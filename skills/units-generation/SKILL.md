@@ -1,6 +1,12 @@
 ---
 name: units-generation
-description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨 (조건부)
+description: Decomposes the system into independently developable units for parallel
+  implementation. Conditionally called by using-devflow orchestrator when the system
+  needs decomposition during AI-DLC Construction phase. Do NOT invoke directly.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
 ---
 
 # units-generation

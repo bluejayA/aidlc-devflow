@@ -1,6 +1,13 @@
 ---
 name: code-generation
-description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
+description: Generates a code plan and then implements it after explicit approval.
+  Called by using-devflow orchestrator for each unit during AI-DLC Construction phase.
+  Two-stage process: planning first, then generation after orchestrator approval.
+  Do NOT invoke directly — use using-devflow instead.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
 ---
 
 # code-generation

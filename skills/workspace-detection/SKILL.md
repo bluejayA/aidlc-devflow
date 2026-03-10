@@ -1,6 +1,12 @@
 ---
 name: workspace-detection
-description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
+description: Scans the current workspace to detect greenfield (new project) or brownfield
+  (existing codebase) project type. Called by using-devflow orchestrator as the first
+  stage of AI-DLC Inception phase. Do NOT invoke directly — use using-devflow instead.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
 ---
 
 # workspace-detection

@@ -1,6 +1,12 @@
 ---
 name: build-and-test
-description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
+description: Generates build and test instructions after all code units are complete.
+  Called by using-devflow orchestrator as the final stage of AI-DLC Construction phase.
+  Do NOT invoke directly — use using-devflow instead.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
 ---
 
 # build-and-test

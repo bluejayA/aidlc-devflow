@@ -1,6 +1,12 @@
 ---
 name: workflow-planning
-description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
+description: Determines which Construction stages to run and at what depth, then saves
+  the approved workflow plan. Called by using-devflow orchestrator during AI-DLC Inception
+  phase. Do NOT invoke directly — use using-devflow instead.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
 ---
 
 # workflow-planning
