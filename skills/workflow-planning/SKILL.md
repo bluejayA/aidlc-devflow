@@ -71,5 +71,7 @@ Create `devflow-docs/inception/workflow-plan.md` with approved plan.
 
 ### Step 6: Update state
 
-Use devflow-state to record approved stages list.
+Use devflow-state to:
+- Write each approved stage and its depth to `## Approved Stages` (e.g., `code-generation: Standard`)
+- Update `## Current Stage` to the first stage in the approved list
 Use devflow-audit to log approval.

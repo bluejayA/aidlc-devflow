@@ -17,24 +17,29 @@ Runs for every unit. Cannot be skipped.
 
 Create a detailed code generation plan with checkboxes.
 
-**Plan format:**
+**Plan format (TDD order — tests first):**
 ```markdown
 # Code Generation Plan: [unit-name]
 
-## Files to Create
-- [ ] `path/to/file.py` — [purpose]
+## Test Files (Write First — TDD RED)
 - [ ] `tests/path/to/test_file.py` — [what it tests]
+
+## Test Strategy
+- [ ] [test name]: [what it verifies]
+- [ ] Run tests → confirm RED (failing)
+
+## Implementation Files
+- [ ] `path/to/file.py` — [purpose]
 
 ## Files to Modify
 - [ ] `path/to/existing.py` — [what changes]
 
 ## Implementation Steps
-- [ ] Step 1: [specific action]
-- [ ] Step 2: [specific action]
-- [ ] ...
-
-## Test Strategy
-- [ ] [test name]: [what it verifies]
+- [ ] Step 1: Write failing test
+- [ ] Step 2: Run test → confirm RED
+- [ ] Step 3: [implement specific action]
+- [ ] Step 4: Run test → confirm GREEN
+- [ ] Step 5: Refactor if needed → confirm GREEN
 ```
 
 Present the plan and wait for approval:

@@ -30,6 +30,10 @@ When creating or updating the state file, maintain this exact structure:
 <!-- 완료된 스테이지 목록 (타임스탬프 포함) -->
 - [stage-name]: [ISO 8601 timestamp]
 
+## Approved Stages
+<!-- workflow-planning에서 승인된 실행 예정 스테이지 목록 (depth 포함) -->
+- [stage-name]: [Minimal | Standard | Comprehensive]
+
 ## Skipped Stages
 <!-- 스킵된 스테이지 및 이유 -->
 - [stage-name]: [reason]

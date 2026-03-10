@@ -66,5 +66,5 @@ When user selects "A) 이전 작업 재개":
 3. Continue from the current stage
 
 When user selects "B) 새 작업 시작":
-1. Archive existing state (rename to `devflow-state-archived-[timestamp].md`)
+1. Archive existing state (rename `devflow-docs/devflow-state.md` → `devflow-docs/devflow-state-archived-[timestamp].md`)
 2. Start fresh from workspace-detection
