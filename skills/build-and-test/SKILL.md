@@ -1,3 +1,8 @@
+---
+name: build-and-test
+description: Use after all code generation units are complete to generate comprehensive build and test instructions for the Construction phase
+---
+
 # build-and-test
 
 <!-- 빌드/테스트 지침 생성: 모든 unit 완료 후 실행 -->

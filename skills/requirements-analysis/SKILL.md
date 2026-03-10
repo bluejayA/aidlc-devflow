@@ -1,3 +1,8 @@
+---
+name: requirements-analysis
+description: Use when analyzing user requirements at adaptive depth (Minimal/Standard/Comprehensive) based on request complexity, before workflow planning
+---
+
 # requirements-analysis
 
 <!-- 요구사항 분석: 적응형 깊이로 사용자 의도와 요구사항을 분석 -->

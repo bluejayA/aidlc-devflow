@@ -1,3 +1,8 @@
+---
+name: units-generation
+description: Use when a complex system needs decomposition into independently developable parallel units before code generation begins
+---
+
 # units-generation
 
 <!-- 작업 단위 분해: 복잡한 시스템을 병렬 개발 가능한 단위로 분해 -->

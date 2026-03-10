@@ -1,3 +1,8 @@
+---
+name: workflow-planning
+description: Use when requirements are defined and you need to determine which construction stages to execute, requiring explicit user approval before proceeding
+---
+
 # workflow-planning
 
 <!-- 워크플로우 계획: 어떤 스테이지를 실행할지 결정하고 사용자 승인을 받음 -->

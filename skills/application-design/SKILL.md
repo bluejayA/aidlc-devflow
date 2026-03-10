@@ -1,3 +1,8 @@
+---
+name: application-design
+description: Use when new components or services need structural design before implementation begins, as determined by workflow-planning
+---
+
 # application-design
 
 <!-- 애플리케이션 설계: 신규 컴포넌트/서비스 구조 설계 -->

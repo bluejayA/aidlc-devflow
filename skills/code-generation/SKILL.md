@@ -1,3 +1,8 @@
+---
+name: code-generation
+description: Use when implementing a unit through the two-stage Plan → Approve → Generate process with TDD, writing tests before implementation
+---
+
 # code-generation
 
 <!-- 코드 생성: Plan → Approve → Generate 2단계 실행 -->

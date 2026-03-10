@@ -114,7 +114,7 @@ devflow-docs/
 
 ---
 
-## Skills 목록 (22개)
+## Skills 목록 (23개)
 
 ### AI-DLC 핵심 스테이지
 
@@ -133,6 +133,7 @@ devflow-docs/
 
 | Skill | 역할 |
 |-------|------|
+| `brainstorming` | 아이디어 → 설계 전환. 구현 전 필수 설계 협업 |
 | `writing-plans` | 구현 계획 작성 |
 | `executing-plans` | 계획 실행 (배치 + 체크포인트) |
 | `subagent-driven-development` | 서브에이전트 병렬 실행 |

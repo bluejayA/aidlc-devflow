@@ -1,3 +1,8 @@
+---
+name: workspace-detection
+description: Use when beginning a devflow session to determine if the project is greenfield or brownfield before gathering requirements
+---
+
 # workspace-detection
 
 <!-- 워크스페이스 분석: 그린필드/브라운필드 판단, 기존 코드베이스 스캔 -->

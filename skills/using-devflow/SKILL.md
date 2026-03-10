@@ -1,3 +1,8 @@
+---
+name: using-devflow
+description: Use when starting any software development task to initialize the AI-DLC workflow, check for existing sessions, or begin a new devflow session
+---
+
 # using-devflow
 
 <!-- devflow 진입점: 모든 소프트웨어 개발 시작 시 자동 활성화 -->
