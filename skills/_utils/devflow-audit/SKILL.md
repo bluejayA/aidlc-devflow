@@ -1,3 +1,14 @@
+---
+name: devflow-audit
+description: Appends interaction logs to devflow-docs/audit.md in append-only mode.
+  Called internally by using-devflow orchestrator to record stage completions, user
+  approvals, and decisions. Do NOT invoke directly — logs are append-only, never overwrite.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
+---
+
 # devflow-audit
 
 <!-- devflow-audit: devflow-docs/audit.md에 append-only로 모든 상호작용을 기록 -->
