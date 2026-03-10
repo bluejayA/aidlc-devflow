@@ -1,3 +1,14 @@
+---
+name: devflow-state
+description: Reads and writes devflow-docs/devflow-state.md to track AI-DLC workflow
+  progress across sessions. Called internally by using-devflow orchestrator to persist
+  stage completion, current phase, and unit tracking. Do NOT invoke directly.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
+---
+
 # devflow-state
 
 <!-- devflow-state: devflow-docs/devflow-state.md 파일을 읽고 쓰는 유틸 -->
