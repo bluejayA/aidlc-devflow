@@ -56,7 +56,14 @@ AI-DLC 기반 개발 워크플로우가 활성화되었습니다.
 🟡 OPERATIONS  → 배포 및 운영 (준비 중)
 ```
 
-### Step 2: Initialize state and audit
+### Step 2: Ensure devflow-docs/ directories
+
+Before initializing state, ensure required directories exist:
+- Check if `devflow-docs/` exists in the workspace root
+- If not: create `devflow-docs/`, `devflow-docs/inception/`, `devflow-docs/construction/`
+- This prevents devflow-state and devflow-audit from failing on first write
+
+### Step 3: Initialize state and audit
 
 Use devflow-state to create initial state:
 - `## Current Phase` → `inception`
@@ -67,7 +74,7 @@ Use devflow-audit to log:
 - User's original request (raw)
 - "New devflow session started (B-plan orchestrator)"
 
-### Step 3: Start orchestration loop
+### Step 4: Start orchestration loop
 
 Proceed to **The Orchestration Loop** below.
 
@@ -166,6 +173,11 @@ Routing:
 | Current Stage | Next Stage | Condition |
 |--------------|-----------|-----------|
 | `code-generation` (plan) | `code-generation` (generate) | After plan approval — call skill with "generate" signal |
+
+**code-generation 2단계 호출 방법:**
+- PART 1 (planning): `code-generation` skill을 일반 호출
+- PART 2 (generation): 승인 후 명시적 호출:
+  `"code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
 | `code-generation` (complete) | `build-and-test` | All units done — see Multi-Unit Handling |
 | `build-and-test` | END | Construction complete |
 

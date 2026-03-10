@@ -22,7 +22,9 @@ Design the component and service structure before implementation begins.
 
 ### Step 1: Load context
 
-Read requirements and workspace analysis.
+Read the following files (if they exist):
+- `devflow-docs/inception/requirements.md` — functional and non-functional requirements
+- `devflow-docs/inception/workspace.md` — greenfield/brownfield context
 
 ### Step 2: Design components
 

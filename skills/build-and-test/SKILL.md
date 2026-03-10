@@ -22,10 +22,17 @@ Generate comprehensive build and test instructions after all units are implement
 
 ### Step 1: Analyze the implementation
 
-Review generated code to understand:
-- Build tools and commands
-- Test frameworks used
-- Integration points between units
+Review the following to understand the build and test requirements:
+
+1. **Source files** in the workspace root (outside `devflow-docs/`) — look for:
+   - Build config files: `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml`
+   - Source file extensions: `.py`, `.go`, `.ts`, `.js`, `.rs`, `.java`
+
+2. **Code plans** in `devflow-docs/construction/*/code-plan.md` — understand:
+   - What files were created and what tests exist
+
+3. **units.md** at `devflow-docs/inception/units.md` (if exists) — understand:
+   - Integration points between units
 
 ### Step 2: Generate build instructions
 

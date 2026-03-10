@@ -22,7 +22,9 @@ Decompose the system into independently developable units.
 
 ### Step 1: Load context
 
-Read application design and requirements documents.
+Read the following files (if they exist):
+- `devflow-docs/inception/application-design.md` — component structure
+- `devflow-docs/inception/requirements.md` — functional requirements
 
 ### Step 2: Identify units
 

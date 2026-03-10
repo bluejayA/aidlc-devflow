@@ -56,7 +56,11 @@ The orchestrator will present the approval gate. Do NOT write any code yet.
 
 ### PART 2 — Generation (오케스트레이터 승인 후)
 
-When the orchestrator signals approval and calls this skill again with "generate":
+When invoked with explicit generation instruction such as:
+`"code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
+
+Or when the conversation context clearly contains an approved plan and the
+orchestrator has signaled to proceed with generation.
 1. Execute each step in the plan
 2. Mark each checkbox `[x]` immediately after completing that step
 3. Follow TDD: write tests first, then implementation
