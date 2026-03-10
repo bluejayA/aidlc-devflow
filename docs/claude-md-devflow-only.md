@@ -21,33 +21,25 @@
 
 ### 경로 A — 전체 파이프라인 (새 기능 / 컴포넌트 / 서비스)
 
-1. **Brainstorming** (`brainstorming`)
-   - 새 기능, 컴포넌트, 동작 수정 시 **항상** 먼저 실행
-   - 설계 문서 작성 후 승인 받기 → `docs/plans/YYYY-MM-DD-<topic>-design.md`에 저장
-   - 코드 한 줄도 작성 전. 예외 없음.
-
-2. **AI-DLC 파이프라인** (`using-devflow`)
-   - Brainstorming 승인 후 devflow 워크플로우 시작
+1. **AI-DLC 파이프라인** (`using-devflow`)
+   - 소프트웨어 개발 요청 시 자동 활성화
    - workspace-detection → requirements-analysis → workflow-planning → (application-design?) → (units-generation?) → code-generation → build-and-test
    - **각 스테이지 완료 시 반드시 A/B 선택 대기. 응답 없이 다음 단계 진행 금지.**
 
-3. **격리 개발** (`using-git-worktrees`)
-   - code-generation 시작 전 새 브랜치 + 워크트리 생성
-   - 각 기능은 독립된 워크트리에서 개발
-
-4. **복잡한 구현** (`subagent-driven-development`)
+2. **병렬 구현** (`dispatching-parallel-agents`)
    - 독립적인 태스크가 2개 이상일 때 서브에이전트 병렬 실행
-   - 각 태스크: 구현 → spec 리뷰 → 코드 품질 리뷰 → 다음 태스크
+   - 공유 상태가 없는 태스크만 병렬화 가능 — 의존성 있으면 순차 진행
 
-5. **코드 리뷰 → 완료** (`requesting-code-review` → `finishing-a-development-branch`)
-   - 모든 unit 완료 후 리뷰 요청
-   - Critical 이슈 해결 후 머지/PR/보관 결정
+3. **코드 리뷰 피드백 처리** (`receiving-code-review`)
+   - 코드 리뷰 피드백 수신 시 Critical / Important / Minor 분류 후 처리
+
+4. **개발 완료 처리** (`finishing-a-development-branch`)
+   - 모든 unit 완료 후 머지 / PR / 유지 / 폐기 4가지 선택지 제시
 
 ### 경로 B — 경량 경로 (단일 파일 수정 / 명확한 범위의 버그 픽스)
 
-1. `test-driven-development` — RED → GREEN → REFACTOR
-2. 구현
-3. `verification-before-completion` — 완료 주장 전 반드시 검증
+1. TDD 방식으로 구현 — RED → GREEN → REFACTOR
+2. `verification-before-completion` — 완료 주장 전 반드시 검증
 
 ### 경로 C — 디버깅 (원인 불명 오류 / 예상 밖 동작)
 
@@ -189,7 +181,7 @@ requirements-analysis 깊이는 자동 판단:
 
 | 플러그인 | 역할 |
 |---------|------|
-| `devflow` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 23개 스킬) — **필수** |
+| `devflow-aidlc-like` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 16개 스킬) — **필수** |
 | `claude-code-setup` | 프로젝트별 자동화 추천 |
 | `agent-council` | 다중 AI 에이전트 의견 수집 |
 | `github` | GitHub 연동 |

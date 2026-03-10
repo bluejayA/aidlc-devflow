@@ -122,6 +122,22 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_utils/devflow-state` | `devflow-docs/devflow-state.md` 읽기/쓰기 |
 | `_utils/devflow-audit` | `devflow-docs/audit.md` append-only 로깅 |
 
+### 공유 규약 문서
+
+| 파일 | 역할 |
+|------|------|
+| `_shared/devflow-conventions.md` | YAML 메타데이터 필드 의미 정의 (스킬이 아닌 규약 문서) |
+
+#### YAML 메타데이터 규약
+
+모든 AI-DLC 스테이지 스킬은 아래 메타데이터 필드를 사용합니다.
+
+| 필드 | 값 | 의미 |
+|------|----|------|
+| `invoke_mode` | `orchestrator-only` | `using-devflow`만 호출 가능. 사용자 직접 호출 불가 |
+| `return_behavior` | `stop-no-gate` | 실행 후 결과 표시 및 STOP. 승인 게이트는 오케스트레이터 소유 |
+| `output_path` | `devflow-docs/...` | 스테이지 산출물 저장 경로 |
+
 ---
 
 ## 산출물 구조
