@@ -66,6 +66,12 @@ After approval:
 ## Completion Gate
 
 After all checkboxes are marked:
+
+1. Update devflow-state: mark this unit complete in `## Completed Units`
+2. Update devflow-state: set `## Current Stage` to next stage
+3. Use devflow-audit to log: "code-generation completed: [unit-name]"
+
+Display:
 ```
 ## Code Generation 완료: [unit-name]
 

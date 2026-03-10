@@ -57,9 +57,10 @@ Expected: [description]
 [any steps that can't be automated]
 ```
 
-### Step 4: Update state
+### Step 4: Update state and audit log
 
 Mark Construction phase as complete in devflow-state.
+Use devflow-audit to log: "build-and-test completed — Construction phase complete"
 
 ### Step 5: Completion gate
 
