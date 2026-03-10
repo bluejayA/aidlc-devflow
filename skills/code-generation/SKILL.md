@@ -28,6 +28,10 @@ Create a code generation plan with checkboxes:
 ```markdown
 # Code Generation Plan: [unit-name]
 
+> **For agentic workers:** REQUIRED: Use `devflow:code-generation` with the
+> "GENERATE" signal to execute this plan. Do NOT implement ad-hoc.
+> `"code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
+
 ## Files to Create
 - [ ] `path/to/file.py` — [purpose]
 - [ ] `tests/path/to/test_file.py` — [what it tests]

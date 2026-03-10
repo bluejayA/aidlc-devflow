@@ -1,0 +1,330 @@
+---
+name: finishing-a-development-branch
+description: Use when implementation is done and all tests pass, and a decision is
+  needed on what to do with the development branch — merge, PR, keep, or discard.
+metadata:
+  version: 0.1.0
+  author: Jay
+  category: ai-dlc-workflow
+---
+
+# finishing-a-development-branch
+
+<!-- 개발 브랜치 마무리: 병합, PR, 유지, 폐기 중 하나를 선택 -->
+
+## Trigger
+
+다음 상황에서 이 스킬을 실행한다:
+
+- 구현이 완료되고 모든 테스트가 통과했을 때
+- "브랜치를 어떻게 할까요?"라는 질문을 받았을 때
+- AI-DLC `build-and-test` 단계가 완료되었을 때
+- 기능 개발 또는 버그 수정 작업이 완전히 마무리되었을 때
+
+---
+
+## Purpose
+
+개발이 완료된 브랜치의 다음 행동을 명확하게 결정하고, 선택에 따라 안전하게 실행한다.
+불명확한 상태(완료됐지만 아무것도 안 한 브랜치)를 남기지 않는다.
+
+---
+
+## 프로세스
+
+### 1단계: 테스트 검증
+
+브랜치 처리 전에 반드시 검증이 완료되어야 한다.
+
+`verification-before-completion` 스킬 사용을 권장한다.
+이미 검증이 완료된 경우 현재 상태를 확인한다:
+
+```bash
+# 현재 브랜치 및 상태 확인
+git status
+git log --oneline -5
+git branch --show-current
+```
+
+검증이 완료되지 않았다면 이 스킬을 중단하고 `verification-before-completion`을 먼저 실행한다.
+
+---
+
+### 2단계: 선택지 제시
+
+정확히 4가지 선택지를 제시한다:
+
+```
+## 브랜치 처리 선택
+
+현재 브랜치: [branch-name]
+베이스 브랜치: [base-branch]
+변경사항: [X commits, Y files changed]
+
+A) 로컬에서 [base-branch]로 병합
+   → 브랜치를 로컬에서 병합하고 개발 브랜치를 삭제합니다
+   → 워크트리 사용 중이면 워크트리도 제거합니다
+
+B) 푸시 후 Pull Request 생성
+   → 원격 저장소에 푸시하고 PR을 생성합니다
+   → 코드 리뷰가 필요하거나 팀과 공유할 때 선택합니다
+
+C) 브랜치 유지 (나중에 처리)
+   → 현재 상태를 유지하고 나중에 다시 결정합니다
+   → 워크트리는 그대로 남습니다
+
+D) 작업 폐기
+   → 브랜치와 모든 변경사항을 삭제합니다
+   → 취소하려면 'discard'를 직접 입력해야 합니다
+```
+
+**선택을 기다린다. 사용자 응답 없이 진행하지 않는다.**
+
+---
+
+### 3단계: 선택에 따른 실행
+
+#### 옵션 A: 로컬 병합
+
+```bash
+# 1. 현재 브랜치 확인
+git branch --show-current
+
+# 2. 베이스 브랜치로 이동
+git checkout [base-branch]
+
+# 3. 병합 실행
+git merge --no-ff [branch-name] -m "Merge branch '[branch-name]'"
+
+# 4. 개발 브랜치 삭제
+git branch -d [branch-name]
+```
+
+워크트리 사용 중인 경우:
+```bash
+# 워크트리 제거 (옵션 A에서만 실행)
+git worktree remove [worktree-path]
+git worktree prune
+```
+
+완료 메시지:
+```
+## 병합 완료
+
+병합된 브랜치: [branch-name] → [base-branch]
+삭제된 브랜치: [branch-name]
+[워크트리 제거: [worktree-path]] (워크트리 사용 시)
+```
+
+---
+
+#### 옵션 B: Push 후 Pull Request 생성
+
+```bash
+# 1. 원격 저장소에 푸시
+git push -u origin [branch-name]
+```
+
+GitHub CLI로 PR 생성:
+```bash
+gh pr create \
+  --base [base-branch] \
+  --title "[PR 제목]" \
+  --body "$(cat <<'EOF'
+## 변경 사항
+
+[변경 내용 요약]
+
+## 테스트
+
+- [ ] 단위 테스트 통과
+- [ ] 통합 테스트 통과
+
+## 체크리스트
+
+- [ ] 코드 리뷰 완료
+- [ ] 문서 업데이트
+EOF
+)"
+```
+
+완료 메시지:
+```
+## PR 생성 완료
+
+브랜치: [branch-name]
+PR URL: [github-pr-url]
+리뷰어에게 공유하거나 직접 병합할 수 있습니다.
+워크트리는 PR 머지 전까지 유지됩니다.
+```
+
+**워크트리는 PR이 머지될 때까지 유지한다. 이 단계에서 제거하지 않는다.**
+
+---
+
+#### 옵션 C: 브랜치 유지
+
+현재 상태 저장:
+```bash
+# 미커밋 변경사항 있으면 커밋 또는 스태시
+git status
+
+# 필요시
+git add -p  # 검토 후 선택적 스테이징
+git commit -m "WIP: [작업 내용]"
+# 또는
+git stash push -m "[작업 내용] — 나중에 처리"
+```
+
+완료 메시지:
+```
+## 브랜치 유지
+
+브랜치: [branch-name]
+상태: [커밋됨 / WIP 스태시됨]
+워크트리: [path] (그대로 유지)
+
+나중에 이 스킬을 다시 실행하면 동일한 선택지를 받을 수 있습니다.
+```
+
+---
+
+#### 옵션 D: 작업 폐기
+
+**이중 확인 절차** — 반드시 사용자가 'discard'를 직접 입력해야 진행한다:
+
+```
+⚠️  경고: 이 작업은 되돌릴 수 없습니다.
+
+다음 항목이 영구적으로 삭제됩니다:
+- 브랜치: [branch-name]
+- 커밋 [count]개
+- 변경된 파일 [count]개
+
+계속하려면 'discard'를 입력하세요.
+취소하려면 다른 키를 입력하세요.
+```
+
+'discard' 입력 확인 후:
+```bash
+# 베이스 브랜치로 이동
+git checkout [base-branch]
+
+# 브랜치 강제 삭제
+git branch -D [branch-name]
+```
+
+워크트리 사용 중인 경우:
+```bash
+# 워크트리 제거 후 브랜치 삭제 (옵션 D에서만 실행)
+git worktree remove --force [worktree-path]
+git worktree prune
+git branch -D [branch-name]
+```
+
+완료 메시지:
+```
+## 브랜치 폐기 완료
+
+삭제된 브랜치: [branch-name]
+[삭제된 워크트리: [worktree-path]] (워크트리 사용 시)
+```
+
+---
+
+## 워크트리 정리 규칙 요약
+
+| 옵션 | 워크트리 처리 |
+|------|------------|
+| A (로컬 병합) | 워크트리 제거 (`git worktree remove`) |
+| B (PR 생성) | 워크트리 유지 (PR 머지 후 처리) |
+| C (브랜치 유지) | 워크트리 유지 |
+| D (폐기) | 워크트리 강제 제거 (`--force`) |
+
+---
+
+## Examples
+
+### Example 1: 기능 개발 완료 후 로컬 병합 (옵션 A)
+
+**상황**: `feature/notification-service` 브랜치에서 개발 완료, 팀 혼자 작업
+
+```bash
+# 1단계: 검증
+pytest tests/ -v  # 15 passed
+
+# 2단계: 선택지 제시 → 사용자가 A 선택
+
+# 3단계: 실행
+git checkout main
+git merge --no-ff feature/notification-service -m "Merge branch 'feature/notification-service'"
+git branch -d feature/notification-service
+git worktree remove ~/workspaces/notification-service-worktree
+git worktree prune
+```
+
+결과:
+```
+병합 완료: feature/notification-service → main
+삭제된 브랜치: feature/notification-service
+워크트리 제거: ~/workspaces/notification-service-worktree
+```
+
+---
+
+### Example 2: 팀 리뷰가 필요한 경우 PR 생성 (옵션 B)
+
+**상황**: `feature/payment-refactor` 브랜치, 코드 리뷰 필요
+
+```bash
+# 2단계: 선택지 제시 → 사용자가 B 선택
+
+# 3단계: 실행
+git push -u origin feature/payment-refactor
+gh pr create \
+  --base main \
+  --title "feat: payment 서비스 리팩토링" \
+  --body "..."
+```
+
+결과:
+```
+PR 생성 완료
+브랜치: feature/payment-refactor
+PR URL: https://github.com/org/repo/pull/42
+워크트리는 PR 머지 후 처리합니다.
+```
+
+---
+
+## Troubleshooting
+
+### 병합 충돌 발생 시 (옵션 A)
+
+**증상**: `git merge` 실행 후 충돌 메시지
+```
+CONFLICT (content): Merge conflict in src/service.py
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+**처리 방법**:
+1. 충돌 파일 목록 확인: `git status`
+2. 각 파일의 충돌 마커(`<<<<<<<`, `=======`, `>>>>>>>`) 해소
+3. 해소 후 스테이징: `git add <파일>`
+4. 병합 커밋: `git commit`
+5. 충돌 해소가 복잡하면 병합을 중단하고 옵션 B(PR)를 선택하는 것을 고려
+   ```bash
+   git merge --abort  # 병합 취소
+   ```
+
+---
+
+### 원격 저장소 푸시 권한 없을 때 (옵션 B)
+
+**증상**: `git push` 실행 후 `Permission denied` 또는 `403` 에러
+
+**처리 방법**:
+1. SSH 키 또는 토큰 설정 확인: `gh auth status`
+2. 인증 재설정: `gh auth login`
+3. HTTPS 대신 SSH 사용: `git remote set-url origin git@github.com:org/repo.git`
+4. 권한 문제가 해결되지 않으면 옵션 A(로컬 병합)를 대안으로 제시한다

@@ -1,7 +1,8 @@
 {
   "name": "devflow",
-  "version": "0.2.0-b-plan",
+  "version": "0.3.0",
   "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (B안: Orchestrator-Centric)",
+  "hooks": "hooks/hooks.json",
   "skills": {
     "using-devflow": "skills/using-devflow",
     "workspace-detection": "skills/workspace-detection",
@@ -11,6 +12,12 @@
     "units-generation": "skills/units-generation",
     "code-generation": "skills/code-generation",
     "build-and-test": "skills/build-and-test",
+    "systematic-debugging": "skills/systematic-debugging",
+    "verification-before-completion": "skills/verification-before-completion",
+    "finishing-a-development-branch": "skills/finishing-a-development-branch",
+    "receiving-code-review": "skills/receiving-code-review",
+    "dispatching-parallel-agents": "skills/dispatching-parallel-agents",
+    "writing-skills": "skills/writing-skills",
     "devflow-state": "skills/_utils/devflow-state",
     "devflow-audit": "skills/_utils/devflow-audit"
   }

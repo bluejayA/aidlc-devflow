@@ -257,6 +257,26 @@ User says: "어제 하던 작업 이어서 해줘"
 3. requirements-analysis 완료, workflow-planning 진행 중이었음 확인
 4. workflow-planning부터 재개
 
+### Example 4: 버그 발생 시 (CONSTRUCTION 도중)
+User says: "테스트가 실패해요 — TypeError: NoneType is not subscriptable"
+
+→ using-devflow 오케스트레이터는 CONSTRUCTION을 일시 중단하고
+  `devflow:systematic-debugging` 스킬을 호출하도록 안내한다.
+  근본 원인 파악 없이 즉흥적으로 코드를 수정하지 않는다.
+
+### Example 5: 완료 주장 전
+User says: "구현 다 했어요"
+
+→ using-devflow는 build-and-test로 넘어가기 전
+  `devflow:verification-before-completion` 스킬을 호출하여
+  실제 명령 실행 결과로 완료를 검증한다.
+
+### Example 6: 개발 브랜치 완료 후
+User says: "다 끝났어요, 이제 어떻게 하죠?"
+
+→ `devflow:finishing-a-development-branch` 스킬을 호출하여
+  병합 / PR / 유지 / 폐기 4가지 선택지를 제시한다.
+
 ---
 
 ## Error Handling

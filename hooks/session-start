@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# using-devflow 스킬 파일 경로 설정
+SKILL_FILE="${CLAUDE_PLUGIN_ROOT}/skills/using-devflow/SKILL.md"
+
+# 스킬 파일이 존재하는 경우 내용을 읽어 additionalContext 형식으로 출력
+if [[ -f "${SKILL_FILE}" ]]; then
+  # 파일 내용 읽기
+  SKILL_CONTENT=$(cat "${SKILL_FILE}")
+
+  # Claude hooks의 additionalContext 형식으로 JSON 출력
+  # jq를 사용해 특수문자를 안전하게 이스케이프 처리
+  jq -n \
+    --arg content "$(printf '<IMPORTANT>\ndevflow 워크플로우가 활성화되어 있습니다.\n소프트웨어 개발 요청이 감지되면 devflow:using-devflow 스킬을 즉시 실행하세요.\n\n%s\n</IMPORTANT>' "${SKILL_CONTENT}")" \
+    '{"additionalContext": $content}'
+else
+  # 스킬 파일이 없으면 빈 JSON 출력
+  echo '{}'
+fi
