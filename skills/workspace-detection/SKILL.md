@@ -1,22 +1,18 @@
 ---
 name: workspace-detection
-description: Use when beginning a devflow session to determine if the project is greenfield or brownfield before gathering requirements
+description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
 ---
 
 # workspace-detection
 
 <!-- 워크스페이스 분석: 그린필드/브라운필드 판단, 기존 코드베이스 스캔 -->
-<!-- ALWAYS 실행 — 스킵 불가 -->
+<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 
 ## Purpose
 
-Analyze the current workspace to determine project type and context before requirements gathering.
+Analyze the current workspace to determine project type and context.
 
-## Always Execute
-
-This stage ALWAYS runs. It cannot be skipped.
-
-## Execution Steps
+## Execute
 
 ### Step 1: Scan workspace
 
@@ -40,7 +36,7 @@ Check for the following indicators:
 | **Greenfield** | No existing code found |
 | **Brownfield** | Existing code found |
 
-### Step 3: Save workspace analysis
+### Step 3: Save artifact
 
 Create `devflow-docs/inception/workspace.md`:
 
@@ -55,32 +51,17 @@ Create `devflow-docs/inception/workspace.md`:
 
 ## Key Files Found
 [list of significant files, if brownfield]
-
-## Recommended Next Stage
-requirements-analysis
 ```
 
-### Step 4: Update state
+## Return to Orchestrator
 
-Use devflow-state to update:
-- `## Current Stage` → `requirements-analysis`
-- Append to `## Completed Stages`: `workspace-detection: [timestamp]`
+After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
 
-### Step 5: Log to audit
-
-Use devflow-audit to log the workspace detection result.
-
-### Step 6: Completion gate
-
-Display:
 ```
-## Workspace Detection 완료
-
+[workspace-detection 결과]
 - 프로젝트 유형: [Greenfield | Brownfield]
+- 발견된 주요 파일: [count]개
 - 산출물: devflow-docs/inception/workspace.md
-
-A) 변경 요청
-B) requirements-analysis 단계로 진행
 ```
 
-Wait for user response before proceeding.
+The orchestrator (using-devflow) will handle the approval gate and state update.

@@ -1,22 +1,19 @@
 ---
 name: workflow-planning
-description: Use when requirements are defined and you need to determine which construction stages to execute, requiring explicit user approval before proceeding
+description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
 ---
 
 # workflow-planning
 
-<!-- 워크플로우 계획: 어떤 스테이지를 실행할지 결정하고 사용자 승인을 받음 -->
-<!-- ALWAYS 실행 — 반드시 명시적 사용자 승인 후 진행 -->
+<!-- 워크플로우 계획: 어떤 스테이지를 실행할지 결정 -->
+<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
+<!-- 중요: 이 skill의 산출물을 오케스트레이터가 읽어 조건부 스테이지를 결정 -->
 
 ## Purpose
 
-Determine which stages to execute and at what depth, then present the plan for explicit user approval.
+Determine which stages to execute and at what depth.
 
-## Always Execute
-
-This stage always runs. User can override recommendations.
-
-## Execution Steps
+## Execute
 
 ### Step 1: Load prior context
 
@@ -35,16 +32,12 @@ Based on the requirements, recommend which Construction stages to include:
 | `code-generation` | **Always** |
 | `build-and-test` | **Always** |
 
-For each included stage, also recommend depth: Minimal / Standard / Comprehensive.
+For each included stage, recommend depth: Minimal / Standard / Comprehensive.
 
 ### Step 3: Generate workflow visualization
 
-Create a simple text-based workflow diagram showing:
-- Included stages in order
-- Depth level for each stage
-- Conditional stages marked with (?)
+Create a text-based workflow diagram:
 
-Example:
 ```
 INCEPTION
   ✅ workspace-detection (완료)
@@ -58,25 +51,39 @@ CONSTRUCTION
   ➡ build-and-test [Standard]
 ```
 
-### Step 4: Present plan for approval
+### Step 4: Save artifact
 
-Display the plan and explicitly state:
+Create `devflow-docs/inception/workflow-plan.md`:
+
+```markdown
+# Workflow Plan
+
+**Timestamp**: [ISO 8601]
+
+## Approved Stages
+
+### CONSTRUCTION
+- application-design: [included | skipped] — [reason]
+- units-generation: [included | skipped] — [reason]
+- code-generation: included — always
+- build-and-test: included — always
+
+## Stage Depths
+- application-design: [Minimal | Standard | Comprehensive]
+- units-generation: [Minimal | Standard | Comprehensive]
+- code-generation: [Minimal | Standard | Comprehensive]
+- build-and-test: [Minimal | Standard | Comprehensive]
 ```
-위 계획을 검토해주세요. 스테이지를 추가하거나 제외할 수 있습니다.
 
-A) 변경 요청 (포함/제외할 스테이지 또는 깊이 조정)
-B) 계획 승인 후 진행
+## Return to Orchestrator
+
+After saving the artifact, display the workflow diagram — then STOP. Do NOT present an approval gate.
+
+```
+[workflow-planning 결과]
+- 포함된 스테이지: [list]
+- 스킵된 스테이지: [list]
+- 산출물: devflow-docs/inception/workflow-plan.md
 ```
 
-**MANDATORY**: Do NOT proceed until user explicitly selects B.
-
-### Step 5: Save workflow plan
-
-Create `devflow-docs/inception/workflow-plan.md` with approved plan.
-
-### Step 6: Update state
-
-Use devflow-state to:
-- Write each approved stage and its depth to `## Approved Stages` (e.g., `code-generation: Standard`)
-- Update `## Current Stage` to the first stage in the approved list
-Use devflow-audit to log approval.
+The orchestrator (using-devflow) will handle the approval gate, state update, and conditional stage routing.
