@@ -57,7 +57,7 @@ When the orchestrator signals approval and calls this skill again with "generate
 
 ## Return to Orchestrator
 
-After PART 1 (planning), display the plan summary — then STOP.
+After PART 1 (planning), display the plan summary — then STOP. Do NOT present an approval gate.
 After PART 2 (generation), display:
 
 ```
