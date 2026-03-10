@@ -71,3 +71,15 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 ```
 
 The orchestrator (using-devflow) will handle the approval gate and state update.
+
+## Common Issues
+
+### No files found in workspace
+If the workspace appears completely empty:
+- Treat as Greenfield
+- Note in the artifact: "Empty workspace — assumed Greenfield"
+
+### Permission errors when scanning
+If file scanning fails due to permissions:
+- Scan only the current directory (non-recursive)
+- Note limitation in the artifact

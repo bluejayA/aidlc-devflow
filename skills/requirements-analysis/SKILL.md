@@ -105,3 +105,15 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 ```
 
 The orchestrator (using-devflow) will handle the approval gate and state update.
+
+## Common Issues
+
+### User provides no requirements context
+If the user's request is too vague to analyze:
+- Default to Comprehensive depth
+- Ask ONE clarifying question: "What problem are you trying to solve?"
+
+### workspace.md not found
+If `devflow-docs/inception/workspace.md` does not exist:
+- Proceed without it
+- Note in requirements: "Workspace analysis not available"

@@ -56,3 +56,15 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 ```
 
 The orchestrator (using-devflow) will handle the approval gate and state update.
+
+## Common Issues
+
+### requirements.md not found
+If `devflow-docs/inception/requirements.md` does not exist:
+- Display: "⚠️ requirements.md를 찾을 수 없습니다. 사용자 요청 컨텍스트만으로 설계를 진행합니다."
+- Proceed based on available conversation context
+
+### No clear component boundaries
+If the system is too simple to decompose:
+- Design as a single component
+- Note: "Single-component system — no decomposition needed"

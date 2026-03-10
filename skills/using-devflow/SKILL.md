@@ -202,3 +202,47 @@ When `build-and-test` is approved:
 산출물 위치: devflow-docs/
 Operations Phase는 현재 준비 중입니다.
 ```
+
+---
+
+## Error Handling
+
+### devflow-docs/ directory missing
+If `devflow-docs/` does not exist when trying to read state:
+- Create the directory before calling devflow-state
+- Treat as a new session (no existing state)
+
+### Stage artifact missing at resume
+If resuming a session but the expected artifact file is missing
+(e.g., `requirements.md` not found when starting `workflow-planning`):
+1. Display warning:
+   ```
+   ⚠️ [stage-name] 산출물을 찾을 수 없습니다: [file-path]
+   이전 단계부터 다시 실행하거나, 해당 파일을 직접 생성해주세요.
+   ```
+2. Offer:
+   ```
+   A) 이전 단계([stage-name])부터 재실행
+   B) 현재 단계 그대로 진행 (산출물 없이)
+   ```
+
+### units.md missing during multi-unit code-generation
+If `devflow-docs/inception/units.md` does not exist but multi-unit routing is expected:
+1. Display warning:
+   ```
+   ⚠️ units.md를 찾을 수 없습니다.
+   단일 unit으로 code-generation을 진행합니다.
+   ```
+2. Proceed with single-unit code-generation
+
+### Stage skill invocation fails
+If a stage skill returns an unexpected result or errors:
+1. Display:
+   ```
+   ⚠️ [stage-name] 실행 중 오류가 발생했습니다.
+   ```
+2. Offer:
+   ```
+   A) 해당 단계 재시도
+   B) 단계 스킵 (devflow-state에 skipped로 기록)
+   ```

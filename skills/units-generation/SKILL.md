@@ -57,3 +57,15 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 ```
 
 The orchestrator (using-devflow) will handle the approval gate and state update.
+
+## Common Issues
+
+### application-design.md not found
+If `devflow-docs/inception/application-design.md` does not exist:
+- Display: "⚠️ application-design.md를 찾을 수 없습니다. requirements.md 기반으로 단위를 분해합니다."
+- Proceed using requirements.md only
+
+### Only one logical unit identified
+If decomposition results in a single unit:
+- Create units.md with one unit
+- Orchestrator will treat this as single-unit code-generation

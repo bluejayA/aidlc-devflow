@@ -74,3 +74,17 @@ After saving both artifacts, display results — then STOP. Do NOT present an ap
 ```
 
 The orchestrator handles the final completion gate and state update.
+
+## Common Issues
+
+### No generated code found
+If no source files exist outside `devflow-docs/`:
+- Display: "⚠️ 생성된 코드를 찾을 수 없습니다."
+- Generate placeholder instructions: "Run after code is available"
+
+### Unknown build tool
+If the build system cannot be determined, use file extensions:
+- `.py` → `pip install -r requirements.txt && python -m pytest`
+- `.ts`/`.js` → `npm install && npm test`
+- `go.mod` → `go build ./... && go test ./...`
+- `Cargo.toml` → `cargo build && cargo test`

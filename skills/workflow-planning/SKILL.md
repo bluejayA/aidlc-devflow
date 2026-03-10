@@ -93,3 +93,16 @@ After saving the artifact, display the workflow diagram — then STOP. Do NOT pr
 ```
 
 The orchestrator (using-devflow) will handle the approval gate, state update, and conditional stage routing.
+
+## Common Issues
+
+### requirements.md or workspace.md not found
+If prior artifacts are missing:
+- Proceed with available information
+- Note missing context in the workflow plan
+- Default to including all optional stages (conservative assumption)
+
+### No clear indication of new components needed
+When it's ambiguous whether application-design is needed:
+- Default to including it
+- Note the ambiguity in the workflow plan
