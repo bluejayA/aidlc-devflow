@@ -166,16 +166,20 @@ Routing:
 | Current Stage | Next Stage | Condition |
 |--------------|-----------|-----------|
 | `code-generation` (plan) | `code-generation` (generate) | After plan approval — call skill with "generate" signal |
-| `code-generation` (complete) | `build-and-test` | All units done |
+| `code-generation` (complete) | `build-and-test` | All units done — see Multi-Unit Handling |
 | `build-and-test` | END | Construction complete |
 
 ### Multi-Unit Handling
 
 If `units-generation` was run and produced multiple units:
 1. Read `devflow-docs/inception/units.md` for unit list and order
-2. Run `code-generation` for each unit in order
-3. After each unit's `code-generation`, present gate before moving to next unit
-4. After all units complete, run `build-and-test`
+2. Track completed units in devflow-state `## Completed Units`
+3. Run `code-generation` for each unit in order
+4. After each unit's `code-generation`, present gate before moving to next unit
+5. **"All units done"** = all unit names in `units.md` appear in `## Completed Units` in devflow-state
+6. After all units complete, run `build-and-test`
+
+**Note on routing keys**: `workflow-plan.md` stores stage decisions as `[stage]: included` or `[stage]: skipped`. Read the exact line to determine routing (e.g. `application-design: included`).
 
 ---
 
