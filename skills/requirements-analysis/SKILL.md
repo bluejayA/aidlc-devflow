@@ -93,7 +93,15 @@ C) [해석 3] — [한 줄 설명, 있는 경우]
 ### Step 4: Ask clarifying questions (Comprehensive only)
 
 <!-- Comprehensive 깊이에서 열린 질문이 있을 때만 -->
-Ask ONE question at a time. Wait for answer before asking next.
+
+열린 질문이 있는 경우, 질문을 시작하기 전에 맥락을 먼저 선언한다:
+
+```
+요구사항을 확정하기 전에 몇 가지 질문을 드리겠습니다.
+[질문 수]개의 열린 질문이 있습니다.
+```
+
+그 후 ONE question at a time. Wait for answer before asking next.
 
 ### Step 5: Save artifact
 
@@ -132,6 +140,7 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 - 기능 요구사항: [count]개
 - 열린 질문: [count]개
 - 산출물: devflow-docs/inception/requirements.md
+※ 누락된 요구사항이 있다면 오케스트레이터 게이트에서 A) 변경 요청을 선택해주세요.
 ```
 
 The orchestrator (using-devflow) will handle the approval gate and state update.

@@ -123,6 +123,8 @@ Use devflow-audit to log:
 
 **Step D: Present approval gate**
 
+Standard gate for most stages:
+
 ```
 ## [Stage Name] 완료
 
@@ -130,9 +132,35 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
+**workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
+
+- `Requires Path Confirmation: true` (Greenfield) → 아래 게이트 사용:
+
+  ```
+  ## workspace-detection 완료 — Greenfield
+
+  새 프로젝트를 어디에 만들까요?
+  (예: ~/projects/my-app, ./my-app)
+
+  경로를 입력하거나, 현재 디렉토리에 만들려면 '.' 를 입력해주세요.
+  ```
+
+  사용자가 경로를 입력하면 해당 경로를 `workspace.md`의 `Project Root`에 업데이트한 뒤 Step E로 진행.
+
+- `Requires Path Confirmation: false` (Brownfield) → 아래 게이트 사용:
+
+  ```
+  ## workspace-detection 완료 — Brownfield
+
+  감지된 프로젝트 경로: [Project Root 값]
+
+  A) 경로 변경
+  B) 이 경로로 진행
+  ```
+
 Wait for user selection.
 
-- If A: Re-invoke the current stage skill with the user's change request. Repeat from Step B.
+- If A (또는 경로 변경 요청): Re-invoke the current stage skill with the user's change request. Repeat from Step B.
 - If B: Proceed to Step E.
 
 **Step E: Update state**

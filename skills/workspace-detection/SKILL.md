@@ -51,6 +51,8 @@ Create `devflow-docs/inception/workspace.md`:
 
 **Detected**: [Greenfield | Brownfield]
 **Timestamp**: [ISO 8601]
+**Project Root**: [현재 작업 디렉토리 절대 경로]
+**Requires Path Confirmation**: [true | false]
 
 ## Project Structure
 [brief description of what was found]
@@ -59,6 +61,10 @@ Create `devflow-docs/inception/workspace.md`:
 [list of significant files, if brownfield]
 ```
 
+**Requires Path Confirmation 기준:**
+- Greenfield → `true` (새 프로젝트 디렉토리 위치 미확정)
+- Brownfield → `false` (기존 코드가 있는 위치가 곧 프로젝트 루트)
+
 ## Return to Orchestrator
 
 After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
@@ -66,6 +72,8 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 ```
 [workspace-detection 결과]
 - 프로젝트 유형: [Greenfield | Brownfield]
+- 감지된 경로: [절대 경로]
+- 경로 확인 필요: [yes | no]
 - 발견된 주요 파일: [count]개
 - 산출물: devflow-docs/inception/workspace.md
 ```
