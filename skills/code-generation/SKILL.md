@@ -1,13 +1,13 @@
 ---
 name: code-generation
-description: Generates a code plan and then implements it after explicit approval.
-  Called by using-devflow orchestrator for each unit during AI-DLC Construction phase.
-  Two-stage process: planning first, then generation after orchestrator approval.
-  Do NOT invoke directly — use using-devflow instead.
+description: Two-stage process — generates a code plan first, then implements after orchestrator approval.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/construction/[unit-name]/code-plan.md
 ---
 
 # code-generation
@@ -109,14 +109,18 @@ Actions:
 
 ## Return to Orchestrator
 
-After PART 1 (planning), display the plan summary — then STOP. Do NOT present an approval gate.
-After PART 2 (generation), display:
+STOP here. No approval gate — orchestrator handles it.
 
+PART 1 완료 시 표시:
+```
+[code-generation Plan 준비]
+- 생성할 파일: [count]개 / 수정할 파일: [count]개 / 구현 단계: [count]개
+```
+
+PART 2 완료 시 표시:
 ```
 [code-generation 완료: unit-name]
 - 생성된 파일: [count]개
 - 모든 체크박스 완료
 - 산출물: devflow-docs/construction/[unit-name]/code-plan.md
 ```
-
-The orchestrator handles all approval gates and state updates.

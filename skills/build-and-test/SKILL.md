@@ -1,12 +1,13 @@
 ---
 name: build-and-test
-description: Generates build and test instructions after all code units are complete.
-  Called by using-devflow orchestrator as the final stage of AI-DLC Construction phase.
-  Do NOT invoke directly — use using-devflow instead.
+description: Generates build and test instructions after all code units are complete. Final Construction stage.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/construction/build-and-test/
 ---
 
 # build-and-test
@@ -72,15 +73,13 @@ Run: `[exact command]`
 
 ## Return to Orchestrator
 
-After saving both artifacts, display results — then STOP. Do NOT present an approval gate.
+STOP here. No approval gate — orchestrator handles final completion.
 
 ```
 [build-and-test 결과]
 - devflow-docs/construction/build-and-test/build-instructions.md
 - devflow-docs/construction/build-and-test/test-instructions.md
 ```
-
-The orchestrator handles the final completion gate and state update.
 
 ## Common Issues
 

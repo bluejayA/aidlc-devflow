@@ -15,6 +15,9 @@ metadata:
 <!-- B안 오케스트레이터: AI-DLC Life Cycle 전체를 소유하고 구동 -->
 <!-- 승인 게이팅 / devflow-state 업데이트 / devflow-audit 로깅을 모두 이 skill이 담당 -->
 <!-- Stage skill은 실행만 하고, 오케스트레이터에게 결과를 반환 -->
+<!-- Stage skill 공통 규약: skills/_shared/devflow-conventions.md 참조 -->
+<!-- invoke_mode: orchestrator-only → 사용자 직접 호출 불가 -->
+<!-- return_behavior: stop-no-gate → 스테이지는 결과 표시 후 STOP, 게이트는 이 오케스트레이터가 소유 -->
 
 ## Trigger
 

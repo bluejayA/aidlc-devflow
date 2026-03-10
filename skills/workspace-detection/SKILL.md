@@ -1,12 +1,13 @@
 ---
 name: workspace-detection
-description: Scans the current workspace to detect greenfield (new project) or brownfield
-  (existing codebase) project type. Called by using-devflow orchestrator as the first
-  stage of AI-DLC Inception phase. Do NOT invoke directly — use using-devflow instead.
+description: Scans the workspace to detect greenfield or brownfield project type. First stage of AI-DLC Inception.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/inception/workspace.md
 ---
 
 # workspace-detection
@@ -67,7 +68,7 @@ Create `devflow-docs/inception/workspace.md`:
 
 ## Return to Orchestrator
 
-After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
+STOP here. No approval gate — orchestrator handles it.
 
 ```
 [workspace-detection 결과]
@@ -77,8 +78,6 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 - 발견된 주요 파일: [count]개
 - 산출물: devflow-docs/inception/workspace.md
 ```
-
-The orchestrator (using-devflow) will handle the approval gate and state update.
 
 ## Common Issues
 

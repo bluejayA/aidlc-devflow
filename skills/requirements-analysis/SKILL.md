@@ -1,12 +1,13 @@
 ---
 name: requirements-analysis
-description: Analyzes user requirements using adaptive depth (Minimal, Standard, or
-  Comprehensive) based on request complexity. Called by using-devflow orchestrator
-  during AI-DLC Inception phase. Do NOT invoke directly — use using-devflow instead.
+description: Analyzes user requirements using adaptive depth (Minimal/Standard/Comprehensive) based on request complexity.
 metadata:
-  version: 0.3.0
+  version: 0.4.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/inception/requirements.md
 ---
 
 # requirements-analysis
@@ -131,7 +132,7 @@ Create `devflow-docs/inception/requirements.md`:
 
 ## Return to Orchestrator
 
-After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
+STOP here. No approval gate — orchestrator handles it.
 
 ```
 [requirements-analysis 결과]
@@ -142,8 +143,6 @@ After saving the artifact, display results in this format — then STOP. Do NOT 
 - 산출물: devflow-docs/inception/requirements.md
 ※ 누락된 요구사항이 있다면 오케스트레이터 게이트에서 A) 변경 요청을 선택해주세요.
 ```
-
-The orchestrator (using-devflow) will handle the approval gate and state update.
 
 ## Common Issues
 

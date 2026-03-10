@@ -1,12 +1,13 @@
 ---
 name: workflow-planning
-description: Determines which Construction stages to run and at what depth, then saves
-  the approved workflow plan. Called by using-devflow orchestrator during AI-DLC Inception
-  phase. Do NOT invoke directly — use using-devflow instead.
+description: Determines which Construction stages to run and at what depth. Saves workflow plan.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/inception/workflow-plan.md
 ---
 
 # workflow-planning
@@ -83,7 +84,7 @@ Create `devflow-docs/inception/workflow-plan.md`:
 
 ## Return to Orchestrator
 
-After saving the artifact, display the workflow diagram — then STOP. Do NOT present an approval gate.
+STOP here. No approval gate — orchestrator handles routing, state update, and approval.
 
 ```
 [workflow-planning 결과]
@@ -91,8 +92,6 @@ After saving the artifact, display the workflow diagram — then STOP. Do NOT pr
 - 스킵된 스테이지: [list]
 - 산출물: devflow-docs/inception/workflow-plan.md
 ```
-
-The orchestrator (using-devflow) will handle the approval gate, state update, and conditional stage routing.
 
 ## Common Issues
 

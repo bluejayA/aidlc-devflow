@@ -1,12 +1,13 @@
 ---
 name: application-design
-description: Designs component and service structure before implementation begins.
-  Conditionally called by using-devflow orchestrator when new components are needed
-  during AI-DLC Construction phase. Do NOT invoke directly — use using-devflow instead.
+description: Designs component and service structure before implementation. Conditional Construction stage.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/inception/application-design.md
 ---
 
 # application-design
@@ -49,15 +50,13 @@ Create `devflow-docs/inception/application-design.md`.
 
 ## Return to Orchestrator
 
-After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
+STOP here. No approval gate — orchestrator handles it.
 
 ```
 [application-design 결과]
 - 설계된 컴포넌트: [count]개
 - 산출물: devflow-docs/inception/application-design.md
 ```
-
-The orchestrator (using-devflow) will handle the approval gate and state update.
 
 ## Common Issues
 
