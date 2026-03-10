@@ -1,13 +1,17 @@
 {
   "name": "devflow",
-  "description": "AI-DLC 방법론 기반 Claude Code 개발 워크플로우 플러그인",
-  "version": "0.1.0",
-  "author": {
-    "name": "Jay Ahn",
-    "email": "jay@devflow"
-  },
-  "homepage": "https://github.com/bluejayA/devflow",
-  "repository": "https://github.com/bluejayA/devflow",
-  "license": "MIT",
-  "keywords": ["aidlc", "workflow", "skills", "tdd", "devflow"]
+  "version": "0.2.0-b-plan",
+  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (B안: Orchestrator-Centric)",
+  "skills": {
+    "using-devflow": "skills/using-devflow",
+    "workspace-detection": "skills/workspace-detection",
+    "requirements-analysis": "skills/requirements-analysis",
+    "workflow-planning": "skills/workflow-planning",
+    "application-design": "skills/application-design",
+    "units-generation": "skills/units-generation",
+    "code-generation": "skills/code-generation",
+    "build-and-test": "skills/build-and-test",
+    "devflow-state": "skills/_utils/devflow-state",
+    "devflow-audit": "skills/_utils/devflow-audit"
+  }
 }
