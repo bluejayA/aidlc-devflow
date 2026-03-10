@@ -1,6 +1,13 @@
 ---
 name: using-devflow
-description: Use when starting any software development task to initialize the AI-DLC workflow
+description: Initializes and drives the AI-DLC development workflow for any software
+  project. Use when user says "let's build", "start coding", "new project", "devflow",
+  "AI-DLC", or begins any software development request. Manages the full lifecycle
+  from requirements through code generation.
+metadata:
+  version: 0.2.0
+  author: Jay
+  category: ai-dlc-workflow
 ---
 
 # using-devflow (Orchestrator)
@@ -217,6 +224,41 @@ Operations Phase는 현재 준비 중입니다.
 
 ---
 
+## Examples
+
+### Example 1: 신규 Python 프로젝트 시작
+User says: "FastAPI로 Todo API를 만들어줘"
+
+1. using-devflow 활성화 → devflow-state 없음 → New Flow 시작
+2. workspace-detection → Greenfield 판정
+3. requirements-analysis → Standard 깊이로 API 요구사항 분석
+4. workflow-planning → application-design: included, units-generation: skipped
+5. application-design → API 라우터/모델/서비스 컴포넌트 설계
+6. code-generation → Plan 제시 → 승인 → FastAPI 코드 생성
+7. build-and-test → `pip install && pytest` 지침 생성
+
+### Example 2: 기존 프로젝트에 기능 추가
+User says: "기존 Django 앱에 알림 시스템 추가해줘"
+
+1. using-devflow 활성화 → devflow-state 없음 → New Flow 시작
+2. workspace-detection → Brownfield 판정 (Django 파일 발견)
+3. requirements-analysis → Standard 깊이
+4. workflow-planning → application-design: included, units-generation: included
+5. application-design → 알림 모델/서비스/API 컴포넌트 설계
+6. units-generation → 3개 unit: notification-model, notification-service, notification-api
+7. code-generation × 3 (unit별)
+8. build-and-test → 통합 테스트 포함 지침
+
+### Example 3: 세션 재개
+User says: "어제 하던 작업 이어서 해줘"
+
+1. using-devflow 활성화 → devflow-state 발견
+2. "A) 이전 작업 재개" 선택
+3. requirements-analysis 완료, workflow-planning 진행 중이었음 확인
+4. workflow-planning부터 재개
+
+---
+
 ## Error Handling
 
 ### devflow-docs/ directory missing
@@ -258,3 +300,32 @@ If a stage skill returns an unexpected result or errors:
    A) 해당 단계 재시도
    B) 단계 스킵 (devflow-state에 skipped로 기록)
    ```
+
+---
+
+## Troubleshooting
+
+### devflow-state.md가 손상된 경우
+Symptom: 상태 파일을 읽었는데 파싱이 불가능한 경우
+Solution:
+1. `devflow-docs/devflow-state.md` 백업 (`devflow-state-backup-[timestamp].md`로 이름 변경)
+2. 새 세션으로 시작 (New Flow)
+3. 이전 산출물이 `devflow-docs/inception/`에 있다면 그대로 활용 가능
+
+### 세션 재개 시 산출물 파일이 없는 경우
+Symptom: devflow-state는 `requirements-analysis: completed`인데 `requirements.md`가 없음
+Solution: Error Handling 섹션의 "Stage artifact missing at resume" 절차 따름
+
+### stage skill이 STOP하지 않고 A/B gate를 직접 제시하는 경우
+Symptom: stage skill이 오케스트레이터 역할을 침범하여 직접 승인 요청
+Solution:
+1. 사용자에게 안내: "이 게이트는 무시하고 B를 선택해주세요"
+2. 이후 오케스트레이터가 정상 게이팅을 처리
+3. 해당 skill의 SKILL.md를 확인하여 "Return to Orchestrator" 섹션이 올바른지 점검
+
+### workflow-plan.md의 included/skipped 값을 읽지 못하는 경우
+Symptom: Routing Table 분기가 예상과 다르게 동작
+Solution:
+1. `devflow-docs/inception/workflow-plan.md` 직접 확인
+2. `application-design: included` 또는 `application-design: skipped` 형식인지 검증
+3. 형식이 다르면 파일을 직접 수정 후 재시도

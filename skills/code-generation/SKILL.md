@@ -66,6 +66,43 @@ orchestrator has signaled to proceed with generation.
 3. Follow TDD: write tests first, then implementation
 4. Save plan progress to `devflow-docs/construction/[unit-name]/code-plan.md`
 
+## Examples
+
+### Example 1: PART 1 — 계획 수립
+Orchestrator calls: "code-generation — plan for unit: notification-service"
+
+Output:
+```markdown
+# Code Generation Plan: notification-service
+
+## Files to Create
+- [ ] `notifications/service.py` — 알림 생성/조회/삭제 비즈니스 로직
+- [ ] `tests/test_notification_service.py` — 서비스 단위 테스트
+
+## Implementation Steps
+- [ ] Step 1: NotificationService 클래스 스켈레톤 작성
+- [ ] Step 2: create_notification() 테스트 작성 (RED)
+- [ ] Step 3: create_notification() 구현 (GREEN)
+- [ ] Step 4: list_notifications() 테스트 및 구현
+- [ ] Step 5: delete_notification() 테스트 및 구현
+
+## Test Strategy
+- [ ] test_create_notification_success: 정상 생성 확인
+- [ ] test_create_notification_invalid_user: 잘못된 사용자 처리
+- [ ] test_list_notifications_empty: 빈 목록 반환
+```
+
+### Example 2: PART 2 — 코드 생성
+Orchestrator calls: "code-generation: GENERATE — proceed with the approved plan for notification-service"
+
+Actions:
+1. Step 1 실행: 스켈레톤 작성 → `[x]` 표시
+2. Step 2 실행: 테스트 작성 → `[x]` 표시
+3. Step 3 실행: 구현 → `[x]` 표시
+4. ... (각 체크박스 즉시 업데이트)
+
+---
+
 ## Return to Orchestrator
 
 After PART 1 (planning), display the plan summary — then STOP. Do NOT present an approval gate.
