@@ -1,23 +1,18 @@
 ---
 name: units-generation
-description: Use when a complex system needs decomposition into independently developable parallel units before code generation begins
+description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨 (조건부)
 ---
 
 # units-generation
 
 <!-- 작업 단위 분해: 복잡한 시스템을 병렬 개발 가능한 단위로 분해 -->
-<!-- 조건부 실행 — workflow-planning에서 포함된 경우만 -->
+<!-- B안: 실행 전용, 조건부 — 오케스트레이터가 workflow-plan 기반으로 호출 여부 결정 -->
 
 ## Purpose
 
-Decompose the system into independently developable units for parallel implementation.
+Decompose the system into independently developable units.
 
-## Conditional Execution
-
-**Execute if:** System needs decomposition into multiple parallel units.
-**Skip if:** Single-unit implementation is sufficient.
-
-## Execution Steps
+## Execute
 
 ### Step 1: Load context
 
@@ -26,38 +21,33 @@ Read application design and requirements documents.
 ### Step 2: Identify units
 
 Each unit must be:
-- Independently implementable (minimal dependency on other units)
+- Independently implementable
 - Completable in a single focused session
 - Testable in isolation
 
 ### Step 3: Define each unit
 
-For each unit:
 ```markdown
 ### Unit: [unit-name]
 **Responsibility**: [single sentence]
-**Dependencies**: [other units this depends on, or "none"]
-**Interfaces**: [what it exposes to other units]
-**Implementation order**: [number — lower = implement first]
+**Dependencies**: [other units, or "none"]
+**Interfaces**: [what it exposes]
+**Implementation order**: [number]
 ```
 
-### Step 4: Save units document
+### Step 4: Save artifact
 
 Create `devflow-docs/inception/units.md`.
 
-### Step 5: Update state
+## Return to Orchestrator
 
-Record unit list in devflow-state under `## Completed Units` preparation.
+After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
 
-### Step 6: Completion gate
-
-Display:
 ```
-## Units Generation 완료
-
-단위 목록:
-[list of unit names with one-line descriptions]
-
-A) 변경 요청
-B) Construction 단계로 진행 (첫 번째 unit부터)
+[units-generation 결과]
+- 생성된 단위: [count]개
+- 구현 순서: [unit1] → [unit2] → ...
+- 산출물: devflow-docs/inception/units.md
 ```
+
+The orchestrator (using-devflow) will handle the approval gate and state update.

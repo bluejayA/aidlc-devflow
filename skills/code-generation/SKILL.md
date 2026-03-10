@@ -1,93 +1,70 @@
 ---
 name: code-generation
-description: Use when implementing a unit through the two-stage Plan → Approve → Generate process with TDD, writing tests before implementation
+description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
 ---
 
 # code-generation
 
-<!-- 코드 생성: Plan → Approve → Generate 2단계 실행 -->
-<!-- ALWAYS 실행 — 각 unit마다 반복 -->
+<!-- 코드 생성: Plan 작성 후 오케스트레이터 승인을 받아 코드 생성 -->
+<!-- B안: Plan 제시까지만 담당 — 승인 게이팅은 오케스트레이터 소유 -->
 
 ## Purpose
 
-Generate code through a two-stage process: first plan with explicit checkboxes, then execute after user approval.
-
-## Always Execute
-
-Runs for every unit. Cannot be skipped.
+Generate a code plan and, after orchestrator approval, execute the plan.
 
 ## Two-Stage Process
 
-### PART 1 — Planning
+### PART 1 — Planning (항상 실행)
 
-Create a detailed code generation plan with checkboxes.
+Create a code generation plan with checkboxes:
 
-**Plan format (TDD order — tests first):**
 ```markdown
 # Code Generation Plan: [unit-name]
 
-## Test Files (Write First — TDD RED)
-- [ ] `tests/path/to/test_file.py` — [what it tests]
-
-## Test Strategy
-- [ ] [test name]: [what it verifies]
-- [ ] Run tests → confirm RED (failing)
-
-## Implementation Files
+## Files to Create
 - [ ] `path/to/file.py` — [purpose]
+- [ ] `tests/path/to/test_file.py` — [what it tests]
 
 ## Files to Modify
 - [ ] `path/to/existing.py` — [what changes]
 
 ## Implementation Steps
-- [ ] Step 1: Write failing test
-- [ ] Step 2: Run test → confirm RED
-- [ ] Step 3: [implement specific action]
-- [ ] Step 4: Run test → confirm GREEN
-- [ ] Step 5: Refactor if needed → confirm GREEN
+- [ ] Step 1: [specific action]
+- [ ] Step 2: [specific action]
+
+## Test Strategy
+- [ ] [test name]: [what it verifies]
 ```
 
-Present the plan and wait for approval:
+After writing the plan, display it and STOP:
+
 ```
-## Code Generation Plan 준비 완료
-
-위 계획을 검토해주세요.
-
-A) 변경 요청
-B) 계획 승인 — 코드 생성 시작
+[code-generation Plan 준비]
+- 생성할 파일: [count]개
+- 수정할 파일: [count]개
+- 구현 단계: [count]개
 ```
 
-**MANDATORY**: Do NOT write any code until user approves the plan.
+The orchestrator will present the approval gate. Do NOT write any code yet.
 
-### PART 2 — Generation
+### PART 2 — Generation (오케스트레이터 승인 후)
 
-After approval:
+When the orchestrator signals approval and calls this skill again with "generate":
 1. Execute each step in the plan
-2. Mark each checkbox `[x]` **immediately** after completing that step
+2. Mark each checkbox `[x]` immediately after completing that step
 3. Follow TDD: write tests first, then implementation
 4. Save plan progress to `devflow-docs/construction/[unit-name]/code-plan.md`
 
-## Checkbox Rules
+## Return to Orchestrator
 
-- Update checkboxes in the SAME interaction where the work is done
-- NEVER defer checkbox updates
-- If a step is blocked, note the blocker in the checkbox: `- [!] Step N: BLOCKED — [reason]`
+After PART 1 (planning), display the plan summary — then STOP.
+After PART 2 (generation), display:
 
-## Completion Gate
-
-After all checkboxes are marked:
-
-1. Update devflow-state: mark this unit complete in `## Completed Units`
-2. Update devflow-state: set `## Current Stage` to next stage
-3. Use devflow-audit to log: "code-generation completed: [unit-name]"
-
-Display:
 ```
-## Code Generation 완료: [unit-name]
-
-- 생성된 파일: [count]
+[code-generation 완료: unit-name]
+- 생성된 파일: [count]개
+- 모든 체크박스 완료
 - 산출물: devflow-docs/construction/[unit-name]/code-plan.md
-
-A) 변경 요청
-B) 다음 단계로 진행
 ```
+
+The orchestrator handles all approval gates and state updates.

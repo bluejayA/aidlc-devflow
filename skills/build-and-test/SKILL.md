@@ -1,22 +1,18 @@
 ---
 name: build-and-test
-description: Use after all code generation units are complete to generate comprehensive build and test instructions for the Construction phase
+description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨
 ---
 
 # build-and-test
 
 <!-- 빌드/테스트 지침 생성: 모든 unit 완료 후 실행 -->
-<!-- ALWAYS 실행 — Construction의 마지막 단계 -->
+<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 
 ## Purpose
 
 Generate comprehensive build and test instructions after all units are implemented.
 
-## Always Execute
-
-Runs after all code-generation units are complete.
-
-## Execution Steps
+## Execute
 
 ### Step 1: Analyze the implementation
 
@@ -56,28 +52,19 @@ Expected: [number] tests pass
 
 ## Integration Tests
 Run: `[exact command]`
-Expected: [description]
 
 ## Manual Verification
 [any steps that can't be automated]
 ```
 
-### Step 4: Update state and audit log
+## Return to Orchestrator
 
-Mark Construction phase as complete in devflow-state.
-Use devflow-audit to log: "build-and-test completed — Construction phase complete"
+After saving both artifacts, display results — then STOP. Do NOT present an approval gate.
 
-### Step 5: Completion gate
-
-Display:
 ```
-## Build and Test 완료
-
+[build-and-test 결과]
 - devflow-docs/construction/build-and-test/build-instructions.md
 - devflow-docs/construction/build-and-test/test-instructions.md
-
-Construction Phase 완료. Operations Phase는 현재 준비 중입니다.
-
-A) 변경 요청
-B) 완료 확인
 ```
+
+The orchestrator handles the final completion gate and state update.

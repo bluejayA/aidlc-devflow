@@ -1,25 +1,18 @@
 ---
 name: application-design
-description: Use when new components or services need structural design before implementation begins, as determined by workflow-planning
+description: B안 순수 실행자 — 오케스트레이터(using-devflow)의 호출로만 실행됨 (조건부)
 ---
 
 # application-design
 
 <!-- 애플리케이션 설계: 신규 컴포넌트/서비스 구조 설계 -->
-<!-- 조건부 실행 — workflow-planning에서 포함된 경우만 -->
+<!-- B안: 실행 전용, 조건부 — 오케스트레이터가 workflow-plan 기반으로 호출 여부 결정 -->
 
 ## Purpose
 
 Design the component and service structure before implementation begins.
 
-## Conditional Execution
-
-**Execute if:** New components or services are needed.
-**Skip if:** Changes are within existing component boundaries.
-
-Check `devflow-docs/inception/workflow-plan.md` to confirm this stage is included.
-
-## Execution Steps
+## Execute
 
 ### Step 1: Load context
 
@@ -35,25 +28,25 @@ For each new component/service, define:
 
 ### Step 3: Design interactions
 
-Describe how components interact using a simple diagram:
+Describe how components interact:
 
 ```
 [ComponentA] --calls--> [ComponentB]
 [ComponentB] --returns--> [ComponentA]
 ```
 
-### Step 4: Save design document
+### Step 4: Save artifact
 
 Create `devflow-docs/inception/application-design.md`.
 
-### Step 5: Completion gate
+## Return to Orchestrator
 
-Display:
+After saving the artifact, display results in this format — then STOP. Do NOT present an approval gate.
+
 ```
-## Application Design 완료
-
+[application-design 결과]
+- 설계된 컴포넌트: [count]개
 - 산출물: devflow-docs/inception/application-design.md
-
-A) 변경 요청
-B) 다음 단계로 진행
 ```
+
+The orchestrator (using-devflow) will handle the approval gate and state update.
