@@ -41,7 +41,7 @@
 | common/error-handling.md | **(없음)** | 0% | 누락 |
 | common/workflow-changes.md | **(없음)** | 0% | 누락 |
 | common/overconfidence-prevention.md | *(verification-before-completion 일부)* | 50% | 일부 중복 |
-| extensions/security/baseline/ | **(없음)** | 0% | 전체 누락 |
+| extensions/security/baseline/ | **(없음)** | 0% | 선택적 확장 — aidlc에서도 opt-in 플러그인으로 구현 필요 |
 | operations/ | *(placeholder)* | 10% | 양쪽 모두 미완 |
 | *(없음)* | aidlc-using-devflow | — | aidlc 고유 |
 | *(없음)* | aidlc-systematic-debugging | — | aidlc 고유 |
@@ -145,6 +145,10 @@
 
 ### 3.5 보안 확장 프레임워크 (`extensions/security/baseline/`)
 
+> **⚠️ 선택적 확장(Extension) 성격 주의**
+>
+> dev-playbook에서 이 내용은 `rules/extensions/` 하위에 위치한다. `extensions/`는 모든 프로젝트에 강제 적용되는 core 규칙이 아니라 **선택적으로 활성화하는 확장**임을 의미한다. aidlc에 반영할 때도 동일하게 **opt-in 플러그인** 형태로 구현해야 하며, core 워크플로우에 내장하거나 자동 실행하는 방식은 적합하지 않다.
+
 **파일 내용 — SECURITY-01 ~ SECURITY-15 규칙**:
 
 | 규칙 ID | 내용 | OWASP 매핑 |
@@ -172,7 +176,12 @@
 
 **aidlc 현황**: 보안 프레임워크 전무. `aidlc-code-generation`의 "Automation Friendly Code Rules" (data-testid 속성)만 언급.
 
-**권고**: `skills/_shared/security-baseline.md` 또는 `aidlc-security-baseline/SKILL.md` 신규 작성. 각 construction 스킬에서 참조.
+**권고**: 별도 aidlc 플러그인(`aidlc-security-extension`)으로 구현. 설치한 경우에만 워크플로우에 보안 검증 게이트가 추가되는 **opt-in 구조**로 설계할 것. core 스킬(`aidlc-code-generation`, `aidlc-build-and-test`)에 보안 로직을 직접 내장하는 방식은 지양.
+
+**aidlc 플러그인 구현 방향**:
+- 플러그인 설치 시: `aidlc-using-devflow` 오케스트레이터가 security gate 단계를 자동으로 workflow에 삽입
+- 미설치 시: core 워크플로우에 영향 없음
+- 활성화 범위 선택 가능: 전체 SECURITY-01~15 또는 카테고리별(예: "API 보안만", "의존성 스캔만") 선택 설치 지원 고려
 
 ---
 
@@ -594,7 +603,9 @@ artifacts_created: [목록]
 
 ## 6. 보안 정책 격차 상세
 
-**dev-playbook** 각 construction 단계에 보안 체크포인트 내장:
+> **⚠️ Extension 성격 재확인**: dev-playbook의 보안 프레임워크는 `rules/extensions/` 하위에 위치하여 선택적 적용이 전제된 내용이다. 아래 격차 분석은 "보안 확장을 활성화했을 때"를 기준으로 한다.
+
+**dev-playbook** 각 construction 단계에 보안 체크포인트 내장 (확장 활성화 시):
 - Code Generation 후: SECURITY-02(입력검증), SECURITY-03(SQL Injection), SECURITY-04(XSS) 검증
 - Build & Test 후: SECURITY-07(의존성 취약점 스캔) 실행
 - Application Design 후: SECURITY-11(접근 제어), SECURITY-09(API 보안) 검토
@@ -603,7 +614,9 @@ artifacts_created: [목록]
 - `aidlc-code-generation`: "data-testid 속성을 UI 요소에 추가" (테스트 자동화용)
 - `skills/_shared/devflow-conventions.md`: tech-stack-defaults.md 참조 (보안 스택 선택 일부)
 
-**격차**: aidlc에서 생성된 코드가 OWASP Top 10 취약점에 노출될 수 있음에도 검증 절차 없음.
+**격차**: aidlc에 보안 확장을 선택적으로 활성화할 수 있는 플러그인 메커니즘 자체가 없음. 보안이 필요한 프로젝트에서 해당 확장을 opt-in으로 설치·활성화할 수 있는 구조가 없는 것이 핵심 문제.
+
+**방향**: aidlc 플러그인 시스템에서 extension을 지원하는 구조(설치 → 워크플로우 자동 확장)를 먼저 정의한 뒤, 보안 확장을 그 첫 번째 사례로 구현하는 것이 적합.
 
 ---
 
@@ -626,13 +639,32 @@ artifacts_created: [목록]
 
 ---
 
-#### P1-2. 보안 프레임워크 통합
+#### P1-2. 보안 확장 플러그인 구현 *(opt-in — core 워크플로우 분리 필수)*
 **기반 파일**: `dev-playbook/rules/extensions/security/baseline/security-baseline.md`
 
-방안 A: `skills/_shared/security-baseline.md` 생성 (참조 문서)
-방안 B: `aidlc-code-generation`의 PART 2 완료 후 보안 검증 체크리스트 추가
+> dev-playbook에서 `extensions/`는 선택적 확장을 의미한다. aidlc에서도 동일하게 **별도 플러그인으로 분리**하여 설치한 경우에만 워크플로우에 영향을 주도록 설계해야 한다. core 스킬에 보안 로직을 직접 내장하는 방식은 지양.
 
-권고 방안: A + B 결합 — shared 문서 작성 후 code-generation과 build-and-test에서 참조
+**구현 방향**:
+
+**Step 1 — aidlc Extension 메커니즘 정의 (선행 작업)**
+- aidlc 플러그인이 core 워크플로우를 확장하는 방식 정의
+  - 예: `plugin.json`의 `extensions` 필드로 활성화
+  - 예: `aidlc-using-devflow` 오케스트레이터가 설치된 extension 스킬 목록을 읽어 stage routing table에 동적 삽입
+- Extension 스킬의 invoke 조건과 gate 위치 정의 (어느 core 단계 전/후에 삽입되는지)
+
+**Step 2 — `aidlc-security-extension/SKILL.md` 신규 작성**
+- SECURITY-01~15 규칙 포함
+- 각 규칙이 어느 core 단계 다음에 실행되는지 명시
+  - `aidlc-application-design` 완료 후 → SECURITY-09, SECURITY-11 검토
+  - `aidlc-code-generation` PART 2 완료 후 → SECURITY-02, SECURITY-03, SECURITY-04 검증
+  - `aidlc-build-and-test` 완료 후 → SECURITY-07 의존성 취약점 스캔
+- Blocking finding 발생 시 오케스트레이터에 중단 신호 반환
+
+**Step 3 — 선택적 활성화 범위 지원 (선택)**
+- 전체 SECURITY-01~15 일괄 활성화
+- 카테고리별 선택 활성화 (예: "API 보안", "의존성 스캔" 등)
+
+**미설치 시**: core 워크플로우에 전혀 영향 없음
 
 ---
 
@@ -758,7 +790,7 @@ Standard/Comprehensive depth에서:
 | 아키텍처 | 계획-지향, 단계별 독립 | 오케스트레이터 중심, 역할 분리 |
 | 요구사항 수집 | 철저한 질문 강제 | 선택적, 깊이 기반 |
 | NFR/인프라 설계 | 3개 전용 단계 | 없음 (누락) |
-| 보안 프레임워크 | SECURITY-01~15 (OWASP 매핑) | 없음 (누락) |
+| 보안 프레임워크 | SECURITY-01~15 (선택적 extension) | 없음 — opt-in 플러그인으로 구현 필요 |
 | 디버깅 | 없음 | 체계적 디버깅 스킬 있음 |
 | 코드 리뷰 | 없음 | reception 스킬 있음 |
 | 완료 검증 | 각 단계 분산 | 전용 verification gate |
@@ -775,6 +807,9 @@ Standard/Comprehensive depth에서:
 **aidlc의 강점**: 오케스트레이터 아키텍처, 워크트리 통합, 디버깅/리뷰/검증 스킬
 **aidlc의 약점**: NFR 3단계 누락, 보안 프레임워크 전무, User Stories 없음, 에러 복구/변경 관리 미흡
 
-**통합 전략**: aidlc의 오케스트레이터 아키텍처를 유지하면서 dev-playbook의 콘텐츠(NFR, 보안, User Stories, 에러 복구)를 순차적으로 이식하는 것이 최적.
+**통합 전략**: aidlc의 오케스트레이터 아키텍처를 유지하면서 dev-playbook의 콘텐츠(NFR, User Stories, 에러 복구)를 core 스킬로 이식하고, 보안 프레임워크는 dev-playbook의 `extensions/` 위치에 충실하게 **별도 opt-in 플러그인**으로 구현하는 것이 적합.
 
-Priority 순서: P1 (5개 스킬 신규 작성) → P2 (6개 개선) → P3 (5개 확장) 순으로 진행 권고.
+Priority 순서:
+- **P1**: 5개 core 스킬 신규 작성 (user-stories, nfr-requirements, nfr-design, infrastructure-design) + 보안 extension 플러그인 메커니즘 설계
+- **P2**: 6개 개선 (depth-levels, error-handling, workflow-changes, 모호성 탐지, build-and-test 확장, reverse-engineering)
+- **P3**: 5개 장기 확장 (functional-design, risk assessment, C4 model, operations phase, content-validation)
