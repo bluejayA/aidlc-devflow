@@ -30,6 +30,22 @@ brainstorming 스킬 ≈ aidlc의 INCEPTION 전체를 하나의 연속 흐름으
 - CONSTRUCTION 단계는 이번 개선 범위 외
 - 기존 17개 스킬의 `return_behavior: stop-no-gate` 원칙 유지
 
+## 스킬 간 파라미터 전달 패턴 (C-2 결정)
+
+이 플러그인에서 오케스트레이터가 스킬에 파라미터를 전달하는 방식:
+
+**Primary — 호출 시 인라인 지시**: `aidlc-code-generation`의 PART 2 신호 패턴과 동일하게 적용.
+
+```
+"aidlc-requirements-analysis 실행. Complexity: Standard"
+"aidlc-application-design: DETAIL — 승인된 목록으로 상세 설계 진행"
+"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"
+```
+
+**Secondary — devflow-state 백업**: 호출 신호가 없어도 스킬이 devflow-state에서 읽을 수 있도록 `## Complexity` 필드에도 기록. fallback 보장용.
+
+스킬은 호출 텍스트에서 먼저 파라미터를 읽고, 없으면 devflow-state를 확인한다.
+
 ---
 
 ## 섹션 1: 오케스트레이터 (`aidlc-using-devflow`) 변경
@@ -87,7 +103,7 @@ B) 복잡도 조정 (Minimal / Standard / Comprehensive 중 선택)
 3) 변경 요청
 ```
 
-선택 후 기존 worktree gate로 이어짐:
+접근법 선택 후 worktree gate로 이어짐 (기존 유지):
 ```
 ## 개발 환경 설정
 
@@ -96,7 +112,13 @@ B) Git Worktree 생성 후 시작 (격리 개발)
 C) 현재 브랜치에서 바로 시작
 ```
 
-**선택된 접근법**: devflow-state `## Selected Approach` 필드에 기록
+**선택된 접근법**: devflow-state `## Selected Approach` 필드에 기록.
+
+**오케스트레이터 SKILL.md 재작성 범위** (I-1 해소): 기존 `aidlc-workflow-planning 전용 게이트` 섹션 전체를 아래 구조로 교체:
+1. Approach Proposal Gate (신규) — 접근법 선택
+2. worktree gate (기존 그대로 유지)
+
+두 gate는 순차적으로 실행되며, 1번 gate 완료 후 2번 gate 진행.
 
 ---
 
@@ -104,29 +126,31 @@ C) 현재 브랜치에서 바로 시작
 
 **위치**: `aidlc-requirements-analysis` 반환 후, 기존 승인 gate 이전에 조건부 삽입
 
-**동작**: requirements-analysis 반환값의 Open Questions 수를 확인:
+**동작**: requirements-analysis 반환값의 `열린 질문: [N]개` 필드를 확인:
 
-```python
-# 의사코드
-if open_questions_count > 0:
-    # 선제 확인 gate 제시
-    """
-    ## aidlc-requirements-analysis 완료
-
-    ⚠️ 미해결 질문이 {N}개 있습니다.
-
-    A) 지금 답변 (requirements-analysis 재실행하여 질문 처리)
-    B) 현재 가정으로 진행 (나중에 변경 가능)
-    """
-else:
-    # 기존 표준 gate
-    """
-    ## aidlc-requirements-analysis 완료
-
-    A) 변경 요청
-    B) 다음 단계 진행
-    """
 ```
+## aidlc-requirements-analysis 완료
+
+[open_questions_count > 0인 경우]
+⚠️ 미해결 질문이 {N}개 있습니다.
+
+A) 지금 답변 (아래 신호로 재실행)
+B) 현재 가정으로 진행 (가정은 requirements.md에 기록됨)
+C) 변경 요청
+
+[open_questions_count == 0인 경우]
+A) 변경 요청
+B) 다음 단계 진행
+```
+
+**A 선택 시 재실행 신호** (C-1 해소):
+```
+"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"
+```
+
+이 신호를 받은 스킬은 Step 1, 2를 건너뛰고 미해결 Open Questions만 one-at-a-time으로 처리한 후 requirements.md를 업데이트하고 STOP한다.
+
+**open_questions_count 판단 기준**: 반환 텍스트에서 `열린 질문: [N]개` 패턴 매칭. N > 0이면 미해결로 판단.
 
 ---
 
@@ -161,9 +185,21 @@ else:
 ```
 1. 모호성 탐지 → 후속 질문 ONE at a time
 2. 모호성이 해소될 때까지 반복
-3. 사용자가 "그냥 진행해" 요청 시:
-   - 가정 목록 제시 + 승인 대기
-   - 승인된 가정 → requirements.md의 ## Assumptions에 기록
+3. 사용자가 "그냥 진행해" 요청 시 (I-4 해소 — stop-no-gate 원칙 준수):
+   - 스킬이 해소되지 않은 항목을 가정으로 확정하여 requirements.md의 ## Assumptions에 기록
+   - 반환 텍스트에 "가정으로 처리된 항목: [N]개" 포함
+   - STOP (승인 대기 없음 — 오케스트레이터 게이트에서 사용자에게 가정 항목 표시)
+```
+
+오케스트레이터는 반환된 가정 항목을 기존 gate에 아래와 같이 포함:
+```
+## aidlc-requirements-analysis 완료
+
+ℹ️ 아래 항목은 가정으로 처리되었습니다:
+- [가정 1]
+- [가정 2]
+
+A) 변경 요청  B) 다음 단계 진행
 ```
 
 ---
@@ -185,13 +221,17 @@ else:
 - 규모: "동시 사용자 수가 어느 정도를 예상하시나요?"
 ```
 
+**Standard depth에서 핵심 질문과 Ambiguity Loop 우선순위** (M-2 해소):
+핵심 질문(최대 2개)을 먼저 진행하고, 각 답변 후 Ambiguity Loop 발동 여부를 판단한다.
+즉 핵심 질문 → (모호하면) Ambiguity Loop → 다음 핵심 질문 → ... 순서.
+
 ### Depth별 질문 정책 요약 (변경 후)
 
 | Depth | 해석 분기 | 핵심 질문 | Ambiguity Loop |
 |-------|-----------|-----------|----------------|
 | Minimal | 없음 | 없음 | 없음 |
-| Standard | 있음 | 최대 2개 | 있음 |
-| Comprehensive | 있음 | 제한 없음 | 있음 |
+| Standard | 있음 | 최대 2개 | 있음 (각 답변 후 판단) |
+| Comprehensive | 있음 | 제한 없음 | 있음 (각 답변 후 판단) |
 
 ---
 
@@ -202,10 +242,10 @@ else:
 **현재**: Step 2에서 단일 스테이지 권고안 생성
 **변경**: 2-3개 접근법 생성, 오케스트레이터가 선택 gate 제시
 
-접근법 생성 기준:
+접근법 생성 기준 (M-3 해소 — complexity와 연동):
 - 항상 "빠른/간결" 접근법 포함 (Minimal depth 위주)
 - 항상 "안전한/완전" 접근법 포함 (Standard+ depth 위주)
-- 복잡한 요청이면 중간 접근법 추가
+- **Comprehensive complexity이면 3개**, 그 외(Minimal/Standard)는 2개
 - 접근법 간 실질적 차이 필수 (스테이지 포함 여부, depth 차이)
 
 반환 형식:
@@ -304,9 +344,11 @@ B) 이 목록으로 상세 설계 진행
 
 | Depth | 동작 |
 |-------|------|
-| Minimal | 목록 단계만 (DETAIL 호출 없음) — 오케스트레이터 gate 단순화 |
-| Standard | 목록 → 승인 → 주요 인터페이스 + 의존성 |
-| Comprehensive | 목록 → 승인 → 전체 인터페이스 + 의존성 + 데이터 소유 + 상호작용 다이어그램 |
+| Minimal | 목록 단계만 (DETAIL 호출 없음). **목록을 application-design.md에 저장** 후 STOP. 오케스트레이터 gate 단순화. |
+| Standard | 목록 → 승인 → DETAIL (주요 인터페이스 + 의존성) → application-design.md 업데이트 |
+| Comprehensive | 목록 → 승인 → DETAIL (전체 인터페이스 + 의존성 + 데이터 소유 + 상호작용 다이어그램) → application-design.md 업데이트 |
+
+**Minimal에서도 application-design.md 저장 필수** (I-3 해소): 이후 스킬(`aidlc-units-generation`, `aidlc-code-generation`)이 이 파일을 읽으므로, 목록만 포함된 형태라도 반드시 저장한다.
 
 ---
 
@@ -333,16 +375,29 @@ Minimal: 목록 gate 후 바로 next stage
 
 | 파일 | 변경 유형 |
 |------|-----------|
-| `skills/aidlc-using-devflow/SKILL.md` | 수정 — Gate 3개 추가, Routing Table 변경 |
-| `skills/aidlc-requirements-analysis/SKILL.md` | 수정 — Complexity 수신, Ambiguity Loop, Standard 질문 추가 |
+| `skills/aidlc-using-devflow/SKILL.md` | 수정 — Gate 3개 추가, Routing Table 변경, workflow-plan.md 파싱 로직 업데이트 |
+| `skills/aidlc-requirements-analysis/SKILL.md` | 수정 — Complexity 수신, Ambiguity Loop, Standard 질문, QUESTIONS 모드 추가 |
 | `skills/aidlc-workflow-planning/SKILL.md` | 수정 — 접근법 2-3개 생성, 아티팩트 형식 확장 |
-| `skills/aidlc-application-design/SKILL.md` | 수정 — 2단계 실행 모드, Depth 연동 |
+| `skills/aidlc-application-design/SKILL.md` | 수정 — 2단계 실행 모드, Depth 연동, Minimal 아티팩트 저장 보장 |
+
+**`aidlc-using-devflow` 파싱 로직 업데이트 상세** (I-2 해소):
+`workflow-plan.md`에 `## Approaches Considered` 섹션이 추가되지만, 기존 라우팅에 사용하는 `application-design: included | skipped` 패턴은 `## Approved Stages` 섹션 아래에만 존재하도록 아티팩트 형식을 유지한다. 오케스트레이터는 `## Approved Stages` 이하만 파싱하므로 기존 Troubleshooting 로직과 충돌하지 않는다.
 
 ---
 
-## 구현 순서 (권고)
+## 구현 순서 (I-5 해소 — 의존성 명확화)
 
-1. `aidlc-workflow-planning` — 접근법 생성 로직 (독립적, 사이드이펙트 없음)
-2. `aidlc-requirements-analysis` — Ambiguity Loop + Standard 질문 (독립적)
-3. `aidlc-using-devflow` — Gate 3개 추가 + Routing Table (앞 두 변경 완료 후)
-4. `aidlc-application-design` — 2단계 모드 (오케스트레이터 Routing Table과 함께)
+```
+단계 1: aidlc-workflow-planning (변경 3A, 3B, 3C)
+  → 독립적. 오케스트레이터 변경 없이 단독 테스트 가능.
+
+단계 2: aidlc-requirements-analysis (변경 2A fallback 포함, 2B, 2C, QUESTIONS 모드)
+  → 독립적. 오케스트레이터 Complexity 전달 없이도 fallback으로 동작.
+
+단계 3: aidlc-using-devflow (변경 1A, 1B, 1C + Routing Table + 파싱 업데이트)
+  → 단계 1, 2 완료 후. 이 단계에서 Complexity 인라인 신호 전달 구현.
+  → 단계 3 완료 시 단계 1, 2의 신규 기능이 오케스트레이터와 완전히 연결됨.
+
+단계 4: aidlc-application-design (변경 4A, 4B)
+  → 단계 3 완료 후. Routing Table의 2단계 gate 분기가 필요하므로 오케스트레이터 먼저.
+```
