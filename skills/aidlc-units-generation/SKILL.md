@@ -1,6 +1,6 @@
 ---
-name: units-generation
-description: Decomposes the system into independently developable units for parallel implementation. Conditional Construction stage.
+name: aidlc-units-generation
+description: aidlc 플러그인(B안) 전용 스킬. Decomposes the system into independently developable units for parallel implementation. Conditional Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/inception/units.md
 ---
 
-# units-generation
+# aidlc-units-generation
 
 <!-- 작업 단위 분해: 복잡한 시스템을 병렬 개발 가능한 단위로 분해 -->
 <!-- B안: 실행 전용, 조건부 — 오케스트레이터가 workflow-plan 기반으로 호출 여부 결정 -->

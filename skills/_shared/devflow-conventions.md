@@ -14,10 +14,10 @@ metadata:
 ### invoke_mode: orchestrator-only
 
 이 값을 가진 스킬은 **사용자가 직접 호출하면 안 됩니다**.
-`using-devflow` 오케스트레이터만 호출합니다.
+`aidlc-using-devflow` 오케스트레이터만 호출합니다.
 
 직접 호출 시 응답:
-> "이 스킬은 using-devflow 오케스트레이터를 통해 자동으로 호출됩니다. `devflow:using-devflow`를 시작해주세요."
+> "이 스킬은 aidlc-using-devflow 오케스트레이터를 통해 자동으로 호출됩니다. `aidlc:aidlc-using-devflow`를 시작해주세요."
 
 ### return_behavior: stop-no-gate
 
@@ -28,7 +28,7 @@ metadata:
 3. 결과 요약 표시 (각 스킬의 `## Return to Orchestrator` 섹션 형식 사용)
 4. **STOP** — A/B 승인 게이트 절대 표시 금지
 
-승인 게이트와 상태 업데이트는 `using-devflow` 오케스트레이터가 전담합니다.
+승인 게이트와 상태 업데이트는 `aidlc-using-devflow` 오케스트레이터가 전담합니다.
 
 ## 공통 이슈 처리
 

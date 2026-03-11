@@ -87,4 +87,4 @@ When creating a new state file:
 1. Create `devflow-docs/` directory if it doesn't exist
 2. Write the state file with default values
 3. Set `## Current Phase` to `inception`
-4. Set `## Current Stage` to `workspace-detection`
+4. Set `## Current Stage` to `aidlc-workspace-detection`

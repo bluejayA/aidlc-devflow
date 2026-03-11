@@ -1,15 +1,13 @@
 ---
-name: writing-skills
-description: Use when creating a new SKILL.md file, editing an existing skill, validating
-  a skill before deployment, or when any process documentation needs to be defined
-  as an executable skill.
+name: aidlc-writing-skills
+description: aidlc 플러그인(B안) 전용. Use when creating a new SKILL.md file, editing an existing skill, validating a skill before deployment, or when any process documentation needs to be defined as an executable skill. Invoke via aidlc:aidlc-writing-skills.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# writing-skills
+# aidlc-writing-skills
 
 <!-- 스킬 작성: 프로세스 문서화의 TDD -->
 
@@ -224,7 +222,7 @@ metadata:
 
 ### Example 2: 기존 스킬 개선
 
-**상황**: `code-generation` 스킬이 오케스트레이터 없이 단독 호출될 때 승인 게이트 처리가 모호함
+**상황**: `aidlc-code-generation` 스킬이 오케스트레이터 없이 단독 호출될 때 승인 게이트 처리가 모호함
 
 **수정 전 문제**:
 ```markdown

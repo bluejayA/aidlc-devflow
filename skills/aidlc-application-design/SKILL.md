@@ -1,6 +1,6 @@
 ---
-name: application-design
-description: Designs component and service structure before implementation. Conditional Construction stage.
+name: aidlc-application-design
+description: aidlc 플러그인(B안) 전용 스킬. Designs component and service structure before implementation. Conditional Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/inception/application-design.md
 ---
 
-# application-design
+# aidlc-application-design
 
 <!-- 애플리케이션 설계: 신규 컴포넌트/서비스 구조 설계 -->
 <!-- B안: 실행 전용, 조건부 — 오케스트레이터가 workflow-plan 기반으로 호출 여부 결정 -->

@@ -1,6 +1,6 @@
 ---
-name: using-git-worktrees
-description: Creates an isolated git worktree before code-generation begins. Protects the main branch during Construction. Called by using-devflow orchestrator after workflow-planning approval.
+name: aidlc-using-git-worktrees
+description: aidlc 플러그인(B안) 전용 스킬. Creates an isolated git worktree before code-generation begins. Protects the main branch during Construction. Called by aidlc:aidlc-using-devflow orchestrator after aidlc-workflow-planning approval.
 metadata:
   version: 0.1.0
   author: Jay
@@ -9,7 +9,7 @@ metadata:
   return_behavior: stop-no-gate
 ---
 
-# using-git-worktrees
+# aidlc-using-git-worktrees
 
 <!-- B안: 격리 개발 워크트리 생성 — 오케스트레이터 승인 후 Construction 진입 전 실행 -->
 <!-- Greenfield / Brownfield 모두 처리, git 미초기화 케이스 포함 -->

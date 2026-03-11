@@ -1,14 +1,13 @@
 ---
-name: finishing-a-development-branch
-description: Use when implementation is done and all tests pass, and a decision is
-  needed on what to do with the development branch — merge, PR, keep, or discard.
+name: aidlc-finishing-a-development-branch
+description: aidlc 플러그인(B안) 전용. Use when implementation is done and all tests pass, and a decision is needed on what to do with the development branch — merge, PR, keep, or discard. Invoke via aidlc:aidlc-finishing-a-development-branch.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# finishing-a-development-branch
+# aidlc-finishing-a-development-branch
 
 <!-- 개발 브랜치 마무리: 병합, PR, 유지, 폐기 중 하나를 선택 -->
 
@@ -18,7 +17,7 @@ metadata:
 
 - 구현이 완료되고 모든 테스트가 통과했을 때
 - "브랜치를 어떻게 할까요?"라는 질문을 받았을 때
-- AI-DLC `build-and-test` 단계가 완료되었을 때
+- AI-DLC `aidlc-build-and-test` 단계가 완료되었을 때
 - 기능 개발 또는 버그 수정 작업이 완전히 마무리되었을 때
 
 ---
@@ -36,7 +35,7 @@ metadata:
 
 브랜치 처리 전에 반드시 검증이 완료되어야 한다.
 
-`verification-before-completion` 스킬 사용을 권장한다.
+`aidlc-verification-before-completion` 스킬 사용을 권장한다.
 이미 검증이 완료된 경우 현재 상태를 확인한다:
 
 ```bash
@@ -46,7 +45,7 @@ git log --oneline -5
 git branch --show-current
 ```
 
-검증이 완료되지 않았다면 이 스킬을 중단하고 `verification-before-completion`을 먼저 실행한다.
+검증이 완료되지 않았다면 이 스킬을 중단하고 `aidlc-verification-before-completion`을 먼저 실행한다.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
-name: code-generation
-description: Two-stage process — generates a code plan first, then implements after orchestrator approval.
+name: aidlc-code-generation
+description: aidlc 플러그인(B안) 전용 스킬. Two-stage process — generates a code plan first, then implements after orchestrator approval. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/construction/[unit-name]/code-plan.md
 ---
 
-# code-generation
+# aidlc-code-generation
 
 <!-- 코드 생성: Plan 작성 후 오케스트레이터 승인을 받아 코드 생성 -->
 <!-- B안: Plan 제시까지만 담당 — 승인 게이팅은 오케스트레이터 소유 -->
@@ -28,7 +28,7 @@ Create a code generation plan with checkboxes:
 ```markdown
 # Code Generation Plan: [unit-name]
 
-> **For agentic workers:** REQUIRED: Use `devflow:code-generation` with the
+> **For agentic workers:** REQUIRED: Use `aidlc:aidlc-code-generation` with the
 > "GENERATE" signal to execute this plan. Do NOT implement ad-hoc.
 > `"code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
 

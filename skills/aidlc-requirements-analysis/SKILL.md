@@ -1,6 +1,6 @@
 ---
-name: requirements-analysis
-description: Analyzes user requirements using adaptive depth (Minimal/Standard/Comprehensive) based on request complexity.
+name: aidlc-requirements-analysis
+description: aidlc 플러그인(B안) 전용 스킬. Analyzes user requirements using adaptive depth (Minimal/Standard/Comprehensive) based on request complexity. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.4.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/inception/requirements.md
 ---
 
-# requirements-analysis
+# aidlc-requirements-analysis
 
 <!-- 요구사항 분석: 적응형 깊이로 사용자 의도와 요구사항을 분석 -->
 <!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->

@@ -3,7 +3,7 @@
 AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 Claude Code 개발 워크플로우 플러그인입니다.
 
 [AI-DLC(AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows)의 컨셉을 최대한 충실하게 반영합니다.
-`using-devflow` 하나가 전체 라이프사이클을 소유하고 구동하며, 나머지 stage skill은 순수 실행자로 동작합니다.
+`aidlc-using-devflow` 하나가 전체 라이프사이클을 소유하고 구동하며, 나머지 stage skill은 순수 실행자로 동작합니다.
 
 > **관련 구현체**: [bluejayA/devflow](https://github.com/bluejayA/devflow) — 동일한 AI-DLC 워크플로우를 분산형(Enhanced Skills) 아키텍처로 구현한 버전
 
@@ -14,7 +14,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | | **devflow-aidlc-like** (이 repo) | **devflow** |
 |---|---|---|
 | **아키텍처** | Orchestrator-Centric (B안) | Enhanced Skills (C안) |
-| **승인 게이팅** | `using-devflow`가 통합 관리 | 각 stage skill이 자체 처리 |
+| **승인 게이팅** | `aidlc-using-devflow`가 통합 관리 | 각 stage skill이 자체 처리 |
 | **상태 업데이트** | 오케스트레이터만 | 각 skill이 직접 |
 | **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
 | **다음 단계 결정** | Stage Routing Table (중앙) | 각 skill에 하드코딩 |
@@ -28,7 +28,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 **devflow-aidlc-like (B안) — 오케스트레이터가 모든 것을 소유**
 ```
-[using-devflow (Orchestrator)]
+[aidlc-using-devflow (Orchestrator)]
   └─ LOOP:
       1. stage skill 호출 → 결과만 받고 STOP
       2. devflow-audit 로깅          ← 오케스트레이터
@@ -63,8 +63,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ## 작동 방식
 
-소프트웨어 개발을 시작하는 순간, `using-devflow`가 자동으로 활성화됩니다.
-세션 시작 훅(`hooks/session-start`)이 Claude에 `using-devflow` 컨텍스트를 주입하여 개발 요청을 자동으로 감지합니다.
+소프트웨어 개발을 시작하는 순간, `aidlc-using-devflow`가 자동으로 활성화됩니다.
+세션 시작 훅(`hooks/session-start`)이 Claude에 `aidlc-using-devflow` 컨텍스트를 주입하여 개발 요청을 자동으로 감지합니다.
 
 오케스트레이터가 Stage Routing Table에 따라 전체 라이프사이클을 순차적으로 구동합니다.
 각 stage 완료 후 오케스트레이터가 직접 승인 게이트를 제시합니다. Stage skill은 실행 결과만 반환하고 즉시 종료합니다.
@@ -75,18 +75,18 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ### 🔵 INCEPTION — 무엇을 만들지 결정
 
-1. **using-devflow** — 진입점. 기존 세션 재개 여부 확인 후 오케스트레이션 시작
-2. **workspace-detection** — 그린필드/브라운필드 판단
-3. **requirements-analysis** — 적응형 깊이(Minimal / Standard / Comprehensive) 요구사항 분석. 해석이 분기되는 경우 선택지 제시 후 확정
-4. **workflow-planning** — 실행할 단계와 깊이를 계획하고 명시적 승인 요청
-5. **application-design** _(조건부)_ — 신규 컴포넌트 설계가 필요할 때
-6. **units-generation** _(조건부)_ — 복잡한 시스템을 병렬 개발 단위로 분해
+1. **aidlc-using-devflow** — 진입점. 기존 세션 재개 여부 확인 후 오케스트레이션 시작
+2. **aidlc-workspace-detection** — 그린필드/브라운필드 판단
+3. **aidlc-requirements-analysis** — 적응형 깊이(Minimal / Standard / Comprehensive) 요구사항 분석. 해석이 분기되는 경우 선택지 제시 후 확정
+4. **aidlc-workflow-planning** — 실행할 단계와 깊이를 계획하고 명시적 승인 요청
+5. **aidlc-application-design** _(조건부)_ — 신규 컴포넌트 설계가 필요할 때
+6. **aidlc-units-generation** _(조건부)_ — 복잡한 시스템을 병렬 개발 단위로 분해
 
 ### 🟢 CONSTRUCTION — 어떻게 만들지 결정
 
-7. **using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
-8. **code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD: 테스트 먼저)
-9. **build-and-test** — 전체 빌드/테스트 지침 생성
+7. **aidlc-using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
+8. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD: 테스트 먼저)
+9. **aidlc-build-and-test** — 전체 빌드/테스트 지침 생성
 
 ---
 
@@ -96,26 +96,26 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | Skill | 역할 |
 |-------|------|
-| `using-devflow` | 오케스트레이터. 전체 라이프사이클 소유 및 구동 |
-| `workspace-detection` | 그린필드/브라운필드 판단 (순수 실행) |
-| `requirements-analysis` | 적응형 요구사항 분석. 해석 분기 시 선택지 제시 |
-| `workflow-planning` | 실행 계획 수립 (순수 실행) |
-| `application-design` | 컴포넌트/서비스 설계 (조건부, 순수 실행) |
-| `units-generation` | 병렬 개발 단위 분해 (조건부, 순수 실행) |
-| `using-git-worktrees` | workflow-planning 후 격리 개발 워크트리 생성 (선택적) |
-| `code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate |
-| `build-and-test` | 빌드/테스트 지침 생성 (순수 실행) |
+| `aidlc-using-devflow` | 오케스트레이터. 전체 라이프사이클 소유 및 구동 |
+| `aidlc-workspace-detection` | 그린필드/브라운필드 판단 (순수 실행) |
+| `aidlc-requirements-analysis` | 적응형 요구사항 분석. 해석 분기 시 선택지 제시 |
+| `aidlc-workflow-planning` | 실행 계획 수립 (순수 실행) |
+| `aidlc-application-design` | 컴포넌트/서비스 설계 (조건부, 순수 실행) |
+| `aidlc-units-generation` | 병렬 개발 단위 분해 (조건부, 순수 실행) |
+| `aidlc-using-git-worktrees` | workflow-planning 후 격리 개발 워크트리 생성 (선택적) |
+| `aidlc-code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate |
+| `aidlc-build-and-test` | 빌드/테스트 지침 생성 (순수 실행) |
 
 ### 개발 품질 도구
 
 | Skill | 역할 |
 |-------|------|
-| `systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 |
-| `verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 |
-| `finishing-a-development-branch` | 개발 완료 후 병합/PR/유지/폐기 처리 |
-| `receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
-| `dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
-| `writing-skills` | 새 스킬 개발 시 TDD 방식 + CSO 원칙 적용 |
+| `aidlc-systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 |
+| `aidlc-verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 |
+| `aidlc-finishing-a-development-branch` | 개발 완료 후 병합/PR/유지/폐기 처리 |
+| `aidlc-receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
+| `aidlc-dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
+| `aidlc-writing-skills` | 새 스킬 개발 시 TDD 방식 + CSO 원칙 적용 |
 
 ### 유틸리티
 
@@ -136,7 +136,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | 필드 | 값 | 의미 |
 |------|----|------|
-| `invoke_mode` | `orchestrator-only` | `using-devflow`만 호출 가능. 사용자 직접 호출 불가 |
+| `invoke_mode` | `orchestrator-only` | `aidlc-using-devflow`만 호출 가능. 사용자 직접 호출 불가 |
 | `return_behavior` | `stop-no-gate` | 실행 후 결과 표시 및 STOP. 승인 게이트는 오케스트레이터 소유 |
 | `output_path` | `devflow-docs/...` | 스테이지 산출물 저장 경로 |
 
@@ -178,7 +178,7 @@ git clone https://github.com/bluejayA/devflow-aidlc-like.git ~/.claude/plugins/d
 오케스트레이터가 모든 승인 게이트를 통합 관리합니다.
 
 ```
-## workspace-detection 완료
+## aidlc-workspace-detection 완료
 
 A) 변경 요청
 B) 다음 단계 진행

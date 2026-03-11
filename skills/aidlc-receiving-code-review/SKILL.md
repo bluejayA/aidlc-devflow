@@ -1,14 +1,13 @@
 ---
-name: receiving-code-review
-description: Use when receiving code review feedback, PR comments, inline suggestions,
-  or any critique of written code that requires a response or action.
+name: aidlc-receiving-code-review
+description: aidlc 플러그인(B안) 전용. Use when receiving code review feedback, PR comments, inline suggestions, or any critique of written code that requires a response or action. Invoke via aidlc:aidlc-receiving-code-review.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# receiving-code-review
+# aidlc-receiving-code-review
 
 <!-- 코드 리뷰 수신: 아첨 없이, 기술적 근거로 응답 -->
 
@@ -149,7 +148,7 @@ metadata:
 수락된 항목만 구현한다. **하나씩** 처리한다:
 
 1. 항목 하나 구현
-2. 테스트 실행하여 회귀 없음 확인 (`verification-before-completion` 적용)
+2. 테스트 실행하여 회귀 없음 확인 (`aidlc-verification-before-completion` 적용)
 3. 다음 항목으로 이동
 
 여러 항목을 한꺼번에 수정하지 않는다 — 무엇이 무엇을 깨뜨렸는지 알 수 없게 된다.

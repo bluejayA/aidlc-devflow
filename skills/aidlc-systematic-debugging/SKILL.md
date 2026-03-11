@@ -1,15 +1,13 @@
 ---
-name: systematic-debugging
-description: Use when a bug is reported, a test is failing, behavior is unexpected,
-  an error is thrown, a fix attempt is not working, or any symptom requires diagnosis
-  before a code change is made.
+name: aidlc-systematic-debugging
+description: aidlc 플러그인(B안) 전용. Use when a bug is reported, a test is failing, behavior is unexpected, an error is thrown, a fix attempt is not working, or any symptom requires diagnosis before a code change is made. Invoke via aidlc:aidlc-systematic-debugging.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# systematic-debugging
+# aidlc-systematic-debugging
 
 <!-- 체계적 디버깅: 원인 규명 없이 수정 금지 -->
 
@@ -148,7 +146,7 @@ metadata:
    - 현재 접근 방식이 근본적으로 잘못되었을 가능성이 높다
    - 다음 중 하나를 선택한다:
      - A) 더 상위 레벨에서 설계를 재검토한다
-     - B) `receiving-code-review` 스킬로 피드백을 구한다
+     - B) `aidlc-receiving-code-review` 스킬로 피드백을 구한다
      - C) 문제를 최소 재현 케이스로 격리하여 다시 1단계부터 시작한다
 
 ---

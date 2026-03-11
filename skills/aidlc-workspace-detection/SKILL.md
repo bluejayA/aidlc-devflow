@@ -1,6 +1,6 @@
 ---
-name: workspace-detection
-description: Scans the workspace to detect greenfield or brownfield project type. First stage of AI-DLC Inception.
+name: aidlc-workspace-detection
+description: aidlc 플러그인(B안) 전용 스킬. Scans the workspace to detect greenfield or brownfield project type. First stage of aidlc AI-DLC Inception. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/inception/workspace.md
 ---
 
-# workspace-detection
+# aidlc-workspace-detection
 
 <!-- 워크스페이스 분석: 그린필드/브라운필드 판단, 기존 코드베이스 스캔 -->
 <!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->

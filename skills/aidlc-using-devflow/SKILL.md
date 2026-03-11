@@ -1,16 +1,15 @@
 ---
-name: using-devflow
-description: Initializes and drives the AI-DLC development workflow for any software
-  project. Use when user says "let's build", "start coding", "new project", "devflow",
-  "AI-DLC", or begins any software development request. Manages the full lifecycle
-  from requirements through code generation.
+name: aidlc-using-devflow
+description: aidlc 플러그인(B안 Orchestrator-Centric)의 진입점 스킬. "aidlc", "aidlc:aidlc-using-devflow",
+  "B안 워크플로우 시작" 등 aidlc 플러그인을 명시적으로 지정할 때 활성화됩니다. devflow
+  플러그인과 구분하여 B안 오케스트레이터 방식으로 AI-DLC 라이프사이클을 구동합니다.
 metadata:
   version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# using-devflow (Orchestrator)
+# aidlc-using-devflow (Orchestrator)
 
 <!-- B안 오케스트레이터: AI-DLC Life Cycle 전체를 소유하고 구동 -->
 <!-- 승인 게이팅 / devflow-state 업데이트 / devflow-audit 로깅을 모두 이 skill이 담당 -->
@@ -21,7 +20,9 @@ metadata:
 
 ## Trigger
 
-Activate at the start of ANY software development request.
+aidlc 플러그인을 명시적으로 지정하여 AI-DLC 워크플로우(B안)를 시작할 때 활성화됩니다.
+- 사용자가 "aidlc", "aidlc:aidlc-using-devflow", "B안 워크플로우" 등을 언급할 때
+- 일반 소프트웨어 개발 요청에는 devflow 플러그인(A안)을 사용하세요.
 
 ---
 
@@ -34,7 +35,7 @@ Read `devflow-docs/devflow-state.md` using devflow-state utility.
 **If state file exists**, display:
 
 ```
-## devflow — 진행 중인 작업 발견
+## aidlc — 진행 중인 작업 발견
 
 현재 단계: [Current Phase] > [Current Stage]
 완료된 스테이지: [list]
@@ -56,7 +57,7 @@ Wait for user selection. Then:
 ### Step 1: Display welcome
 
 ```
-## devflow 워크플로우 시작 (B안 — Orchestrator)
+## aidlc 워크플로우 시작 (B안 — Orchestrator)
 
 AI-DLC 기반 개발 워크플로우가 활성화되었습니다.
 
@@ -77,12 +78,12 @@ Before initializing state, ensure required directories exist:
 
 Use devflow-state to create initial state:
 - `## Current Phase` → `inception`
-- `## Current Stage` → `workspace-detection`
+- `## Current Stage` → `aidlc-workspace-detection`
 
 Use devflow-audit to log:
 - Timestamp
 - User's original request (raw)
-- "New devflow session started (B-plan orchestrator)"
+- "New aidlc session started (B-plan orchestrator)"
 
 ### Step 4: Start orchestration loop
 
@@ -135,10 +136,10 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
-**workflow-planning 전용 게이트:** 계획 승인 후 Construction 진입 방식을 결정한다.
+**aidlc-workflow-planning 전용 게이트:** 계획 승인 후 Construction 진입 방식을 결정한다.
 
 ```
-## workflow-planning 완료
+## aidlc-workflow-planning 완료
 
 [workflow visualization 포함]
 
@@ -148,24 +149,24 @@ B) Git Worktree 생성 후 시작 (격리 개발 — main 브랜치 보호)
 C) 현재 브랜치에서 바로 시작
 ```
 
-- B 선택 시: `using-git-worktrees` 스킬 호출 → 결과 게이트 제시:
+- B 선택 시: `aidlc-using-git-worktrees` 스킬 호출 → 결과 게이트 제시:
   ```
-  ## using-git-worktrees 완료
+  ## aidlc-using-git-worktrees 완료
 
   [스킬 반환 결과 표시]
 
   A) 브랜치 이름 변경 요청 (스킬 재실행)
   B) 이 워크트리에서 Construction 시작
-  ⚠️ 베이스라인 테스트 실패 시: C) systematic-debugging 먼저 / B) 실패 인지 후 진행
+  ⚠️ 베이스라인 테스트 실패 시: C) aidlc-systematic-debugging 먼저 / B) 실패 인지 후 진행
   ```
-- C 선택 시: `using-git-worktrees` 스킵, 첫 Construction 스테이지로 바로 진행
+- C 선택 시: `aidlc-using-git-worktrees` 스킵, 첫 Construction 스테이지로 바로 진행
 
-**workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
+**aidlc-workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
 
 - `Requires Path Confirmation: true` (Greenfield) → 아래 게이트 사용:
 
   ```
-  ## workspace-detection 완료 — Greenfield
+  ## aidlc-workspace-detection 완료 — Greenfield
 
   새 프로젝트를 어디에 만들까요?
   (예: ~/projects/my-app, ./my-app)
@@ -178,7 +179,7 @@ C) 현재 브랜치에서 바로 시작
 - `Requires Path Confirmation: false` (Brownfield) → 아래 게이트 사용:
 
   ```
-  ## workspace-detection 완료 — Brownfield
+  ## aidlc-workspace-detection 완료 — Brownfield
 
   감지된 프로젝트 경로: [Project Root 값]
 
@@ -211,51 +212,51 @@ Use the **Stage Routing Table** below to determine the next stage.
 
 | Current Stage | Next Stage | Condition |
 |--------------|-----------|-----------|
-| `workspace-detection` | `requirements-analysis` | Always |
-| `requirements-analysis` | `workflow-planning` | Always |
-| `workflow-planning` | See below | Read workflow-plan.md |
+| `aidlc-workspace-detection` | `aidlc-requirements-analysis` | Always |
+| `aidlc-requirements-analysis` | `aidlc-workflow-planning` | Always |
+| `aidlc-workflow-planning` | See below | Read workflow-plan.md |
 
-After `workflow-planning` approval (worktree gate B 또는 C 선택 후):
+After `aidlc-workflow-planning` approval (worktree gate B 또는 C 선택 후):
 1. Read `devflow-docs/inception/workflow-plan.md`
 2. Check `application-design: included | skipped`
 3. Check `units-generation: included | skipped`
 
 Routing:
-- application-design included → next: `application-design`
-- application-design skipped, units-generation included → next: `units-generation`
-- both skipped → next: `code-generation`
+- application-design included → next: `aidlc-application-design`
+- application-design skipped, units-generation included → next: `aidlc-units-generation`
+- both skipped → next: `aidlc-code-generation`
 
 | Current Stage | Next Stage | Condition |
 |--------------|-----------|-----------|
-| `workflow-planning` | `using-git-worktrees` | 워크트리 게이트 B 선택 시 |
-| `workflow-planning` | first Construction stage | 워크트리 게이트 C 선택 시 (스킵) |
-| `using-git-worktrees` | first Construction stage | 워크트리 생성 완료 후 |
-| `application-design` | `units-generation` | if units-generation included in workflow-plan |
-| `application-design` | `code-generation` | if units-generation skipped |
-| `units-generation` | `code-generation` | Always |
+| `aidlc-workflow-planning` | `aidlc-using-git-worktrees` | 워크트리 게이트 B 선택 시 |
+| `aidlc-workflow-planning` | first Construction stage | 워크트리 게이트 C 선택 시 (스킵) |
+| `aidlc-using-git-worktrees` | first Construction stage | 워크트리 생성 완료 후 |
+| `aidlc-application-design` | `aidlc-units-generation` | if units-generation included in workflow-plan |
+| `aidlc-application-design` | `aidlc-code-generation` | if units-generation skipped |
+| `aidlc-units-generation` | `aidlc-code-generation` | Always |
 
 ### CONSTRUCTION sequence
 
 | Current Stage | Next Stage | Condition |
 |--------------|-----------|-----------|
-| `code-generation` (plan) | `code-generation` (generate) | After plan approval — call skill with "generate" signal |
+| `aidlc-code-generation` (plan) | `aidlc-code-generation` (generate) | After plan approval — call skill with "generate" signal |
 
-**code-generation 2단계 호출 방법:**
-- PART 1 (planning): `code-generation` skill을 일반 호출
+**aidlc-code-generation 2단계 호출 방법:**
+- PART 1 (planning): `aidlc-code-generation` skill을 일반 호출
 - PART 2 (generation): 승인 후 명시적 호출:
-  `"code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
-| `code-generation` (complete) | `build-and-test` | All units done — see Multi-Unit Handling |
-| `build-and-test` | END | Construction complete |
+  `"aidlc-code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
+| `aidlc-code-generation` (complete) | `aidlc-build-and-test` | All units done — see Multi-Unit Handling |
+| `aidlc-build-and-test` | END | Construction complete |
 
 ### Multi-Unit Handling
 
-If `units-generation` was run and produced multiple units:
+If `aidlc-units-generation` was run and produced multiple units:
 1. Read `devflow-docs/inception/units.md` for unit list and order
 2. Track completed units in devflow-state `## Completed Units`
-3. Run `code-generation` for each unit in order
-4. After each unit's `code-generation`, present gate before moving to next unit
+3. Run `aidlc-code-generation` for each unit in order
+4. After each unit's `aidlc-code-generation`, present gate before moving to next unit
 5. **"All units done"** = all unit names in `units.md` appear in `## Completed Units` in devflow-state
-6. After all units complete, run `build-and-test`
+6. After all units complete, run `aidlc-build-and-test`
 
 **Note on routing keys**: `workflow-plan.md` stores stage decisions as `[stage]: included` or `[stage]: skipped`. Read the exact line to determine routing (e.g. `application-design: included`).
 
@@ -263,14 +264,14 @@ If `units-generation` was run and produced multiple units:
 
 ## Construction Complete
 
-When `build-and-test` is approved:
+When `aidlc-build-and-test` is approved:
 
 1. Use devflow-state to set `## Current Phase` → `complete`
 2. Use devflow-audit to log "Construction phase complete"
 3. Display:
 
 ```
-## devflow 워크플로우 완료
+## aidlc 워크플로우 완료
 
 🎉 Construction Phase가 완료되었습니다.
 
@@ -286,54 +287,54 @@ Operations Phase는 현재 준비 중입니다.
 ## Examples
 
 ### Example 1: 신규 Python 프로젝트 시작
-User says: "FastAPI로 Todo API를 만들어줘"
+User says: "aidlc로 FastAPI Todo API를 만들어줘"
 
-1. using-devflow 활성화 → devflow-state 없음 → New Flow 시작
-2. workspace-detection → Greenfield 판정
-3. requirements-analysis → Standard 깊이로 API 요구사항 분석
-4. workflow-planning → application-design: included, units-generation: skipped
-5. application-design → API 라우터/모델/서비스 컴포넌트 설계
-6. code-generation → Plan 제시 → 승인 → FastAPI 코드 생성
-7. build-and-test → `pip install && pytest` 지침 생성
+1. aidlc-using-devflow 활성화 → devflow-state 없음 → New Flow 시작
+2. aidlc-workspace-detection → Greenfield 판정
+3. aidlc-requirements-analysis → Standard 깊이로 API 요구사항 분석
+4. aidlc-workflow-planning → application-design: included, units-generation: skipped
+5. aidlc-application-design → API 라우터/모델/서비스 컴포넌트 설계
+6. aidlc-code-generation → Plan 제시 → 승인 → FastAPI 코드 생성
+7. aidlc-build-and-test → `pip install && pytest` 지침 생성
 
 ### Example 2: 기존 프로젝트에 기능 추가
-User says: "기존 Django 앱에 알림 시스템 추가해줘"
+User says: "aidlc B안으로 기존 Django 앱에 알림 시스템 추가해줘"
 
-1. using-devflow 활성화 → devflow-state 없음 → New Flow 시작
-2. workspace-detection → Brownfield 판정 (Django 파일 발견)
-3. requirements-analysis → Standard 깊이
-4. workflow-planning → application-design: included, units-generation: included
-5. application-design → 알림 모델/서비스/API 컴포넌트 설계
-6. units-generation → 3개 unit: notification-model, notification-service, notification-api
-7. code-generation × 3 (unit별)
-8. build-and-test → 통합 테스트 포함 지침
+1. aidlc-using-devflow 활성화 → devflow-state 없음 → New Flow 시작
+2. aidlc-workspace-detection → Brownfield 판정 (Django 파일 발견)
+3. aidlc-requirements-analysis → Standard 깊이
+4. aidlc-workflow-planning → application-design: included, units-generation: included
+5. aidlc-application-design → 알림 모델/서비스/API 컴포넌트 설계
+6. aidlc-units-generation → 3개 unit: notification-model, notification-service, notification-api
+7. aidlc-code-generation × 3 (unit별)
+8. aidlc-build-and-test → 통합 테스트 포함 지침
 
 ### Example 3: 세션 재개
-User says: "어제 하던 작업 이어서 해줘"
+User says: "어제 하던 aidlc 작업 이어서 해줘"
 
-1. using-devflow 활성화 → devflow-state 발견
+1. aidlc-using-devflow 활성화 → devflow-state 발견
 2. "A) 이전 작업 재개" 선택
-3. requirements-analysis 완료, workflow-planning 진행 중이었음 확인
-4. workflow-planning부터 재개
+3. aidlc-requirements-analysis 완료, aidlc-workflow-planning 진행 중이었음 확인
+4. aidlc-workflow-planning부터 재개
 
 ### Example 4: 버그 발생 시 (CONSTRUCTION 도중)
 User says: "테스트가 실패해요 — TypeError: NoneType is not subscriptable"
 
-→ using-devflow 오케스트레이터는 CONSTRUCTION을 일시 중단하고
-  `devflow:systematic-debugging` 스킬을 호출하도록 안내한다.
+→ aidlc-using-devflow 오케스트레이터는 CONSTRUCTION을 일시 중단하고
+  `aidlc:aidlc-systematic-debugging` 스킬을 호출하도록 안내한다.
   근본 원인 파악 없이 즉흥적으로 코드를 수정하지 않는다.
 
 ### Example 5: 완료 주장 전
 User says: "구현 다 했어요"
 
-→ using-devflow는 build-and-test로 넘어가기 전
-  `devflow:verification-before-completion` 스킬을 호출하여
+→ aidlc-using-devflow는 aidlc-build-and-test로 넘어가기 전
+  `aidlc:aidlc-verification-before-completion` 스킬을 호출하여
   실제 명령 실행 결과로 완료를 검증한다.
 
 ### Example 6: 개발 브랜치 완료 후
 User says: "다 끝났어요, 이제 어떻게 하죠?"
 
-→ `devflow:finishing-a-development-branch` 스킬을 호출하여
+→ `aidlc:aidlc-finishing-a-development-branch` 스킬을 호출하여
   병합 / PR / 유지 / 폐기 4가지 선택지를 제시한다.
 
 ---
@@ -347,7 +348,7 @@ If `devflow-docs/` does not exist when trying to read state:
 
 ### Stage artifact missing at resume
 If resuming a session but the expected artifact file is missing
-(e.g., `requirements.md` not found when starting `workflow-planning`):
+(e.g., `requirements.md` not found when starting `aidlc-workflow-planning`):
 1. Display warning:
    ```
    ⚠️ [stage-name] 산출물을 찾을 수 없습니다: [file-path]
@@ -364,9 +365,9 @@ If `devflow-docs/inception/units.md` does not exist but multi-unit routing is ex
 1. Display warning:
    ```
    ⚠️ units.md를 찾을 수 없습니다.
-   단일 unit으로 code-generation을 진행합니다.
+   단일 unit으로 aidlc-code-generation을 진행합니다.
    ```
-2. Proceed with single-unit code-generation
+2. Proceed with single-unit aidlc-code-generation
 
 ### Stage skill invocation fails
 If a stage skill returns an unexpected result or errors:
@@ -392,7 +393,7 @@ Solution:
 3. 이전 산출물이 `devflow-docs/inception/`에 있다면 그대로 활용 가능
 
 ### 세션 재개 시 산출물 파일이 없는 경우
-Symptom: devflow-state는 `requirements-analysis: completed`인데 `requirements.md`가 없음
+Symptom: devflow-state는 `aidlc-requirements-analysis: completed`인데 `requirements.md`가 없음
 Solution: Error Handling 섹션의 "Stage artifact missing at resume" 절차 따름
 
 ### stage skill이 STOP하지 않고 A/B gate를 직접 제시하는 경우

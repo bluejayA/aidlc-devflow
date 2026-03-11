@@ -1,15 +1,13 @@
 ---
-name: verification-before-completion
-description: Use when about to claim a task is complete, say "it should work", declare
-  a fix is done, say "tests pass", or make any success assertion before running the
-  actual verification commands.
+name: aidlc-verification-before-completion
+description: aidlc 플러그인(B안) 전용. Use when about to claim a task is complete, say "it should work", declare a fix is done, say "tests pass", or make any success assertion before running the actual verification commands. Invoke via aidlc:aidlc-verification-before-completion.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# verification-before-completion
+# aidlc-verification-before-completion
 
 <!-- 완료 선언 전 신선한 검증 증거 필수 -->
 

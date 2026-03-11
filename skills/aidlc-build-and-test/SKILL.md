@@ -1,6 +1,6 @@
 ---
-name: build-and-test
-description: Generates build and test instructions after all code units are complete. Final Construction stage.
+name: aidlc-build-and-test
+description: aidlc 플러그인(B안) 전용 스킬. Generates build and test instructions after all code units are complete. Final Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/construction/build-and-test/
 ---
 
-# build-and-test
+# aidlc-build-and-test
 
 <!-- 빌드/테스트 지침 생성: 모든 unit 완료 후 실행 -->
 <!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->

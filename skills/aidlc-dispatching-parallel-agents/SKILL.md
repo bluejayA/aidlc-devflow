@@ -1,15 +1,13 @@
 ---
-name: dispatching-parallel-agents
-description: Use when two or more independent tasks can be executed simultaneously,
-  when different domains need separate investigation, or when waiting for one task
-  to complete before starting another would waste time.
+name: aidlc-dispatching-parallel-agents
+description: aidlc 플러그인(B안) 전용. Use when two or more independent tasks can be executed simultaneously, when different domains need separate investigation, or when waiting for one task to complete before starting another would waste time. Invoke via aidlc:aidlc-dispatching-parallel-agents.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
 ---
 
-# dispatching-parallel-agents
+# aidlc-dispatching-parallel-agents
 
 <!-- 병렬 에이전트 디스패치: 독립적 문제를 동시에 해결 -->
 
@@ -21,7 +19,7 @@ metadata:
 - 각 태스크가 서로 다른 파일/모듈/도메인을 다룰 때
 - 한 태스크의 결과가 다른 태스크의 시작 조건이 아닐 때
 - 순차 실행보다 병렬 실행이 명백히 빠를 때
-- `units-generation`으로 분해된 여러 unit을 동시에 구현할 때
+- `aidlc-units-generation`으로 분해된 여러 unit을 동시에 구현할 때
 
 ---
 
@@ -274,7 +272,7 @@ Agent 3: 42개 의존성 → devflow-docs/analysis/dependencies.md
 **처리 방법**:
 1. Agent 1, 3의 결과를 보존한다 (되돌리지 않음)
 2. Agent 2만 별도로 재실행한다:
-   - 실패 원인 파악 (`systematic-debugging` 스킬 활용)
+   - 실패 원인 파악 (`aidlc-systematic-debugging` 스킬 활용)
    - 프롬프트를 더 구체적으로 수정 후 재시도
 3. Agent 2 재실행 시 Agent 1, 3의 산출물이 영향을 주는지 확인한다
 4. 모든 에이전트 완료 후 통합 테스트를 실행한다

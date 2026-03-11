@@ -1,6 +1,6 @@
 ---
-name: workflow-planning
-description: Determines which Construction stages to run and at what depth. Saves workflow plan.
+name: aidlc-workflow-planning
+description: aidlc 플러그인(B안) 전용 스킬. Determines which Construction stages to run and at what depth. Saves workflow plan. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,7 +10,7 @@ metadata:
   output_path: devflow-docs/inception/workflow-plan.md
 ---
 
-# workflow-planning
+# aidlc-workflow-planning
 
 <!-- 워크플로우 계획: 어떤 스테이지를 실행할지 결정 -->
 <!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
@@ -34,10 +34,10 @@ Based on the requirements, recommend which Construction stages to include:
 
 | Stage | Include if |
 |-------|-----------|
-| `application-design` | New components or services needed |
-| `units-generation` | System needs decomposition into parallel units |
-| `code-generation` | **Always** |
-| `build-and-test` | **Always** |
+| `aidlc-application-design` | New components or services needed |
+| `aidlc-units-generation` | System needs decomposition into parallel units |
+| `aidlc-code-generation` | **Always** |
+| `aidlc-build-and-test` | **Always** |
 
 For each included stage, recommend depth: Minimal / Standard / Comprehensive.
 
