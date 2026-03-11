@@ -1,25 +1,5 @@
 {
   "name": "aidlc",
   "version": "0.3.0",
-  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (B안: Orchestrator-Centric)",
-  "hooks": "hooks/hooks.json",
-  "skills": {
-    "aidlc-using-devflow": "skills/aidlc-using-devflow",
-    "aidlc-workspace-detection": "skills/aidlc-workspace-detection",
-    "aidlc-requirements-analysis": "skills/aidlc-requirements-analysis",
-    "aidlc-workflow-planning": "skills/aidlc-workflow-planning",
-    "aidlc-application-design": "skills/aidlc-application-design",
-    "aidlc-units-generation": "skills/aidlc-units-generation",
-    "aidlc-code-generation": "skills/aidlc-code-generation",
-    "aidlc-build-and-test": "skills/aidlc-build-and-test",
-    "aidlc-systematic-debugging": "skills/aidlc-systematic-debugging",
-    "aidlc-verification-before-completion": "skills/aidlc-verification-before-completion",
-    "aidlc-finishing-a-development-branch": "skills/aidlc-finishing-a-development-branch",
-    "aidlc-receiving-code-review": "skills/aidlc-receiving-code-review",
-    "aidlc-dispatching-parallel-agents": "skills/aidlc-dispatching-parallel-agents",
-    "aidlc-writing-skills": "skills/aidlc-writing-skills",
-    "aidlc-using-git-worktrees": "skills/aidlc-using-git-worktrees",
-    "devflow-state": "skills/_utils/devflow-state",
-    "devflow-audit": "skills/_utils/devflow-audit"
-  }
+  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (B안: Orchestrator-Centric)"
 }
