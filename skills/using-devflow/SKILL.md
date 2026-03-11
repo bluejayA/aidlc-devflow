@@ -135,6 +135,31 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
+**workflow-planning 전용 게이트:** 계획 승인 후 Construction 진입 방식을 결정한다.
+
+```
+## workflow-planning 완료
+
+[workflow visualization 포함]
+
+Construction 진입 방식:
+A) 변경 요청
+B) Git Worktree 생성 후 시작 (격리 개발 — main 브랜치 보호)
+C) 현재 브랜치에서 바로 시작
+```
+
+- B 선택 시: `using-git-worktrees` 스킬 호출 → 결과 게이트 제시:
+  ```
+  ## using-git-worktrees 완료
+
+  [스킬 반환 결과 표시]
+
+  A) 브랜치 이름 변경 요청 (스킬 재실행)
+  B) 이 워크트리에서 Construction 시작
+  ⚠️ 베이스라인 테스트 실패 시: C) systematic-debugging 먼저 / B) 실패 인지 후 진행
+  ```
+- C 선택 시: `using-git-worktrees` 스킵, 첫 Construction 스테이지로 바로 진행
+
 **workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
 
 - `Requires Path Confirmation: true` (Greenfield) → 아래 게이트 사용:
@@ -190,7 +215,7 @@ Use the **Stage Routing Table** below to determine the next stage.
 | `requirements-analysis` | `workflow-planning` | Always |
 | `workflow-planning` | See below | Read workflow-plan.md |
 
-After `workflow-planning` approval:
+After `workflow-planning` approval (worktree gate B 또는 C 선택 후):
 1. Read `devflow-docs/inception/workflow-plan.md`
 2. Check `application-design: included | skipped`
 3. Check `units-generation: included | skipped`
@@ -202,6 +227,9 @@ Routing:
 
 | Current Stage | Next Stage | Condition |
 |--------------|-----------|-----------|
+| `workflow-planning` | `using-git-worktrees` | 워크트리 게이트 B 선택 시 |
+| `workflow-planning` | first Construction stage | 워크트리 게이트 C 선택 시 (스킵) |
+| `using-git-worktrees` | first Construction stage | 워크트리 생성 완료 후 |
 | `application-design` | `units-generation` | if units-generation included in workflow-plan |
 | `application-design` | `code-generation` | if units-generation skipped |
 | `units-generation` | `code-generation` | Always |

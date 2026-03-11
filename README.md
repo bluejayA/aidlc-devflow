@@ -19,7 +19,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
 | **다음 단계 결정** | Stage Routing Table (중앙) | 각 skill에 하드코딩 |
 | **Stage skill 역할** | 실행 후 STOP (순수 실행자) | 실행 + 게이팅 + 상태 관리 |
-| **Skill 수** | 16개 | 23개 |
+| **Skill 수** | 17개 | 23개 |
 | **AI-DLC 컨셉 부합도** | 높음 — 오케스트레이터가 LC 소유 | 중간 — 자율 skill 간 협력 |
 | **확장 용이성** | Stage 추가 시 Routing Table만 수정 | 각 skill이 독립적으로 확장 |
 | **디버깅** | 오케스트레이터 하나만 추적 | 각 skill 개별 추적 필요 |
@@ -84,12 +84,13 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ### 🟢 CONSTRUCTION — 어떻게 만들지 결정
 
-7. **code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD: 테스트 먼저)
-8. **build-and-test** — 전체 빌드/테스트 지침 생성
+7. **using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
+8. **code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD: 테스트 먼저)
+9. **build-and-test** — 전체 빌드/테스트 지침 생성
 
 ---
 
-## Skills 목록 (16개)
+## Skills 목록 (17개)
 
 ### AI-DLC 핵심 스테이지
 
@@ -101,6 +102,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `workflow-planning` | 실행 계획 수립 (순수 실행) |
 | `application-design` | 컴포넌트/서비스 설계 (조건부, 순수 실행) |
 | `units-generation` | 병렬 개발 단위 분해 (조건부, 순수 실행) |
+| `using-git-worktrees` | workflow-planning 후 격리 개발 워크트리 생성 (선택적) |
 | `code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate |
 | `build-and-test` | 빌드/테스트 지침 생성 (순수 실행) |
 

@@ -56,6 +56,11 @@ When creating or updating the state file, maintain this exact structure:
 <!-- 완료된 unit 목록 -->
 - [unit-name]: [ISO 8601 timestamp]
 
+## Worktree
+<!-- using-git-worktrees 실행 결과 -->
+- branch: [feature/xxx | none]
+- path: [.worktrees/xxx | none]
+
 ## Extension Configuration
 <!-- 활성화된 extension 목록 -->
 - security: [enabled | disabled]

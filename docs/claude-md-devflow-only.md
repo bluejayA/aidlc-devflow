@@ -23,7 +23,8 @@
 
 1. **AI-DLC 파이프라인** (`using-devflow`)
    - 소프트웨어 개발 요청 시 자동 활성화
-   - workspace-detection → requirements-analysis → workflow-planning → (application-design?) → (units-generation?) → code-generation → build-and-test
+   - workspace-detection → requirements-analysis → workflow-planning → (using-git-worktrees?) → (application-design?) → (units-generation?) → code-generation → build-and-test
+   - workflow-planning 완료 후 워크트리 생성 여부를 물음 — **B(워크트리 생성)를 권장: main 브랜치 보호**
    - **각 스테이지 완료 시 반드시 A/B 선택 대기. 응답 없이 다음 단계 진행 금지.**
 
 2. **병렬 구현** (`dispatching-parallel-agents`)
@@ -181,7 +182,7 @@ requirements-analysis 깊이는 자동 판단:
 
 | 플러그인 | 역할 |
 |---------|------|
-| `devflow-aidlc-like` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 16개 스킬) — **필수** |
+| `devflow-aidlc-like` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 17개 스킬) — **필수** |
 | `claude-code-setup` | 프로젝트별 자동화 추천 |
 | `agent-council` | 다중 AI 에이전트 의견 수집 |
 | `github` | GitHub 연동 |
