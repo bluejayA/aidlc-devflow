@@ -80,6 +80,7 @@ Use devflow-state to create initial state:
 - `## Current Phase` → `inception`
 - `## Current Stage` → `aidlc-workspace-detection`
 - `## Complexity` → (workspace-detection 이후 Complexity Declaration Gate에서 결정)
+- `## Selected Approach` → (workflow-planning 이후 Approach Proposal Gate에서 결정)
 
 Use devflow-audit to log:
 - Timestamp
@@ -137,58 +138,7 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
-**aidlc-workflow-planning 전용 게이트 (2단계):**
-
-**1단계 — 접근법 선택 gate:**
-
-skill이 반환한 접근법 목록을 표시하고 선택받는다:
-
-```
-## aidlc-workflow-planning 완료 — 접근법 선택
-
-**A안) [A안 접근법명]** (권장)
-포함: [스테이지 목록] | 깊이: [depth]
-적합: [한 줄] | 주의: [한 줄]
-
-**B안) [B안 접근법명]**
-포함: [스테이지 목록] | 깊이: [depth]
-적합: [한 줄] | 주의: [한 줄]
-
-([C안) [C안 접근법명] — Comprehensive complexity인 경우만]
-포함: [스테이지 목록] | 깊이: [depth]
-적합: [한 줄] | 주의: [한 줄])
-
-1) A안으로 진행
-2) B안으로 진행
-(3) C안으로 진행)
-X) 변경 요청
-```
-
-- 선택 후: `devflow-docs/inception/workflow-plan.md`의 `**Selected Approach**` 필드를 선택된 안으로 업데이트
-- 선택 후: devflow-state `## Selected Approach` 필드 기록
-- X 선택 시: `aidlc-workflow-planning` 재호출
-
-**2단계 — 개발 환경 설정 gate (기존 worktree gate 유지):**
-
-```
-## 개발 환경 설정
-
-A) 변경 요청
-B) Git Worktree 생성 후 시작 (격리 개발 — main 브랜치 보호)
-C) 현재 브랜치에서 바로 시작
-```
-
-- B 선택 시: `aidlc-using-git-worktrees` 스킬 호출 → 결과 게이트 제시:
-  ```
-  ## aidlc-using-git-worktrees 완료
-
-  [스킬 반환 결과 표시]
-
-  A) 브랜치 이름 변경 요청 (스킬 재실행)
-  B) 이 워크트리에서 Construction 시작
-  ⚠️ 베이스라인 테스트 실패 시: C) aidlc-systematic-debugging 먼저 / B) 실패 인지 후 진행
-  ```
-- C 선택 시: `aidlc-using-git-worktrees` 스킵, 첫 Construction 스테이지로 바로 진행
+<!-- 게이트 순서: 실행 흐름과 일치 (workspace-detection → Complexity → requirements-analysis → workflow-planning) -->
 
 **aidlc-workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
 
@@ -238,7 +188,7 @@ B) 복잡도 조정 (원하는 복잡도를 알려주세요)
 - A 선택 시 → 확정된 complexity를 devflow-state `## Complexity`에 기록 후 Step E 진행
 - B 선택 시 → 사용자가 입력한 complexity로 업데이트 후 Step E 진행
 
-requirements-analysis 호출 시 인라인 신호 포함:
+**인라인 신호 (다음 loop의 Step A에서 적용)**: requirements-analysis 호출 시 확정된 complexity를 인라인으로 전달:
 `"aidlc-requirements-analysis 실행. Complexity: [확정된 값]"`
 
 **aidlc-requirements-analysis 전용 게이트:**
@@ -263,7 +213,7 @@ C) 변경 요청
 - A 선택 시: 아래 신호로 재호출:
   `"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"`
   결과 반환 후 다시 이 gate로 복귀.
-- B 선택 시: 표준 gate (B) 다음 단계 진행으로 처리.
+- B 선택 시: 미해결 질문을 현재 가정으로 유지하고 다음 단계로 진행.
 - C 선택 시: `aidlc-requirements-analysis` 전체 재호출.
 
 **N == 0인 경우 (미해결 질문 없음):**
@@ -285,6 +235,59 @@ A) 변경 요청  B) 다음 단계 진행
 
 A) 변경 요청  B) 다음 단계 진행
 ```
+
+**aidlc-workflow-planning 전용 게이트 (2단계):**
+
+**1단계 — 접근법 선택 gate:**
+
+skill이 반환한 접근법 목록을 표시하고 선택받는다:
+
+```
+## aidlc-workflow-planning 완료 — 접근법 선택
+
+**A안) [A안 접근법명]** (권장)
+포함: [스테이지 목록] | 깊이: [depth]
+적합: [한 줄] | 주의: [한 줄]
+
+**B안) [B안 접근법명]**
+포함: [스테이지 목록] | 깊이: [depth]
+적합: [한 줄] | 주의: [한 줄]
+
+([C안) [C안 접근법명] — Comprehensive complexity인 경우만]
+포함: [스테이지 목록] | 깊이: [depth]
+적합: [한 줄] | 주의: [한 줄])
+
+1) A안으로 진행
+2) B안으로 진행
+(3) C안으로 진행)
+X) 변경 요청
+```
+
+- 선택 후: `devflow-docs/inception/workflow-plan.md`의 `**Selected Approach**` 필드를 선택된 안으로 업데이트
+- 선택 후: devflow-state `## Selected Approach` 필드 기록
+- X 선택 시: `aidlc-workflow-planning` 재호출 (변경 요청 내용 + 기존 complexity 인라인 전달)
+
+**2단계 — 개발 환경 설정 gate (기존 worktree gate 유지):**
+
+```
+## 개발 환경 설정
+
+A) 변경 요청
+B) Git Worktree 생성 후 시작 (격리 개발 — main 브랜치 보호)
+C) 현재 브랜치에서 바로 시작
+```
+
+- B 선택 시: `aidlc-using-git-worktrees` 스킬 호출 → 결과 게이트 제시:
+  ```
+  ## aidlc-using-git-worktrees 완료
+
+  [스킬 반환 결과 표시]
+
+  A) 브랜치 이름 변경 요청 (스킬 재실행)
+  B) 이 워크트리에서 Construction 시작
+  ⚠️ 베이스라인 테스트 실패 시: C) aidlc-systematic-debugging 먼저 / B) 실패 인지 후 진행
+  ```
+- C 선택 시: `aidlc-using-git-worktrees` 스킵, 첫 Construction 스테이지로 바로 진행
 
 **Step E: Update state**
 
