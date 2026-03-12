@@ -2,7 +2,7 @@
 name: devflow-conventions
 description: Shared conventions for all AI-DLC stage skills. Defines invoke_mode and return_behavior metadata semantics.
 metadata:
-  version: 0.3.0
+  version: 0.4.0
   author: Jay
   category: ai-dlc-workflow
 ---
@@ -29,7 +29,7 @@ AIDLC는 **3단 위임 체인** 구조를 사용한다. 슈퍼에이전트(하�
 - `orchestrator-only`: **상위 오케스트레이터만** 호출 가능. 사용자 직접 호출 불가.
   - Phase Orchestrator → Entry Orchestrator만 호출
   - Stage Skill → Phase Orchestrator만 호출
-- `user-invocable`: 사용자가 직접 호출 가능
+- `user-invocable`: 사용자가 직접 호출 가능. 오케스트레이터 워크플로우 외부에서 독립적으로 사용
 
 ### return_behavior
 
@@ -46,8 +46,9 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 ## 리뷰 규약
 
 ### Depth 정책
-- **Minimal**: 리뷰 스킵
+- **Minimal**: 리뷰 스킵, 바로 Return to Orchestrator
 - **Standard / Comprehensive**: 리뷰 서브에이전트 dispatch
+- depth 확인: 호출 텍스트의 depth를 우선 사용. 없으면 `devflow-state.md`의 `## Complexity` 필드
 
 ### 리뷰 루프
 1. `_shared/reviewers/[type]-prompt.md` 읽기
@@ -84,20 +85,23 @@ B) 직접 수정 지시
 
 - `_shared/import-review-protocol.md` — GENERATE/IMPORT 모드 전환, Hold/Skip 상태 관리
 - Pre-Planning 스테이지(user-stories, nfr-requirements)에서 참조
-- 모드 선택은 오케스트레이터가 게이트로 처리 (스킬 내부에서 모드 선택 금지 — B안 규칙)
+- 모드 선택은 오케스트레이터가 게이트로 처리 (스킬 내부에서 모드 선택 금지 — Orchestrator-Centric 규칙)
 
 ## Return to Orchestrator 규약
 
 모든 `orchestrator-only` 스킬은 실행 완료 후 아래 형식으로 반환:
 
 ```
+STOP.
 [stage-name 결과]
 - [핵심 결과 항목들]
 - 산출물: [path]
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
-STOP 후 게이트는 상위 오케스트레이터가 처리한다.
+- 각 스킬의 SKILL.md에는 반환 필드 목록만 정의한다. 형식 설명은 이 규약을 따른다.
+- `return_behavior: stop-no-gate` 스킬은 게이트를 제시하지 않는다.
+- STOP 후 게이트는 상위 오케스트레이터가 처리한다.
 
 ## 산출물 미발견 시 공통 처리
 
@@ -106,9 +110,26 @@ STOP 후 게이트는 상위 오케스트레이터가 처리한다.
 - 사용 가능한 컨텍스트만으로 진행
 - 산출물에 누락 사실 기록
 
+## Complexity와 Stage Depth
+
+- **Complexity**: 프로젝트 전체 복잡도. INCEPTION 초기에 선언 (Minimal/Standard/Comprehensive).
+- **Stage Depth**: 개별 스테이지 실행 깊이. workflow-planning에서 Stage별로 결정.
+- **기본 규칙**: Stage Depth는 Complexity를 따르되, workflow-planning이 override 가능.
+- **전달 방식**: 오케스트레이터가 스킬 호출 시 인라인 텍스트로 depth를 전달.
+  스킬은 호출 텍스트의 depth를 우선 사용하고, 없으면 devflow-state.md에서 읽는다.
+
+## 용어
+
+| 용어 | 정의 |
+|------|------|
+| **unit** | 독립적으로 구현·테스트 가능한 개발 단위. story(사용자 가치)나 component(아키텍처 단위)와 다름. 구현 순서와 병렬성을 결정하기 위한 분해 단위. |
+| **Orchestrator-Centric** | 오케스트레이터가 게이트·상태·라우팅을 소유하고, stage skill은 순수 실행자인 아키텍처. |
+| **Pre-Planning** | requirements-analysis와 workflow-planning 사이의 조건부 단계 (user-stories, nfr-requirements). |
+| **depth** | 개별 스테이지의 실행 깊이 (Minimal/Standard/Comprehensive). Complexity와 구분. |
+
 ## 새 스킬 추가 가이드
 
 1. **frontmatter 필수 필드**: name, description, metadata (version, author, category, invoke_mode, return_behavior)
-2. **리뷰 대상 스킬이면**: `## Review (Standard 이상)` 섹션 추가. 리뷰 규약의 리뷰 루프 패턴 참조
+2. **리뷰 대상 스킬이면**: 리뷰 규약의 리뷰 루프 패턴 참조. SKILL.md에는 산출물 경로와 리뷰어 종류만 명시
 3. **Phase Orchestrator에 등록**: 해당 Phase 오케스트레이터의 스테이지 순회 + 게이트 매핑에 추가
 4. **plugin.json**: skills 디렉토리에 자동 인식 (별도 등록 불필요)
