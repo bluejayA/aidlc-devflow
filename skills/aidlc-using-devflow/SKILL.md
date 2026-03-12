@@ -79,6 +79,7 @@ Before initializing state, ensure required directories exist:
 Use devflow-state to create initial state:
 - `## Current Phase` → `inception`
 - `## Current Stage` → `aidlc-workspace-detection`
+- `## Complexity` → (workspace-detection 이후 Complexity Declaration Gate에서 결정)
 
 Use devflow-audit to log:
 - Timestamp
@@ -191,6 +192,26 @@ Wait for user selection.
 
 - If A (또는 경로 변경 요청): Re-invoke the current stage skill with the user's change request. Repeat from Step B.
 - If B: Proceed to Step E.
+
+**[Complexity Declaration] workspace-detection 승인 후, requirements-analysis 호출 전:**
+
+workspace.md 결과와 사용자의 원래 요청을 기반으로 complexity를 판단하여 아래 gate 제시:
+
+```
+## 복잡도 판단
+
+복잡도: **[Minimal | Standard | Comprehensive]**
+이유: [한 줄 — 예: "다중 컴포넌트 + 외부 API 연동 포함"]
+
+A) 이 복잡도로 요구사항 분석 진행
+B) 복잡도 조정 (원하는 복잡도를 알려주세요)
+```
+
+- A 선택 시 → 확정된 complexity를 devflow-state `## Complexity`에 기록 후 Step E 진행
+- B 선택 시 → 사용자가 입력한 complexity로 업데이트 후 Step E 진행
+
+requirements-analysis 호출 시 인라인 신호 포함:
+`"aidlc-requirements-analysis 실행. Complexity: [확정된 값]"`
 
 **Step E: Update state**
 
