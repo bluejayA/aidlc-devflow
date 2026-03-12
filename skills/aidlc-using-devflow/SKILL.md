@@ -137,14 +137,42 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
-**aidlc-workflow-planning 전용 게이트:** 계획 승인 후 Construction 진입 방식을 결정한다.
+**aidlc-workflow-planning 전용 게이트 (2단계):**
+
+**1단계 — 접근법 선택 gate:**
+
+skill이 반환한 접근법 목록을 표시하고 선택받는다:
 
 ```
-## aidlc-workflow-planning 완료
+## aidlc-workflow-planning 완료 — 접근법 선택
 
-[workflow visualization 포함]
+**A안) [A안 접근법명]** (권장)
+포함: [스테이지 목록] | 깊이: [depth]
+적합: [한 줄] | 주의: [한 줄]
 
-Construction 진입 방식:
+**B안) [B안 접근법명]**
+포함: [스테이지 목록] | 깊이: [depth]
+적합: [한 줄] | 주의: [한 줄]
+
+([C안) [C안 접근법명] — Comprehensive complexity인 경우만]
+포함: [스테이지 목록] | 깊이: [depth]
+적합: [한 줄] | 주의: [한 줄])
+
+1) A안으로 진행
+2) B안으로 진행
+(3) C안으로 진행)
+X) 변경 요청
+```
+
+- 선택 후: `devflow-docs/inception/workflow-plan.md`의 `**Selected Approach**` 필드를 선택된 안으로 업데이트
+- 선택 후: devflow-state `## Selected Approach` 필드 기록
+- X 선택 시: `aidlc-workflow-planning` 재호출
+
+**2단계 — 개발 환경 설정 gate (기존 worktree gate 유지):**
+
+```
+## 개발 환경 설정
+
 A) 변경 요청
 B) Git Worktree 생성 후 시작 (격리 개발 — main 브랜치 보호)
 C) 현재 브랜치에서 바로 시작
@@ -236,6 +264,9 @@ Use the **Stage Routing Table** below to determine the next stage.
 | `aidlc-workspace-detection` | `aidlc-requirements-analysis` | Always |
 | `aidlc-requirements-analysis` | `aidlc-workflow-planning` | Always |
 | `aidlc-workflow-planning` | See below | Read workflow-plan.md |
+
+**Note (workflow-planning)**: workflow-planning 라우팅은 `## Approved Stages` 이하만 파싱한다.
+`## Approaches Considered`, `**Selected Approach**` 섹션은 라우팅 파싱에 영향 없음.
 
 After `aidlc-workflow-planning` approval (worktree gate B 또는 C 선택 후):
 1. Read `devflow-docs/inception/workflow-plan.md`
