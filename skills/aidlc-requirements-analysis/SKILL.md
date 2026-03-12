@@ -19,11 +19,35 @@ metadata:
 
 Analyze and document requirements at a depth appropriate to the request's complexity.
 
+## Execution Modes
+
+### Normal Mode (기본)
+일반 호출. Step 1부터 순서대로 실행.
+
+### QUESTIONS Mode
+호출 텍스트에 `QUESTIONS` 키워드 포함 시 활성화:
+`"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"`
+
+QUESTIONS 모드에서는:
+1. `devflow-docs/inception/requirements.md` 읽기
+2. `## Open Questions` 섹션의 미해결 질문만 one-at-a-time으로 처리
+3. 답변을 `## Assumptions` 또는 해당 요구사항 섹션에 반영
+4. `requirements.md` 업데이트 후 STOP
+
+Step 1, 2, 3, 4는 실행하지 않는다.
+
 ## Execute
 
-### Step 1: Assess complexity
+### Step 1: Load complexity
 
-Evaluate the user's request against these criteria:
+**호출 텍스트에서 complexity 확인 (Primary)**:
+호출 텍스트에 `Complexity: [level]` 패턴이 있으면 그 값을 사용:
+- "aidlc-requirements-analysis 실행. Complexity: Standard" → Standard 사용
+- "[Complexity: Standard] 오케스트레이터에서 확정된 복잡도로 분석합니다." 표시
+
+**devflow-state에서 확인 (Fallback)**:
+호출 텍스트에 complexity 정보가 없으면 `devflow-docs/devflow-state.md`의 `## Complexity` 필드를 읽는다.
+해당 필드도 없으면 기존 기준으로 자체 판단:
 
 **Choose Minimal if ALL of:**
 - Single, clearly defined feature
