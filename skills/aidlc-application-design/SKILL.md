@@ -117,9 +117,21 @@ DETAIL 모드에서만 실행.
 **Interactions**: [ASCII 다이어그램] (Comprehensive만)
 ```
 
+## Review (Standard 이상)
+
+depth가 Standard 이상이면 (LIST/DETAIL 모드 공통):
+1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
+2. 리뷰 서브에이전트 dispatch:
+   - 산출물 경로: `devflow-docs/inception/application-design.md`
+   - 상위 산출물: `devflow-docs/inception/requirements.md`
+3. ✅ Approved → Return to Orchestrator
+4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+
+depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles it.
+STOP.
 
 **LIST Mode 반환:**
 ```
@@ -127,8 +139,7 @@ STOP here. No approval gate — orchestrator handles it.
 - 설계된 컴포넌트: [count]개
 - 목록: [컴포넌트명 나열]
 - 산출물: devflow-docs/inception/application-design.md (목록 단계)
-※ Minimal depth: 오케스트레이터가 DETAIL 호출 없이 바로 다음 단계 진행
-※ Standard/Comprehensive: 오케스트레이터가 목록 승인 후 DETAIL 호출
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
 **DETAIL Mode 반환:**
@@ -136,16 +147,12 @@ STOP here. No approval gate — orchestrator handles it.
 [application-design 결과 — DETAIL]
 - 상세 설계 완료: [count]개 컴포넌트
 - 산출물: devflow-docs/inception/application-design.md (업데이트됨)
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
 ## Common Issues
 
-### requirements.md not found
-If `devflow-docs/inception/requirements.md` does not exist:
-- Display: "⚠️ requirements.md를 찾을 수 없습니다. 사용자 요청 컨텍스트만으로 설계를 진행합니다."
-- Proceed based on available conversation context
-
 ### No clear component boundaries
-If the system is too simple to decompose:
-- Design as a single component
-- Note: "Single-component system — no decomposition needed"
+시스템이 단일 컴포넌트로 충분하면:
+- 단일 컴포넌트로 설계
+- "Single-component system — no decomposition needed" 기록
