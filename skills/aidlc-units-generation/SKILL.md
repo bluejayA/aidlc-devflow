@@ -48,25 +48,33 @@ Each unit must be:
 
 Create `devflow-docs/inception/units.md`.
 
+## Review (Standard 이상)
+
+depth가 Standard 이상이면:
+1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
+2. 리뷰 서브에이전트 dispatch:
+   - 산출물 경로: `devflow-docs/inception/units.md`
+   - 상위 산출물: `devflow-docs/inception/application-design.md` (있으면), `devflow-docs/inception/requirements.md`
+3. ✅ Approved → Return to Orchestrator
+4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+
+depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles it.
+STOP.
 
 ```
 [units-generation 결과]
 - 생성된 단위: [count]개
 - 구현 순서: [unit1] → [unit2] → ...
 - 산출물: devflow-docs/inception/units.md
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
 ## Common Issues
 
-### application-design.md not found
-If `devflow-docs/inception/application-design.md` does not exist:
-- Display: "⚠️ application-design.md를 찾을 수 없습니다. requirements.md 기반으로 단위를 분해합니다."
-- Proceed using requirements.md only
-
 ### Only one logical unit identified
-If decomposition results in a single unit:
-- Create units.md with one unit
-- Orchestrator will treat this as single-unit code-generation
+분해 결과 단일 unit이면:
+- units.md에 1개 unit으로 작성
+- 오케스트레이터가 single-unit code-generation으로 처리
