@@ -109,27 +109,34 @@ Create `devflow-docs/inception/workflow-plan.md`:
 오케스트레이터가 선택을 받은 후 `**Selected Approach**` 필드를 업데이트한다.
 오케스트레이터 Routing Table은 `## Approved Stages` 이하만 파싱한다.
 
+## Review (Standard 이상)
+
+depth가 Standard 이상이면:
+1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
+2. 리뷰 서브에이전트 dispatch:
+   - 산출물 경로: `devflow-docs/inception/workflow-plan.md`
+   - 상위 산출물: `devflow-docs/inception/requirements.md`
+3. ✅ Approved → Return to Orchestrator
+4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+
+depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles approach selection, state update, and routing.
+STOP.
 
 ```
 [workflow-planning 결과]
 - 생성된 접근법: [A안명] / [B안명] / ([C안명])
 - 권장 접근법: [A안 | B안 | C안]
-- 접근법 상세: (위 Step 2의 접근법 목록 참조)
-- 산출물: devflow-docs/inception/workflow-plan.md (Selected Approach 확정 후 오케스트레이터가 업데이트)
+- 접근법 상세: (Step 2의 접근법 목록 참조)
+- 산출물: devflow-docs/inception/workflow-plan.md
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
 ## Common Issues
 
-### requirements.md or workspace.md not found
-If prior artifacts are missing:
-- Proceed with available information
-- Note missing context in the workflow plan
-- Default to including all optional stages (conservative assumption)
-
 ### No clear indication of new components needed
-When it's ambiguous whether application-design is needed:
-- Default to including it
-- Note the ambiguity in the workflow plan
+application-design 포함 여부가 모호하면:
+- 기본적으로 포함
+- workflow plan에 모호성 기록
