@@ -23,7 +23,7 @@
 
 2. **AI-DLC 파이프라인** (`devflow:using-devflow`)
    - Brainstorming 승인 후 devflow 워크플로우 시작
-   - workspace-detection → requirements-analysis → workflow-planning → (application-design?) → (units-generation?) → code-generation → build-and-test
+   - workspace-detection → requirements-analysis → workflow-planning → (application-design?) → (units-generation?) → code-generation (TDD: RED-GREEN-REFACTOR) → build-and-test (빌드+테스트 실행)
    - **각 스테이지 완료 시 반드시 A/B 선택 대기. 응답 없이 다음 단계 진행 금지.**
 
 3. **격리 개발** (`devflow:using-git-worktrees`)
@@ -91,7 +91,7 @@ requirements-analysis 깊이는 자동 판단:
 ## 기본 원칙
 
 - **계획 먼저 승인 후 진행**: 구현 전 접근 방식 공유, 승인 없이 코드 작성 금지
-- **TDD 필수**: 테스트를 항상 먼저 작성
+- **TDD Iron Law**: 실패 테스트 없이 프로덕션 코드 작성 금지. 위반 시 코드 삭제 후 RED부터 재시작
 - **증거 우선**: 완료 주장 전 반드시 검증. "될 것 같다"는 허용하지 않음
 - **코멘트 한국어**: 코드 내 주석은 한국어로
 - **보안 자동 검토**: OWASP Top 10 기준 취약점 확인

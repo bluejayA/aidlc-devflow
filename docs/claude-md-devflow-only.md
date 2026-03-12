@@ -23,7 +23,7 @@
 
 1. **AI-DLC 파이프라인** (`using-devflow`)
    - 소프트웨어 개발 요청 시 자동 활성화
-   - workspace-detection → requirements-analysis → workflow-planning → (using-git-worktrees?) → (application-design?) → (units-generation?) → code-generation → build-and-test
+   - workspace-detection → requirements-analysis → workflow-planning → (using-git-worktrees?) → (application-design?) → (units-generation?) → code-generation (TDD: RED-GREEN-REFACTOR) → build-and-test (빌드+테스트 실행)
    - workflow-planning 완료 후 워크트리 생성 여부를 물음 — **B(워크트리 생성)를 권장: main 브랜치 보호**
    - **각 스테이지 완료 시 반드시 A/B 선택 대기. 응답 없이 다음 단계 진행 금지.**
 
@@ -93,7 +93,7 @@ requirements-analysis 깊이는 자동 판단:
 ## 기본 원칙
 
 - **계획 먼저 승인 후 진행**: 구현 전 접근 방식 공유, 승인 없이 코드 작성 금지
-- **TDD 필수**: 테스트를 항상 먼저 작성
+- **TDD Iron Law**: 실패 테스트 없이 프로덕션 코드 작성 금지. 위반 시 코드 삭제 후 RED부터 재시작
 - **증거 우선**: 완료 주장 전 반드시 검증. "될 것 같다"는 허용하지 않음
 - **보안 자동 검토**: OWASP Top 10 기준 취약점 확인
 

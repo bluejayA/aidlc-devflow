@@ -85,8 +85,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 ### 🟢 CONSTRUCTION — 어떻게 만들지 결정
 
 7. **aidlc-using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
-8. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD: 테스트 먼저)
-9. **aidlc-build-and-test** — 전체 빌드/테스트 지침 생성
+8. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD Iron Law: RED-GREEN-REFACTOR + Self-Review)
+9. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + 지침 문서 생성
 
 ---
 
@@ -103,15 +103,15 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `aidlc-application-design` | 컴포넌트/서비스 설계 (조건부, 순수 실행) |
 | `aidlc-units-generation` | 병렬 개발 단위 분해 (조건부, 순수 실행) |
 | `aidlc-using-git-worktrees` | workflow-planning 후 격리 개발 워크트리 생성 (선택적) |
-| `aidlc-code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate |
-| `aidlc-build-and-test` | 빌드/테스트 지침 생성 (순수 실행) |
+| `aidlc-code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate (TDD Iron Law + Self-Review) |
+| `aidlc-build-and-test` | 빌드 실행 + 전체 테스트 스위트 실행 + 참조용 지침 문서 생성 |
 
 ### 개발 품질 도구
 
 | Skill | 역할 |
 |-------|------|
-| `aidlc-systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 |
-| `aidlc-verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 |
+| `aidlc-systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 + 실패 이력 분석 |
+| `aidlc-verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 + 회귀 테스트 RED-GREEN 검증 |
 | `aidlc-finishing-a-development-branch` | 개발 완료 후 병합/PR/유지/폐기 처리 |
 | `aidlc-receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
 | `aidlc-dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
@@ -128,7 +128,10 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | 파일 | 역할 |
 |------|------|
-| `_shared/devflow-conventions.md` | YAML 메타데이터 필드 의미 정의 (스킬이 아닌 규약 문서) |
+| `_shared/devflow-conventions.md` | YAML 메타데이터 필드 의미 + TDD 규약 + 리뷰 규약 정의 |
+| `_shared/tdd-protocol.md` | TDD Iron Law, RED-GREEN-REFACTOR 사이클, Self-Review 체크리스트, 회귀 테스트 검증 |
+| `_shared/gate-patterns.md` | 표준/조건부/리뷰 연계 게이트 패턴 정의 |
+| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 (artifact, code-plan, code-reviewer) |
 
 #### YAML 메타데이터 규약
 
@@ -155,8 +158,11 @@ devflow-docs/
 │   ├── application-design.md  # 컴포넌트 설계 (조건부)
 │   └── units.md            # 개발 단위 목록 (조건부)
 ├── construction/
-│   └── {unit}/
-│       └── code-plan.md    # 코드 생성 계획 + 진행 체크박스
+│   ├── {unit}/
+│   │   └── code-plan.md    # 코드 생성 계획 + 진행 체크박스
+│   └── build-and-test/
+│       ├── build-instructions.md  # 빌드 지침
+│       └── test-instructions.md   # 테스트 지침
 ├── devflow-state.md        # 현재 단계 상태 (세션 재개용)
 └── audit.md                # 전체 상호작용 로그 (append-only)
 ```
