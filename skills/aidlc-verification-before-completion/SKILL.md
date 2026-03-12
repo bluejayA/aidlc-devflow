@@ -2,7 +2,7 @@
 name: aidlc-verification-before-completion
 description: aidlc 플러그인(B안) 전용. Use when about to claim a task is complete, say "it should work", declare a fix is done, say "tests pass", or make any success assertion before running the actual verification commands. Invoke via aidlc:aidlc-verification-before-completion.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
 ---
@@ -10,6 +10,7 @@ metadata:
 # aidlc-verification-before-completion
 
 <!-- 완료 선언 전 신선한 검증 증거 필수 -->
+<!-- TDD 관련 검증은 _shared/tdd-protocol.md 참조 -->
 
 ## 철의 법칙
 
@@ -120,6 +121,15 @@ metadata:
 결론: 모든 검증 통과. 완료 선언.
 ```
 
+### 6단계: 회귀 테스트 RED-GREEN 검증 (버그 수정 시)
+
+`_shared/tdd-protocol.md`의 "회귀 테스트 RED-GREEN 검증" 섹션을 수행한다.
+
+**적용 조건**: systematic-debugging을 거쳐 수정한 경우, 또는 버그 수정 완료 주장 시.
+**미적용**: 신규 기능 개발 (code-generation TDD에서 이미 커버).
+
+5단계에서 검증이 모두 통과해도, 버그 수정인 경우 이 단계를 추가로 수행한다.
+
 ---
 
 ## Examples
@@ -187,6 +197,45 @@ test_user_service.py::test_delete_user FAILED
 
 실패한 테스트: test_delete_user
 완료 선언을 보류합니다. systematic-debugging 프로세스로 실패 원인 조사를 시작합니다.
+```
+
+---
+
+### Example 3: 버그 수정 후 회귀 테스트 검증
+
+**상황**: systematic-debugging으로 이메일 검증 버그 수정 완료
+
+**1~5단계**: (일반 Gate 프로세스 수행)
+
+**6단계 수행**:
+```bash
+# 1. 회귀 테스트 실행
+$ pytest tests/test_email.py::test_validate_io_tld -v
+# → PASS ✓
+
+# 2. 수정 되돌리기
+$ git stash
+
+# 3. 회귀 테스트 실행
+$ pytest tests/test_email.py::test_validate_io_tld -v
+# → FAIL ✓ (테스트가 버그를 잡음을 증명)
+
+# 4. 수정 복원
+$ git stash pop
+
+# 5. 전체 테스트
+$ pytest tests/ -v
+# → 24 passed, 0 failed ✓
+```
+
+완료 선언:
+```
+## 회귀 테스트 검증
+- 회귀 테스트: test_validate_io_tld
+- 수정 적용 시: PASS ✓
+- 수정 되돌림 시: FAIL ✓ (테스트 유효성 증명)
+- 수정 복원 후: 전체 PASS ✓
+결론: 회귀 테스트 유효. 완료 선언.
 ```
 
 ---
