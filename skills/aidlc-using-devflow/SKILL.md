@@ -244,8 +244,9 @@ A) 변경 요청  B) 다음 단계 진행
 [컴포넌트 목록 표시]
 
 A) 컴포넌트 추가/변경 요청 (LIST 재실행)
-B) 이 목록으로 상세 설계 진행 (DETAIL 호출)  ← Standard/Comprehensive만
-B) 다음 단계 진행  ← Minimal만
+B) [depth에 따라 조건부 표시]
+   ↳ Standard/Comprehensive: "이 목록으로 상세 설계 진행 (DETAIL 호출)"
+   ↳ Minimal: "다음 단계 진행"
 ```
 
 - A 선택 시: `aidlc-application-design` 재호출 (일반)
@@ -348,9 +349,14 @@ Routing:
 | `aidlc-workflow-planning` | first Construction stage | 워크트리 게이트 C 선택 시 (스킵) |
 | `aidlc-using-git-worktrees` | first Construction stage | 워크트리 생성 완료 후 |
 | `aidlc-application-design` (LIST) | `aidlc-application-design` (DETAIL) | Standard/Comprehensive depth |
-| `aidlc-application-design` (LIST) | `aidlc-units-generation` 또는 `aidlc-code-generation` | Minimal depth |
+| `aidlc-application-design` (LIST) | `aidlc-units-generation` | Minimal depth + units-generation included |
+| `aidlc-application-design` (LIST) | `aidlc-code-generation` | Minimal depth + units-generation skipped |
 | `aidlc-application-design` (DETAIL) | `aidlc-units-generation` | if units-generation included in workflow-plan |
 | `aidlc-application-design` (DETAIL) | `aidlc-code-generation` | if units-generation skipped |
+
+**Note (application-design)**: LIST→DETAIL 전환은 오케스트레이터 gate에서 처리.
+Minimal depth는 LIST 완료 후 DETAIL 없이 바로 다음 stage로 진행.
+
 | `aidlc-units-generation` | `aidlc-code-generation` | Always |
 
 ### CONSTRUCTION sequence
