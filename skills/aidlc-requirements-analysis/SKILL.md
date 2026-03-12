@@ -189,9 +189,21 @@ Create `devflow-docs/inception/requirements.md`:
 [Any unresolved questions]
 ```
 
+## Review (Standard 이상)
+
+depth가 Standard 이상이면:
+1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
+2. 리뷰 서브에이전트 dispatch:
+   - 산출물 경로: `devflow-docs/inception/requirements.md`
+   - 상위 산출물: `devflow-docs/inception/workspace.md` (있으면)
+3. ✅ Approved → Return to Orchestrator
+4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+
+depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles it.
+STOP.
 
 ```
 [requirements-analysis 결과]
@@ -201,22 +213,16 @@ STOP here. No approval gate — orchestrator handles it.
 - 열린 질문: [count]개
 - 가정으로 처리된 항목: [0개 | N개 — 항목명 목록]
 - 산출물: devflow-docs/inception/requirements.md
-※ 누락된 요구사항이 있다면 오케스트레이터 게이트에서 A) 변경 요청을 선택해주세요.
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
 ## Common Issues
 
 ### User provides no requirements context
-If the user's request is too vague to analyze:
-- Default to Comprehensive depth
-- Step 2에서 가능한 해석을 제시: "어떤 방향을 원하시나요?"
-
-### workspace.md not found
-If `devflow-docs/inception/workspace.md` does not exist:
-- Proceed without it
-- Note in requirements: "Workspace analysis not available"
+요청이 너무 모호하면:
+- Comprehensive depth 기본 적용
+- Step 2에서 가능한 해석 제시
 
 ### Step 2에서 해석이 3가지 이상으로 늘어날 때
-해석이 너무 많으면 사용자가 선택하기 어렵다.
 - 가장 가능성 높은 2-3가지로 압축
 - 나머지는 "기타: 다른 방향이라면 직접 설명해주세요"로 열어두기
