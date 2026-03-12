@@ -19,7 +19,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
 | **다음 단계 결정** | Stage Routing Table (중앙) | 각 skill에 하드코딩 |
 | **Stage skill 역할** | 실행 후 STOP (순수 실행자) | 실행 + 게이팅 + 상태 관리 |
-| **Skill 수** | 17개 | 23개 |
+| **Skill 수** | 19개 | 23개 |
 | **AI-DLC 컨셉 부합도** | 높음 — 오케스트레이터가 LC 소유 | 중간 — 자율 skill 간 협력 |
 | **확장 용이성** | Stage 추가 시 Routing Table만 수정 | 각 skill이 독립적으로 확장 |
 | **디버깅** | 오케스트레이터 하나만 추적 | 각 skill 개별 추적 필요 |
@@ -78,19 +78,21 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 1. **aidlc-using-devflow** — 진입점. 기존 세션 재개 여부 확인 후 오케스트레이션 시작
 2. **aidlc-workspace-detection** — 그린필드/브라운필드 판단
 3. **aidlc-requirements-analysis** — 적응형 깊이(Minimal / Standard / Comprehensive) 요구사항 분석. 해석이 분기되는 경우 선택지 제시 후 확정
-4. **aidlc-workflow-planning** — 실행할 단계와 깊이를 계획하고 명시적 승인 요청
-5. **aidlc-application-design** _(조건부)_ — 신규 컴포넌트 설계가 필요할 때
-6. **aidlc-units-generation** _(조건부)_ — 복잡한 시스템을 병렬 개발 단위로 분해
+4. **aidlc-user-stories** _(조건부)_ — 요구사항을 INVEST 기준 사용자 스토리로 변환 (Pre-Planning)
+5. **aidlc-nfr-requirements** _(조건부)_ — 도메인 컨텍스트 + 프로파일 기반 비기능 요구사항 수집 (Pre-Planning, GENERATE/IMPORT)
+6. **aidlc-workflow-planning** — 실행할 단계와 깊이를 계획하고 명시적 승인 요청
+7. **aidlc-application-design** _(조건부)_ — 신규 컴포넌트 설계 + NFR Design Patterns (Comprehensive)
+8. **aidlc-units-generation** _(조건부)_ — 복잡한 시스템을 병렬 개발 단위로 분해
 
 ### 🟢 CONSTRUCTION — 어떻게 만들지 결정
 
-7. **aidlc-using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
-8. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD Iron Law: RED-GREEN-REFACTOR + Self-Review)
-9. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + 지침 문서 생성
+9. **aidlc-using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
+10. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD Iron Law: RED-GREEN-REFACTOR + Self-Review)
+11. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + 지침 문서 생성
 
 ---
 
-## Skills 목록 (17개)
+## Skills 목록 (19개)
 
 ### AI-DLC 핵심 스테이지
 
@@ -99,8 +101,10 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `aidlc-using-devflow` | 오케스트레이터. 전체 라이프사이클 소유 및 구동 |
 | `aidlc-workspace-detection` | 그린필드/브라운필드 판단 (순수 실행) |
 | `aidlc-requirements-analysis` | 적응형 요구사항 분석. 해석 분기 시 선택지 제시 |
+| `aidlc-user-stories` | 요구사항을 INVEST 기준 사용자 스토리로 변환 (조건부, Pre-Planning) |
+| `aidlc-nfr-requirements` | 도메인 컨텍스트 + 프로파일 기반 비기능 요구사항 수집 (조건부, GENERATE/IMPORT) |
 | `aidlc-workflow-planning` | 실행 계획 수립 (순수 실행) |
-| `aidlc-application-design` | 컴포넌트/서비스 설계 (조건부, 순수 실행) |
+| `aidlc-application-design` | 컴포넌트/서비스 설계 + NFR Design Patterns (조건부, 순수 실행) |
 | `aidlc-units-generation` | 병렬 개발 단위 분해 (조건부, 순수 실행) |
 | `aidlc-using-git-worktrees` | workflow-planning 후 격리 개발 워크트리 생성 (선택적) |
 | `aidlc-code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate (TDD Iron Law + Self-Review) |
@@ -128,9 +132,10 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | 파일 | 역할 |
 |------|------|
-| `_shared/devflow-conventions.md` | YAML 메타데이터 필드 의미 + TDD 규약 + 리뷰 규약 정의 |
+| `_shared/devflow-conventions.md` | YAML 메타데이터 필드 의미 + TDD 규약 + 리뷰 규약 + Import-Review 규약 정의 |
 | `_shared/tdd-protocol.md` | TDD Iron Law, RED-GREEN-REFACTOR 사이클, Self-Review 체크리스트, 회귀 테스트 검증 |
-| `_shared/gate-patterns.md` | 표준/조건부/리뷰 연계 게이트 패턴 정의 |
+| `_shared/gate-patterns.md` | 표준/조건부/리뷰 연계/Hold 변형/모드 선택 게이트 패턴 정의 |
+| `_shared/import-review-protocol.md` | GENERATE/IMPORT 모드 정의 + Hold/Skip 시그널 규약 |
 | `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 (artifact, code-plan, code-reviewer) |
 
 #### YAML 메타데이터 규약
@@ -154,6 +159,8 @@ devflow-docs/
 ├── inception/
 │   ├── workspace.md        # 워크스페이스 분석 결과
 │   ├── requirements.md     # 요구사항 문서 (해석 확정 포함)
+│   ├── user-stories.md     # 사용자 스토리 (조건부)
+│   ├── nfr-requirements.md # 비기능 요구사항 (조건부)
 │   ├── workflow-plan.md    # 승인된 실행 계획
 │   ├── application-design.md  # 컴포넌트 설계 (조건부)
 │   └── units.md            # 개발 단위 목록 (조건부)
