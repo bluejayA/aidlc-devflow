@@ -47,7 +47,7 @@ complexity는 호출 텍스트 또는 `devflow-docs/devflow-state.md`의 `## Com
 
 각 접근법 형식:
 ```
-### [A안 | B안 | C안]) [접근법명] [(권장)]
+### [A안 | B안 | C안] [접근법명] [(권장)]
 - 포함 스테이지: [list]
 - 깊이: [Minimal | Standard | Comprehensive]
 - 적합: [한 줄]
@@ -105,6 +105,7 @@ Create `devflow-docs/inception/workflow-plan.md`:
 ```
 
 **중요**: `## Approved Stages`는 선택된 접근법 기준으로 작성한다.
+초기 저장 시에는 권장 접근법(A안) 기준으로 작성한다.
 오케스트레이터가 선택을 받은 후 `**Selected Approach**` 필드를 업데이트한다.
 오케스트레이터 Routing Table은 `## Approved Stages` 이하만 파싱한다.
 
