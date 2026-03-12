@@ -93,6 +93,26 @@ C) [해석 3] — [한 줄 설명, 있는 경우]
 
 선택된 해석을 requirements.md의 `## User Intent`에 반영한다.
 
+#### Ambiguity Resolution Loop (Standard / Comprehensive)
+
+해석 선택 후, 다음 모호성 신호를 탐지한다:
+- "~하거나", "둘 다", "상황에 따라", "아직 모르겠어", "적당히"
+- 설계 결정을 내리기에 불충분한 답변 (조건부 표현, 수치 없는 모호한 표현)
+
+**신호 감지 시**: 후속 질문 ONE at a time:
+```
+[이전 답변]을 더 구체화해야 합니다.
+A와 B 중에서 상충할 때 어느 쪽을 우선하시겠어요?
+```
+
+모호성이 해소될 때까지 반복.
+
+**사용자가 "그냥 진행해" 또는 "계속해" 요청 시**:
+- 해소되지 않은 항목을 가정으로 확정
+- requirements.md의 `## Assumptions`에 기록
+- 반환 텍스트에 "가정으로 처리된 항목: [N]개 — [목록]" 포함
+- STOP (승인 대기 없음 — 오케스트레이터 gate에서 표시)
+
 ### Step 3: Execute at chosen depth
 
 #### Minimal
@@ -106,6 +126,10 @@ C) [해석 3] — [한 줄 설명, 있는 경우]
 3. List non-functional requirements (performance, security, etc.)
 4. Identify constraints and assumptions
 5. Note open questions (if any)
+6. 핵심 질문 (최대 2개, one at a time): 요구사항에서 설계 방향을 바꿀 수 있는 불확실성이 있으면 질문. 없으면 스킵.
+   - 처리 방식: "실시간 처리가 필요한가요, 배치로 충분한가요?"
+   - 사용자 유형: "단일 사용자인가요, 다중 사용자인가요?"
+   - 각 답변 후 Ambiguity Resolution Loop 발동 여부 판단.
 
 #### Comprehensive
 1. Full intent analysis (Step 2에서 확정된 해석 기반)
@@ -114,6 +138,14 @@ C) [해석 3] — [한 줄 설명, 있는 경우]
 4. Risk assessment (High/Medium/Low per requirement)
 5. Dependencies and constraints
 6. Open questions — ask user ONE at a time before proceeding
+
+### Depth별 질문 정책
+
+| Depth | 해석 분기 | 핵심 질문 | Ambiguity Loop |
+|-------|-----------|-----------|----------------|
+| Minimal | 없음 | 없음 | 없음 |
+| Standard | 있음 | 최대 2개 (each → loop) | 있음 |
+| Comprehensive | 있음 | 제한 없음 (each → loop) | 있음 |
 
 ### Step 4: Ask clarifying questions (Comprehensive only)
 
@@ -164,6 +196,7 @@ STOP here. No approval gate — orchestrator handles it.
 - 해석 확정: [확정된 해석 한 줄 요약, 또는 "단일 해석 — 확인 불필요"]
 - 기능 요구사항: [count]개
 - 열린 질문: [count]개
+- 가정으로 처리된 항목: [0개 | N개 — 항목명 목록]
 - 산출물: devflow-docs/inception/requirements.md
 ※ 누락된 요구사항이 있다면 오케스트레이터 게이트에서 A) 변경 요청을 선택해주세요.
 ```
