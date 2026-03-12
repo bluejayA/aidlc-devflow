@@ -175,7 +175,7 @@ C) 현재 브랜치에서 바로 시작
   경로를 입력하거나, 현재 디렉토리에 만들려면 '.' 를 입력해주세요.
   ```
 
-  사용자가 경로를 입력하면 해당 경로를 `workspace.md`의 `Project Root`에 업데이트한 뒤 Step E로 진행.
+  사용자가 경로를 입력하면 해당 경로를 `workspace.md`의 `Project Root`에 업데이트한 뒤 아래 Complexity Declaration Gate로 진행.
 
 - `Requires Path Confirmation: false` (Brownfield) → 아래 게이트 사용:
 
@@ -191,7 +191,7 @@ C) 현재 브랜치에서 바로 시작
 Wait for user selection.
 
 - If A (또는 경로 변경 요청): Re-invoke the current stage skill with the user's change request. Repeat from Step B.
-- If B: Proceed to Step E.
+- If B: 아래 Complexity Declaration Gate로 진행.
 
 **[Complexity Declaration] workspace-detection 승인 후, requirements-analysis 호출 전:**
 
