@@ -2,7 +2,7 @@
 name: aidlc-application-design
 description: aidlc 플러그인(B안) 전용 스킬. Designs component and service structure before implementation. Conditional Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
-  version: 0.3.0
+  version: 0.4.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only

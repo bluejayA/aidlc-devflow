@@ -2,7 +2,7 @@
 name: aidlc-code-generation
 description: aidlc 플러그인(B안) 전용 스킬. Two-stage process — generates a code plan first, then implements after orchestrator approval. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
-  version: 0.3.0
+  version: 0.4.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
