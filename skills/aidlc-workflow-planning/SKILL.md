@@ -117,7 +117,7 @@ STOP here. No approval gate — orchestrator handles approach selection, state u
 [workflow-planning 결과]
 - 생성된 접근법: [A안명] / [B안명] / ([C안명])
 - 권장 접근법: [A안 | B안 | C안]
-- 접근법 상세: (위 ## Approaches 섹션 참조)
+- 접근법 상세: (위 Step 2의 접근법 목록 참조)
 - 산출물: devflow-docs/inception/workflow-plan.md (Selected Approach 확정 후 오케스트레이터가 업데이트)
 ```
 

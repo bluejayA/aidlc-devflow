@@ -36,7 +36,8 @@ DETAIL 모드에서는:
    - **Comprehensive**: 전체 인터페이스 + 의존성 + 데이터 소유 + 상호작용 다이어그램
 3. `application-design.md` 업데이트 후 STOP
 
-depth는 호출 텍스트 또는 `devflow-docs/devflow-state.md`의 `## Selected Approach` 필드에서 확인.
+**depth 확인 (Primary)**: 호출 텍스트에 `Depth: [level]` 패턴이 있으면 그 값을 사용.
+**depth 확인 (Fallback)**: 호출 텍스트에 없으면 `devflow-docs/inception/workflow-plan.md`의 `## Stage Depths` → `application-design` 행에서 읽는다.
 
 **Minimal depth**: LIST Mode만 실행. DETAIL 호출 없음.
 

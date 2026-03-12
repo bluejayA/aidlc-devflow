@@ -138,7 +138,7 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
-<!-- 게이트 순서: 실행 흐름과 일치 (workspace-detection → Complexity → requirements-analysis → application-design → workflow-planning) -->
+<!-- 게이트 순서: 실행 흐름과 일치 (workspace-detection → Complexity → requirements-analysis → workflow-planning → application-design) -->
 
 **aidlc-workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
 
@@ -212,7 +212,7 @@ C) 변경 요청
 
 - A 선택 시: 아래 신호로 재호출:
   `"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"`
-  결과 반환 후 다시 이 gate로 복귀.
+  결과 반환 후 다시 이 gate로 복귀 (반환 텍스트에서 `열린 질문: [N]개` 패턴 재확인).
 - B 선택 시: 미해결 질문을 현재 가정으로 유지하고 다음 단계로 진행.
 - C 선택 시: `aidlc-requirements-analysis` 전체 재호출.
 
@@ -235,23 +235,6 @@ A) 변경 요청  B) 다음 단계 진행
 
 A) 변경 요청  B) 다음 단계 진행
 ```
-
-**aidlc-application-design (LIST) 전용 게이트:**
-
-```
-## aidlc-application-design 완료 — 컴포넌트 목록 확인
-
-[컴포넌트 목록 표시]
-
-A) 컴포넌트 추가/변경 요청 (LIST 재실행)
-B) [depth에 따라 조건부 표시]
-   ↳ Standard/Comprehensive: "이 목록으로 상세 설계 진행 (DETAIL 호출)"
-   ↳ Minimal: "다음 단계 진행"
-```
-
-- A 선택 시: `aidlc-application-design` 재호출 (일반)
-- B 선택 시 (Standard/Comprehensive): `"aidlc-application-design: DETAIL — 승인된 목록으로 상세 설계 진행"` 호출
-- B 선택 시 (Minimal): 다음 stage로 이동
 
 **aidlc-workflow-planning 전용 게이트 (2단계):**
 
@@ -305,6 +288,37 @@ C) 현재 브랜치에서 바로 시작
   ⚠️ 베이스라인 테스트 실패 시: C) aidlc-systematic-debugging 먼저 / B) 실패 인지 후 진행
   ```
 - C 선택 시: `aidlc-using-git-worktrees` 스킵, 첫 Construction 스테이지로 바로 진행
+
+**aidlc-application-design (LIST) 전용 게이트:**
+
+```
+## aidlc-application-design 완료 — 컴포넌트 목록 확인
+
+[컴포넌트 목록 표시]
+
+A) 컴포넌트 추가/변경 요청 (LIST 재실행)
+B) [depth에 따라 조건부 표시]
+   ↳ Standard/Comprehensive: "이 목록으로 상세 설계 진행 (DETAIL 호출)"
+   ↳ Minimal: "다음 단계 진행"
+```
+
+- A 선택 시: `aidlc-application-design` 재호출 (일반)
+- B 선택 시 (Standard/Comprehensive): `"aidlc-application-design: DETAIL — 승인된 목록으로 상세 설계 진행. Depth: [Standard|Comprehensive]"` 호출
+- B 선택 시 (Minimal): 다음 stage로 이동
+
+**aidlc-application-design (DETAIL) 전용 게이트:**
+
+```
+## aidlc-application-design 완료 — 상세 설계 확인
+
+[컴포넌트 상세 설계 표시]
+
+A) 상세 설계 변경 요청 (DETAIL 재실행)
+B) 다음 단계 진행
+```
+
+- A 선택 시: `"aidlc-application-design: DETAIL — 승인된 목록으로 상세 설계 진행"` 재호출
+- B 선택 시: Routing Table 기준 다음 stage로 이동
 
 **Step E: Update state**
 
