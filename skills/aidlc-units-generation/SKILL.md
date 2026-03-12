@@ -1,6 +1,6 @@
 ---
 name: aidlc-units-generation
-description: aidlc 플러그인(B안) 전용 스킬. Decomposes the system into independently developable units for parallel implementation. Conditional Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
+description: Decomposes the system into independently developable units for parallel implementation. Conditional INCEPTION stage. Called by inception-orchestrator.
 metadata:
   version: 0.4.0
   author: Jay
@@ -13,7 +13,6 @@ metadata:
 # aidlc-units-generation
 
 <!-- 작업 단위 분해: 복잡한 시스템을 병렬 개발 가능한 단위로 분해 -->
-<!-- B안: 실행 전용, 조건부 — 오케스트레이터가 workflow-plan 기반으로 호출 여부 결정 -->
 
 ## Purpose
 
@@ -48,29 +47,19 @@ Each unit must be:
 
 Create `devflow-docs/inception/units.md`.
 
-## Review (Standard 이상)
+## Review
 
-depth가 Standard 이상이면:
-1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/inception/units.md`
-   - 상위 산출물: `devflow-docs/inception/application-design.md` (있으면), `devflow-docs/inception/requirements.md`
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/inception/units.md
+- 리뷰어: artifact-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
-
-```
-[units-generation 결과]
+conventions 표준 형식. 반환 필드:
 - 생성된 단위: [count]개
 - 구현 순서: [unit1] → [unit2] → ...
 - 산출물: devflow-docs/inception/units.md
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
 ## Common Issues
 

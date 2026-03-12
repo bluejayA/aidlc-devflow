@@ -13,7 +13,6 @@ metadata:
 # aidlc-nfr-requirements
 
 <!-- 비기능 요구사항 수집: 도메인 + 프로파일 기반 체계적 NFR 수집 -->
-<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 <!-- IMPORT 모드: _shared/import-review-protocol.md 참조 -->
 
 ## Purpose
@@ -140,26 +139,15 @@ Create `devflow-docs/inception/nfr-requirements.md`:
 - [항목]: [원래 기본값] → [사용자 조정값] (이유: [사용자 설명])
 ```
 
-## Review (Standard 이상)
+## Review
 
-depth가 Standard 이상이면:
-1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/inception/nfr-requirements.md`
-   - 상위 산출물: `devflow-docs/inception/requirements.md`, `devflow-docs/inception/user-stories.md` (있으면)
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
-
-**depth 확인**: `devflow-docs/devflow-state.md`의 `## Complexity` 필드를 읽는다.
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/inception/nfr-requirements.md
+- 리뷰어: artifact-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
-
-```
-[nfr-requirements 결과]
+conventions 표준 형식. 반환 필드:
 - 모드: [GENERATE | IMPORT]
 - 도메인: [선택된 도메인]
 - 프로파일: [선택된 프로파일]
@@ -167,7 +155,6 @@ STOP.
 - 사용자 조정: [count]개 항목
 - 산출물: devflow-docs/inception/nfr-requirements.md
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
 ## Common Issues
 
