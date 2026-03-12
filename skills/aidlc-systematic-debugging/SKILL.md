@@ -2,9 +2,10 @@
 name: aidlc-systematic-debugging
 description: aidlc 플러그인(B안) 전용. Use when a bug is reported, a test is failing, behavior is unexpected, an error is thrown, a fix attempt is not working, or any symptom requires diagnosis before a code change is made. Invoke via aidlc:aidlc-systematic-debugging.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
+  return_behavior: stop-no-gate
 ---
 
 # aidlc-systematic-debugging
@@ -128,6 +129,7 @@ metadata:
 
 ### 4단계: 구현
 
+<!-- TDD RED-GREEN 프로세스 상세: _shared/tdd-protocol.md 참조 -->
 1. **실패 테스트 작성 (TDD RED)**
    - 버그를 재현하는 테스트를 먼저 작성한다
    - 이 테스트는 현재 코드에서 실패해야 한다
@@ -141,13 +143,26 @@ metadata:
    - 작성한 테스트가 통과하는지 확인한다
    - 기존 테스트가 모두 통과하는지 확인한다 (회귀 방지)
 
-4. **3회 이상 수정 실패 시 → 아키텍처 재검토**
-   - 동일 버그에 3번 이상 수정을 시도했는데 계속 실패하면 멈춘다
-   - 현재 접근 방식이 근본적으로 잘못되었을 가능성이 높다
-   - 다음 중 하나를 선택한다:
-     - A) 더 상위 레벨에서 설계를 재검토한다
-     - B) `aidlc-receiving-code-review` 스킬로 피드백을 구한다
-     - C) 문제를 최소 재현 케이스로 격리하여 다시 1단계부터 시작한다
+4. **3회 이상 수정 실패 시 → 멈추고 실패 이력 분석**
+
+   **즉시 수정 시도를 중단한다.** 먼저 왜 3번 실패했는지 분석한다:
+
+   #### 실패 이력 요약
+   | 시도 | 가설 | 수정 내용 | 결과 | 왜 실패했는가 |
+   |------|------|----------|------|-------------|
+   | 1회  |      |          |      |             |
+   | 2회  |      |          |      |             |
+   | 3회  |      |          |      |             |
+
+   #### 공통 패턴 식별
+   - 3번의 가설이 모두 같은 영역을 겨냥했는가? → 다른 영역 탐색 필요
+   - 수정이 매번 다른 테스트를 깨뜨렸는가? → 설계 결합도 문제
+   - 근본 원인을 찾지 못한 채 증상만 수정했는가? → 1단계 재현으로 복귀
+
+   #### 분석 후 선택지 제시
+   - A) 더 상위 레벨에서 설계를 재검토한다
+   - B) `aidlc-receiving-code-review` 스킬로 피드백을 구한다
+   - C) 문제를 최소 재현 케이스로 격리하여 다시 1단계부터 시작한다
 
 ---
 
@@ -254,3 +269,17 @@ DATABASE_MAX_OVERFLOW = 5
 3. 통과한다면 내 수정이 공유 상태(DB, 파일, 전역 변수)를 오염시킨 것
 4. 수정의 사이드 이펙트 범위를 다시 분석하고 더 좁은 수정을 시도한다
 5. 격리가 필요하다면 테스트 픽스처 또는 mock을 추가한다
+
+---
+
+## Return to Orchestrator
+
+STOP. 수정 완료 후 아래 형식으로 반환:
+
+```
+[systematic-debugging 완료]
+- 근본 원인: [1줄 요약]
+- 수정 내용: [1줄 요약]
+- 테스트: [회귀 테스트명] 추가됨
+- 전체 테스트: [N]개 통과, 0 실패
+```
