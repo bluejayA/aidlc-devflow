@@ -107,20 +107,44 @@ Actions:
 
 ---
 
+## Review (Standard 이상)
+
+### PART 1 (Plan) 완료 시
+depth가 Standard 이상이면:
+1. `_shared/reviewers/code-plan-reviewer-prompt.md` 읽기
+2. 리뷰 서브에이전트 dispatch:
+   - 산출물 경로: `devflow-docs/construction/[unit-name]/code-plan.md`
+   - 설계 산출물: `devflow-docs/inception/requirements.md`, `devflow-docs/inception/application-design.md` (있으면)
+3. ✅ Approved → Return to Orchestrator
+4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+
+### PART 2 (Generate) 완료 시
+depth가 Standard 이상이면:
+1. `_shared/reviewers/code-reviewer-prompt.md` 읽기
+2. 리뷰 서브에이전트 dispatch:
+   - 변경 파일 목록: 구현된 소스 파일
+   - code-plan 경로: `devflow-docs/construction/[unit-name]/code-plan.md`
+3. ✅ Approved → Return to Orchestrator
+4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+
+depth가 Minimal이면: 리뷰 스킵
+
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles it.
+STOP.
 
-PART 1 완료 시 표시:
+PART 1 완료 시:
 ```
 [code-generation Plan 준비]
 - 생성할 파일: [count]개 / 수정할 파일: [count]개 / 구현 단계: [count]개
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
 
-PART 2 완료 시 표시:
+PART 2 완료 시:
 ```
 [code-generation 완료: unit-name]
 - 생성된 파일: [count]개
 - 모든 체크박스 완료
 - 산출물: devflow-docs/construction/[unit-name]/code-plan.md
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
