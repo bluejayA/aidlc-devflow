@@ -13,7 +13,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | | **devflow-aidlc-like** (이 repo) | **devflow** |
 |---|---|---|
-| **아키텍처** | Orchestrator-Centric (B안) | Enhanced Skills (C안) |
+| **아키텍처** | Orchestrator-Centric | Enhanced Skills |
 | **승인 게이팅** | `aidlc-using-devflow`가 통합 관리 | 각 stage skill이 자체 처리 |
 | **상태 업데이트** | 오케스트레이터만 | 각 skill이 직접 |
 | **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
@@ -26,7 +26,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ### 아키텍처 흐름 비교
 
-**devflow-aidlc-like (B안) — 오케스트레이터가 모든 것을 소유**
+**devflow-aidlc-like — 오케스트레이터가 모든 것을 소유**
 ```
 [aidlc-using-devflow (Orchestrator)]
   └─ LOOP:
@@ -38,7 +38,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
       6. 반복
 ```
 
-**devflow (C안) — 각 skill이 자급자족**
+**devflow — 각 skill이 자급자족**
 ```
 [using-devflow] → [workspace-detection]
                        ├─ 실행
@@ -132,7 +132,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | 파일 | 역할 |
 |------|------|
-| `_shared/devflow-conventions.md` | YAML 메타데이터 필드 의미 + TDD 규약 + 리뷰 규약 + Import-Review 규약 정의 |
+| `_shared/devflow-conventions.md` | YAML 메타데이터 + Complexity/Depth 관계 + 용어 정리 + Return/Review 규약 + TDD 규약 |
 | `_shared/tdd-protocol.md` | TDD Iron Law, RED-GREEN-REFACTOR 사이클, Self-Review 체크리스트, 회귀 테스트 검증 |
 | `_shared/gate-patterns.md` | 표준/조건부/리뷰 연계/Hold 변형/모드 선택 게이트 패턴 정의 |
 | `_shared/import-review-protocol.md` | GENERATE/IMPORT 모드 정의 + Hold/Skip 시그널 규약 |
@@ -144,7 +144,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | 필드 | 값 | 의미 |
 |------|----|------|
-| `invoke_mode` | `orchestrator-only` | `aidlc-using-devflow`만 호출 가능. 사용자 직접 호출 불가 |
+| `invoke_mode` | `orchestrator-only` | 오케스트레이터만 호출 가능. 사용자 직접 호출 불가 |
+| `invoke_mode` | `user-invocable` | 사용자가 직접 호출 가능한 유틸리티 스킬 |
 | `return_behavior` | `stop-no-gate` | 실행 후 결과 표시 및 STOP. 승인 게이트는 오케스트레이터 소유 |
 | `output_path` | `devflow-docs/...` | 스테이지 산출물 저장 경로 |
 
@@ -218,7 +219,7 @@ B) 다음 단계 진행
 - [AWS AI-DLC 방법론 블로그](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
 - [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
 - [obra/superpowers](https://github.com/obra/superpowers)
-- [B안 vs C안 비교 분석](docs/analysis/2026-03-10-b-plan-vs-c-plan-analysis.md)
+- [Orchestrator-Centric vs Enhanced Skills 비교 분석](docs/analysis/2026-03-10-b-plan-vs-c-plan-analysis.md)
 - [Skill Guide 준수 리뷰](docs/analysis/2026-03-10-skill-guide-review.md)
 
 ---
