@@ -2,7 +2,7 @@
 name: devflow-conventions
 description: Shared conventions for all AI-DLC stage skills. Defines invoke_mode and return_behavior metadata semantics.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
 ---
@@ -72,6 +72,13 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 A) 현재 상태로 승인
 B) 직접 수정 지시
 ```
+
+## TDD 규약
+
+- `_shared/tdd-protocol.md` — TDD Iron Law, RED-GREEN-REFACTOR, Self-Review 체크리스트, 회귀 테스트 검증
+- Construction 스킬 중 코드를 작성/수정하는 스킬은 이 프로토콜을 참조
+- 참조 스킬: `aidlc-code-generation`, `aidlc-verification-before-completion`, `aidlc-systematic-debugging`
+- 리뷰 시 TDD 준수 확인: `code-reviewer-prompt.md`, `code-plan-reviewer-prompt.md`
 
 ## Return to Orchestrator 규약
 
