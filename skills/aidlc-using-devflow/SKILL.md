@@ -241,6 +241,51 @@ B) 복잡도 조정 (원하는 복잡도를 알려주세요)
 requirements-analysis 호출 시 인라인 신호 포함:
 `"aidlc-requirements-analysis 실행. Complexity: [확정된 값]"`
 
+**aidlc-requirements-analysis 전용 게이트:**
+
+반환 텍스트에서 `열린 질문: [N]개` 패턴을 확인한다.
+**패턴 매칭 실패 시 (I-3 해소)**: LLM이 "없음", "0개", 다른 표현을 사용한 경우 N=0으로 처리하고 표준 gate 진행.
+
+**N > 0인 경우 (미해결 질문 있음):**
+
+```
+## aidlc-requirements-analysis 완료
+
+⚠️ 미해결 질문이 {N}개 있습니다.
+[가정으로 처리된 항목이 있는 경우:]
+ℹ️ 가정으로 처리된 항목: [목록]
+
+A) 지금 답변 (미해결 질문만 처리 후 계속)
+B) 현재 가정으로 진행 (가정은 requirements.md에 기록됨)
+C) 변경 요청
+```
+
+- A 선택 시: 아래 신호로 재호출:
+  `"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"`
+  결과 반환 후 다시 이 gate로 복귀.
+- B 선택 시: 표준 gate (B) 다음 단계 진행으로 처리.
+- C 선택 시: `aidlc-requirements-analysis` 전체 재호출.
+
+**N == 0인 경우 (미해결 질문 없음):**
+
+[가정 항목이 있는 경우:]
+```
+## aidlc-requirements-analysis 완료
+
+ℹ️ 가정으로 처리된 항목:
+- [가정 1]
+- [가정 2]
+
+A) 변경 요청  B) 다음 단계 진행
+```
+
+[가정 항목도 없는 경우:]
+```
+## aidlc-requirements-analysis 완료
+
+A) 변경 요청  B) 다음 단계 진행
+```
+
 **Step E: Update state**
 
 Use devflow-state to:
