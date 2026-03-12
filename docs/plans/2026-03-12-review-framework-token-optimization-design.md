@@ -53,6 +53,18 @@
 
 ### 결정 4: Escalation — 최대 5회 → 사용자 escalate
 - superpowers와 동일한 정책
+- Escalation 시 메시지 형식:
+  ```
+  ⚠️ 리뷰 루프 5회 초과 — 사용자 판단 필요
+
+  리뷰 이력:
+  - 1회: [이슈 요약]
+  - 2회: [이슈 요약]
+  - ...
+
+  A) 현재 상태로 승인
+  B) 직접 수정 지시
+  ```
 
 ### 결정 5: 접근법 — Phase 분리 + 리뷰 통합 (A안)
 - 오케스트레이터 Phase별 분리와 리뷰 프레임워크를 동시에 도입
@@ -112,15 +124,44 @@ aidlc-using-devflow (Entry)
 
 ### INCEPTION Orchestrator: `aidlc-inception-orchestrator/SKILL.md` (~180줄)
 
-- `invoke_mode: orchestrator-only` (Entry Orchestrator만 호출)
-- 스테이지 순회: workspace-detection → Complexity Gate → requirements-analysis → Open Questions Gate → workflow-planning → Approach Proposal Gate → application-design (조건부)
+- `invoke_mode: orchestrator-only` — 상위 오케스트레이터(Entry)만 호출 가능
+- `plugin.json`에 스킬로 등록, Entry Orchestrator가 스킬 호출(invoke) 방식으로 실행
+- 스테이지 순회 + 게이트 매핑:
+  1. workspace-detection → workspace-detection 전용 게이트 [조건부 게이트]
+  2. Complexity Declaration Gate
+  3. requirements-analysis → Open Questions 게이트 [조건부 게이트]
+  4. workflow-planning → Approach Proposal 게이트 [2단계 게이트]
+  5. application-design (조건부) → LIST 게이트 → DETAIL 게이트 [표준 게이트]
 - 각 게이트는 `_shared/gate-patterns.md` 템플릿 참조
 
 ### CONSTRUCTION Orchestrator: `aidlc-construction-orchestrator/SKILL.md` (~200줄)
 
-- `invoke_mode: orchestrator-only`
-- 스테이지 순회: units-generation (조건부) → code-generation (Plan → Generate, multi-unit) → build-and-test
-- Multi-unit 핸들링 로직
+- `invoke_mode: orchestrator-only` — 상위 오케스트레이터(Entry)만 호출 가능
+- `plugin.json`에 스킬로 등록
+- 스테이지 순회 + 게이트 매핑:
+  1. units-generation (조건부) → units 게이트 [표준 게이트]
+  2. code-generation Plan → code-plan 게이트 [리뷰 연계 게이트]
+  3. code-generation Generate → 구현 게이트 [리뷰 연계 게이트]
+  4. build-and-test → 완료 게이트 [표준 게이트]
+- Multi-unit 핸들링: devflow-state의 `## Completed Units`를 읽어 미완료 unit 순회, unit당 step 2-3 반복
+
+### `invoke_mode: orchestrator-only` 정의 확장
+
+기존 정의 "aidlc-using-devflow만 호출"을 **"상위 오케스트레이터만 호출 가능"**으로 확장:
+- Phase Orchestrator: Entry Orchestrator만 호출
+- Stage Skill: Phase Orchestrator만 호출
+- 사용자 직접 호출 불가는 동일
+
+### devflow-state 읽기/쓰기 책임
+
+| 필드 | 쓰기 책임 | 읽기 |
+|------|----------|------|
+| `## Current Phase` | Entry Orchestrator | Phase Orchestrator |
+| `## Current Stage` | Phase Orchestrator | Stage Skill (선택적) |
+| `## Complexity` | Entry Orchestrator (초기화) | Phase Orchestrator, Stage Skill |
+| `## Selected Approach` | INCEPTION Orchestrator (gate 후) | Stage Skill |
+| `## Completed Units` | CONSTRUCTION Orchestrator (unit 완료 시) | CONSTRUCTION Orchestrator |
+| `## Audit Log` | Phase Orchestrator (gate 결정 시) | — |
 
 ---
 
@@ -221,6 +262,8 @@ depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
 | aidlc-application-design | artifact-reviewer | application-design.md |
 | aidlc-code-generation (Plan) | code-plan-reviewer | code-plan.md |
 | aidlc-code-generation (Generate) | code-reviewer | 구현 코드 |
+| aidlc-units-generation | artifact-reviewer | units.md |
+| aidlc-workspace-detection | 리뷰 없음 | (사실 확인 — 검증 불필요) |
 | aidlc-build-and-test | 리뷰 없음 | (검증 자체가 목적) |
 
 ### 리뷰 결과 반환 형식
@@ -305,9 +348,16 @@ STOP.
 | `_shared/devflow-conventions.md` | 39줄 → ~80줄 (아키텍처 가이드) |
 | `.claude-plugin/plugin.json` | 버전 0.3.0 → 0.4.0 |
 
-### 변경 없는 파일 (8개)
+### 변경 없는 파일 (9개)
 
-aidlc-build-and-test, aidlc-verification-before-completion, aidlc-receiving-code-review, aidlc-systematic-debugging, aidlc-dispatching-parallel-agents, aidlc-finishing-a-development-branch, aidlc-using-git-worktrees, aidlc-writing-skills
+aidlc-build-and-test, aidlc-workspace-detection, aidlc-verification-before-completion, aidlc-receiving-code-review, aidlc-systematic-debugging, aidlc-dispatching-parallel-agents, aidlc-finishing-a-development-branch, aidlc-using-git-worktrees, aidlc-writing-skills
+
+### 기존 스킬과의 관계
+
+| 기존 스킬 | 새 리뷰 프레임워크와의 관계 |
+|-----------|--------------------------|
+| `aidlc-receiving-code-review` | **역할 분리, 충돌 없음.** 이 스킬은 외부(사람 또는 다른 AI)로부터 받은 코드 리뷰에 대응하는 방법을 정의. 새 리뷰 프레임워크는 내부 서브에이전트가 자동으로 수행하는 리뷰. 둘은 보완적 관계 |
+| `aidlc-verification-before-completion` | **역할 유지.** 리뷰 서브에이전트는 산출물 품질 검증, verification은 실행 증거(테스트 통과 등) 검증. 서로 다른 관점의 검증이므로 둘 다 유지 |
 
 ### 토큰 비용 비교
 
@@ -315,6 +365,7 @@ aidlc-build-and-test, aidlc-verification-before-completion, aidlc-receiving-code
 |---------|------|---------|
 | INCEPTION 스테이지당 오케스트레이터 로드 | 549줄 | ~180줄 |
 | CONSTRUCTION 스테이지당 오케스트레이터 로드 | 549줄 | ~200줄 |
-| 5 스테이지 워크플로우 총 오케스트레이터 비용 | ~2,745줄 | ~1,020줄 |
+| Entry Orchestrator 로드 | — | ~80줄 × 1회 (최초만) |
+| 5 스테이지 워크플로우 총 오케스트레이터 비용 | ~2,745줄 | ~1,020줄 (Entry 80×1 + INCEPTION 180×3단계 + CONSTRUCTION 200×2단계. 조건부 스테이지 제외 기준) |
 | 리뷰 추가 비용 (Standard, 5 스킬) | 0 | ~75줄 |
 | **순 절감** | — | **약 60%** |
