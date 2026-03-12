@@ -139,6 +139,9 @@ A와 B 중에서 상충할 때 어느 쪽을 우선하시겠어요?
 5. Dependencies and constraints
 6. Open questions — ask user ONE at a time before proceeding
 
+---
+
+<!-- 아래 테이블은 Step 3/4 전체에 적용되는 정책 요약 -->
 ### Depth별 질문 정책
 
 | Depth | 해석 분기 | 핵심 질문 | Ambiguity Loop |
