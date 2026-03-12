@@ -52,3 +52,12 @@ Pre-Planning 스테이지(user-stories, nfr-requirements)에서 실행 중 중�
 ```
 
 오케스트레이터는 HELD/SKIPPED 상태를 devflow-state에 기록하고 다음 스테이지로 진행한다.
+
+## 적용 대상
+
+| 스킬 | GENERATE | IMPORT | Hold/Skip |
+|------|----------|--------|-----------|
+| `aidlc-user-stories` | ✅ | ❌ | ✅ |
+| `aidlc-nfr-requirements` | ✅ | ✅ | ✅ |
+
+user-stories는 requirements-analysis 결과를 기반으로 Claude가 변환하는 것이 핵심 가치이므로 IMPORT 불필요.
