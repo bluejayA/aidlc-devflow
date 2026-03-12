@@ -13,7 +13,6 @@ metadata:
 # aidlc-build-and-test
 
 <!-- 빌드 실행 + 전체 테스트 실행 + 지침 문서 생성: 모든 unit 완료 후 실행 -->
-<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 
 ## Purpose
 
@@ -95,16 +94,10 @@ Run: `[정확한 명령어]`
 
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles final completion.
-
-```
-[build-and-test 결과]
+conventions 표준 형식. 반환 필드:
 - 빌드: ✅ 성공 | ❌ 실패 ([에러 요약])
 - 테스트: ✅ [N]개 통과, 0 실패 | ❌ [N]개 통과, [M]개 실패
-- 산출물:
-  - devflow-docs/construction/build-and-test/build-instructions.md
-  - devflow-docs/construction/build-and-test/test-instructions.md
-```
+- 산출물: build-instructions.md, test-instructions.md
 
 ## Error Handling
 
