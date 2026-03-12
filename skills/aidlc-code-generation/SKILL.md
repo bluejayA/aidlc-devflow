@@ -2,7 +2,7 @@
 name: aidlc-code-generation
 description: aidlc 플러그인(B안) 전용 스킬. Two-stage process — generates a code plan first, then implements after orchestrator approval. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -40,11 +40,20 @@ Create a code generation plan with checkboxes:
 - [ ] `path/to/existing.py` — [what changes]
 
 ## Implementation Steps
-- [ ] Step 1: [specific action]
-- [ ] Step 2: [specific action]
+- [ ] Step 1: [기능명]
+  - [ ] RED: [테스트명] 작성
+  - [ ] Verify RED: 실패 확인
+  - [ ] GREEN: [구현 내용]
+  - [ ] Verify GREEN: 통과 확인 + 전체 회귀
+  - [ ] REFACTOR: [정리 대상이 있으면 명시, 없으면 생략]
+- [ ] Step 2: [기능명]
+  - [ ] RED: [테스트명] 작성
+  ...
 
 ## Test Strategy
 - [ ] [test name]: [what it verifies]
+
+> 각 테스트는 Implementation Steps의 RED 단계에서 작성된다. 별도 테스트 단계가 아님.
 ```
 
 After writing the plan, display it and STOP:
@@ -65,10 +74,15 @@ When invoked with explicit generation instruction such as:
 
 Or when the conversation context clearly contains an approved plan and the
 orchestrator has signaled to proceed with generation.
-1. Execute each step in the plan
-2. Mark each checkbox `[x]` immediately after completing that step
-3. Follow TDD: write tests first, then implementation
-4. Save plan progress to `devflow-docs/construction/[unit-name]/code-plan.md`
+1. `_shared/tdd-protocol.md` 읽기
+2. 각 Implementation Step에 대해 TDD 사이클 실행:
+   a. RED: 실패 테스트 작성 → 실행 → 실패 확인
+   b. GREEN: 최소 구현 → 실행 → 해당 테스트 + 전체 테스트 통과 확인
+   c. REFACTOR: 정리 → 전체 테스트 재실행
+   d. 체크박스 [x] 표시 (하위 RED/Verify RED/GREEN/Verify GREEN/REFACTOR 포함)
+3. Iron Law 위반 시: 해당 코드 삭제 후 RED부터 재시작
+4. 모든 Step 완료 후 Self-Review 체크리스트 수행 (`_shared/tdd-protocol.md` 참조)
+5. 자가 수정 후 Save plan progress to `devflow-docs/construction/[unit-name]/code-plan.md`
 
 ## Examples
 
@@ -100,10 +114,18 @@ Output:
 Orchestrator calls: "code-generation: GENERATE — proceed with the approved plan for notification-service"
 
 Actions:
-1. Step 1 실행: 스켈레톤 작성 → `[x]` 표시
-2. Step 2 실행: 테스트 작성 → `[x]` 표시
-3. Step 3 실행: 구현 → `[x]` 표시
-4. ... (각 체크박스 즉시 업데이트)
+1. `_shared/tdd-protocol.md` 읽기
+2. Step 1 실행:
+   - RED: test_create_notification_success 작성 → 실행 → FAIL ✓
+   - GREEN: create_notification() 구현 → 실행 → PASS ✓ (전체 1/1)
+   - [x] Step 1 완료
+3. Step 2 실행:
+   - RED: test_create_notification_invalid_user 작성 → 실행 → FAIL ✓
+   - GREEN: 유효성 검증 추가 → 실행 → PASS ✓ (전체 2/2)
+   - [x] Step 2 완료
+4. Step 3~5: 동일 패턴 반복
+5. Self-Review 수행 (`_shared/tdd-protocol.md` 체크리스트) → 이슈 없음
+6. code-plan.md 저장
 
 ---
 
@@ -144,6 +166,9 @@ PART 2 완료 시:
 ```
 [code-generation 완료: unit-name]
 - 생성된 파일: [count]개
+- 테스트: [count]개 통과, 0 실패
+- TDD 사이클: [count]회 완료
+- Self-Review: ✅ 완료
 - 모든 체크박스 완료
 - 산출물: devflow-docs/construction/[unit-name]/code-plan.md
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
