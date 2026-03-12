@@ -39,9 +39,9 @@
 | CONSTRUCTION — code-generation | ✅ | ✅ | 동등 |
 | CONSTRUCTION — build-and-test | ✅ | ✅ | 동등 |
 | CONSTRUCTION — git-worktrees | ✅ | ✅ | 동등 |
-| brainstorming | ✅ (472줄 자체 보유) | superpowers 위임 | devflow가 독립적 |
-| TDD 프로토콜 | ✅ (613줄 자체 보유) | ✅ (132줄 shared) | devflow가 상세, aidlc-like가 간결 |
-| subagent-driven-development | ✅ 자체 보유 | superpowers 위임 | devflow가 독립적 |
+| brainstorming | ✅ (472줄, superpowers 참고 자체 작성) | superpowers에 위임 | devflow가 내장, aidlc-like가 토큰 절약 |
+| TDD 프로토콜 | ✅ (613줄, superpowers 참고 자체 작성) | ✅ (132줄 shared, superpowers 참고 축약) | 동일 원천, devflow가 상세, aidlc-like가 간결 |
+| subagent-driven-development | ✅ (superpowers 참고 자체 작성) | superpowers에 위임 | devflow가 내장, aidlc-like가 토큰 절약 |
 | 세션 추적/대시보드 | ✅ (dev-progress, superpowers-tracking) | devflow-state만 | devflow 우위 |
 | 코드 리뷰 서브에이전트 | ✅ 3종 | ✅ 3종 | 동등 |
 
@@ -49,7 +49,7 @@
 
 **devflow 우위 영역**:
 - functional-design 단계 보유 (CONSTRUCTION에서 상세 설계 단계 추가)
-- brainstorming, TDD, subagent-driven-development를 자체 내장 (외부 플러그인 의존 없음)
+- brainstorming, TDD, subagent-driven-development를 superpowers 참고하여 자체 내장 (런타임에 superpowers 플러그인 불필요)
 - 세션 추적 도구 풍부 (dev-progress 대시보드, superpowers-tracking)
 
 **aidlc-like 우위 영역**:
@@ -79,7 +79,7 @@
 | devflow | aidlc-like |
 |---------|------------|
 | 스킬 개별 호출 자유도 높음 — debugging만 단독 사용 가능 | 전체 흐름을 한 곳(오케스트레이터)에서 파악 가능 |
-| 외부 플러그인 의존 없이 자체 완결 | 게이트/상태/로깅 형식 일관성 보장 |
+| superpowers 참고하여 내장 — 런타임 외부 의존 없음 | 게이트/상태/로깅 형식 일관성 보장 |
 | 기능 풍부 (brainstorming, 세션 추적 등) | Stage 추가/변경이 Routing Table만으로 가능 |
 
 ### 3-3. 단점
@@ -136,8 +136,8 @@ devflow는 각 skill의 자율성이 높아 AI-DLC보다는 마이크로서비�
 |------|---------|------------|------|
 | 총 풋프린트 | ~11,363줄 | ~4,348줄 | aidlc-like 2.6배 적음 |
 | Shared/지원 파일 | 3,776줄 | 550줄 | aidlc-like 6.9배 적음 |
-| TDD 프로토콜 | 613줄 (자체 스킬) | 132줄 (shared 참조) | aidlc-like 4.6배 적음 |
-| brainstorming | 472줄 (자체 보유) | 0줄 (superpowers 위임) | aidlc-like 절약, 단 외부 의존 |
+| TDD 프로토콜 | 613줄 (superpowers 참고 내장) | 132줄 (superpowers 참고 축약) | 동일 원천, aidlc-like 4.6배 적음 |
+| brainstorming | 472줄 (superpowers 참고 내장) | 0줄 (superpowers에 위임) | devflow는 내장 비용, aidlc-like는 외부 의존 비용 |
 
 ### 5-2. 효율성 패턴 비교
 
@@ -163,7 +163,7 @@ devflow는 각 skill의 자율성이 높아 AI-DLC보다는 마이크로서비�
 
 ### 5-4. 토큰 효율성 판정
 
-**aidlc-like가 효율적**. conventions SSOT 패턴으로 Review/Return/TDD 중복을 체계적으로 제거했다. 단, brainstorming과 TDD를 superpowers에 위임하는 것은 토큰 절약이 아닌 기능 이전이므로 순수 효율 비교에서 제외해야 한다. 이를 제외해도 conventions 참조 패턴만으로 스킬당 평균 31% 줄 수를 줄였다.
+**aidlc-like가 효율적**. conventions SSOT 패턴으로 Review/Return/TDD 중복을 체계적으로 제거했다. 단, 두 플러그인 모두 superpowers를 원천으로 공유한다. devflow는 superpowers 스킬을 참고하여 자체 내장(472줄+613줄)했고, aidlc-like는 superpowers 런타임 위임 또는 축약 참조(132줄)를 선택했다. 내장 vs 위임은 "독립성 vs 토큰 효율" 트레이드오프이며, 이를 제외해도 conventions 참조 패턴만으로 스킬당 평균 31% 줄 수를 줄였다.
 
 ---
 
@@ -171,7 +171,7 @@ devflow는 각 skill의 자율성이 높아 AI-DLC보다는 마이크로서비�
 
 | 차원 | 우위 | 핵심 근거 |
 |------|------|-----------|
-| **기능 우수성** | devflow | 29개 스킬, functional-design/brainstorming/세션추적 자체 보유 |
+| **기능 우수성** | devflow | 29개 스킬, functional-design/brainstorming/세션추적 내장 (superpowers 참고) |
 | **사용자 흐름** | 용도별 무승부 | devflow=독립 호출 자유, aidlc-like=일관성과 추적 용이 |
 | **AI-DLC 정합성** | aidlc-like | 오케스트레이터가 LC 소유, stage=순수 실행자 원칙 구조적 강제 |
 | **토큰 효율성** | aidlc-like | 총 풋프린트 2.6배 적음, conventions SSOT로 체계적 중복 제거 |
@@ -180,8 +180,8 @@ devflow는 각 skill의 자율성이 높아 AI-DLC보다는 마이크로서비�
 
 **devflow를 선택할 때**:
 - 스킬을 개별적으로 꺼내 쓰는 유연성이 중요할 때
-- 외부 플러그인(superpowers) 없이 독립적으로 동작해야 할 때
-- brainstorming, 세션 추적 등 풍부한 기능이 필요할 때
+- 런타임에 superpowers 플러그인 없이 동작해야 할 때 (superpowers 참고 내장)
+- brainstorming, 세션 추적 등 풍부한 내장 기능이 필요할 때
 
 **aidlc-like를 선택할 때**:
 - AI-DLC 방법론을 원래 의도대로 충실히 따르고 싶을 때
