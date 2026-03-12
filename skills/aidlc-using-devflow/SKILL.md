@@ -138,7 +138,7 @@ A) 변경 요청
 B) 다음 단계 진행
 ```
 
-<!-- 게이트 순서: 실행 흐름과 일치 (workspace-detection → Complexity → requirements-analysis → workflow-planning) -->
+<!-- 게이트 순서: 실행 흐름과 일치 (workspace-detection → Complexity → requirements-analysis → application-design → workflow-planning) -->
 
 **aidlc-workspace-detection 전용 게이트:** `workspace.md`의 `Requires Path Confirmation` 값을 읽어 분기한다.
 
@@ -236,6 +236,22 @@ A) 변경 요청  B) 다음 단계 진행
 A) 변경 요청  B) 다음 단계 진행
 ```
 
+**aidlc-application-design (LIST) 전용 게이트:**
+
+```
+## aidlc-application-design 완료 — 컴포넌트 목록 확인
+
+[컴포넌트 목록 표시]
+
+A) 컴포넌트 추가/변경 요청 (LIST 재실행)
+B) 이 목록으로 상세 설계 진행 (DETAIL 호출)  ← Standard/Comprehensive만
+B) 다음 단계 진행  ← Minimal만
+```
+
+- A 선택 시: `aidlc-application-design` 재호출 (일반)
+- B 선택 시 (Standard/Comprehensive): `"aidlc-application-design: DETAIL — 승인된 목록으로 상세 설계 진행"` 호출
+- B 선택 시 (Minimal): 다음 stage로 이동
+
 **aidlc-workflow-planning 전용 게이트 (2단계):**
 
 **1단계 — 접근법 선택 gate:**
@@ -331,8 +347,10 @@ Routing:
 | `aidlc-workflow-planning` | `aidlc-using-git-worktrees` | 워크트리 게이트 B 선택 시 |
 | `aidlc-workflow-planning` | first Construction stage | 워크트리 게이트 C 선택 시 (스킵) |
 | `aidlc-using-git-worktrees` | first Construction stage | 워크트리 생성 완료 후 |
-| `aidlc-application-design` | `aidlc-units-generation` | if units-generation included in workflow-plan |
-| `aidlc-application-design` | `aidlc-code-generation` | if units-generation skipped |
+| `aidlc-application-design` (LIST) | `aidlc-application-design` (DETAIL) | Standard/Comprehensive depth |
+| `aidlc-application-design` (LIST) | `aidlc-units-generation` 또는 `aidlc-code-generation` | Minimal depth |
+| `aidlc-application-design` (DETAIL) | `aidlc-units-generation` | if units-generation included in workflow-plan |
+| `aidlc-application-design` (DETAIL) | `aidlc-code-generation` | if units-generation skipped |
 | `aidlc-units-generation` | `aidlc-code-generation` | Always |
 
 ### CONSTRUCTION sequence
