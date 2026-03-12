@@ -1,10 +1,11 @@
 ---
 name: aidlc-receiving-code-review
-description: aidlc 플러그인(B안) 전용. Use when receiving code review feedback, PR comments, inline suggestions, or any critique of written code that requires a response or action. Invoke via aidlc:aidlc-receiving-code-review.
+description: Use when receiving code review feedback, PR comments, inline suggestions, or any critique of written code that requires a response or action.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # aidlc-receiving-code-review

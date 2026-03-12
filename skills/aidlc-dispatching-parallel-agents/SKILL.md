@@ -1,10 +1,11 @@
 ---
 name: aidlc-dispatching-parallel-agents
-description: aidlc 플러그인(B안) 전용. Use when two or more independent tasks can be executed simultaneously, when different domains need separate investigation, or when waiting for one task to complete before starting another would waste time. Invoke via aidlc:aidlc-dispatching-parallel-agents.
+description: Use when two or more independent tasks can be executed simultaneously, when different domains need separate investigation, or when waiting for one task to complete before starting another would waste time.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # aidlc-dispatching-parallel-agents
