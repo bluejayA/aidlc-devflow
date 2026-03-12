@@ -1,6 +1,6 @@
 ---
 name: aidlc-requirements-analysis
-description: aidlc 플러그인(B안) 전용 스킬. Analyzes user requirements using adaptive depth (Minimal/Standard/Comprehensive) based on request complexity. Called by aidlc:aidlc-using-devflow orchestrator.
+description: Analyzes user requirements using adaptive depth (Minimal/Standard/Comprehensive). Called by inception-orchestrator.
 metadata:
   version: 0.4.0
   author: Jay
@@ -13,7 +13,6 @@ metadata:
 # aidlc-requirements-analysis
 
 <!-- 요구사항 분석: 적응형 깊이로 사용자 의도와 요구사항을 분석 -->
-<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 
 ## Purpose
 
@@ -189,24 +188,15 @@ Create `devflow-docs/inception/requirements.md`:
 [Any unresolved questions]
 ```
 
-## Review (Standard 이상)
+## Review
 
-depth가 Standard 이상이면:
-1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/inception/requirements.md`
-   - 상위 산출물: `devflow-docs/inception/workspace.md` (있으면)
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/inception/requirements.md
+- 리뷰어: artifact-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
-
-```
-[requirements-analysis 결과]
+conventions 표준 형식. 반환 필드:
 - 분석 깊이: [Minimal | Standard | Comprehensive]
 - 해석 확정: [확정된 해석 한 줄 요약, 또는 "단일 해석 — 확인 불필요"]
 - 기능 요구사항: [count]개
@@ -214,7 +204,6 @@ STOP.
 - 가정으로 처리된 항목: [0개 | N개 — 항목명 목록]
 - 산출물: devflow-docs/inception/requirements.md
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
 ## Common Issues
 

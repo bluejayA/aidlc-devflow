@@ -1,6 +1,6 @@
 ---
 name: aidlc-workflow-planning
-description: aidlc 플러그인(B안) 전용 스킬. Determines which Construction stages to run and at what depth. Saves workflow plan. Called by aidlc:aidlc-using-devflow orchestrator.
+description: Determines which Construction stages to run and at what depth. Saves workflow plan. Called by inception-orchestrator.
 metadata:
   version: 0.6.0
   author: Jay
@@ -13,7 +13,6 @@ metadata:
 # aidlc-workflow-planning
 
 <!-- 워크플로우 계획: 어떤 스테이지를 실행할지 결정 -->
-<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 <!-- 중요: 이 skill의 산출물을 오케스트레이터가 읽어 조건부 스테이지를 결정 -->
 
 ## Purpose
@@ -125,30 +124,20 @@ Create `devflow-docs/inception/workflow-plan.md`:
 Pre-Planning 스테이지는 오케스트레이터가 직접 게이트로 관리하며, 이 섹션은 기록용.
 기존 `### CONSTRUCTION` 파싱 로직은 변경 없음.
 
-## Review (Standard 이상)
+## Review
 
-depth가 Standard 이상이면:
-1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/inception/workflow-plan.md`
-   - 상위 산출물: `devflow-docs/inception/requirements.md`
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/inception/workflow-plan.md
+- 리뷰어: artifact-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
-
-```
-[workflow-planning 결과]
+conventions 표준 형식. 반환 필드:
 - 생성된 접근법: [A안명] / [B안명] / ([C안명])
 - 권장 접근법: [A안 | B안 | C안]
 - 접근법 상세: (Step 2의 접근법 목록 참조)
 - 산출물: devflow-docs/inception/workflow-plan.md
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
 ## Common Issues
 

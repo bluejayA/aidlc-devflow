@@ -1,10 +1,11 @@
 ---
 name: aidlc-systematic-debugging
-description: aidlc 플러그인(B안) 전용. Use when a bug is reported, a test is failing, behavior is unexpected, an error is thrown, a fix attempt is not working, or any symptom requires diagnosis before a code change is made. Invoke via aidlc:aidlc-systematic-debugging.
+description: Use when a bug is reported, a test is failing, behavior is unexpected, an error is thrown, a fix attempt is not working, or any symptom requires diagnosis before a code change is made.
 metadata:
   version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: user-invocable
   return_behavior: stop-no-gate
 ---
 
@@ -40,19 +41,17 @@ metadata:
 
 ---
 
-## 합리화 방지 테이블
+## 합리화 방지
 
 아래 생각이 들면 즉시 멈추고 4단계 프로세스를 따른다:
 
-| 합리화 패턴 | 위험성 | 올바른 행동 |
-|------------|--------|------------|
-| "빠르게 고치면 될 것 같아" | 원인을 모르는 채 수정 → 재발 | 1단계 Root Cause 조사부터 시작 |
-| "이전에 비슷한 버그 봤어" | 유사 증상 ≠ 같은 원인 | 현재 케이스를 독립적으로 재현 |
-| "에러 메시지가 명확해" | 에러 위치 ≠ 근본 원인 | 에러 발생 위치 상위 호출 스택 추적 |
-| "테스트만 고치면 되겠다" | 테스트가 실제 결함을 감추게 됨 | 테스트가 틀린 이유를 먼저 증명 |
-| "시도해보고 안 되면 다른 거 해보자" | 무작위 수정 → 상태 불명확 | 단일 가설 → 단일 수정 → 검증 순서 준수 |
-| "타임아웃 문제겠지" | 무근거 추정 | 타임아웃임을 측정으로 확인 후 수정 |
-| "버전 업그레이드하면 해결될 것" | 외부 요인에 책임 전가 | 현재 코드에서 재현 후 판단 |
+| 합리화 패턴 | 올바른 행동 |
+|------------|------------|
+| "빠르게 고치면 될 것 같아" | 1단계 Root Cause 조사부터 |
+| "이전에 비슷한 버그 봤어" | 현재 케이스를 독립적으로 재현 |
+| "에러 메시지가 명확해" | 상위 호출 스택까지 추적 |
+| "테스트만 고치면 되겠다" | 테스트가 틀린 이유를 먼저 증명 |
+| "시도해보고 안 되면 다른 거" | 단일 가설 → 단일 수정 → 검증 |
 
 ---
 
@@ -213,35 +212,11 @@ EMAIL_PATTERN = r'^[\w.+-]+@[\w-]+\.[a-z]{2,}$'  # {2,6} → {2,}
 
 ### Example 2: 간헐적 타임아웃
 
-**증상**: API가 간헐적으로 504 Gateway Timeout을 반환
-
-**1단계 조사**:
-- 에러 로그에서 `upstream timed out (110: Connection timed out) while reading response header`
-- 재현: 부하가 높을 때만 발생 — 최소 재현을 위해 `locust`로 50 RPS 발생
-
-**2단계 패턴 분석**:
-```
-| 조건              | 결과          |
-|-----------------|--------------|
-| 10 RPS          | 정상 응답      |
-| 50 RPS          | 간헐적 타임아웃 |
-| DB 쿼리 없는 API  | 50 RPS 정상   |
-```
-→ DB 쿼리가 있는 엔드포인트에서만 발생
-
-**3단계 가설**: DB 연결 풀이 고갈되어 대기 시간 초과
-→ `SHOW PROCESSLIST` + 연결 풀 모니터링으로 확인 → 연결 풀 상한(10)에 도달 확인
-
-**4단계 구현**:
-```python
-# 실패 테스트 작성 (RED) — 연결 풀 고갈 시뮬레이션
-def test_db_pool_exhaustion():
-    ...
-
-# 연결 풀 크기 조정 (GREEN)
-DATABASE_POOL_SIZE = 20  # 10 → 20
-DATABASE_MAX_OVERFLOW = 5
-```
+**증상**: API가 간헐적으로 504 반환
+**1단계**: 에러 로그 → `upstream timed out` 확인. 재현: `locust`로 50 RPS
+**2단계**: DB 쿼리 있는 엔드포인트에서만 발생 (10 RPS 정상, 50 RPS 실패)
+**3단계**: DB 연결 풀 고갈 가설 → `SHOW PROCESSLIST`로 풀 상한(10) 도달 확인
+**4단계**: RED(풀 고갈 시뮬레이션 테스트) → GREEN(`POOL_SIZE=20`)
 
 ---
 
@@ -274,12 +249,8 @@ DATABASE_MAX_OVERFLOW = 5
 
 ## Return to Orchestrator
 
-STOP. 수정 완료 후 아래 형식으로 반환:
-
-```
-[systematic-debugging 완료]
+conventions 표준 형식. 반환 필드:
 - 근본 원인: [1줄 요약]
 - 수정 내용: [1줄 요약]
 - 테스트: [회귀 테스트명] 추가됨
 - 전체 테스트: [N]개 통과, 0 실패
-```

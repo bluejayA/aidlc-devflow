@@ -1,10 +1,11 @@
 ---
 name: aidlc-writing-skills
-description: aidlc 플러그인(B안) 전용. Use when creating a new SKILL.md file, editing an existing skill, validating a skill before deployment, or when any process documentation needs to be defined as an executable skill. Invoke via aidlc:aidlc-writing-skills.
+description: Use when creating a new SKILL.md file, editing an existing skill, validating a skill before deployment, or when any process documentation needs to be defined as an executable skill.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # aidlc-writing-skills

@@ -115,14 +115,15 @@ A) 변경 요청 → requirements-analysis 재호출
 B) 승인, 다음 단계 진행
 ```
 
-### 4. Pre-Planning Gate [조건부 게이트]
+### 4. Pre-Planning 분기 [자동분기 + 조건부 게이트]
 
 requirements-analysis 게이트 통과 후, workflow-planning 호출 전에 실행.
 Pre-Planning은 INCEPTION 내 스테이지 그룹명이며, workflow-plan.md의 `### PRE-PLANNING` 섹션에 결과가 기록된다.
+Minimal/Comprehensive는 자동 분기, Standard만 사용자 게이트.
 
-**Minimal complexity**: 자동 스킵 — user-stories, nfr-requirements 모두 건너뜀. workflow-planning으로 직행.
+**Minimal complexity**: 자동 스킵 — workflow-planning으로 직행.
 
-**Comprehensive complexity**: 자동 포함 — user-stories, nfr-requirements 모두 실행. User-Stories 게이트로 진행.
+**Comprehensive complexity**: 자동 포함 — User-Stories 게이트로 진행.
 
 **Standard complexity**: 3-option 게이트 제시
 

@@ -1,6 +1,6 @@
 ---
 name: aidlc-using-git-worktrees
-description: aidlc 플러그인(B안) 전용 스킬. Creates an isolated git worktree before code-generation begins. Protects the main branch during Construction. Called by aidlc:aidlc-using-devflow orchestrator after aidlc-workflow-planning approval.
+description: Creates an isolated git worktree before code-generation begins. Protects the main branch during Construction. Called by construction-orchestrator.
 metadata:
   version: 0.1.0
   author: Jay
@@ -11,8 +11,7 @@ metadata:
 
 # aidlc-using-git-worktrees
 
-<!-- B안: 격리 개발 워크트리 생성 — 오케스트레이터 승인 후 Construction 진입 전 실행 -->
-<!-- Greenfield / Brownfield 모두 처리, git 미초기화 케이스 포함 -->
+<!-- 격리 개발 워크트리 생성 — Construction 진입 전 실행 -->
 
 ## Purpose
 
@@ -147,22 +146,12 @@ git worktree add "$PATH" -b "$BRANCH"
 
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles it.
-
-**워크트리 생성 성공 시:**
-```
-[using-git-worktrees 결과]
+conventions 표준 형식. 반환 필드:
 - 브랜치: [branch-name]
 - 워크트리 경로: [.worktrees/xxx]
 - 베이스라인 테스트: [N tests passed | 스킵 (Greenfield) | ⚠️ N failures]
 - .gitignore: [업데이트됨 | 이미 설정됨 | 해당 없음]
-```
-
-**워크트리 스킵 시 (git init 거부):**
-```
-[using-git-worktrees 결과]
-- 상태: 스킵 — git 저장소 없음, 현재 디렉토리에서 진행
-```
+- (스킵 시: 상태: 스킵 — git 저장소 없음)
 
 ## Common Issues
 

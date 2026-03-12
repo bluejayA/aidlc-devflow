@@ -1,10 +1,11 @@
 ---
 name: aidlc-verification-before-completion
-description: aidlc 플러그인(B안) 전용. Use when about to claim a task is complete, say "it should work", declare a fix is done, say "tests pass", or make any success assertion before running the actual verification commands. Invoke via aidlc:aidlc-verification-before-completion.
+description: Use when about to claim a task is complete, say "it should work", declare a fix is done, say "tests pass", or make any success assertion before running the actual verification commands.
 metadata:
   version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # aidlc-verification-before-completion
@@ -48,12 +49,9 @@ metadata:
 | Red Flag 표현 | 왜 위험한가 |
 |--------------|-----------|
 | "should work" / "아마 될 것 같아요" | 실행하지 않은 코드에 대한 추측 |
-| "probably passes" / "통과할 것 같습니다" | 실제 실행 없는 예측 |
 | "에이전트가 성공했다고 보고했습니다" | 에이전트 보고 ≠ 실제 검증 |
-| "이전에 테스트했을 때 됐어요" | 신선하지 않은 증거 — 코드가 바뀌었을 수 있음 |
+| "이전에 테스트했을 때 됐어요" | 코드가 바뀌었을 수 있음 |
 | "코드를 보니 맞는 것 같습니다" | 코드 리뷰 ≠ 실행 결과 |
-| 커밋하기 전에 테스트를 실행하지 않음 | 검증 없는 완료 선언 |
-| "타입이 맞으니까 런타임도 괜찮을 거예요" | 정적 분석 ≠ 런타임 동작 |
 | "로컬에서 됐으니 CI도 통과할 거예요" | 환경 차이 무시 |
 
 ---
@@ -203,40 +201,8 @@ test_user_service.py::test_delete_user FAILED
 
 ### Example 3: 버그 수정 후 회귀 테스트 검증
 
-**상황**: systematic-debugging으로 이메일 검증 버그 수정 완료
-
-**1~5단계**: (일반 Gate 프로세스 수행)
-
-**6단계 수행**:
-```bash
-# 1. 회귀 테스트 실행
-$ pytest tests/test_email.py::test_validate_io_tld -v
-# → PASS ✓
-
-# 2. 수정 되돌리기
-$ git stash
-
-# 3. 회귀 테스트 실행
-$ pytest tests/test_email.py::test_validate_io_tld -v
-# → FAIL ✓ (테스트가 버그를 잡음을 증명)
-
-# 4. 수정 복원
-$ git stash pop
-
-# 5. 전체 테스트
-$ pytest tests/ -v
-# → 24 passed, 0 failed ✓
-```
-
-완료 선언:
-```
-## 회귀 테스트 검증
-- 회귀 테스트: test_validate_io_tld
-- 수정 적용 시: PASS ✓
-- 수정 되돌림 시: FAIL ✓ (테스트 유효성 증명)
-- 수정 복원 후: 전체 PASS ✓
-결론: 회귀 테스트 유효. 완료 선언.
-```
+**상황**: systematic-debugging으로 버그 수정 완료 → 1~5단계 수행 후 6단계:
+회귀 테스트 PASS → `git stash` → 회귀 테스트 FAIL(유효성 증명) → `git stash pop` → 전체 PASS
 
 ---
 

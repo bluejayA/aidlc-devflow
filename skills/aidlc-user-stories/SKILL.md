@@ -13,7 +13,6 @@ metadata:
 # aidlc-user-stories
 
 <!-- 사용자 스토리 생성: 요구사항을 INVEST 기준 스토리로 변환 -->
-<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 <!-- Hold/Skip: _shared/import-review-protocol.md 참조 -->
 
 ## Purpose
@@ -74,31 +73,19 @@ Create `devflow-docs/inception/user-stories.md`:
 **Priority**: [Must | Should | Could]
 ```
 
-## Review (Standard 이상)
+## Review
 
-depth가 Standard 이상이면:
-1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/inception/user-stories.md`
-   - 상위 산출물: `devflow-docs/inception/requirements.md`
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
-
-**depth 확인**: `devflow-docs/devflow-state.md`의 `## Complexity` 필드를 읽는다.
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/inception/user-stories.md
+- 리뷰어: artifact-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
-
-```
-[user-stories 결과]
+conventions 표준 형식. 반환 필드:
 - 액터: [count]명 ([액터명 나열])
 - 사용자 스토리: [count]개 (Must: [N], Should: [N], Could: [N])
 - 산출물: devflow-docs/inception/user-stories.md
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
 ## Common Issues
 

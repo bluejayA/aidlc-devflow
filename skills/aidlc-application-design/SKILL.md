@@ -1,6 +1,6 @@
 ---
 name: aidlc-application-design
-description: aidlc 플러그인(B안) 전용 스킬. Designs component and service structure before implementation. Conditional Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
+description: Designs component and service structure before implementation. Conditional Construction stage. Called by inception-orchestrator.
 metadata:
   version: 0.6.0
   author: Jay
@@ -13,7 +13,6 @@ metadata:
 # aidlc-application-design
 
 <!-- 애플리케이션 설계: 신규 컴포넌트/서비스 구조 설계 -->
-<!-- B안: 실행 전용, 조건부 — 오케스트레이터가 workflow-plan 기반으로 호출 여부 결정 -->
 
 ## Purpose
 
@@ -117,15 +116,10 @@ DETAIL 모드에서만 실행.
 **Interactions**: [ASCII 다이어그램] (Comprehensive만)
 ```
 
-### Step 5: NFR Design Patterns (Comprehensive DETAIL + NFR Design 신호 시)
+### Step 5: NFR Design Patterns (오케스트레이터 신호 시)
 
 호출 텍스트에 `NFR Design 포함` 키워드가 있을 때만 실행.
 없으면 이 Step을 스킵하고 Review로 진행.
-
-**활성화 조건** (3가지 모두 충족):
-1. depth가 Comprehensive
-2. DETAIL 모드
-3. 오케스트레이터가 `NFR Design 포함` 신호 전달
 
 **핵심 원칙**: Claude는 **정보 정리자**이지 **의사결정자**가 아니다. NFR 설계에는 정답이 없고 트레이드오프만 존재한다.
 
@@ -152,39 +146,27 @@ DETAIL 모드에서만 실행.
 | [패턴 C] | [장점] | [단점] | [비용] |
 ```
 
-## Review (Standard 이상)
+## Review
 
-depth가 Standard 이상이면 (LIST/DETAIL 모드 공통):
-1. `_shared/reviewers/artifact-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/inception/application-design.md`
-   - 상위 산출물: `devflow-docs/inception/requirements.md`
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵, 바로 Return to Orchestrator
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/inception/application-design.md
+- 리뷰어: artifact-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
+conventions 표준 형식. 반환 필드:
 
-**LIST Mode 반환:**
-```
-[application-design 결과 — LIST]
+**LIST Mode:**
 - 설계된 컴포넌트: [count]개
 - 목록: [컴포넌트명 나열]
 - 산출물: devflow-docs/inception/application-design.md (목록 단계)
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
-**DETAIL Mode 반환:**
-```
-[application-design 결과 — DETAIL]
+**DETAIL Mode:**
 - 상세 설계 완료: [count]개 컴포넌트
-- NFR Design Patterns: [count]개 카테고리 (Comprehensive + NFR 신호 시)
+- NFR Design Patterns: [count]개 카테고리 (NFR 신호 시)
 - 산출물: devflow-docs/inception/application-design.md (업데이트됨)
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
 
 ## Common Issues
 

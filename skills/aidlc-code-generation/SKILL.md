@@ -1,6 +1,6 @@
 ---
 name: aidlc-code-generation
-description: aidlc 플러그인(B안) 전용 스킬. Two-stage process — generates a code plan first, then implements after orchestrator approval. Called by aidlc:aidlc-using-devflow orchestrator.
+description: Two-stage process — generates a code plan first, then implements after orchestrator approval. Called by construction-orchestrator.
 metadata:
   version: 0.5.0
   author: Jay
@@ -13,7 +13,6 @@ metadata:
 # aidlc-code-generation
 
 <!-- 코드 생성: Plan 작성 후 오케스트레이터 승인을 받아 코드 생성 -->
-<!-- B안: Plan 제시까지만 담당 — 승인 게이팅은 오케스트레이터 소유 -->
 
 ## Purpose
 
@@ -113,63 +112,24 @@ Output:
 ### Example 2: PART 2 — 코드 생성
 Orchestrator calls: "code-generation: GENERATE — proceed with the approved plan for notification-service"
 
-Actions:
-1. `_shared/tdd-protocol.md` 읽기
-2. Step 1 실행:
-   - RED: test_create_notification_success 작성 → 실행 → FAIL ✓
-   - GREEN: create_notification() 구현 → 실행 → PASS ✓ (전체 1/1)
-   - [x] Step 1 완료
-3. Step 2 실행:
-   - RED: test_create_notification_invalid_user 작성 → 실행 → FAIL ✓
-   - GREEN: 유효성 검증 추가 → 실행 → PASS ✓ (전체 2/2)
-   - [x] Step 2 완료
-4. Step 3~5: 동일 패턴 반복
-5. Self-Review 수행 (`_shared/tdd-protocol.md` 체크리스트) → 이슈 없음
-6. code-plan.md 저장
+Actions: `_shared/tdd-protocol.md` 읽기 → 각 Step에 대해 RED→GREEN→REFACTOR 사이클 → Self-Review → code-plan.md 저장
 
----
+## Review
 
-## Review (Standard 이상)
+conventions Review Workflow 적용.
 
-### PART 1 (Plan) 완료 시
-depth가 Standard 이상이면:
-1. `_shared/reviewers/code-plan-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 산출물 경로: `devflow-docs/construction/[unit-name]/code-plan.md`
-   - 설계 산출물: `devflow-docs/inception/requirements.md`, `devflow-docs/inception/application-design.md` (있으면)
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
+### PART 1 (Plan)
+- 산출물: devflow-docs/construction/[unit-name]/code-plan.md
+- 리뷰어: code-plan-reviewer-prompt.md
 
-### PART 2 (Generate) 완료 시
-depth가 Standard 이상이면:
-1. `_shared/reviewers/code-reviewer-prompt.md` 읽기
-2. 리뷰 서브에이전트 dispatch:
-   - 변경 파일 목록: 구현된 소스 파일
-   - code-plan 경로: `devflow-docs/construction/[unit-name]/code-plan.md`
-3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회, 초과 시 사용자 escalate)
-
-depth가 Minimal이면: 리뷰 스킵
+### PART 2 (Generate)
+- 산출물: 구현된 소스 파일
+- 리뷰어: code-reviewer-prompt.md
 
 ## Return to Orchestrator
 
-STOP.
+conventions 표준 형식. 반환 필드:
 
-PART 1 완료 시:
-```
-[code-generation Plan 준비]
-- 생성할 파일: [count]개 / 수정할 파일: [count]개 / 구현 단계: [count]개
-- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
+**PART 1:** 생성할 파일 [count]개 / 수정할 파일 [count]개 / 구현 단계 [count]개 / 리뷰
 
-PART 2 완료 시:
-```
-[code-generation 완료: unit-name]
-- 생성된 파일: [count]개
-- 테스트: [count]개 통과, 0 실패
-- TDD 사이클: [count]회 완료
-- Self-Review: ✅ 완료
-- 모든 체크박스 완료
-- 산출물: devflow-docs/construction/[unit-name]/code-plan.md
-- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
-```
+**PART 2:** 생성된 파일 [count]개 / 테스트 [count]개 통과 / TDD 사이클 [count]회 / Self-Review / 산출물 / 리뷰

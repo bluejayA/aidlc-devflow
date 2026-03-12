@@ -1,10 +1,11 @@
 ---
 name: aidlc-finishing-a-development-branch
-description: aidlc 플러그인(B안) 전용. Use when implementation is done and all tests pass, and a decision is needed on what to do with the development branch — merge, PR, keep, or discard. Invoke via aidlc:aidlc-finishing-a-development-branch.
+description: Use when implementation is done and all tests pass, and a decision is needed on what to do with the development branch — merge, PR, keep, or discard.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # aidlc-finishing-a-development-branch

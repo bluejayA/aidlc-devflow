@@ -1,6 +1,6 @@
 ---
 name: aidlc-workspace-detection
-description: aidlc 플러그인(B안) 전용 스킬. Scans the workspace to detect greenfield or brownfield project type. First stage of aidlc AI-DLC Inception. Called by aidlc:aidlc-using-devflow orchestrator.
+description: Scans the workspace to detect greenfield or brownfield project type. First stage of INCEPTION. Called by inception-orchestrator.
 metadata:
   version: 0.3.0
   author: Jay
@@ -13,7 +13,6 @@ metadata:
 # aidlc-workspace-detection
 
 <!-- 워크스페이스 분석: 그린필드/브라운필드 판단, 기존 코드베이스 스캔 -->
-<!-- B안: 실행 전용 — 게이팅/상태 업데이트/로깅 없음 -->
 
 ## Purpose
 
@@ -68,25 +67,14 @@ Create `devflow-docs/inception/workspace.md`:
 
 ## Return to Orchestrator
 
-STOP here. No approval gate — orchestrator handles it.
-
-```
-[workspace-detection 결과]
+conventions 표준 형식. 반환 필드:
 - 프로젝트 유형: [Greenfield | Brownfield]
 - 감지된 경로: [절대 경로]
 - 경로 확인 필요: [yes | no]
 - 발견된 주요 파일: [count]개
 - 산출물: devflow-docs/inception/workspace.md
-```
 
 ## Common Issues
 
-### No files found in workspace
-If the workspace appears completely empty:
-- Treat as Greenfield
-- Note in the artifact: "Empty workspace — assumed Greenfield"
-
-### Permission errors when scanning
-If file scanning fails due to permissions:
-- Scan only the current directory (non-recursive)
-- Note limitation in the artifact
+- 빈 워크스페이스 → Greenfield로 처리, 산출물에 기록
+- 권한 오류 → 현재 디렉토리만 스캔 (비재귀), 산출물에 제한 기록
