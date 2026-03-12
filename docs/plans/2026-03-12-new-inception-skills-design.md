@@ -55,7 +55,8 @@
 
 ### Hold/Skip Signal
 
-어떤 스테이지든 실행 중 중단하거나 건너뛸 수 있다.
+Pre-Planning 스테이지(user-stories, nfr-requirements)에서 실행 중 중단하거나 건너뛸 수 있다.
+오케스트레이터가 H(Hold) 또는 S(Skip) 선택을 감지하면 아래 형식으로 산출물을 저장한다.
 
 **Hold**: 진행 중인 작업을 중단하고 나중에 재개
 ```markdown
@@ -96,6 +97,9 @@ INCEPTION 흐름에서 requirements-analysis **이후**, workflow-planning **이
 요구사항을 INVEST 기준 사용자 스토리로 변환. 비개발자가 "무엇을 만들지"를 사용자 관점에서 정리.
 
 ### 실행 흐름
+
+비대화형 생성 — 사용자 질문 없이 requirements.md를 기반으로 일괄 변환한다.
+변경 요청은 오케스트레이터 게이트에서 처리.
 
 ```
 Step 1: Load context
@@ -139,14 +143,35 @@ Step 4: Save artifact
 ### 리뷰
 
 Standard 이상: artifact-reviewer dispatch.
+- 산출물 경로: `devflow-docs/inception/user-stories.md`
+- 상위 산출물: `devflow-docs/inception/requirements.md`
+
 Minimal: 리뷰 스킵.
+
+### Return to Orchestrator
+
+STOP.
+
+```
+[user-stories 결과]
+- 액터: [count]명 ([액터명 나열])
+- 사용자 스토리: [count]개 (Must: [N], Should: [N], Could: [N])
+- 산출물: devflow-docs/inception/user-stories.md
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
+```
 
 ### 메타데이터
 
 ```yaml
-invoke_mode: orchestrator-only
-return_behavior: stop-no-gate
-output_path: devflow-docs/inception/user-stories.md
+name: aidlc-user-stories
+description: 요구사항을 INVEST 기준 사용자 스토리로 변환. Pre-Planning 스테이지.
+metadata:
+  version: 0.6.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/inception/user-stories.md
 ```
 
 ---
@@ -242,14 +267,38 @@ Step 6: Save artifact
 ### 리뷰
 
 Standard 이상: artifact-reviewer dispatch.
+- 산출물 경로: `devflow-docs/inception/nfr-requirements.md`
+- 상위 산출물: `devflow-docs/inception/requirements.md`, `devflow-docs/inception/user-stories.md` (있으면)
+
 Minimal: 리뷰 스킵.
+
+### Return to Orchestrator
+
+STOP.
+
+```
+[nfr-requirements 결과]
+- 모드: [GENERATE | IMPORT]
+- 도메인: [선택된 도메인]
+- 프로파일: [선택된 프로파일]
+- NFR 항목: [count]개 카테고리
+- 사용자 조정: [count]개 항목
+- 산출물: devflow-docs/inception/nfr-requirements.md
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
+```
 
 ### 메타데이터
 
 ```yaml
-invoke_mode: orchestrator-only
-return_behavior: stop-no-gate
-output_path: devflow-docs/inception/nfr-requirements.md
+name: aidlc-nfr-requirements
+description: 도메인 컨텍스트 + 프로파일 기반 비기능 요구사항(NFR) 수집. GENERATE/IMPORT 모드 지원. Pre-Planning 스테이지.
+metadata:
+  version: 0.6.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
+  output_path: devflow-docs/inception/nfr-requirements.md
 ```
 
 ---
@@ -258,7 +307,10 @@ output_path: devflow-docs/inception/nfr-requirements.md
 
 ### 변경 범위
 
-Comprehensive depth DETAIL 모드에서만 활성화되는 `## NFR Design Patterns` 섹션 추가.
+`## NFR Design Patterns` 섹션 추가. 활성화 조건 (3가지 모두 충족):
+1. depth가 **Comprehensive**
+2. **DETAIL** 모드
+3. `devflow-docs/inception/nfr-requirements.md`가 **존재**
 
 ### NFR Design의 핵심 원칙
 
@@ -335,9 +387,10 @@ workspace-detection → [Complexity Gate] → requirements-analysis → [Open Qu
   → (application-design + NFR Design) → 완료
 ```
 
-### 5.2 Pre-Planning Gate (신규)
+### 5.2 Pre-Planning Gate (신규) [조건부 게이트]
 
 requirements-analysis 게이트 통과 후, workflow-planning 호출 **전에** 실행.
+Pre-Planning은 INCEPTION 내 스테이지 그룹명이며, workflow-plan.md의 `### PRE-PLANNING` 섹션에 결과가 기록된다.
 
 **Minimal complexity**: 자동 스킵 (user-stories, nfr-requirements 모두 건너뜀)
 
@@ -353,7 +406,7 @@ B) NFR 수집만 → nfr-requirements만 실행 (상용 배포 시 권장)
 C) 바로 워크플로우 계획으로 → 추가 분석 스킵
 ```
 
-### 5.3 User-Stories 게이트
+### 5.3 User-Stories 게이트 [표준 게이트 + Hold]
 
 ```
 [user-stories 결과 표시]
@@ -362,7 +415,7 @@ B) 승인, 다음 단계 진행
 H) 보류 (나중에 돌아옴) → HELD 상태 저장, 다음으로 진행
 ```
 
-### 5.4 NFR-Requirements 게이트
+### 5.4 NFR-Requirements 게이트 [모드 선택 + 표준 게이트 + Hold]
 
 **모드 선택 (오케스트레이터 소유)**:
 ```
@@ -385,11 +438,17 @@ B) 승인, 다음 단계 진행
 H) 보류 (나중에 돌아옴) → HELD 상태 저장, 다음으로 진행
 ```
 
-### 5.5 NFR Design Mode Gate (Comprehensive만)
+### 5.5 NFR Design 활성화 (게이트 아님, 자동 판단)
 
-application-design DETAIL 호출 시, nfr-requirements.md가 존재하면 자동으로 NFR Design 섹션을 활성화.
-오케스트레이터가 DETAIL 호출 시 인라인 신호 전달:
+application-design DETAIL 호출 시, 3가지 조건을 모두 확인:
+1. depth가 Comprehensive
+2. DETAIL 모드
+3. `devflow-docs/inception/nfr-requirements.md` 존재
+
+모두 충족 시 오케스트레이터가 DETAIL 호출에 인라인 신호 추가:
 `"aidlc-application-design: DETAIL — NFR Design 포함"`
+
+하나라도 미충족 시 기존 DETAIL 호출 유지 (NFR Design 없음).
 
 ### 5.6 Hold/Skip 처리
 
@@ -417,6 +476,10 @@ application-design DETAIL 호출 시, nfr-requirements.md가 존재하면 자동
 - build-and-test: included — always
 ```
 
+**오케스트레이터 파싱 변경**: `### PRE-PLANNING` 섹션은 오케스트레이터가 파싱하지 않는다.
+Pre-Planning 스테이지는 오케스트레이터가 직접 게이트로 관리하며, workflow-plan.md의 PRE-PLANNING 섹션은 기록용.
+기존 `### CONSTRUCTION` 파싱 로직은 변경 없음.
+
 ### 접근법 생성 시 NFR 반영
 
 nfr-requirements.md가 존재하면:
@@ -430,12 +493,13 @@ nfr-requirements.md가 존재하면:
 | 파일 | 변경 유형 | 설명 |
 |------|----------|------|
 | `skills/_shared/import-review-protocol.md` | **CREATE** | GENERATE/IMPORT 모드 + Hold/Skip 공유 프로토콜 (~50줄) |
-| `skills/aidlc-user-stories/SKILL.md` | **CREATE** | 독립 스킬: 요구사항 → 사용자 스토리 변환 (~80줄) |
-| `skills/aidlc-nfr-requirements/SKILL.md` | **CREATE** | 독립 스킬: 도메인 컨텍스트 + 프로파일 기반 NFR 수집 (~120줄) |
-| `skills/aidlc-application-design/SKILL.md` | **MODIFY** | Comprehensive DETAIL에 NFR Design Patterns 섹션 추가 (~40줄 추가) |
-| `skills/aidlc-inception-orchestrator/SKILL.md` | **MODIFY** | Pre-Planning Gate + 모드 선택 + hold/skip 처리 (~60줄 추가) |
-| `skills/aidlc-workflow-planning/SKILL.md` | **MODIFY** | Approved Stages에 PRE-PLANNING 섹션 + NFR 반영 (~15줄 추가) |
-| `skills/_shared/devflow-conventions.md` | **MODIFY** | import-review-protocol 참조 추가 (~3줄 추가) |
+| `skills/aidlc-user-stories/SKILL.md` | **CREATE** | 독립 스킬 v0.6.0: 요구사항 → 사용자 스토리 변환 (~100줄) |
+| `skills/aidlc-nfr-requirements/SKILL.md` | **CREATE** | 독립 스킬 v0.6.0: 도메인 컨텍스트 + 프로파일 기반 NFR 수집 (~140줄) |
+| `skills/aidlc-application-design/SKILL.md` | **MODIFY** | v0.4.0 → v0.6.0, Comprehensive DETAIL에 NFR Design Patterns 섹션 추가 (~40줄 추가) |
+| `skills/aidlc-inception-orchestrator/SKILL.md` | **MODIFY** | v0.4.0 → v0.6.0, Pre-Planning Gate + 모드 선택 + hold/skip 처리 (~60줄 추가) |
+| `skills/aidlc-workflow-planning/SKILL.md` | **MODIFY** | v0.4.0 → v0.6.0, Approved Stages에 PRE-PLANNING 섹션 + NFR 반영 (~15줄 추가) |
+| `skills/_shared/devflow-conventions.md` | **MODIFY** | v0.2.0 → v0.3.0, import-review-protocol 참조 + Hold/Skip 규약 추가 |
+| `skills/_shared/gate-patterns.md` | **MODIFY** | Hold 게이트 변형 + 모드 선택 게이트 패턴 추가 |
 | `.claude-plugin/plugin.json` | **MODIFY** | v0.5.0 → v0.6.0 |
 
 ---
