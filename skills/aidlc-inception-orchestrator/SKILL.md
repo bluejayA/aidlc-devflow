@@ -2,7 +2,7 @@
 name: aidlc-inception-orchestrator
 description: INCEPTION Phase 오케스트레이터. 스테이지 순회 + 게이트 관리. Entry Orchestrator가 호출.
 metadata:
-  version: 0.4.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -18,7 +18,9 @@ metadata:
 
 ```
 workspace-detection → [Complexity Gate] → requirements-analysis → [Open Questions Gate]
-  → workflow-planning → [Approach Proposal Gate] → application-design (조건부) → 완료
+  → [Pre-Planning Gate] → (user-stories) → (nfr-requirements)
+  → workflow-planning → [Approach Proposal Gate]
+  → (application-design + NFR Design) → 완료
 ```
 
 ## The Orchestration Loop
@@ -113,7 +115,67 @@ A) 변경 요청 → requirements-analysis 재호출
 B) 승인, 다음 단계 진행
 ```
 
-### 4. workflow-planning 게이트 [2단계 게이트]
+### 4. Pre-Planning Gate [조건부 게이트]
+
+requirements-analysis 게이트 통과 후, workflow-planning 호출 전에 실행.
+Pre-Planning은 INCEPTION 내 스테이지 그룹명이며, workflow-plan.md의 `### PRE-PLANNING` 섹션에 결과가 기록된다.
+
+**Minimal complexity**: 자동 스킵 — user-stories, nfr-requirements 모두 건너뜀. workflow-planning으로 직행.
+
+**Comprehensive complexity**: 자동 포함 — user-stories, nfr-requirements 모두 실행. User-Stories 게이트로 진행.
+
+**Standard complexity**: 3-option 게이트 제시
+
+```
+요구사항 분석이 완료되었습니다. 다음 단계 전에 추가 분석이 가능합니다:
+
+A) User Stories + NFR 수집 → 두 스테이지 모두 실행
+B) NFR 수집만 → nfr-requirements만 실행 (상용 배포 시 권장)
+C) 바로 워크플로우 계획으로 → 추가 분석 스킵
+```
+
+A → User-Stories 게이트로 진행
+B → NFR-Requirements 게이트로 진행 (user-stories 스킵)
+C → workflow-planning으로 직행
+
+### 5. User-Stories 게이트 [표준 게이트 + Hold]
+
+Pre-Planning Gate에서 user-stories 실행이 결정된 경우에만.
+aidlc-user-stories 호출 → 결과 게이트:
+
+```
+[user-stories 결과 표시]
+A) 변경 요청 → user-stories 재호출
+B) 승인, 다음 단계 진행 → NFR-Requirements 게이트
+H) 보류 (나중에 돌아옴) → HELD 상태 저장, NFR-Requirements 게이트로 진행
+```
+
+### 6. NFR-Requirements 게이트 [모드 선택 게이트 + 표준 게이트 + Hold]
+
+Pre-Planning Gate에서 nfr-requirements 실행이 결정된 경우에만.
+
+**6a. 모드 선택 (오케스트레이터 소유)**:
+```
+NFR 요구사항을 어떻게 진행하시겠습니까?
+
+A) Claude가 질문하며 수집 (GENERATE)
+B) 이미 작성된 NFR 문서가 있음 (IMPORT)
+S) 이 단계 건너뛰기 (SKIP)
+```
+
+A → `"Mode: GENERATE"` 인라인 신호로 aidlc-nfr-requirements 호출
+B → `"Mode: IMPORT"` 인라인 신호로 aidlc-nfr-requirements 호출
+S → SKIPPED 상태 저장, workflow-planning으로 진행
+
+**6b. 결과 게이트**:
+```
+[nfr-requirements 결과 표시]
+A) 변경 요청 → nfr-requirements 재호출
+B) 승인, 다음 단계 진행 → workflow-planning
+H) 보류 (나중에 돌아옴) → HELD 상태 저장, workflow-planning으로 진행
+```
+
+### 7. workflow-planning 게이트 [2단계 게이트]
 
 **1단계: 접근법 선택**
 ```
@@ -162,11 +224,11 @@ workflow-plan.md의 `## Approved Stages`를 읽어 분기:
 - `application-design: skipped`, `units-generation: included` → INCEPTION 완료, CONSTRUCTION에서 units-generation부터 시작
 - `application-design: skipped`, `units-generation: skipped` → INCEPTION 완료, CONSTRUCTION에서 code-generation 직행
 
-### 5. application-design 게이트 (조건부 실행)
+### 8. application-design 게이트 (조건부 실행)
 
 `application-design: included`인 경우에만 실행.
 
-#### 5a. LIST 게이트 [표준 게이트]
+#### 8a. LIST 게이트 [표준 게이트]
 
 ```
 [application-design LIST 결과 표시]
@@ -176,13 +238,22 @@ B) [depth에 따라 조건부 표시]
    - Standard/Comprehensive: 승인, 상세 설계 진행 → application-design: DETAIL 호출
 ```
 
-#### 5b. DETAIL 게이트 [표준 게이트] (Standard/Comprehensive만)
+#### 8b. DETAIL 게이트 [표준 게이트] (Standard/Comprehensive만)
 
 ```
 [application-design DETAIL 결과 표시]
 A) 변경 요청 → application-design: DETAIL 재호출
 B) 승인, INCEPTION 완료
 ```
+
+**DETAIL 호출 시 NFR Design 활성화 판단:**
+3가지 조건 모두 충족 시 인라인 신호 추가:
+1. depth가 Comprehensive
+2. DETAIL 모드
+3. `devflow-docs/inception/nfr-requirements.md` 존재
+
+충족 시: `"aidlc-application-design: DETAIL — NFR Design 포함"`
+미충족 시: `"aidlc-application-design: DETAIL"` (기존대로)
 
 ---
 
@@ -196,6 +267,13 @@ A) 해당 단계 재시도 / B) 단계 스킵 (devflow-state에 skipped 기록)
 `workflow-plan.md` 라우팅 키 형식이 예상과 다르면:
 1. 파일 직접 확인 후 형식 수정
 2. 기본값: application-design included, units-generation skipped
+
+### Hold/Skip 상태 처리
+Pre-Planning 스테이지에서 HELD 또는 SKIPPED가 발생하면:
+1. devflow-state에 상태 기록: `user-stories: HELD` 또는 `nfr-requirements: SKIPPED`
+2. devflow-audit에 로깅
+3. 다음 스테이지로 진행
+4. workflow-plan.md의 `### PRE-PLANNING` 섹션에 상태 기록
 
 ### Stage skill이 직접 gate를 제시하는 경우
 스킬이 오케스트레이터 역할을 침범하면:

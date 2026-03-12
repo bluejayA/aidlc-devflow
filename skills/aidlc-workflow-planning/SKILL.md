@@ -2,7 +2,7 @@
 name: aidlc-workflow-planning
 description: aidlc 플러그인(B안) 전용 스킬. Determines which Construction stages to run and at what depth. Saves workflow plan. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
-  version: 0.4.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -27,6 +27,8 @@ Determine which stages to execute and at what depth.
 Read (if they exist):
 - `devflow-docs/inception/workspace.md`
 - `devflow-docs/inception/requirements.md`
+- `devflow-docs/inception/user-stories.md` — 사용자 스토리 (있으면)
+- `devflow-docs/inception/nfr-requirements.md` — NFR 요구사항 (있으면)
 
 ### Step 2: Generate approaches (2-3개)
 
@@ -44,6 +46,12 @@ complexity는 호출 텍스트 또는 `devflow-docs/devflow-state.md`의 `## Com
 - (3개인 경우) 중간 접근법: 상황에 맞게 구성
 
 **접근법 간 실질적 차이 필수**: 스테이지 포함 여부 또는 depth가 달라야 함.
+
+**NFR 컨텍스트 반영:**
+`devflow-docs/inception/nfr-requirements.md`가 존재하면:
+- "안전한/완전" 접근법에 `application-design: Comprehensive` 포함 (NFR Design 활성화)
+- "빠른/간결" 접근법에서도 NFR 존재 사실 명시
+- 접근법 형식에 NFR 관련 고려사항 추가
 
 각 접근법 형식:
 ```
@@ -91,6 +99,10 @@ Create `devflow-docs/inception/workflow-plan.md`:
 - (C안) [접근법명] — [한 줄 요약]
 
 ## Approved Stages
+### PRE-PLANNING
+- user-stories: [included | skipped | held] — [reason]
+- nfr-requirements: [included | skipped | held] — [reason]
+
 ### CONSTRUCTION
 - application-design: [included | skipped] — [reason]
 - units-generation: [included | skipped] — [reason]
@@ -108,6 +120,10 @@ Create `devflow-docs/inception/workflow-plan.md`:
 초기 저장 시에는 권장 접근법(A안) 기준으로 작성한다.
 오케스트레이터가 선택을 받은 후 `**Selected Approach**` 필드를 업데이트한다.
 오케스트레이터 Routing Table은 `## Approved Stages` 이하만 파싱한다.
+
+**참고**: `### PRE-PLANNING` 섹션은 오케스트레이터가 파싱하지 않는다.
+Pre-Planning 스테이지는 오케스트레이터가 직접 게이트로 관리하며, 이 섹션은 기록용.
+기존 `### CONSTRUCTION` 파싱 로직은 변경 없음.
 
 ## Review (Standard 이상)
 

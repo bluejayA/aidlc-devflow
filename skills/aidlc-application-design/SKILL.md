@@ -2,7 +2,7 @@
 name: aidlc-application-design
 description: aidlc 플러그인(B안) 전용 스킬. Designs component and service structure before implementation. Conditional Construction stage. Called by aidlc:aidlc-using-devflow orchestrator.
 metadata:
-  version: 0.4.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -117,6 +117,41 @@ DETAIL 모드에서만 실행.
 **Interactions**: [ASCII 다이어그램] (Comprehensive만)
 ```
 
+### Step 5: NFR Design Patterns (Comprehensive DETAIL + NFR Design 신호 시)
+
+호출 텍스트에 `NFR Design 포함` 키워드가 있을 때만 실행.
+없으면 이 Step을 스킵하고 Review로 진행.
+
+**활성화 조건** (3가지 모두 충족):
+1. depth가 Comprehensive
+2. DETAIL 모드
+3. 오케스트레이터가 `NFR Design 포함` 신호 전달
+
+**핵심 원칙**: Claude는 **정보 정리자**이지 **의사결정자**가 아니다. NFR 설계에는 정답이 없고 트레이드오프만 존재한다.
+
+1. `devflow-docs/inception/nfr-requirements.md` 읽기
+2. 각 NFR 카테고리에 대해 컴포넌트 설계와 연계된 패턴 옵션 테이블 생성:
+   - 각 패턴의 장점, 단점, 비용 영향을 병렬 제시
+   - **"권장 패턴: X" 형식 사용 금지** — 옵션만 제시
+   - `⚠️ 이 선택은 기술 담당자와 상의를 권장합니다` 경고 포함
+3. `application-design.md`에 `## NFR Design Patterns` 섹션 추가
+
+**산출물 형식:**
+```markdown
+## NFR Design Patterns
+
+> ⚠️ NFR 패턴 선택은 운영 환경과 비용에 따라 달라집니다.
+> 기술 담당자와 상의를 권장합니다.
+
+### [NFR 카테고리]: [요구사항 값]
+
+| 패턴 | 장점 | 단점 | 비용 영향 |
+|------|------|------|----------|
+| [패턴 A] | [장점] | [단점] | [비용] |
+| [패턴 B] | [장점] | [단점] | [비용] |
+| [패턴 C] | [장점] | [단점] | [비용] |
+```
+
 ## Review (Standard 이상)
 
 depth가 Standard 이상이면 (LIST/DETAIL 모드 공통):
@@ -146,6 +181,7 @@ STOP.
 ```
 [application-design 결과 — DETAIL]
 - 상세 설계 완료: [count]개 컴포넌트
+- NFR Design Patterns: [count]개 카테고리 (Comprehensive + NFR 신호 시)
 - 산출물: devflow-docs/inception/application-design.md (업데이트됨)
 - 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal)]
 ```
