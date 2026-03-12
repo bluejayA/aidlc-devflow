@@ -327,7 +327,7 @@ Claude는 **정보 정리자**이지 **의사결정자**가 아니다. NFR 설�
 
 Step N+1: Load NFR context
   - devflow-docs/inception/nfr-requirements.md 읽기
-  - 없으면: "NFR 요구사항이 수집되지 않았습니다. 기본 패턴으로 진행합니다." 안내
+  - (오케스트레이터가 파일 존재를 사전 확인하므로 이 단계에서 파일은 항상 존재)
 
 Step N+2: NFR 카테고리별 패턴 매핑
   - nfr-requirements의 각 항목에 대해 컴포넌트 설계와 연계된 패턴 옵션 제시
