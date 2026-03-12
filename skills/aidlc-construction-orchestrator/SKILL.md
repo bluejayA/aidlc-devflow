@@ -2,7 +2,7 @@
 name: aidlc-construction-orchestrator
 description: CONSTRUCTION Phase 오케스트레이터. 스테이지 순회 + 게이트 관리 + Multi-unit 핸들링. Entry Orchestrator가 호출.
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -98,12 +98,44 @@ B) 승인, 다음 unit 진행
 
 `aidlc-build-and-test` 호출
 
-#### 완료 게이트 [표준 게이트]
+#### 완료 게이트 [조건부 게이트]
+
+build-and-test 결과에 따라 분기:
+
+**빌드 성공 + 테스트 전체 통과 시:**
 ```
 [build-and-test 결과 표시]
-A) 수정 요청 → build-and-test 재호출
-B) 승인, CONSTRUCTION 완료
+A) CONSTRUCTION 완료 승인
+B) 추가 수정 요청 → code-generation 재호출
 ```
+
+**테스트 실패 시:**
+```
+[build-and-test 결과 표시 — 실패 테스트 목록 포함]
+A) systematic-debugging으로 조사
+B) 실패를 무시하고 완료 (devflow-state에 "테스트 실패 [N]건 미해결" 기록)
+```
+
+**빌드 실패 시:**
+```
+[build-and-test 결과 표시 — 빌드 에러 포함]
+A) systematic-debugging으로 조사
+(빌드 실패는 완료 불가 — 무시 선택지 없음)
+```
+
+### Debugging 라우팅
+
+build-and-test에서 테스트/빌드 실패 시 사용자가 debugging을 선택하면:
+
+1. `aidlc-systematic-debugging` 호출
+2. debugging 완료 시 Return 수신:
+   ```
+   [systematic-debugging 완료]
+   - 근본 원인: [요약]
+   - 수정 내용: [요약]
+   - 테스트: [회귀 테스트명] 추가됨
+   ```
+3. debugging Return 수신 후 `aidlc-build-and-test` 재실행
 
 ## Audit Logging
 
