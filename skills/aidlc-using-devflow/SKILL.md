@@ -2,7 +2,7 @@
 name: aidlc-using-devflow
 description: AIDLC Entry Orchestrator. Phase 라우팅 + devflow-state 초기화. 사용자가 호출하는 유일한 진입점.
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
@@ -65,23 +65,26 @@ metadata:
 ### Resume Flow
 
 1. `devflow-docs/devflow-state.md` 읽기
-2. 재개 게이트 제시:
+2. `devflow-docs/session-summary.md` 읽기 (있으면)
+3. 재개 게이트 제시:
    ```
    ## aidlc — 진행 중인 작업 발견
 
    현재 단계: [Current Phase] > [Current Stage]
    완료된 스테이지: [list]
+   마지막 완료: [session-summary의 최근 완료 항목] (있으면)
 
    A) 이전 작업 재개
    B) 새 작업 시작 (기존 상태 초기화)
    ```
-3. A 선택 시:
-   - devflow-audit에 로깅: "Session resumed at [stage]"
+4. A 선택 시:
+   - devflow-audit에 로깅: `"Session resumed at [stage] — commit: [git rev-parse --short HEAD]"`
    - `## Current Phase` 확인하여 해당 Phase Orchestrator 호출:
      - `INCEPTION` → `aidlc-inception-orchestrator` 호출
      - `CONSTRUCTION` → `aidlc-construction-orchestrator` 호출
-4. B 선택 시:
+5. B 선택 시:
    - 기존 state를 `devflow-state-archived-[timestamp].md`로 이름 변경
+   - 기존 session-summary를 `session-summary-archived-[timestamp].md`로 이름 변경 (있으면)
    - New Flow 진행
 
 ## Phase 전환
@@ -90,14 +93,22 @@ metadata:
 
 `aidlc-inception-orchestrator`가 INCEPTION 완료를 반환하면:
 1. devflow-state의 `## Current Phase`를 `CONSTRUCTION`으로 업데이트
-2. `aidlc-construction-orchestrator` 호출
+2. `devflow-docs/session-summary.md` 업데이트:
+   - `## Current State`의 Phase를 `CONSTRUCTION`으로
+   - `**Commit**` 필드에 현재 HEAD hash
+   - devflow-audit에 `"Phase transition: INCEPTION → CONSTRUCTION — commit: [hash]"`
+3. `aidlc-construction-orchestrator` 호출
 
 ### CONSTRUCTION 완료 시
 
 `aidlc-construction-orchestrator`가 CONSTRUCTION 완료를 반환하면:
 1. devflow-state의 `## Current Phase`를 `complete`로 업데이트
-2. devflow-audit에 로깅: "Construction phase complete"
-3. 완료 안내:
+2. `devflow-docs/session-summary.md` 최종 업데이트:
+   - `## Current State`의 Phase를 `complete`로
+   - `**Commit**` 필드에 현재 HEAD hash
+   - `## Next Steps`에 "aidlc-finishing-a-development-branch로 머지/PR 진행"
+3. devflow-audit에 로깅: `"Construction complete — commit: [hash]"`
+4. 완료 안내:
    ```
    🎉 INCEPTION + CONSTRUCTION 완료
 
