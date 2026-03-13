@@ -1,0 +1,110 @@
+---
+name: aidlc-writing-plans
+description: 설계 문서를 상세 구현 계획으로 변환. aidlc-workflow-planning(INCEPTION 실행 계획)과 구분 — 이 스킬은 태스크별 구현 계획 작성.
+invoke_mode: user-invocable
+---
+
+# Writing Plans
+
+설계 문서(spec)를 엔지니어가 zero context에서도 실행 가능한 구현 계획으로 변환한다.
+
+**시작 시 선언**: "aidlc-writing-plans 스킬을 사용하여 구현 계획을 작성합니다."
+
+## Scope Check
+
+스펙이 여러 독립 서브시스템을 포함하면 서브시스템별로 계획을 분리한다.
+
+## Complexity-Based Detail
+
+설계 문서의 `Complexity` 값을 읽어 태스크 상세도 결정. 없으면 직접 판단.
+
+| Complexity | 태스크 수 | 코드 포함 | Architecture |
+|------------|-----------|-----------|--------------|
+| Minimal | 1-3개 | 핵심 변경만 | 1문장 |
+| Standard | 3-7개 | 주요 코드 | 2-3문장 |
+| Comprehensive | 7개+ | 전체 코드 | 전체 섹션 |
+
+복잡도 무관 필수 항목: 정확한 파일 경로, TDD 사이클 체크박스, 커밋.
+
+## File Structure
+
+태스크 정의 전 파일 구조 설계:
+- 파일당 한 가지 책임
+- 함께 변경되는 파일은 함께 배치
+- 기존 코드베이스 패턴 따름
+
+## Plan Document Header (필수)
+
+```markdown
+# [Feature Name] Implementation Plan
+
+> **For agentic workers:** REQUIRED: Use `aidlc-subagent-driven-development` or `aidlc-executing-plans` to implement.
+
+**Goal:** [한 줄]
+**Complexity:** [Minimal | Standard | Comprehensive]
+**Architecture:** [2-3문장]
+**Tech Stack:** [주요 기술]
+```
+
+## Task Structure
+
+````markdown
+### Task N: [Component Name]
+
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/test.py`
+
+- [ ] **Step 1: Write failing test**
+[완성된 테스트 코드]
+
+- [ ] **Step 2: Run test — verify FAIL**
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "..."
+
+- [ ] **Step 3: Write minimal implementation**
+[완성된 구현 코드]
+
+- [ ] **Step 4: Run test — verify PASS**
+Expected: PASS
+
+- [ ] **Step 5: Commit**
+````
+
+## Bite-Sized Granularity
+
+각 Step은 한 가지 행동 (2-5분):
+- "실패하는 테스트 작성" — Step
+- "실행하여 실패 확인" — Step
+- "최소 구현" — Step
+- "테스트 통과 확인" — Step
+- "커밋" — Step
+
+## Plan Review Loop
+
+청크(≤1000줄) 단위로 작성 후 리뷰:
+1. 청크 작성 완료
+2. Review Workflow 실행 (conventions 참조) — plan-document-reviewer 역할
+3. 이슈 발견 → 수정 → 재리뷰 (최대 5회)
+4. 승인 → 다음 청크 또는 Execution Handoff
+
+## Execution Handoff
+
+계획 저장 후:
+
+> "계획이 `docs/plans/<파일명>`에 저장되었습니다. 실행하시겠습니까?"
+
+- 서브에이전트 가능 → `aidlc-subagent-driven-development` (권장)
+- 별도 세션 → `aidlc-executing-plans`
+
+## 핵심 규칙
+
+- 정확한 파일 경로 (상대 경로 금지)
+- 완성된 코드 ("검증 추가" 같은 추상적 지시 금지)
+- 정확한 실행 명령 + 예상 출력
+- DRY, YAGNI, TDD, 빈번한 커밋
+
+---
+
+**저장 경로**: `docs/plans/YYYY-MM-DD-<feature-name>-plan.md`
