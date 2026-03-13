@@ -1,4 +1,5 @@
 .DS_Store
+.orphaned_at
 .worktrees/
 node_modules/
 .claude/
