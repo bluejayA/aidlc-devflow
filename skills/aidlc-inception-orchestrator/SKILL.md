@@ -2,7 +2,7 @@
 name: aidlc-inception-orchestrator
 description: INCEPTION Phase 오케스트레이터. 스테이지 순회 + 게이트 관리. Entry Orchestrator가 호출.
 metadata:
-  version: 0.6.0
+  version: 0.7.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -36,7 +36,16 @@ devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호�
 
 ### Step B: 결과 표시 + 로깅
 
-스킬 반환값을 사용자에게 표시하고, devflow-audit에 기록한다.
+스킬 반환값을 사용자에게 표시하고, devflow-audit에 기록한다. 결정 이유 포함 (session-continuity 규약 참조).
+
+### Step B-1: session-summary 업데이트
+
+게이트 승인 후 `devflow-docs/session-summary.md`를 업데이트한다:
+- 파일이 없으면 신규 생성 (`_shared/patterns/session-continuity.md`의 템플릿 참조)
+- `## Completed Work > ### INCEPTION`에 완료 스테이지 추가: `- [x] [stage-name] — [핵심 결과 한 줄]`
+- `## Current State`의 Stage 필드 업데이트
+- `## Key Decisions`에 게이트 선택 기록 (결정 이유 포함)
+- `**Commit**` 필드에 현재 HEAD hash
 
 ### Step C: 게이트 제시
 
