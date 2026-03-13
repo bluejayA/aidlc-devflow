@@ -2,7 +2,7 @@
 name: devflow-conventions
 description: Shared conventions for all AI-DLC stage skills. Defines invoke_mode and return_behavior metadata semantics.
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   author: Jay
   category: ai-dlc-workflow
 ---
@@ -150,3 +150,15 @@ STOP.
 - 구현 서브에이전트 병렬 실행 금지 (충돌 방지)
 - Two-stage review 필수: spec compliance → code quality (순서 변경 금지)
 - Model Selection: mechanical task → haiku, integration → sonnet, architecture/review → opus
+
+## Session Continuity 규약
+
+- `_shared/patterns/session-continuity.md` — 아티팩트 로딩 규칙, session-summary 템플릿, 재검증 프로토콜
+- 세션 재개 시 Phase Orchestrator가 이 패턴을 참조하여 컨텍스트 로드
+- session-summary.md는 INCEPTION 스테이지 완료, Phase 전환, Unit 완료 시 자동 업데이트
+- commit hash는 핵심 전환점에서만 기록 (세션 시작/재개, Phase 전환, Unit 완료)
+
+### Audit 강화 형식
+기존 `[timestamp] [stage] — [choice]`에 결정 이유 한 줄 추가:
+`[timestamp] [stage] — [choice] — [이유]`
+기존 형식도 유효 (하위 호환).
