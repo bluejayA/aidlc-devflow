@@ -133,3 +133,20 @@ STOP.
 2. **리뷰 대상 스킬이면**: 리뷰 규약의 리뷰 루프 패턴 참조. SKILL.md에는 산출물 경로와 리뷰어 종류만 명시
 3. **Phase Orchestrator에 등록**: 해당 Phase 오케스트레이터의 스테이지 순회 + 게이트 매핑에 추가
 4. **plugin.json**: skills 디렉토리에 자동 인식 (별도 등록 불필요)
+
+## Brainstorming HARD-GATE
+
+새 기능, 컴포넌트, 동작 수정 시 설계 문서 작성 + 사용자 승인 전까지 코드 작성 금지.
+"단순해서 설계 불필요"는 합리화 — 모든 프로젝트에 적용.
+설계 분량은 복잡도에 따라 조절 (Minimal: 2-5문장, Comprehensive: 전체 섹션).
+
+## TDD Iron Law
+
+실패하는 테스트 없이 프로덕션 코드 작성 금지. 상세: `_shared/tdd-protocol.md` 참조.
+
+## Subagent Dispatch Rules
+
+- 독립적 태스크 2개 이상일 때만 서브에이전트 디스패치
+- 구현 서브에이전트 병렬 실행 금지 (충돌 방지)
+- Two-stage review 필수: spec compliance → code quality (순서 변경 금지)
+- Model Selection: mechanical task → haiku, integration → sonnet, architecture/review → opus
