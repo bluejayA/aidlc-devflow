@@ -75,7 +75,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 ### 🔵 INCEPTION — 무엇을 만들지 결정
 
 1. **aidlc-using-devflow** — 진입점. 기존 세션 재개 여부 확인 후 오케스트레이션 시작
-2. **aidlc-workspace-detection** — 그린필드/브라운필드 판단
+2. **aidlc-workspace-detection** — 그린필드/브라운필드 판단. Brownfield 시 technology stack + code structure 수집
 3. **aidlc-requirements-analysis** — 적응형 깊이(Minimal / Standard / Comprehensive) 요구사항 분석. 해석이 분기되는 경우 선택지 제시 후 확정
 4. **aidlc-user-stories** _(조건부)_ — 요구사항을 INVEST 기준 사용자 스토리로 변환 (Pre-Planning)
 5. **aidlc-nfr-requirements** _(조건부)_ — 도메인 컨텍스트 + 프로파일 기반 비기능 요구사항 수집 (Pre-Planning, GENERATE/IMPORT)
@@ -99,7 +99,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | Skill | 역할 |
 |-------|------|
 | `aidlc-using-devflow` | 오케스트레이터. 전체 라이프사이클 소유 및 구동 |
-| `aidlc-workspace-detection` | 그린필드/브라운필드 판단 (순수 실행) |
+| `aidlc-workspace-detection` | 그린필드/브라운필드 판단 + Brownfield 시 tech-stack/code-structure 수집 |
 | `aidlc-requirements-analysis` | 적응형 요구사항 분석. 해석 분기 시 선택지 제시 |
 | `aidlc-user-stories` | 요구사항을 INVEST 기준 사용자 스토리로 변환 (조건부, Pre-Planning) |
 | `aidlc-nfr-requirements` | 도메인 컨텍스트 + 프로파일 기반 비기능 요구사항 수집 (조건부, GENERATE/IMPORT) |
