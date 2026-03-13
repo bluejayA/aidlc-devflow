@@ -1,7 +1,11 @@
 ---
 name: aidlc-writing-plans
 description: 설계 문서를 상세 구현 계획으로 변환. aidlc-workflow-planning(INCEPTION 실행 계획)과 구분 — 이 스킬은 태스크별 구현 계획 작성.
-invoke_mode: user-invocable
+metadata:
+  version: 0.1.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # Writing Plans

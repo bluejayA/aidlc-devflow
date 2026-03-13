@@ -1,7 +1,11 @@
 ---
 name: aidlc-brainstorming
 description: 아이디어를 설계로 전환하는 협업 대화 스킬. HARD-GATE — 설계 승인 전 코드 작성 금지.
-invoke_mode: user-invocable
+metadata:
+  version: 0.1.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # Brainstorming

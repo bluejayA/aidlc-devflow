@@ -1,7 +1,11 @@
 ---
 name: aidlc-test-driven-development
 description: TDD 원칙 강제. Rigid — 예외 없이 정확히 따를 것. 실패하는 테스트 없이 프로덕션 코드 작성 금지.
-invoke_mode: user-invocable
+metadata:
+  version: 0.1.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # Test-Driven Development

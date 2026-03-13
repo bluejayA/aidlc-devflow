@@ -1,7 +1,11 @@
 ---
 name: aidlc-executing-plans
 description: 구현 계획을 별도 세션에서 배치 실행. 체크포인트 리뷰 + 세션 재개 지원.
-invoke_mode: user-invocable
+metadata:
+  version: 0.1.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # Executing Plans

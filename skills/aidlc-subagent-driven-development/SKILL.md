@@ -1,7 +1,11 @@
 ---
 name: aidlc-subagent-driven-development
 description: 구현 계획을 태스크별 서브에이전트로 실행. Fresh subagent per task + two-stage review.
-invoke_mode: user-invocable
+metadata:
+  version: 0.1.0
+  author: Jay
+  category: ai-dlc-workflow
+  invoke_mode: user-invocable
 ---
 
 # Subagent-Driven Development

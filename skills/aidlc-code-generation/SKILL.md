@@ -7,7 +7,7 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
-  output_path: devflow-docs/construction/[unit-name]/code-plan.md
+  output_path: devflow-docs/construction/{unit}/code-plan.md
 ---
 
 # aidlc-code-generation
