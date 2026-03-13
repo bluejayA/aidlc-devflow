@@ -1,6 +1,6 @@
 {
   "name": "aidlc",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (B안: Orchestrator-Centric)",
   "skills": "./skills"
 }
