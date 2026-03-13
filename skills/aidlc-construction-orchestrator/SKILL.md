@@ -2,7 +2,7 @@
 name: aidlc-construction-orchestrator
 description: CONSTRUCTION Phase 오케스트레이터. 스테이지 순회 + 게이트 관리 + Multi-unit 핸들링. Entry Orchestrator가 호출.
 metadata:
-  version: 0.5.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -33,6 +33,48 @@ units-generation (조건부) → [units 게이트]
 다음 파일을 읽는다:
 - `devflow-docs/devflow-state.md` — Complexity, Completed Units 확인
 - `devflow-docs/inception/workflow-plan.md` — Approved Stages, Stage Depths 확인
+- `devflow-docs/inception/requirements.md` — 요구사항 맥락 복원
+- `devflow-docs/inception/application-design.md` — 설계 맥락 복원 (있으면)
+- `devflow-docs/inception/units.md` — unit 목록 (있으면)
+- `devflow-docs/session-summary.md` — 이전 세션 맥락 (있으면)
+
+<!-- 아티팩트 로딩 규칙: _shared/patterns/session-continuity.md 참조 -->
+
+컨텍스트 로드 완료 후 요약 표시:
+```
+📋 컨텍스트 로드 완료
+- 로드한 파일: [count]개
+- Phase: CONSTRUCTION
+- 마지막 완료: [last completed unit or stage]
+```
+
+### Step 1.5: 재검증 (세션 재개 시)
+
+devflow-state의 `## Completed Units`에 완료 unit이 있는 경우에만 실행.
+신규 세션(완료 unit 없음)에서는 스킵.
+
+<!-- 재검증 프로토콜: _shared/patterns/session-continuity.md 참조 -->
+
+1. 직전 완료 unit의 테스트 실행
+2. 결과 분기:
+
+**통과 시:**
+```
+✅ 재검증 통과 — [unit-name] 테스트 [N]개 통과
+다음 작업부터 재개합니다.
+```
+→ Step 2로 진행
+
+**실패 시:**
+```
+⚠️ 재검증 실패 — [unit-name] 테스트 [N]개 중 [M]개 실패
+
+A) 전체 테스트 스위트 실행 (회귀 범위 확인)
+B) systematic-debugging으로 즉시 조사
+```
+→ A: 전체 실행 후 실패 있으면 debugging 라우팅
+→ B: 바로 `aidlc-systematic-debugging` 호출
+→ debugging Return 수신 후 재검증 재실행 (Step 1.5 반복)
 
 ### Step 2: 스테이지 결정
 
@@ -103,7 +145,10 @@ A) 수정 요청 → code-generation: GENERATE 재호출
 B) 승인, 다음 unit 진행
 ```
 
-승인 후: devflow-state의 `## Completed Units`에 unit명 추가
+승인 후:
+- devflow-state의 `## Completed Units`에 unit명 추가
+- `devflow-docs/session-summary.md` 업데이트: Completed Work에 unit 추가 + `**Commit**` 필드에 현재 HEAD hash
+- devflow-audit에 로깅: `[timestamp] unit-complete: [unit-name] — [commit hash]`
 
 #### 2d. 다음 unit 확인
 
@@ -156,7 +201,8 @@ build-and-test에서 테스트/빌드 실패 시 사용자가 debugging을 선�
 ## Audit Logging
 
 각 게이트 결정 시 devflow-audit에 기록:
-- 스테이지명, 타임스탬프, 사용자 선택 (A/B/C), 리뷰 결과 (있으면)
+결정 이유 포함 (session-continuity 규약 참조).
+- 스테이지명, 타임스탬프, 사용자 선택 (A/B/C), 결정 이유, 리뷰 결과 (있으면)
 
 ## Error Handling
 
