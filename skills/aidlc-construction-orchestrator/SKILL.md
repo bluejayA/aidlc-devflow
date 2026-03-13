@@ -19,6 +19,7 @@ metadata:
 
 ```
 units-generation (조건부) → [units 게이트]
+  → functional-design (Comprehensive만) → [설계 게이트]
   → code-generation Plan → [code-plan 게이트]
   → code-generation Generate → [구현 게이트]
   → (multi-unit이면 다음 unit으로 반복)
@@ -63,7 +64,22 @@ units-generation이 스킵된 경우, 단일 unit으로 처리한다.
 
 **각 unit에 대해 아래를 반복:**
 
-#### 2a. code-generation Plan 호출
+#### 2a. functional-design (조건부)
+
+**실행 조건**: Complexity가 `Comprehensive`인 경우만
+
+`aidlc-functional-design` 호출 (unit명 전달)
+
+##### 설계 게이트 [표준 게이트]
+```
+[functional-design 결과 표시]
+A) 변경 요청 → functional-design 재호출
+B) 승인, 코드 생성 진행
+```
+
+**Minimal/Standard**: 이 단계 스킵, 바로 code-generation으로.
+
+#### 2b. code-generation Plan 호출
 
 `aidlc-code-generation` 호출 (unit명 + Complexity 인라인 전달: `"Complexity: [level]"`)
 
@@ -75,7 +91,7 @@ A) 변경 요청 → code-generation 재호출
 B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 ```
 
-#### 2b. code-generation Generate 호출
+#### 2c. code-generation Generate 호출
 
 `"aidlc-code-generation: GENERATE — proceed with the approved plan for [unit-name]"` 인라인 신호로 호출
 
@@ -89,7 +105,7 @@ B) 승인, 다음 unit 진행
 
 승인 후: devflow-state의 `## Completed Units`에 unit명 추가
 
-#### 2c. 다음 unit 확인
+#### 2d. 다음 unit 확인
 
 미완료 unit이 있으면 → 2a로 돌아가 다음 unit 처리
 모든 unit 완료 시 → build-and-test로 진행

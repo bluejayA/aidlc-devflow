@@ -123,6 +123,13 @@ CONSTRUCTION 도중 사용자가 아래 상황을 보고하면 해당 스킬로 
 ### 개발 브랜치 완료 후
 `aidlc-finishing-a-development-branch` 스킬을 호출하여 병합/PR/유지/폐기 선택지를 제시한다.
 
+### 설계/계획 요청 시
+- 설계 협업 요청 → `aidlc-brainstorming` 안내
+- 구현 계획 작성 요청 → `aidlc-writing-plans` 안내
+- 서브에이전트 기반 실행 요청 → `aidlc-subagent-driven-development` 안내
+- 배치 실행 요청 → `aidlc-executing-plans` 안내
+- TDD 강제 필요 시 → `aidlc-test-driven-development` 참조
+
 ## Error Handling
 
 ### devflow-docs/ directory missing

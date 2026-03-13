@@ -19,7 +19,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
 | **다음 단계 결정** | Stage Routing Table (중앙) | 각 skill에 하드코딩 |
 | **Stage skill 역할** | 실행 후 STOP (순수 실행자) | 실행 + 게이팅 + 상태 관리 |
-| **Skill 수** | 19개 | 23개 |
+| **Skill 수** | 26개 | 23개 |
 | **AI-DLC 컨셉 부합도** | 높음 — 오케스트레이터가 LC 소유 | 중간 — 자율 skill 간 협력 |
 | **확장 용이성** | Stage 추가 시 Routing Table만 수정 | 각 skill이 독립적으로 확장 |
 | **디버깅** | 오케스트레이터 하나만 추적 | 각 skill 개별 추적 필요 |
@@ -55,7 +55,6 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 - Stage 추가/변경이 잦아 중앙 라우팅이 편리할 때
 
 **devflow** 선택 기준:
-- 일상 개발 도구 (TDD, 디버깅, 코드 리뷰 등)도 함께 쓰고 싶을 때
 - 각 skill을 독립적으로 호출하는 자유도가 필요할 때
 - Skill을 개별적으로 커스터마이징하고 싶을 때
 
@@ -87,12 +86,13 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 ### 🟢 CONSTRUCTION — 어떻게 만들지 결정
 
 9. **aidlc-using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
-10. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD Iron Law: RED-GREEN-REFACTOR + Self-Review)
-11. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + 지침 문서 생성
+10. **aidlc-functional-design** _(조건부)_ — Comprehensive 깊이일 때 상세 기능 설계 (도메인 엔티티, 비즈니스 규칙, 데이터 흐름)
+11. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD Iron Law: RED-GREEN-REFACTOR + Self-Review)
+12. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + 지침 문서 생성
 
 ---
 
-## Skills 목록 (19개)
+## Skills 목록 (26개)
 
 ### AI-DLC 핵심 스테이지
 
@@ -107,8 +107,20 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `aidlc-application-design` | 컴포넌트/서비스 설계 + NFR Design Patterns (조건부, 순수 실행) |
 | `aidlc-units-generation` | 병렬 개발 단위 분해 (조건부, 순수 실행) |
 | `aidlc-using-git-worktrees` | workflow-planning 후 격리 개발 워크트리 생성 (선택적) |
+| `aidlc-functional-design` | CONSTRUCTION 상세 기능 설계 — 도메인 엔티티, 비즈니스 규칙, 데이터 흐름 (조건부, Comprehensive만) |
 | `aidlc-code-generation` | 2단계 코드 생성 — Plan 후 STOP, 승인 후 Generate (TDD Iron Law + Self-Review) |
 | `aidlc-build-and-test` | 빌드 실행 + 전체 테스트 스위트 실행 + 참조용 지침 문서 생성 |
+
+### 개발 워크플로우 도구
+
+| Skill | 역할 |
+|-------|------|
+| `aidlc-brainstorming` | 아이디어를 설계 문서로 전환. HARD-GATE — 설계 승인 전 코드 작성 금지 |
+| `aidlc-writing-plans` | 설계 문서를 태스크별 상세 구현 계획으로 변환 |
+| `aidlc-test-driven-development` | TDD Iron Law 강제 (Rigid). RED-GREEN-REFACTOR |
+| `aidlc-subagent-driven-development` | 태스크별 서브에이전트 실행 + 2단계 리뷰 (spec → quality) |
+| `aidlc-executing-plans` | 구현 계획 배치 실행 + 세션 재개 지원 |
+| `aidlc-superpowers-tracking` | 세션 스킬 사용 추적 + 워크플로우 개선 인사이트 |
 
 ### 개발 품질 도구
 
@@ -132,11 +144,14 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | 파일 | 역할 |
 |------|------|
-| `_shared/devflow-conventions.md` | YAML 메타데이터 + Complexity/Depth 관계 + 용어 정리 + Return/Review 규약 + TDD 규약 |
-| `_shared/tdd-protocol.md` | TDD Iron Law, RED-GREEN-REFACTOR 사이클, Self-Review 체크리스트, 회귀 테스트 검증 |
+| `_shared/devflow-conventions.md` | YAML 메타데이터 + Complexity/Depth 관계 + Return/Review 규약 + HARD-GATE + TDD Iron Law + Subagent 규약 |
+| `_shared/tdd-protocol.md` | TDD Iron Law, RED-GREEN-REFACTOR, Self-Review, 합리화 방지, Red Flags, 회귀 테스트 검증 |
 | `_shared/gate-patterns.md` | 표준/조건부/리뷰 연계/Hold 변형/모드 선택 게이트 패턴 정의 |
 | `_shared/import-review-protocol.md` | GENERATE/IMPORT 모드 정의 + Hold/Skip 시그널 규약 |
-| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 (artifact, code-plan, code-reviewer) |
+| `_shared/patterns/three-mode-selection.md` | Together/Import/Skip 모드 선택 패턴 |
+| `_shared/patterns/hold-mechanism.md` | Mid-step Hold 시그널 + Resume 규약 |
+| `_shared/patterns/brownfield-exploration.md` | 기존 코드베이스 탐색 프로토콜 |
+| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 (artifact, code-plan, code-reviewer, implementer, spec, quality) |
 
 #### YAML 메타데이터 규약
 
@@ -167,6 +182,7 @@ devflow-docs/
 │   └── units.md            # 개발 단위 목록 (조건부)
 ├── construction/
 │   ├── {unit}/
+│   │   ├── functional-design.md  # 상세 기능 설계 (조건부, Comprehensive)
 │   │   └── code-plan.md    # 코드 생성 계획 + 진행 체크박스
 │   └── build-and-test/
 │       ├── build-instructions.md  # 빌드 지침
