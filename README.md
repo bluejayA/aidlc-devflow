@@ -151,6 +151,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_shared/patterns/three-mode-selection.md` | Together/Import/Skip 모드 선택 패턴 |
 | `_shared/patterns/hold-mechanism.md` | Mid-step Hold 시그널 + Resume 규약 |
 | `_shared/patterns/brownfield-exploration.md` | 기존 코드베이스 탐색 프로토콜 |
+| `_shared/patterns/session-continuity.md` | 세션 재개 시 아티팩트 자동 로딩 + session-summary 템플릿 + 재검증 프로토콜 |
 | `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 (artifact, code-plan, code-reviewer, implementer, spec, quality) |
 
 #### YAML 메타데이터 규약
