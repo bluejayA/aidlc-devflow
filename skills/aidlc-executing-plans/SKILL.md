@@ -2,7 +2,7 @@
 name: aidlc-executing-plans
 description: 구현 계획을 별도 세션에서 배치 실행. 체크포인트 리뷰 + 세션 재개 지원.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
@@ -53,9 +53,22 @@ metadata:
 
 ## 세션 재개
 
-1. 체크박스 `[x]` 파싱으로 완료 태스크 식별
-2. devflow-audit 교차 확인
-3. 완료 태스크 건너뛰고 다음부터 재개
+1. `devflow-docs/session-summary.md` 로드 (있으면) — 이전 세션 맥락 확인
+2. 체크박스 `[x]` 파싱으로 완료 태스크 식별
+3. devflow-audit 교차 확인
+4. 재검증 (독립 실행 시에만):
+   - construction-orchestrator 경유 호출인 경우 → 재검증 스킵 (이미 Step 1.5에서 완료)
+   - 독립 실행인 경우 → 직전 완료 태스크의 테스트 실행
+   - 통과 → 다음 태스크부터 재개
+   - 실패 → 사용자 게이트:
+     ```
+     ⚠️ 재검증 실패 — [task-name] 테스트 실패
+
+     A) 전체 테스트 스위트 실행
+     B) systematic-debugging으로 조사
+     ```
+   - debugging 완료 후 재검증 재실행
+5. 완료 태스크 건너뛰고 다음부터 재개
 
 ## Mid-Execution Changes
 
