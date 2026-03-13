@@ -58,7 +58,8 @@ Brownfield일 때만 실행. 두 가지 수집:
 
 ### 산출물 변경
 
-기존 `workspace.md` 템플릿에 Brownfield일 때 섹션 2개 추가:
+기존 `workspace.md` 템플릿에 Brownfield일 때 섹션 2개 추가.
+기존 `## Project Structure`는 `## Key Files Found`와 함께 유지 (발견된 파일 목록). `## Code Structure`는 구조적 분석 (디렉토리 레이아웃 + 진입점 + 패턴)으로 역할 구분:
 
 ```markdown
 ## Technology Stack
@@ -83,16 +84,37 @@ Brownfield일 때만 실행. 두 가지 수집:
 - 감지된 경로: [절대 경로]
 - 경로 확인 필요: [yes | no]
 - 발견된 주요 파일: [count]개
-- 코드베이스 분석: [포함 | N/A]  ← 추가
+- 코드베이스 분석: [포함 | 해당 없음]  ← 추가
 - 산출물: devflow-docs/inception/workspace.md
+- 리뷰: 해당 없음 (detection 스테이지 — 사실 수집만 수행)
 ```
 
-### 변경하지 않는 것
+### 엣지 케이스: 복수 매니페스트 / 모노레포
+
+- 루트에 `package.json` + `pyproject.toml` 등 복수 매니페스트 존재 시: 모두 나열, 주 언어 판단하지 않음
+- 모노레포 구조 (`packages/`, `services/` 하위): 1단계 깊이 제약으로 하위 매니페스트는 탐색하지 않음. Code Structure의 Directory Layout에 모노레포 구조임을 기록
+
+### Observed Patterns 판단 기준
+
+LLM의 추측을 방지하기 위해 디렉토리 이름 기반의 명시적 규칙만 적용:
+
+| 디렉토리 패턴 | 기록할 패턴 |
+|--------------|-----------|
+| `controllers/` + `models/` + `views/` | MVC |
+| `routes/` + `services/` + `repositories/` | 레이어 구조 |
+| `cmd/` + `internal/` + `pkg/` | Go 표준 레이아웃 |
+| `src/` + `tests/` | src 레이아웃 |
+| 위에 해당 없음 | "특정 패턴 미감지" |
+
+### 변경 사항 (스킬 내부)
+
+- 스킬 버전: 0.3.0 → 0.4.0
+
+### 변경하지 않는 것 (스킬 외부)
 
 - 오케스트레이터 라우팅: 변경 없음
 - Greenfield 경로: 영향 없음
 - 게이트 구조: 변경 없음
-- 버전: 0.3.0 → 0.4.0
 
 ## 성공 기준
 
