@@ -2,7 +2,7 @@
 name: aidlc-workflow-planning
 description: Determines which Construction stages to run and at what depth. Saves workflow plan. Called by inception-orchestrator.
 metadata:
-  version: 0.6.0
+  version: 0.7.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -111,7 +111,7 @@ Create `devflow-docs/inception/workflow-plan.md`:
 ## Stage Depths
 - application-design: [Minimal | Standard | Comprehensive]
 - units-generation: [Minimal | Standard | Comprehensive]
-- code-generation: [Minimal | Standard | Comprehensive]
+- code-generation: [Minimal | Standard | Comprehensive] (TDD protocol 적용 — _shared/tdd-protocol.md)
 - build-and-test: [Minimal | Standard | Comprehensive]
 ```
 
