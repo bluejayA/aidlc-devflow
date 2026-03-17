@@ -133,6 +133,8 @@ STOP.
 2. **리뷰 대상 스킬이면**: 리뷰 규약의 리뷰 루프 패턴 참조. SKILL.md에는 산출물 경로와 리뷰어 종류만 명시
 3. **Phase Orchestrator에 등록**: 해당 Phase 오케스트레이터의 스테이지 순회 + 게이트 매핑에 추가
 4. **plugin.json**: skills 디렉토리에 자동 인식 (별도 등록 불필요)
+5. **스킬 작성 원칙 참조**: `_shared/patterns/skill-best-practices.md` — 자유도 설계, 점진적 공개, CSO 심화
+6. **패턴 선택**: `_shared/patterns/skill-pattern-catalog.md` — 7개 패턴 중 적합한 것 선택
 
 ## Brainstorming HARD-GATE
 
@@ -143,6 +145,11 @@ STOP.
 ## TDD Iron Law
 
 실패하는 테스트 없이 프로덕션 코드 작성 금지. 상세: `_shared/tdd-protocol.md` 참조.
+
+## 합리화 방지 원칙
+
+규율 강제 스킬(TDD, 디버깅 등)의 합리화 방지 테이블 작성법과 설득 원칙:
+`_shared/patterns/persuasion-principles.md` 참조.
 
 ## Subagent Dispatch Rules
 
