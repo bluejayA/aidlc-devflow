@@ -6,6 +6,7 @@ metadata:
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-no-gate
 ---
 
 # aidlc-receiving-code-review

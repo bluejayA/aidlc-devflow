@@ -6,6 +6,7 @@ metadata:
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-with-gate
 ---
 
 # aidlc-finishing-a-development-branch

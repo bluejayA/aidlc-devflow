@@ -1,6 +1,6 @@
 ---
 name: aidlc-code-generation
-description: Two-stage process — generates a code plan first, then implements after orchestrator approval. Called by construction-orchestrator.
+description: Use when a defined unit needs code implementation through a two-stage process of planning then generating code with TDD.
 metadata:
   version: 0.5.0
   author: Jay

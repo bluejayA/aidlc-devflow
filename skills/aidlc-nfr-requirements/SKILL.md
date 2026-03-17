@@ -1,6 +1,6 @@
 ---
 name: aidlc-nfr-requirements
-description: 도메인 컨텍스트 + 프로파일 기반 비기능 요구사항(NFR) 수집. GENERATE/IMPORT 모드 지원. Pre-Planning 스테이지. Called by aidlc-inception-orchestrator.
+description: Use when non-functional requirements need to be defined based on domain context and project profile, or when importing existing NFR documents.
 metadata:
   version: 0.6.0
   author: Jay

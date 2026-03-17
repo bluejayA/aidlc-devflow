@@ -1,11 +1,12 @@
 ---
 name: devflow-audit
-description: Appends interaction logs to devflow-docs/audit.md in append-only mode. Never overwrite — always append.
+description: Use when recording an interaction or decision to the devflow audit log during orchestrator execution.
 metadata:
   version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
 ---
 
 # devflow-audit

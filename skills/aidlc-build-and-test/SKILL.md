@@ -1,6 +1,6 @@
 ---
 name: aidlc-build-and-test
-description: Execute build and full test suite after all units are implemented, then generate reference instructions. Called by aidlc-construction-orchestrator.
+description: Use when code implementation is complete and needs to be built, tested, and verified before completion.
 metadata:
   version: 0.5.0
   author: Jay

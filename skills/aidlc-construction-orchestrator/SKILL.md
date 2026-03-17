@@ -1,6 +1,6 @@
 ---
 name: aidlc-construction-orchestrator
-description: CONSTRUCTION Phase 오케스트레이터. 스테이지 순회 + 게이트 관리 + Multi-unit 핸들링. Entry Orchestrator가 호출.
+description: Use when CONSTRUCTION phase begins, to orchestrate code generation, testing, and completion stages for each unit.
 metadata:
   version: 0.6.0
   author: Jay

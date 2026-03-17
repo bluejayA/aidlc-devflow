@@ -1,11 +1,12 @@
 ---
 name: devflow-state
-description: Reads and writes devflow-docs/devflow-state.md to persist workflow state across sessions.
+description: Use when reading or writing devflow state during orchestrator execution, including phase tracking and stage completion.
 metadata:
   version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
+  return_behavior: stop-no-gate
 ---
 
 # devflow-state

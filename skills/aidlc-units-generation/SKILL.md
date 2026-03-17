@@ -1,6 +1,6 @@
 ---
 name: aidlc-units-generation
-description: Decomposes the system into independently developable units for parallel implementation. Conditional INCEPTION stage. Called by inception-orchestrator.
+description: Use when the system needs to be decomposed into independently developable and testable units with dependency ordering.
 metadata:
   version: 0.4.0
   author: Jay
@@ -25,6 +25,10 @@ Decompose the system into independently developable units.
 Read the following files (if they exist):
 - `devflow-docs/inception/application-design.md` — component structure
 - `devflow-docs/inception/requirements.md` — functional requirements
+
+### application-design 의존성
+- `application-design: included`이면 `application-design.md`를 읽어 컴포넌트 구조 기반으로 unit 분해
+- `application-design: skipped`이면 `requirements.md`만으로 unit 분해 (컴포넌트 구조 없이 요구사항 기반)
 
 ### Step 2: Identify units
 

@@ -6,6 +6,7 @@ metadata:
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-no-gate
 ---
 
 # aidlc-verification-before-completion
@@ -21,6 +22,10 @@ metadata:
 에이전트의 성공 보고, 이전 실행 기억, 코드 리뷰 만으로는 부족하다.
 
 ---
+
+### code-generation과의 관계
+code-generation이 이미 TDD + code-review를 거친 경우, 추가 수정이 없으면 재검증 불필요.
+이 스킬은 code-generation 이후 추가 변경이 있거나, 사용자가 명시적으로 최종 검증을 요청했을 때 사용.
 
 ## Trigger
 
