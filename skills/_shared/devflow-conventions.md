@@ -22,6 +22,16 @@ AIDLC는 **3단 위임 체인** 구조를 사용한다. 슈퍼에이전트(하�
 
 각 계층은 자기 역할만 하고 빠진다. 이를 통해 현재 Phase에 필요한 컨텍스트만 로드하여 토큰 효율을 확보한다.
 
+## Instruction Priority
+
+충돌 시 우선순위:
+
+1. **사용자 지시** (CLAUDE.md, 프로젝트 설정, 직접 요청) — 최우선
+2. **스킬 규칙** (SKILL.md, `_shared/` 규약) — 기본 동작 오버라이드
+3. **기본 동작** (시스템 프롬프트) — 최하위
+
+사용자 지시가 스킬 규칙과 충돌하면 사용자 지시를 따른다. 예: CLAUDE.md가 "TDD 불필요"라고 하면 tdd-protocol의 Iron Law보다 사용자 지시 우선.
+
 ## YAML 메타데이터 규약
 
 ### invoke_mode
@@ -33,7 +43,7 @@ AIDLC는 **3단 위임 체인** 구조를 사용한다. 슈퍼에이전트(하�
 
 ### return_behavior
 
-- `stop-no-gate`: 실행 완료 후 결과 표시하고 STOP. 승인 게이트는 상위 오케스트레이터가 소유.
+- `stop-no-gate`: 실행 완료 후 결과 표시하고 STOP. 오케스트레이터 게이트 제시 금지. 단, 스킬 내 단계별 사용자 확인(섹션별 승인 등)은 허용 — 이는 게이트가 아닌 작업 진행 방식.
 - `stop-with-gate`: 스킬 내부에서 사용자 승인을 받고 STOP (예외적 사용)
 
 ## 게이트 패턴 규약
@@ -48,7 +58,10 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 ### Depth 정책
 - **Minimal**: 리뷰 스킵, 바로 Return to Orchestrator
 - **Standard / Comprehensive**: 리뷰 서브에이전트 dispatch
-- depth 확인: 호출 텍스트의 depth를 우선 사용. 없으면 `devflow-state.md`의 `## Complexity` 필드
+- depth 확인 (fallback 우선순위):
+  1. 호출 텍스트의 인라인 depth 신호
+  2. `workflow-plan.md`의 `## Stage Depths`
+  3. `devflow-state.md`의 `## Complexity`
 
 ### 리뷰 루프
 1. `_shared/reviewers/[type]-prompt.md` 읽기
@@ -150,6 +163,29 @@ STOP.
 - 구현 서브에이전트 병렬 실행 금지 (충돌 방지)
 - Two-stage review 필수: spec compliance → code quality (순서 변경 금지)
 - Model Selection: mechanical task → haiku, integration → sonnet, architecture/review → opus
+
+## 서브에이전트 컨텍스트 격리
+
+### 원칙
+- 서브에이전트에 세션 히스토리 전달 금지 — 태스크에 필요한 최소 컨텍스트만 구성
+- 각 서브에이전트는 독립된 컨텍스트에서 실행 (다른 태스크 결과 미전달)
+
+### 필수 포함 항목
+- 태스크 명세 (전문 텍스트 — 계획 파일을 직접 읽게 하지 않음)
+- 관련 파일 경로
+- 기술 제약 / 아키텍처 컨텍스트
+- 산출물 형식
+
+### 금지 항목
+- 이전 대화 내역
+- 다른 태스크의 결과
+- 사용자 피드백 원문 (요약만 허용)
+
+### 적용 스킬
+- `aidlc-subagent-driven-development` — per-task implementer dispatch
+- `aidlc-dispatching-parallel-agents` — 병렬 에이전트 dispatch
+- `aidlc-requesting-code-review` — 리뷰어 서브에이전트 dispatch
+- `aidlc-executing-plans` — 별도 세션 실행 (세션 자체가 격리)
 
 ## Session Continuity 규약
 
