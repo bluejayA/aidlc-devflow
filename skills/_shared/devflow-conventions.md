@@ -54,10 +54,13 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 1. `_shared/reviewers/[type]-prompt.md` 읽기
 2. 서브에이전트 dispatch (산출물 경로 전달)
 3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues → 수정 후 re-dispatch (최대 5회)
-5. 5회 초과 시 사용자 escalate
+4. ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
+5. Recommendations만 있음 (Issues 없음) → 루프 종료 (수정은 권장)
+6. 5회 초과 시 사용자 escalate
 
 ### 리뷰어 프롬프트
+- `_shared/reviewers/spec-document-reviewer-prompt.md` — 설계 문서 (brainstorming)
+- `_shared/reviewers/plan-document-reviewer-prompt.md` — 구현 계획 (writing-plans)
 - `_shared/reviewers/artifact-reviewer-prompt.md` — INCEPTION 산출물
 - `_shared/reviewers/code-plan-reviewer-prompt.md` — 코드 계획
 - `_shared/reviewers/code-reviewer-prompt.md` — 구현 코드 (Spec + Quality 통합)
