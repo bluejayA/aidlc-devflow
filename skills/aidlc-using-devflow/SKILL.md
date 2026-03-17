@@ -1,6 +1,6 @@
 ---
 name: aidlc-using-devflow
-description: AIDLC Entry Orchestrator. Phase 라우팅 + devflow-state 초기화. 사용자가 호출하는 유일한 진입점.
+description: Use when starting a new project with AIDLC workflow, resuming an existing devflow session, or when "devflow 시작" or "devflow 재개" is requested.
 metadata:
   version: 0.5.0
   author: Jay
