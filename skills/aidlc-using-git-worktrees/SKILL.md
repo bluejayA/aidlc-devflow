@@ -44,9 +44,11 @@ B) 워크트리 없이 현재 디렉토리에서 진행 (오케스트레이터�
 
 ---
 
-### Step 2: 브랜치 이름 도출
+### Step 2: 브랜치 이름 결정
 
-`devflow-docs/inception/requirements.md`의 `## User Intent` 섹션을 읽어 feature 이름을 추출한다.
+**오케스트레이터에서 `"Branch: feature/[이름]"` 신호를 받은 경우:** 해당 이름을 그대로 사용한다.
+
+**신호가 없는 경우 (직접 호출 등):** `devflow-docs/inception/requirements.md`의 `## User Intent` 섹션을 읽어 feature 이름을 추출한다.
 
 변환 규칙:
 - 한국어/영어 혼합 → 영어 키워드 추출 (2-4단어)
@@ -165,13 +167,6 @@ git branch --list [branch-name]
 
 - 기존 브랜치 존재 시: `-[n]` 숫자 접미사 추가 (`feature/todo-api-2`)
 - 기존 워크트리가 이미 해당 브랜치를 사용 중이면: 해당 워크트리를 재사용
-
-### 워크트리 생성 후 브랜치 이름을 바꾸고 싶을 때
-
-오케스트레이터 게이트에서 "A) 브랜치 이름 변경 요청" 선택 시:
-1. `git worktree remove .worktrees/[old-name] --force`
-2. `git branch -D [old-branch]`
-3. 이 스킬 재실행 (오케스트레이터가 devflow-state에 희망 이름 기록 후 재호출)
 
 ### Greenfield에서 의존성 파일이 없는 경우
 
