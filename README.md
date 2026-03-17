@@ -5,6 +5,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 [AI-DLC(AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows)의 컨셉을 최대한 충실하게 반영합니다.
 `aidlc-using-devflow` 하나가 전체 라이프사이클을 소유하고 구동하며, 나머지 stage skill은 순수 실행자로 동작합니다.
 
+> **처음이신가요?** 👉 [AIDLC와 함께 개발하기](docs/guide/how-it-works.md) — 기술 용어 없이 전체 흐름을 쉽게 설명합니다.
+
 > **관련 구현체**: [bluejayA/devflow](https://github.com/bluejayA/devflow) — 동일한 AI-DLC 워크플로우를 분산형(Enhanced Skills) 아키텍처로 구현한 버전
 
 ---

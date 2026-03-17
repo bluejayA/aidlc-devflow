@@ -30,6 +30,23 @@ unit별 비즈니스 로직을 상세 설계한다. application-design(아키텍
 | Import | 기존 설계 문서 검증 |
 | Skip | devflow-state에 SKIPPED 기록 |
 
+## Execution Modes
+
+오케스트레이터가 인라인 신호로 모드를 전달한다. 모드 선택은 이 스킬에서 하지 않음 (Orchestrator-Centric).
+
+### Together (기본)
+Step별 순차 실행. 각 Step 사이 사용자 확인 가능.
+
+### Import
+사용자가 기존 설계 문서를 제공하면:
+1. 파일 수신
+2. 형식 검증 (필수 섹션 존재)
+3. 내용 검토 (누락/모순 식별)
+4. 피드백 제시 → 사용자 확정
+
+### Skip
+`devflow-state`에 SKIPPED 기록 후 Return to Orchestrator.
+
 ## Together 모드 Steps
 
 ### Step 1: 도메인 엔티티 정의

@@ -17,6 +17,8 @@ metadata:
 
 Construction 시작 전 격리된 git worktree를 생성하여 main 브랜치를 보호한다.
 
+> 호출 주체: inception-orchestrator (workflow-planning 게이트에서 "Git worktree로 격리 개발" 선택 시)
+
 ## Execute
 
 ### Step 1: Git 저장소 상태 확인

@@ -20,6 +20,10 @@ metadata:
 요구사항을 INVEST 기준 사용자 스토리로 변환한다.
 비대화형 생성 — requirements.md를 기반으로 일괄 변환하고, 변경 요청은 오케스트레이터 게이트에서 처리.
 
+### IMPORT 모드
+User-stories는 IMPORT 미지원. requirements-analysis 결과를 기반으로 생성하는 것이 핵심 가치.
+IMPORT 신호 수신 시: "User-stories는 IMPORT 미지원입니다. GENERATE 모드로 실행합니다." 메시지 후 GENERATE 진행.
+
 ## Execute
 
 ### Step 1: Load context

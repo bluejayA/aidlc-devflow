@@ -35,6 +35,9 @@ QUESTIONS 모드에서는:
 
 Step 1, 2, 3, 4는 실행하지 않는다.
 
+### QUESTIONS 모드 반환값
+미해결 질문이 남아있으면 `열린 질문: [N]개` 패턴을 포함하여 반환. 모두 해결되면 `열린 질문: 0개`.
+
 ## Execute
 
 ### Step 1: Load complexity

@@ -28,3 +28,5 @@
 - Together 모드의 모든 Step 사이
 - Import 모드의 검증 단계
 - 오케스트레이터의 게이트 대기 중
+
+> Three-Mode Selection에서 Together 모드 진행 중 Hold 발생 시 이 메커니즘 적용. `three-mode-selection.md` 참조.

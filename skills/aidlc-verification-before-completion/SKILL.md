@@ -23,6 +23,10 @@ metadata:
 
 ---
 
+### code-generation과의 관계
+code-generation이 이미 TDD + code-review를 거친 경우, 추가 수정이 없으면 재검증 불필요.
+이 스킬은 code-generation 이후 추가 변경이 있거나, 사용자가 명시적으로 최종 검증을 요청했을 때 사용.
+
 ## Trigger
 
 다음 행동을 하려는 순간 이 스킬을 실행한다:
