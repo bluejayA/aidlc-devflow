@@ -248,13 +248,26 @@ B) [depth에 따라 조건부 표시]
    - Standard/Comprehensive: 승인, 상세 설계 진행 → application-design: DETAIL 호출
 ```
 
-#### 8b. DETAIL 게이트 [표준 게이트] (Standard/Comprehensive만)
+#### 8b. DETAIL 게이트 [리뷰 연계 게이트] (Standard/Comprehensive만)
 
 ```
 [application-design DETAIL 결과 표시]
 A) 변경 요청 → application-design: DETAIL 재호출
 B) 승인, INCEPTION 완료
+R) 리뷰 요청 → artifact-reviewer dispatch 후 결과와 함께 게이트 재표시
 ```
+
+**R 선택 시 리뷰 프로세스:**
+1. `_shared/reviewers/artifact-reviewer-prompt.md`를 서브에이전트로 dispatch
+   - 리뷰 대상: `devflow-docs/inception/application-design.md`
+   - 참조 컨텍스트: `requirements.md`, `nfr-requirements.md` (있으면), `workspace.md`
+2. 리뷰 결과를 게이트에 포함하여 재표시:
+   ```
+   [리뷰 결과 표시]
+   A) 리뷰 반영하여 수정 → application-design: DETAIL 재호출
+   B) 리뷰 참고, 현재 상태로 승인 → INCEPTION 완료
+   ```
+3. conventions 리뷰 루프 규약 적용 (Issues → 수정 권장, Recommendations → 참고)
 
 **DETAIL 호출 시 NFR Design 활성화 판단:**
 3가지 조건 모두 충족 시 인라인 신호 추가:

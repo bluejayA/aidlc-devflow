@@ -1,6 +1,6 @@
 ---
 name: aidlc-application-design
-description: Designs component and service structure before implementation. Conditional Construction stage. Called by inception-orchestrator.
+description: Use when component and service structure needs to be designed before implementation, as a conditional INCEPTION stage after workflow-planning.
 metadata:
   version: 0.6.0
   author: Jay
