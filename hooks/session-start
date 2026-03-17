@@ -1,20 +1,20 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# AIDLC SessionStart hook — 세션 시작 시 안내 메시지 출력
+# Claude Code가 이 stdout을 컨텍스트로 수신
 
-# using-devflow 스킬 파일 경로 설정
-SKILL_FILE="${CLAUDE_PLUGIN_ROOT}/skills/using-devflow/SKILL.md"
+PLUGIN_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-# 스킬 파일이 존재하는 경우 내용을 읽어 additionalContext 형식으로 출력
-if [[ -f "${SKILL_FILE}" ]]; then
-  # 파일 내용 읽기
-  SKILL_CONTENT=$(cat "${SKILL_FILE}")
+cat << 'MSG'
+🔧 AIDLC devflow 플러그인이 설치되어 있습니다.
 
-  # Claude hooks의 additionalContext 형식으로 JSON 출력
-  # jq를 사용해 특수문자를 안전하게 이스케이프 처리
-  jq -n \
-    --arg content "$(printf '<IMPORTANT>\ndevflow 워크플로우가 활성화되어 있습니다.\n소프트웨어 개발 요청이 감지되면 devflow:using-devflow 스킬을 즉시 실행하세요.\n\n%s\n</IMPORTANT>' "${SKILL_CONTENT}")" \
-    '{"additionalContext": $content}'
-else
-  # 스킬 파일이 없으면 빈 JSON 출력
-  echo '{}'
-fi
+시작하려면:
+- 새 프로젝트: "devflow 시작해줘" 또는 "/aidlc:aidlc-using-devflow"
+- 기존 프로젝트 이어하기: "devflow 재개해줘"
+
+사용 가능한 독립 스킬:
+- /aidlc:aidlc-brainstorming — 아이디어를 설계로
+- /aidlc:aidlc-systematic-debugging — 버그 원인 조사
+- /aidlc:aidlc-test-driven-development — TDD 사이클
+- /aidlc:aidlc-requesting-code-review — 코드 리뷰 요청
+- /aidlc:aidlc-writing-skills — 새 스킬 작성
+MSG
