@@ -31,10 +31,14 @@
    - 독립적인 태스크가 2개 이상일 때 서브에이전트 병렬 실행
    - 공유 상태가 없는 태스크만 병렬화 가능 — 의존성 있으면 순차 진행
 
-3. **코드 리뷰 피드백 처리** (`receiving-code-review`)
+3. **코드 리뷰** (`requesting-code-review`)
+   - 2-stage review: spec compliance → code quality (OWASP + 언어별 보안)
+   - standalone 호출 또는 subagent-driven-development에서 자동 호출
+
+4. **코드 리뷰 피드백 처리** (`receiving-code-review`)
    - 코드 리뷰 피드백 수신 시 Critical / Important / Minor 분류 후 처리
 
-4. **개발 완료 처리** (`finishing-a-development-branch`)
+5. **개발 완료 처리** (`finishing-a-development-branch`)
    - 모든 unit 완료 후 머지 / PR / 유지 / 폐기 4가지 선택지 제시
 
 ### 경로 B — 경량 경로 (단일 파일 수정 / 명확한 범위의 버그 픽스)
@@ -182,16 +186,33 @@ requirements-analysis 깊이는 자동 판단:
 
 | 플러그인 | 역할 |
 |---------|------|
-| `devflow-aidlc-like` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 17개 스킬) — **필수** |
+| `devflow-aidlc-like` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 27개 스킬) — **필수** |
 | `claude-code-setup` | 프로젝트별 자동화 추천 |
 | `agent-council` | 다중 AI 에이전트 의견 수집 |
 | `github` | GitHub 연동 |
 
 ---
 
-## 프로젝트별 컨텍스트
+## 프로젝트 프로파일 (선택)
 
-각 프로젝트 루트의 `CLAUDE.md`에서 프로젝트별 상세 설정 참고.
+프로젝트 루트의 `CLAUDE.md`에 기술 스택과 설계 원칙을 명시하면 질문 없이 자동 적용됩니다:
+
+```markdown
+## 기술 스택
+- 언어: Python 3.12
+- 프레임워크: FastAPI
+- DB: PostgreSQL
+- 테스트: pytest
+- 패키지: uv
+
+## 설계 원칙
+- TDD: 필수
+- Complexity: Standard
+```
+
+미명시 항목만 질문합니다. 프로파일은 선택사항 — 없어도 워크플로우는 정상 동작합니다.
+
+## 프로젝트별 컨텍스트
 
 - devflow 파이프라인 산출물: `devflow-docs/` (자동 생성)
 - 설계 문서: `docs/plans/` (brainstorming 완료 시 저장)
