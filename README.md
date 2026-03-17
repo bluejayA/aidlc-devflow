@@ -211,8 +211,36 @@ devflow-docs/
 
 ## 설치
 
+### 방법 1: 마켓플레이스 (권장)
+
+[devflow-marketplace](https://github.com/bluejayA/devflow-marketplace)를 통해 설치합니다:
+
 ```bash
-git clone https://github.com/bluejayA/devflow-aidlc-like.git ~/.claude/plugins/devflow-aidlc-like
+# 1. 마켓플레이스 설치
+claude plugins install https://github.com/bluejayA/devflow-marketplace.git
+
+# 2. aidlc 플러그인이 자동으로 포함됩니다
+```
+
+마켓플레이스에는 두 가지 구현체가 포함되어 있습니다:
+- `aidlc` — 이 플러그인 (Orchestrator-Centric)
+- `devflow` — 분산형 구현체 (Enhanced Skills)
+
+### 방법 2: 단독 설치
+
+이 플러그인만 직접 설치합니다:
+
+```bash
+claude plugins install https://github.com/bluejayA/devflow-aidlc-like.git
+```
+
+### 설치 확인
+
+설치 후 새 세션을 시작하면 안내 메시지가 자동 표시됩니다:
+
+```
+🔧 AIDLC devflow 플러그인이 설치되어 있습니다.
+시작하려면: "devflow 시작해줘"
 ```
 
 ---
