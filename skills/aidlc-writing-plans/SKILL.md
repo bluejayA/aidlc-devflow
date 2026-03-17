@@ -87,11 +87,16 @@ Expected: PASS
 
 ## Plan Review Loop
 
-청크(≤1000줄) 단위로 작성 후 리뷰:
-1. 청크 작성 완료
-2. Review Workflow 실행 (conventions 참조) — plan-document-reviewer 역할
-3. 이슈 발견 → 수정 → 재리뷰 (최대 5회)
-4. 승인 → 다음 청크 또는 Execution Handoff
+청크(≤1000줄) 단위로 작성 후 리뷰 (conventions 리뷰 루프 규약 참조):
+
+1. **Minimal depth**: 리뷰 스킵, 바로 Execution Handoff로
+2. **Standard/Comprehensive depth**:
+   - 청크 작성 완료
+   - `_shared/reviewers/plan-document-reviewer-prompt.md`를 서브에이전트로 dispatch
+   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
+   - Recommendations만 → 루프 종료 (수정 권장)
+   - 5회 초과 → 사용자 escalate
+3. 승인 → 다음 청크 또는 Execution Handoff
 
 ## Execution Handoff
 
