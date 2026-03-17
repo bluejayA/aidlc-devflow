@@ -1,11 +1,12 @@
 ---
 name: aidlc-subagent-driven-development
-description: 구현 계획을 태스크별 서브에이전트로 실행. Fresh subagent per task + two-stage review.
+description: Use when executing an implementation plan in the current session with independent tasks that benefit from fresh subagent context per task.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-no-gate
 ---
 
 # Subagent-Driven Development
@@ -42,20 +43,18 @@ metadata:
 | **NEEDS_CONTEXT** | 누락 정보 제공 → 재디스패치 |
 | **BLOCKED** | 평가: 컨텍스트 문제 → 추가 제공, 추론 한계 → 상위 모델, 태스크 과대 → 분할, 계획 오류 → 사용자 에스컬레이션 |
 
-### 4. Spec Compliance 리뷰
-- `_shared/reviewers/spec-reviewer-prompt.md` 템플릿 사용
-- ❌ 이슈 → 구현자 수정 → 재리뷰 (반복)
-- ✅ 통과 → Code Quality 리뷰로
+### 4. Code Review — `aidlc-requesting-code-review` 호출
 
-### 5. Code Quality 리뷰
-- **Spec 통과 후에만 실행** (순서 변경 금지)
-- `_shared/reviewers/code-quality-reviewer-prompt.md` 템플릿 사용
-- ❌ 이슈 → 구현자 수정 → 재리뷰
-- ✅ 통과 → 태스크 완료
+구현 완료 후 `aidlc-requesting-code-review` 스킬을 호출하여 2-stage review 실행.
+- 입력: 변경 파일 + spec/plan 경로 (해당 태스크) + depth (plan Complexity 연동)
+- ❌ Issues → 구현자 수정 → 재호출
+- ✅ Ready to merge → 태스크 완료
 
-### 6. 태스크 완료 표시
+> 리뷰 로직은 `aidlc-requesting-code-review`가 Single Source of Truth. 이 스킬에서 직접 리뷰어를 dispatch하지 않는다.
 
-### 7. 전체 완료
+### 5. 태스크 완료 표시
+
+### 6. 전체 완료
 - 모든 태스크 완료 후 최종 코드 리뷰 디스패치
 - `aidlc-finishing-a-development-branch` 호출
 
@@ -83,13 +82,13 @@ metadata:
 
 Task 1:
   → 구현자 디스패치 → 질문 발생 → 답변 → 구현 완료
-  → Spec 리뷰 ✅ → Quality 리뷰: Minor 1건 → 수정 → ✅
+  → requesting-code-review 호출 → Ready to merge
   → Task 1 완료
 
 Task 2:
   → 구현자 디스패치 → 구현 완료
-  → Spec 리뷰 ❌ (누락 1건) → 수정 → ✅
-  → Quality 리뷰 ✅
+  → requesting-code-review 호출 → Needs fixes (spec 누락 1건)
+  → 구현자 수정 → requesting-code-review 재호출 → Ready to merge
   → Task 2 완료
 
 ...전체 완료 → 최종 리뷰 → finishing-branch
@@ -98,6 +97,7 @@ Task 2:
 ## Integration
 
 - **호출하는 스킬**: `aidlc-writing-plans` (Execution Handoff)
+- **리뷰 위임**: `aidlc-requesting-code-review` (per-task 2-stage review)
 - **완료 시 호출**: `aidlc-finishing-a-development-branch`
 - **TDD 준수**: `_shared/tdd-protocol.md`
-- **서브에이전트 프롬프트**: `_shared/reviewers/`
+- **서브에이전트 프롬프트**: `_shared/reviewers/implementer-prompt.md`
