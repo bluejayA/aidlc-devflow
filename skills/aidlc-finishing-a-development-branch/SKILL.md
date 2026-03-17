@@ -117,6 +117,11 @@ git worktree prune
 [워크트리 제거: [worktree-path]] (워크트리 사용 시)
 ```
 
+**devflow 종료 처리** (devflow-state.md가 존재하는 경우):
+1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
+2. `devflow-docs/devflow-state.md`를 `devflow-docs/devflow-state-archived-[timestamp].md`로 이름 변경
+3. devflow-audit에 로깅: `"Flow finished — option A (local merge)"`
+
 ---
 
 #### 옵션 B: Push 후 Pull Request 생성
@@ -157,9 +162,12 @@ EOF
 PR URL: [github-pr-url]
 리뷰어에게 공유하거나 직접 병합할 수 있습니다.
 워크트리는 PR 머지 전까지 유지됩니다.
+devflow는 PR 머지 후 종료 처리됩니다.
 ```
 
 **워크트리는 PR이 머지될 때까지 유지한다. 이 단계에서 제거하지 않는다.**
+
+**devflow state 유지**: 옵션 B에서는 devflow-state.md를 아카이브하지 않는다. PR 머지 후 다음 세션에서 using-devflow가 PR 머지 확인 → 종료 처리를 안내한다. devflow-state에 `## Finishing Choice`를 `B (PR pending)` + `## PR URL`을 `[github-pr-url]`로 기록한다.
 
 ---
 
@@ -231,16 +239,21 @@ git branch -D [branch-name]
 [삭제된 워크트리: [worktree-path]] (워크트리 사용 시)
 ```
 
+**devflow 종료 처리** (devflow-state.md가 존재하는 경우):
+1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
+2. `devflow-docs/devflow-state.md`를 `devflow-docs/devflow-state-archived-[timestamp].md`로 이름 변경
+3. devflow-audit에 로깅: `"Flow finished — option D (discarded)"`
+
 ---
 
 ## 워크트리 정리 규칙 요약
 
-| 옵션 | 워크트리 처리 |
-|------|------------|
-| A (로컬 병합) | 워크트리 제거 (`git worktree remove`) |
-| B (PR 생성) | 워크트리 유지 (PR 머지 후 처리) |
-| C (브랜치 유지) | 워크트리 유지 |
-| D (폐기) | 워크트리 강제 제거 (`--force`) |
+| 옵션 | 워크트리 처리 | devflow 처리 |
+|------|------------|------------|
+| A (로컬 병합) | 워크트리 제거 (`git worktree remove`) | `finished` + 아카이브 |
+| B (PR 생성) | 워크트리 유지 (PR 머지 후 처리) | state 유지 (PR 머지 후 종료) |
+| C (브랜치 유지) | 워크트리 유지 | state 유지 |
+| D (폐기) | 워크트리 강제 제거 (`--force`) | `finished` + 아카이브 |
 
 ---
 

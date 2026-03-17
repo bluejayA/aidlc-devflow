@@ -30,7 +30,7 @@ When creating or updating the state file, maintain this exact structure:
 # devflow State
 
 ## Current Phase
-<!-- 현재 단계: inception | construction | operations | complete -->
+<!-- 현재 단계: inception | construction | operations | complete | finished -->
 [phase name]
 
 ## Current Stage
