@@ -6,11 +6,14 @@ metadata:
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-no-gate
 ---
 
 # aidlc-dispatching-parallel-agents
 
 <!-- 병렬 에이전트 디스패치: 독립적 문제를 동시에 해결 -->
+
+> 서브에이전트 컨텍스트 격리: `_shared/devflow-conventions.md` 참조
 
 ## Trigger
 

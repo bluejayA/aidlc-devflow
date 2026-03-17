@@ -1,11 +1,12 @@
 ---
 name: aidlc-executing-plans
-description: 구현 계획을 별도 세션에서 배치 실행. 체크포인트 리뷰 + 세션 재개 지원.
+description: Use when executing an implementation plan in a separate session with checkpoint reviews and session resume support.
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-no-gate
 ---
 
 # Executing Plans
