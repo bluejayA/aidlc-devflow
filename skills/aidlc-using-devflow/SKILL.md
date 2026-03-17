@@ -66,26 +66,88 @@ metadata:
 
 1. `devflow-docs/devflow-state.md` 읽기
 2. `devflow-docs/session-summary.md` 읽기 (있으면)
-3. 재개 게이트 제시:
-   ```
-   ## aidlc — 진행 중인 작업 발견
+3. `## Current Phase` 값에 따라 분기:
 
-   현재 단계: [Current Phase] > [Current Stage]
-   완료된 스테이지: [list]
-   마지막 완료: [session-summary의 최근 완료 항목] (있으면)
+#### Phase가 `finished`인 경우
 
-   A) 이전 작업 재개
-   B) 새 작업 시작 (기존 상태 초기화)
-   ```
-4. A 선택 시:
-   - devflow-audit에 로깅: `"Session resumed at [stage] — commit: [git rev-parse --short HEAD]"`
-   - `## Current Phase` 확인하여 해당 Phase Orchestrator 호출:
-     - `INCEPTION` → `aidlc-inception-orchestrator` 호출
-     - `CONSTRUCTION` → `aidlc-construction-orchestrator` 호출
-5. B 선택 시:
-   - 기존 state를 `devflow-state-archived-[timestamp].md`로 이름 변경
-   - 기존 session-summary를 `session-summary-archived-[timestamp].md`로 이름 변경 (있으면)
-   - New Flow 진행
+이전 플로우가 완전히 종료된 상태. 아카이브 처리가 누락된 경우.
+
+```
+## aidlc — 이전 플로우 완료됨
+
+이전 작업이 완료된 상태입니다.
+
+→ 새 작업을 시작합니다.
+```
+
+state를 `devflow-state-archived-[timestamp].md`로 이름 변경 후 New Flow 진행.
+
+#### Phase가 `complete`이고 `## Finishing Choice`가 `B (PR pending)`인 경우
+
+PR 생성 후 머지 대기 중인 상태.
+
+```
+## aidlc — PR 머지 대기 중
+
+이전 작업의 PR이 아직 열려있습니다.
+PR URL: [## PR URL 값]
+
+A) PR 머지 완료 → devflow 종료 처리
+B) PR 아직 진행 중 → 다른 작업 시작
+C) PR 확인 후 결정
+```
+
+A 선택 시:
+- `gh pr view [PR URL] --json state`로 머지 확인 (가능한 경우)
+- devflow-state의 `## Current Phase`를 `finished`로 업데이트
+- state를 `devflow-state-archived-[timestamp].md`로 이름 변경
+- 워크트리 존재 시 제거 (`git worktree remove` + `git worktree prune`)
+- devflow-audit에 로깅: `"Flow finished — PR merged"`
+- 새 작업 시작 여부 안내
+
+B 선택 시:
+- state를 `devflow-state-archived-[timestamp].md`로 이름 변경
+- New Flow 진행
+
+C 선택 시:
+- PR 상태를 `gh pr view`로 확인 후 결과에 따라 A 또는 재안내
+
+#### Phase가 `complete`인 경우 (Finishing Choice 없음)
+
+CONSTRUCTION은 완료됐지만 finishing-branch를 아직 실행하지 않은 상태.
+
+```
+## aidlc — CONSTRUCTION 완료, 브랜치 처리 대기
+
+INCEPTION + CONSTRUCTION이 완료되었습니다.
+
+A) aidlc-finishing-a-development-branch 실행 → 브랜치 처리
+B) 새 작업 시작 (기존 상태 초기화)
+```
+
+#### Phase가 `INCEPTION` 또는 `CONSTRUCTION`인 경우 (기존 동작)
+
+```
+## aidlc — 진행 중인 작업 발견
+
+현재 단계: [Current Phase] > [Current Stage]
+완료된 스테이지: [list]
+마지막 완료: [session-summary의 최근 완료 항목] (있으면)
+
+A) 이전 작업 재개
+B) 새 작업 시작 (기존 상태 초기화)
+```
+
+A 선택 시:
+- devflow-audit에 로깅: `"Session resumed at [stage] — commit: [git rev-parse --short HEAD]"`
+- `## Current Phase` 확인하여 해당 Phase Orchestrator 호출:
+  - `INCEPTION` → `aidlc-inception-orchestrator` 호출
+  - `CONSTRUCTION` → `aidlc-construction-orchestrator` 호출
+
+B 선택 시:
+- 기존 state를 `devflow-state-archived-[timestamp].md`로 이름 변경
+- 기존 session-summary를 `session-summary-archived-[timestamp].md`로 이름 변경 (있으면)
+- New Flow 진행
 
 ## Phase 전환
 
