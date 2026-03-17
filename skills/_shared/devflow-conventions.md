@@ -159,7 +159,7 @@ STOP.
 
 - 독립적 태스크 2개 이상일 때만 서브에이전트 디스패치
 - 구현 서브에이전트 병렬 실행 금지 (충돌 방지)
-- Two-stage review 필수: spec compliance → code quality (순서 변경 금지)
+- Two-stage review 필수: `aidlc-requesting-code-review` 스킬이 spec compliance → code quality 순서로 실행 (순서 변경 금지)
 - Model Selection: mechanical task → haiku, integration → sonnet, architecture/review → opus
 
 ## Session Continuity 규약
