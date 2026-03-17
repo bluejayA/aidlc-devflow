@@ -1,6 +1,6 @@
 ---
 name: aidlc-functional-design
-description: CONSTRUCTION 단계 상세 기능 설계. 도메인 엔티티, 비즈니스 규칙, 데이터 흐름, 에러 시나리오 설계.
+description: Use when a unit needs detailed functional design including domain entities, business rules, and API contracts before code generation.
 metadata:
   version: 0.1.0
   author: Jay

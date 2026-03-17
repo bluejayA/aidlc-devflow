@@ -1,6 +1,6 @@
 ---
 name: aidlc-using-git-worktrees
-description: Creates an isolated git worktree before code-generation begins. Protects the main branch during Construction. Called by construction-orchestrator.
+description: Use when an isolated workspace is needed for feature development, creating a git worktree with a new branch.
 metadata:
   version: 0.1.0
   author: Jay

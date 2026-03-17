@@ -1,11 +1,12 @@
 ---
 name: aidlc-superpowers-tracking
-description: 세션 중 스킬/패턴 사용을 추적하여 워크플로우 개선 인사이트 제공.
+description: Use when comparing aidlc skills and patterns against superpowers updates, tracking gaps, or planning feature adoption from superpowers releases.
 metadata:
   version: 0.1.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
+  return_behavior: stop-no-gate
 ---
 
 # Superpowers Tracking

@@ -1,6 +1,6 @@
 ---
 name: aidlc-requirements-analysis
-description: Analyzes user requirements using adaptive depth (Minimal/Standard/Comprehensive). Called by inception-orchestrator.
+description: Use when user requirements need to be analyzed, structured into a requirements document, or when open questions from a previous analysis need resolution.
 metadata:
   version: 0.4.0
   author: Jay

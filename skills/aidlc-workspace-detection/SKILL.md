@@ -1,6 +1,6 @@
 ---
 name: aidlc-workspace-detection
-description: Scans the workspace to detect greenfield or brownfield project type. First stage of INCEPTION. Called by inception-orchestrator.
+description: Use when starting INCEPTION to detect whether the workspace is greenfield or brownfield and analyze existing code structure.
 metadata:
   version: 0.4.0
   author: Jay

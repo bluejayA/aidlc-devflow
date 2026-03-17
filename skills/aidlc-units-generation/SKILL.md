@@ -1,6 +1,6 @@
 ---
 name: aidlc-units-generation
-description: Decomposes the system into independently developable units for parallel implementation. Conditional INCEPTION stage. Called by inception-orchestrator.
+description: Use when the system needs to be decomposed into independently developable and testable units with dependency ordering.
 metadata:
   version: 0.4.0
   author: Jay

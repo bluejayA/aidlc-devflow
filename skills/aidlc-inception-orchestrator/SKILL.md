@@ -1,6 +1,6 @@
 ---
 name: aidlc-inception-orchestrator
-description: INCEPTION Phase 오케스트레이터. 스테이지 순회 + 게이트 관리. Entry Orchestrator가 호출.
+description: Use when INCEPTION phase begins, to orchestrate workspace detection, requirements, planning, and design stages.
 metadata:
   version: 0.7.0
   author: Jay

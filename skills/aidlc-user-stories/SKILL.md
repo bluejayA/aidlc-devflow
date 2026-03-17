@@ -1,6 +1,6 @@
 ---
 name: aidlc-user-stories
-description: 요구사항을 INVEST 기준 사용자 스토리로 변환. Pre-Planning 스테이지. Called by aidlc-inception-orchestrator.
+description: Use when requirements need to be converted into INVEST-compliant user stories with acceptance criteria.
 metadata:
   version: 0.6.0
   author: Jay

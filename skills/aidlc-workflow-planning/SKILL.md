@@ -1,6 +1,6 @@
 ---
 name: aidlc-workflow-planning
-description: Determines which Construction stages to run and at what depth. Saves workflow plan. Called by inception-orchestrator.
+description: Use when INCEPTION needs to determine which stages to execute, their depths, and the overall development approach.
 metadata:
   version: 0.7.0
   author: Jay
