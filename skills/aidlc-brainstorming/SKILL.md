@@ -70,12 +70,19 @@ metadata:
 
 ### Step 6: Spec Review + 사용자 리뷰 + 전환
 
-1. `_shared/reviewers/` 기반 Review Workflow 실행 (conventions 참조)
-   - spec-document-reviewer 역할로 리뷰 서브에이전트 디스패치
-   - 이슈 발견 시 수정 → 재리뷰 (최대 5회, 초과 시 사용자 판단)
-2. 사용자 리뷰 게이트:
-   > "Spec이 `<경로>`에 저장되었습니다. 리뷰 후 변경사항이 있으면 알려주세요."
-3. 사용자 승인 후 `aidlc-writing-plans` 스킬로 전환
+**Spec Review Loop** (conventions 리뷰 루프 규약 참조):
+
+1. **Minimal depth**: 리뷰 스킵, 바로 사용자 리뷰 게이트로
+2. **Standard/Comprehensive depth**:
+   - `_shared/reviewers/spec-document-reviewer-prompt.md`를 서브에이전트로 dispatch
+   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
+   - Recommendations만 → 루프 종료 (수정 권장)
+   - 5회 초과 → 사용자 escalate
+
+**사용자 리뷰 게이트** (리뷰 통과 후):
+> "Spec이 `<경로>`에 저장되었습니다. 리뷰 후 변경사항이 있으면 알려주세요."
+
+사용자 승인 후 `aidlc-writing-plans` 스킬로 전환
 
 ---
 
