@@ -13,59 +13,6 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 > **아키텍처** 👉 [아키텍처 문서](docs/guide/architecture.md) — 3단 위임 체인, 리뷰 체계, 스킬 패턴 7종
 
-> **관련 구현체**: [bluejayA/devflow](https://github.com/bluejayA/devflow) — 동일한 AI-DLC 워크플로우를 분산형(Enhanced Skills) 아키텍처로 구현한 버전
-
----
-
-## 두 구현체 비교
-
-| | **devflow-aidlc-like** (이 repo) | **devflow** |
-|---|---|---|
-| **아키텍처** | Orchestrator-Centric | Enhanced Skills |
-| **승인 게이팅** | `aidlc-using-devflow`가 통합 관리 | 각 stage skill이 자체 처리 |
-| **상태 업데이트** | 오케스트레이터만 | 각 skill이 직접 |
-| **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
-| **다음 단계 결정** | Stage Routing Table (중앙) | 각 skill에 하드코딩 |
-| **Stage skill 역할** | 실행 후 STOP (순수 실행자) | 실행 + 게이팅 + 상태 관리 |
-| **Skill 수** | 27개 | 23개 |
-| **AI-DLC 컨셉 부합도** | 높음 — 오케스트레이터가 LC 소유 | 중간 — 자율 skill 간 협력 |
-| **확장 용이성** | Stage 추가 시 Routing Table만 수정 | 각 skill이 독립적으로 확장 |
-| **디버깅** | 오케스트레이터 하나만 추적 | 각 skill 개별 추적 필요 |
-
-### 아키텍처 흐름 비교
-
-**devflow-aidlc-like — 오케스트레이터가 모든 것을 소유**
-```
-[aidlc-using-devflow (Orchestrator)]
-  └─ LOOP:
-      1. stage skill 호출 → 결과만 받고 STOP
-      2. devflow-audit 로깅          ← 오케스트레이터
-      3. A/B 승인 게이트 제시        ← 오케스트레이터
-      4. devflow-state 업데이트      ← 오케스트레이터
-      5. Stage Routing Table로 다음 단계 결정
-      6. 반복
-```
-
-**devflow — 각 skill이 자급자족**
-```
-[using-devflow] → [workspace-detection]
-                       ├─ 실행
-                       ├─ devflow-state 업데이트  ← skill 내부
-                       ├─ devflow-audit 로깅      ← skill 내부
-                       └─ A/B gate → [requirements-analysis]  ← skill 내부
-```
-
-### 어떤 것을 선택할까?
-
-**devflow-aidlc-like (이 repo)** 선택 기준:
-- AI-DLC 컨셉을 학습하거나 연구할 때
-- 워크플로우 전체 흐름을 한 곳에서 파악하고 싶을 때
-- Stage 추가/변경이 잦아 중앙 라우팅이 편리할 때
-
-**devflow** 선택 기준:
-- 각 skill을 독립적으로 호출하는 자유도가 필요할 때
-- Skill을 개별적으로 커스터마이징하고 싶을 때
-
 ---
 
 ## 작동 방식
@@ -279,7 +226,6 @@ B) 다음 단계 진행
 - [AWS AI-DLC 방법론 블로그](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
 - [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
 - [obra/superpowers](https://github.com/obra/superpowers)
-- [Orchestrator-Centric vs Enhanced Skills 비교 분석](docs/analysis/2026-03-10-b-plan-vs-c-plan-analysis.md)
 - [Skill Guide 준수 리뷰](docs/analysis/2026-03-10-skill-guide-review.md)
 
 ---
