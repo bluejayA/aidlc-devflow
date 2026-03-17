@@ -133,6 +133,7 @@ STOP.
 2. **리뷰 대상 스킬이면**: 리뷰 규약의 리뷰 루프 패턴 참조. SKILL.md에는 산출물 경로와 리뷰어 종류만 명시
 3. **Phase Orchestrator에 등록**: 해당 Phase 오케스트레이터의 스테이지 순회 + 게이트 매핑에 추가
 4. **plugin.json**: skills 디렉토리에 자동 인식 (별도 등록 불필요)
+5. **사용자 질문 설계**: `_shared/patterns/question-format-guide.md` — 선택지 설계, 수준 적응, 모순 감지
 
 ## Brainstorming HARD-GATE
 
