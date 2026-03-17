@@ -150,6 +150,8 @@ metadata:
 
 이 목록이 스킬의 Trigger 섹션이 된다.
 
+> 압박 시나리오 설계 상세: `_shared/patterns/skill-testing-guide.md` 참조
+
 ### 2단계: 최소 동작 스킬 작성 (GREEN)
 
 압박 시나리오를 통과시키는 최소한의 스킬을 작성한다:
@@ -158,9 +160,19 @@ metadata:
 - 핵심 프로세스 하나가 올바르게 동작하는 것이 먼저다
 - 예시와 troubleshooting은 나중에 추가해도 된다
 
-### 3단계: 배포 전 검증 체크리스트 실행 (REFACTOR)
+> 스킬 구조 설계 원칙: `_shared/patterns/skill-best-practices.md` 참조
+> 규율 강제 스킬의 언어 설계: `_shared/patterns/persuasion-principles.md` 참조
+> 패턴 선택: `_shared/patterns/skill-pattern-catalog.md` 참조
+
+### 3단계: 배포 전 검증 (REFACTOR)
 
 아래 체크리스트를 모두 통과해야 배포한다.
+
+**Standard/Comprehensive depth**: skill-reviewer 서브에이전트를 dispatch하여 자동 검증.
+- 리뷰어 프롬프트: `_shared/reviewers/skill-reviewer-prompt.md`
+- dispatch 방법: `devflow-conventions.md` 리뷰 루프 규약 참조 (최대 5회, 초과 시 사용자 escalate)
+
+**Minimal depth**: 아래 체크리스트를 수동으로 확인.
 
 ---
 
@@ -244,6 +256,31 @@ description: Use when code implementation is needed for a defined unit or featur
 ```
 
 배포 전 체크리스트 재실행 → 통과 확인 후 배포
+
+---
+
+### Example 3: 패턴 카탈로그를 활용한 신규 스킬 설계
+
+**상황**: "배포 전 보안 검사" 스킬을 새로 만들어야 함
+
+**1단계 — 패턴 선택**:
+`skill-pattern-catalog.md`에서 패턴 선택 가이드를 따름:
+- 규율 강제인가? → 예 (보안 검사 스킵은 심각한 결과)
+- → **Iron Law 패턴** 선택
+
+**2단계 — 구조 템플릿 복사**:
+Iron Law 패턴의 구조 템플릿에서 시작:
+```markdown
+## 철의 법칙
+> NO DEPLOYMENT WITHOUT SECURITY CHECK FIRST
+위반 시: 배포 취소, 보안 검사부터 재시작
+```
+
+**3단계 — persuasion-principles 적용**:
+- Authority: "NO EXCEPTIONS" 추가
+- 합리화 방지 테이블: "급해서", "내부 도구라 괜찮다" 등 수집 + 반박 작성
+
+배포 전 체크리스트 + skill-reviewer dispatch → 통과 확인 후 배포
 
 ---
 
