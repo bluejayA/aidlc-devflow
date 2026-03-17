@@ -7,6 +7,12 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 > **처음이신가요?** 👉 [AIDLC와 함께 개발하기](docs/guide/how-it-works.md) — 기술 용어 없이 전체 흐름을 쉽게 설명합니다.
 
+> **사용법** 👉 [사용자 가이드](docs/guide/user-guide.md) — 시작, 질문 방식, 게이트, 독립 스킬 사용법
+
+> **커스터마이즈** 👉 [운영자 가이드](docs/guide/operator-guide.md) — 기술 카탈로그, 질문 원칙, 워크플로우 기본값 조정
+
+> **아키텍처** 👉 [아키텍처 문서](docs/guide/architecture.md) — 3단 위임 체인, 리뷰 체계, 스킬 패턴 7종
+
 > **관련 구현체**: [bluejayA/devflow](https://github.com/bluejayA/devflow) — 동일한 AI-DLC 워크플로우를 분산형(Enhanced Skills) 아키텍처로 구현한 버전
 
 ---
@@ -21,7 +27,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | **Audit 로깅** | 오케스트레이터만 | 각 skill이 직접 |
 | **다음 단계 결정** | Stage Routing Table (중앙) | 각 skill에 하드코딩 |
 | **Stage skill 역할** | 실행 후 STOP (순수 실행자) | 실행 + 게이팅 + 상태 관리 |
-| **Skill 수** | 26개 | 23개 |
+| **Skill 수** | 27개 | 23개 |
 | **AI-DLC 컨셉 부합도** | 높음 — 오케스트레이터가 LC 소유 | 중간 — 자율 skill 간 협력 |
 | **확장 용이성** | Stage 추가 시 Routing Table만 수정 | 각 skill이 독립적으로 확장 |
 | **디버깅** | 오케스트레이터 하나만 추적 | 각 skill 개별 추적 필요 |
@@ -131,6 +137,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `aidlc-systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 + 실패 이력 분석 |
 | `aidlc-verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 + 회귀 테스트 RED-GREEN 검증 |
 | `aidlc-finishing-a-development-branch` | 개발 완료 후 병합/PR/유지/폐기 처리 |
+| `aidlc-requesting-code-review` | 2-stage 코드 리뷰 요청 (spec compliance → code quality). 리뷰 로직의 Single Source of Truth |
 | `aidlc-receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
 | `aidlc-dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
 | `aidlc-writing-skills` | 새 스킬 개발 시 TDD 방식 + CSO 원칙 적용 |
@@ -154,7 +161,13 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_shared/patterns/hold-mechanism.md` | Mid-step Hold 시그널 + Resume 규약 |
 | `_shared/patterns/brownfield-exploration.md` | 기존 코드베이스 탐색 프로토콜 |
 | `_shared/patterns/session-continuity.md` | 세션 재개 시 아티팩트 자동 로딩 + session-summary 템플릿 + 재검증 프로토콜 |
-| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 (artifact, code-plan, code-reviewer, implementer, spec, quality) |
+| `_shared/patterns/skill-best-practices.md` | 스킬 작성 원칙 — 자유도 설계, 점진적 공개, CSO 심화 |
+| `_shared/patterns/persuasion-principles.md` | 규율 강제 스킬의 설득 원칙 — 합리화 방지 테이블 작성법 |
+| `_shared/patterns/skill-testing-guide.md` | 스킬 TDD 방법론 — 압박 시나리오 기반 RED-GREEN-REFACTOR |
+| `_shared/patterns/skill-pattern-catalog.md` | 7개 스킬 패턴 분류 + 선택 가이드 |
+| `_shared/patterns/question-format-guide.md` | 질문 설계 원칙 — 선택지 설계, 수준 적응, 모순 감지 |
+| `_shared/patterns/tech-stack-defaults.md` | 아키텍처별 기술 카탈로그 — 선택지 생성 데이터 |
+| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 8종 (artifact, code-plan, code-reviewer, implementer, spec, quality, skill, spec-document, plan-document) |
 
 #### YAML 메타데이터 규약
 
