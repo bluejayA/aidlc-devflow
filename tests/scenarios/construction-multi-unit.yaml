@@ -1,0 +1,15 @@
+name: "Construction — Multi unit standard path"
+orchestrator: aidlc-construction-orchestrator
+inputs:
+  complexity: Standard
+  choices:
+    units-generation: B
+    code-plan: B
+    code-generation-result: B
+    build-and-test-result: A
+expect:
+  stage_path:
+    - context-load
+    - revalidation
+    - stage-decision
+  final_stage: stage-decision

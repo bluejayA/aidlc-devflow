@@ -190,6 +190,22 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 
 ---
 
+## 6. 메타 태그 시스템
+
+**규격 문서**: `skills/_shared/patterns/meta-tag-standard.md`
+**테스트**: `bash tests/run-all.sh`
+
+오케스트레이터 SKILL.md에 HTML 주석 형태의 메타 태그(`@gate`, `@gate-option`, `@step`, `@condition`)가 삽입되어 있다. 이 태그는 분기/라우팅/스텝 순서를 기계적으로 검증하는 데 사용된다.
+
+### 스킬 수정 시 태그 동기화
+
+게이트 추가/삭제, 옵션 변경, 스텝 순서 변경 등 오케스트레이터의 라우팅 로직을 수정하면 메타 태그도 함께 업데이트해야 한다. 태그가 불일치하면 `tests/run-all.sh` 실행 시 실패한다.
+
+- 태그 변경이 필요한 상황과 동기화 방법: `_shared/patterns/meta-tag-standard.md` → Maintenance 섹션 참조
+- Claude로 개발하는 경우 TDD(build-and-test)가 불일치를 자동 검출하므로, 별도 수동 체크 없이 테스트 실패로 인지 가능
+
+---
+
 ## 도움이 필요할 때
 
 | 상황 | 참조 문서 |
@@ -201,3 +217,5 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 | 질문 설계 | `_shared/patterns/question-format-guide.md` |
 | 기술 카탈로그 | `_shared/patterns/tech-stack-defaults.md` |
 | TDD 프로토콜 | `_shared/tdd-protocol.md` |
+| 메타 태그 규격 | `_shared/patterns/meta-tag-standard.md` |
+| 테스트 실행 | `tests/run-all.sh` |

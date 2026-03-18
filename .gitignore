@@ -5,3 +5,9 @@ node_modules/
 .claude/
 .private-journal/
 devflow-docs/
+__pycache__/
+.venv/
+.python-version
+*.pyc
+uv.lock
+main.py

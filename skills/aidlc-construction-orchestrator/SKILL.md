@@ -27,6 +27,9 @@ units-generation (조건부) → [units 게이트]
 ```
 
 ## On Activation
+<!-- @step:1 id=context-load -->
+<!-- @step:2 id=revalidation skip-when=no-completed-units -->
+<!-- @step:3 id=stage-decision -->
 
 ### Step 1: 컨텍스트 로드
 
@@ -91,6 +94,9 @@ B) systematic-debugging으로 즉시 조사
 스킬 호출 → 결과 표시
 
 #### units 게이트 [표준 게이트]
+<!-- @gate: units-generation -->
+<!-- @gate-option: A -> units-generation {재호출} -->
+<!-- @gate-option: B -> code-generation -->
 ```
 [units-generation 결과 표시]
 A) 변경 요청 → units-generation 재호출
@@ -113,6 +119,9 @@ units-generation이 스킵된 경우, 단일 unit으로 처리한다.
 `aidlc-functional-design` 호출 (unit명 전달)
 
 ##### 설계 게이트 [표준 게이트]
+<!-- @gate: functional-design -->
+<!-- @gate-option: A -> functional-design {재호출} -->
+<!-- @gate-option: B -> code-generation-plan -->
 ```
 [functional-design 결과 표시]
 A) 변경 요청 → functional-design 재호출
@@ -126,6 +135,9 @@ B) 승인, 코드 생성 진행
 `aidlc-code-generation` 호출 (unit명 + Complexity 인라인 전달: `"Complexity: [level]"`)
 
 #### code-plan 게이트 [리뷰 연계 게이트]
+<!-- @gate: code-plan -->
+<!-- @gate-option: A -> code-generation-plan {재호출} -->
+<!-- @gate-option: B -> code-generation-generate -->
 ```
 [code-generation Plan 결과 표시]
 [리뷰 결과 표시 (Standard 이상)]
@@ -138,6 +150,9 @@ B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 `"aidlc-code-generation: GENERATE — proceed with the approved plan for [unit-name]"` 인라인 신호로 호출
 
 #### 구현 게이트 [리뷰 연계 게이트]
+<!-- @gate: code-generation-result -->
+<!-- @gate-option: A -> code-generation-generate {재호출} -->
+<!-- @gate-option: B -> next-unit -->
 ```
 [code-generation 완료 결과 표시]
 [리뷰 결과 표시 (Standard 이상)]
@@ -160,6 +175,9 @@ B) 승인, 다음 unit 진행
 `aidlc-build-and-test` 호출
 
 #### 완료 게이트 [조건부 게이트]
+<!-- @gate: build-and-test-result -->
+<!-- @gate-option: A -> CONSTRUCTION-complete -->
+<!-- @gate-option: B -> code-generation-plan {추가수정} -->
 
 build-and-test 결과에 따라 분기:
 

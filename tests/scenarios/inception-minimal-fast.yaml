@@ -1,0 +1,16 @@
+name: "Inception — Minimal fast path"
+orchestrator: aidlc-inception-orchestrator
+inputs:
+  complexity: Minimal
+  choices:
+    workspace-detection: B
+    complexity-declaration: B
+    requirements-analysis: B
+expect:
+  stage_path:
+    - workspace-detection
+    - complexity-declaration
+    - requirements-analysis
+    - pre-planning
+    - workflow-planning
+  final_stage: workflow-planning
