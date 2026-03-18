@@ -144,6 +144,40 @@ Unit별 반복 실행. 각 Unit마다:
 | `skill-pattern-catalog.md` | 7개 스킬 패턴 분류 |
 | `question-format-guide.md` | 질문 설계 원칙 |
 | `tech-stack-defaults.md` | 기술 카탈로그 |
+| `meta-tag-standard.md` | 메타 태그 규격 + 유지보수 |
+
+---
+
+## 메타 태그 시스템
+
+오케스트레이터 SKILL.md에 HTML 주석 형태의 메타 태그가 삽입되어 있다.
+이를 통해 **LLM 토큰 0으로** 분기/라우팅/스텝 순서를 정적 검증할 수 있다.
+
+### 태그 타입
+
+| 태그 | 용도 | 예시 |
+|------|------|------|
+| `@gate` | 분기점 선언 | `<!-- @gate: complexity-declaration -->` |
+| `@gate-option` | 선택지 정의 | `<!-- @gate-option: A -> requirements-analysis -->` |
+| `@step` | 실행 단계 순서 | `<!-- @step:1 id=workspace-detection -->` |
+| `@condition` | 자동 분기 조건 | `<!-- @condition: complexity==Minimal -> workflow-planning -->` |
+
+### 데이터 흐름
+
+```
+SKILL.md (메타 태그)
+    → [parse-skills.js] → tests/graph/*.json
+    → [pytest L1] 구조 무결성 (dead-end, unreachable, circular)
+    → [pytest L2] 라우팅 시뮬레이션 (YAML fixtures)
+    → [pytest L3] 스텝 순서 + 필수 스텝 검증
+```
+
+### 현재 적용 범위
+
+- `aidlc-inception-orchestrator` — 8 steps, 11 gates, 5 conditions
+- `aidlc-construction-orchestrator` — 3 steps, 5 gates
+
+규격 상세: `_shared/patterns/meta-tag-standard.md`
 
 ---
 
@@ -184,7 +218,7 @@ skills/
 │   ├── gate-patterns.md           ← 게이트 패턴
 │   ├── tdd-protocol.md            ← TDD 규약
 │   ├── import-review-protocol.md  ← Import/Generate 프로토콜
-│   ├── patterns/                  ← 공유 패턴 (10개)
+│   ├── patterns/                  ← 공유 패턴 (11개, meta-tag-standard 포함)
 │   └── reviewers/                 ← 리뷰어 프롬프트 (8개)
 ├── _utils/
 │   ├── devflow-audit/             ← 감사 로그
@@ -193,7 +227,17 @@ hooks/
 ├── hooks.json                     ← SessionStart 이벤트
 └── session-start                  ← 안내 메시지 출력
 tests/
-└── validate-skills.sh             ← 구조 검증 스크립트
+├── validate-skills.sh             ← 구조 검증 스크립트
+├── run-all.sh                     ← 전체 테스트 러너 (파서 → pytest)
+├── parse-skills.js                ← 메타 태그 파서 (Node.js)
+├── conftest.py                    ← pytest 공유 fixtures
+├── graph/                         ← 파서 출력 JSON (.gitignore)
+├── scenarios/                     ← L2 라우팅 시뮬레이션 YAML fixtures
+├── test_meta_tag_format.py        ← 태그 형식 검증
+├── test_parser_output.py          ← 파서 출력 검증
+├── test_graph_validator.py        ← L1 정적 그래프 검증
+├── test_routing_simulator.py      ← L2 라우팅 시뮬레이션
+└── test_step_order.py             ← L3 스텝 순서 검증
 docs/
 ├── guide/                         ← 가이드 문서
 └── plans/                         ← 설계/구현 계획
