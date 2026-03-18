@@ -254,3 +254,34 @@ council 리뷰의 상세 절차 (risk scoring, 프롬프트, 스키마, 충돌 �
 기존 `[timestamp] [stage] — [choice]`에 결정 이유 한 줄 추가:
 `[timestamp] [stage] — [choice] — [이유]`
 기존 형식도 유효 (하위 호환).
+
+## 산출물 포맷 규약
+
+산출물의 주요 독자가 누구인지에 따라 포맷을 선택한다.
+
+| 독자 | 포맷 | 이유 |
+|------|------|------|
+| **사람 + AI** (리뷰, 승인, 공유) | Markdown | 가독성, 편집 용이 |
+| **AI 전용** (맥락 복원, 중간 상태, 머신 파싱) | JSON / JSONL | 토큰 효율, 파싱 정확도 |
+
+### 판단 기준
+
+"사용자가 이 파일을 열어서 읽거나 승인할 일이 있는가?"
+- **Yes** → Markdown
+- **No** → JSON/JSONL
+
+### 현재 적용
+
+| 파일 | 독자 | 포맷 |
+|------|------|------|
+| requirements.md, application-design.md | 사람 + AI | Markdown |
+| session-summary.md | 사람 + AI | Markdown |
+| devflow-state.md | 사람 + AI | Markdown |
+| audit.md | 사람 (디버깅) + AI | Markdown |
+| stage-context.jsonl (예정) | AI 전용 | JSONL |
+
+### 새 산출물 추가 시
+
+1. 독자 판단 → 포맷 결정
+2. AI 전용이면 JSON/JSONL 우선 검토
+3. 사람이 디버깅 목적으로 볼 수 있으면 `cat file | python3 -m json.tool` 등으로 확인 가능한 구조화 포맷 사용
