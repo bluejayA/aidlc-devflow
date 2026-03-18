@@ -156,6 +156,46 @@ devflow-docs/
 
 ---
 
+## 사전 요구사항
+
+### 필수
+
+| 항목 | 최소 버전 | 용도 |
+|------|----------|------|
+| **Git** | 2.20+ | 버전 관리, worktree 격리 개발 |
+| **Claude Code** | 2.x | 플러그인 호스트 |
+
+### 테스트 인프라 실행 시
+
+테스트 인프라(`tests/run-all.sh`)를 실행하려면 추가로 필요합니다:
+
+| 항목 | 최소 버전 | 용도 |
+|------|----------|------|
+| **Node.js** | 18+ | SKILL.md 메타 태그 파서 (`parse-skills.js`) |
+| **Python** | 3.12+ | pytest 기반 L1/L2/L3 테스트 |
+| **uv** | 0.4+ | Python 패키지 관리 + pytest 실행 |
+
+### 선택 (특정 스킬 사용 시)
+
+| 항목 | 용도 | 관련 스킬 |
+|------|------|----------|
+| **GitHub CLI (`gh`)** | PR 생성, 이슈 관리 | `finishing-a-development-branch`, `using-devflow` |
+
+### 퀵 체크
+
+```bash
+# 필수 도구 확인
+git --version && node --version && python3 --version && uv --version
+
+# (선택) GitHub CLI 확인
+gh --version
+
+# 테스트 의존성 설치 + 실행
+uv sync && bash tests/run-all.sh
+```
+
+---
+
 ## 설치
 
 ### 방법 1: 마켓플레이스 (권장)

@@ -1,8 +1,15 @@
 {
-  "hooks": [
-    {
-      "event": "SessionStart",
-      "command": "hooks/session-start"
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "hooks/session-start"
+          }
+        ]
+      }
+    ]
+  }
 }
