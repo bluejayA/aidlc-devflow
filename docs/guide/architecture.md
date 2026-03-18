@@ -138,9 +138,8 @@ Unit별 반복 실행. 각 Unit마다:
 | `hold-mechanism.md` | 보류(Hold) 상태 관리 |
 | `brownfield-exploration.md` | 기존 코드베이스 탐색 |
 | `session-continuity.md` | 세션 재개 프로토콜 |
-| `skill-best-practices.md` | 스킬 작성 원칙 |
+| `skill-writing-guide.md` | 스킬 작성 원칙 + TDD 방법론 |
 | `persuasion-principles.md` | 규율 강제 언어 설계 |
-| `skill-testing-guide.md` | 스킬 TDD 방법론 |
 | `skill-pattern-catalog.md` | 7개 스킬 패턴 분류 |
 | `question-format-guide.md` | 질문 설계 원칙 |
 | `tech-stack-defaults.md` | 기술 카탈로그 |

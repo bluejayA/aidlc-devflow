@@ -1,6 +1,6 @@
 {
   "name": "aidlc",
   "version": "1.1.0",
-  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (Orchestrator-Centric, 27개 skill, 11개 공유 패턴, 8개 리뷰어, 메타 태그 검증)",
+  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (Orchestrator-Centric, 27개 skill, 10개 공유 패턴, 8개 리뷰어, 메타 태그 검증)",
   "skills": "./skills"
 }

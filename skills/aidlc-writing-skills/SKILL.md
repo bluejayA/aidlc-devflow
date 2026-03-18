@@ -151,7 +151,7 @@ metadata:
 
 이 목록이 스킬의 Trigger 섹션이 된다.
 
-> 압박 시나리오 설계 상세: `_shared/patterns/skill-testing-guide.md` 참조
+> 압박 시나리오 설계 상세: `_shared/patterns/skill-writing-guide.md` 참조
 
 ### 2단계: 최소 동작 스킬 작성 (GREEN)
 
@@ -161,7 +161,7 @@ metadata:
 - 핵심 프로세스 하나가 올바르게 동작하는 것이 먼저다
 - 예시와 troubleshooting은 나중에 추가해도 된다
 
-> 스킬 구조 설계 원칙: `_shared/patterns/skill-best-practices.md` 참조
+> 스킬 구조 설계 원칙: `_shared/patterns/skill-writing-guide.md` 참조
 > 규율 강제 스킬의 언어 설계: `_shared/patterns/persuasion-principles.md` 참조
 > 패턴 선택: `_shared/patterns/skill-pattern-catalog.md` 참조
 

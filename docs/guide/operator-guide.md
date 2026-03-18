@@ -158,7 +158,7 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 ### 새 스킬 추가 시 참조 문서 맵
 
 ```
-1. skill-best-practices.md     ← 구조 설계 원칙 (자유도, 점진적 공개, 500줄)
+1. skill-writing-guide.md      ← 구조 설계 원칙 + TDD 방법론 (자유도, 점진적 공개, 500줄, 압박 시나리오)
    ↓
 2. skill-pattern-catalog.md    ← 7개 패턴 중 적합한 것 선택
    ↓

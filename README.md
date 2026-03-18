@@ -112,9 +112,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_shared/patterns/hold-mechanism.md` | Mid-step Hold 시그널 + Resume 규약 |
 | `_shared/patterns/brownfield-exploration.md` | 기존 코드베이스 탐색 프로토콜 |
 | `_shared/patterns/session-continuity.md` | 세션 재개 시 아티팩트 자동 로딩 + session-summary 템플릿 + 재검증 프로토콜 |
-| `_shared/patterns/skill-best-practices.md` | 스킬 작성 원칙 — 자유도 설계, 점진적 공개, CSO 심화 |
+| `_shared/patterns/skill-writing-guide.md` | 스킬 작성 원칙 + TDD 방법론 — 자유도 설계, 점진적 공개, CSO 심화, 압박 시나리오 |
 | `_shared/patterns/persuasion-principles.md` | 규율 강제 스킬의 설득 원칙 — 합리화 방지 테이블 작성법 |
-| `_shared/patterns/skill-testing-guide.md` | 스킬 TDD 방법론 — 압박 시나리오 기반 RED-GREEN-REFACTOR |
 | `_shared/patterns/skill-pattern-catalog.md` | 7개 스킬 패턴 분류 + 선택 가이드 |
 | `_shared/patterns/question-format-guide.md` | 질문 설계 원칙 — 선택지 설계, 수준 적응, 모순 감지 |
 | `_shared/patterns/tech-stack-defaults.md` | 아키텍처별 기술 카탈로그 — 선택지 생성 데이터 |

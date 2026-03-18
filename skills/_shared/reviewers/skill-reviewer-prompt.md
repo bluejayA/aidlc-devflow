@@ -14,10 +14,9 @@ Agent tool (general-purpose):
 
     **Skill to review:** [SKILL_FILE_PATH]
     **Reference standards:**
-    - Structure: skills/_shared/patterns/skill-best-practices.md
-    - Testing: skills/_shared/patterns/skill-testing-guide.md
+    - Reference: skills/_shared/patterns/skill-writing-guide.md
 
-    ## 1. 구조 검증 (skill-best-practices.md 기준)
+    ## 1. 구조 검증 (skill-writing-guide.md 기준)
 
     | 항목 | 검증 기준 |
     |------|----------|
@@ -29,7 +28,7 @@ Agent tool (general-purpose):
     | 필수 섹션 | Trigger, Examples (2개 이상), Troubleshooting (2개 이상) 존재하는가 |
     | 줄 수 | 500줄 이하인가 (초과 시 분리 권고) |
 
-    ## 2. 내용 검증 (skill-testing-guide.md 기준)
+    ## 2. 내용 검증 (skill-writing-guide.md 기준)
 
     | 항목 | 검증 기준 |
     |------|----------|
