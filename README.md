@@ -1,5 +1,9 @@
 # devflow-aidlc-like
 
+![version](https://img.shields.io/badge/version-1.1.0-blue)
+![skills](https://img.shields.io/badge/skills-27-green)
+![tests](https://img.shields.io/badge/tests-95-brightgreen)
+
 AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 Claude Code 개발 워크플로우 플러그인입니다.
 
 [AI-DLC(AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows)의 컨셉을 최대한 충실하게 반영합니다.
