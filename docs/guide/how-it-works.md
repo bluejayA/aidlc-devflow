@@ -297,7 +297,7 @@ AI가 임의로 결정하고 진행하는 일은 없습니다.
 
 ```bash
 # 설치
-git clone https://github.com/bluejayA/devflow-aidlc-like.git ~/.claude/plugins/devflow-aidlc-like
+git clone https://github.com/bluejayA/aidlc-devflow.git ~/.claude/plugins/aidlc-devflow
 
 # 사용 — Claude Code에서 개발 요청을 하면 자동으로 시작됩니다
 "사용자 인증 기능을 만들어줘"

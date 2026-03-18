@@ -1,9 +1,9 @@
-# devflow vs devflow-aidlc-like 비교 분석
+# devflow vs aidlc-devflow 비교 분석
 
 **작성일**: 2026-03-12
 **대상**:
 - [devflow](https://github.com/bluejayA/devflow) — Enhanced Skills 아키텍처
-- [devflow-aidlc-like](https://github.com/bluejayA/devflow-aidlc-like) — Orchestrator-Centric 아키텍처
+- [aidlc-devflow](https://github.com/bluejayA/aidlc-devflow) — Orchestrator-Centric 아키텍처
 
 **배경**: 두 플러그인 모두 AWS AI-DLC 방법론과 superpowers 플러그인을 참고하여 만든 Claude Code 개발 워크플로우 플러그인이다. 최종 목표(AI-DLC 기반 소프트웨어 개발 자동화)는 동일하며, 아키텍처 접근 방식이 다르다.
 

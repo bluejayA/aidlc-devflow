@@ -221,7 +221,7 @@ claude plugins install https://github.com/bluejayA/devflow-marketplace.git
 이 플러그인만 직접 설치합니다:
 
 ```bash
-claude plugins install https://github.com/bluejayA/devflow-aidlc-like.git
+claude plugins install https://github.com/bluejayA/aidlc-devflow.git
 ```
 
 ### 설치 확인

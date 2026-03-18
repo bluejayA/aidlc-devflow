@@ -3,7 +3,7 @@
 **작성일**: 2026-03-11
 **분석 범위**:
 - dev-playbook: `/Users/jay.ahn/projects/ai/dev-playbook-ai-coding/.claude/rules/` (common, inception, construction, extensions, operations)
-- aidlc: `/Users/jay.ahn/projects/ai/devflow-aidlc-like/skills/` (15개 스킬 + _shared + _utils)
+- aidlc: `/Users/jay.ahn/projects/ai/aidlc-devflow/skills/` (15개 스킬 + _shared + _utils)
 
 ---
 

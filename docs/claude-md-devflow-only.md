@@ -186,7 +186,7 @@ requirements-analysis 깊이는 자동 판단:
 
 | 플러그인 | 역할 |
 |---------|------|
-| `devflow-aidlc-like` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 27개 스킬) — **필수** |
+| `aidlc-devflow` | AI-DLC 개발 라이프사이클 전체 (Inception → Construction, 27개 스킬) — **필수** |
 | `claude-code-setup` | 프로젝트별 자동화 추천 |
 | `agent-council` | 다중 AI 에이전트 의견 수집 |
 | `github` | GitHub 연동 |

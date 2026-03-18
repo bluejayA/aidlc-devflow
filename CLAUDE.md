@@ -1,10 +1,10 @@
-# devflow-aidlc-like 프로젝트 규칙
+# aidlc-devflow 프로젝트 규칙
 
 ## 백로그-GitHub 이슈 연동 (필수)
 
 ### 백로그 등록 시
 - `memory/backlog_aidlc.md`에 항목 추가
-- GitHub 이슈를 `enhancement` 라벨로 동시 생성 (`bluejayA/devflow-aidlc-like`)
+- GitHub 이슈를 `enhancement` 라벨로 동시 생성 (`bluejayA/aidlc-devflow`)
 - 백로그에 이슈 번호와 링크 기록
 
 ### 백로그 구현 시

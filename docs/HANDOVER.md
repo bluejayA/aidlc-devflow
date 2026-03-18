@@ -56,16 +56,16 @@ AI-DLC 방법론을 오케스트레이터 중심 아키텍처로 구현한 Claud
 
 | ID | 이슈 | 우선순위 | 내용 |
 |----|------|---------|------|
-| BL-025 | [#30](https://github.com/bluejayA/devflow-aidlc-like/issues/30) | P1 | agent-council 리뷰 공통 인프라 — CLI 감지, risk scoring, 프롬프트/스키마 |
-| BL-026 | [#31](https://github.com/bluejayA/devflow-aidlc-like/issues/31) | P1 | application-design agent-council 리뷰 |
-| BL-027 | [#32](https://github.com/bluejayA/devflow-aidlc-like/issues/32) | P1 | code agent-council 리뷰 |
+| BL-025 | [#30](https://github.com/bluejayA/aidlc-devflow/issues/30) | P1 | agent-council 리뷰 공통 인프라 — CLI 감지, risk scoring, 프롬프트/스키마 |
+| BL-026 | [#31](https://github.com/bluejayA/aidlc-devflow/issues/31) | P1 | application-design agent-council 리뷰 |
+| BL-027 | [#32](https://github.com/bluejayA/aidlc-devflow/issues/32) | P1 | code agent-council 리뷰 |
 
 **2순위 — 워크플로우 개선**
 
 | ID | 이슈 | 우선순위 | 내용 |
 |----|------|---------|------|
-| BL-023 | [#28](https://github.com/bluejayA/devflow-aidlc-like/issues/28) | P1 | Flow 패널 내부 스텝 진행 표시 |
-| BL-021 | [#25](https://github.com/bluejayA/devflow-aidlc-like/issues/25) | P1 | GitHub Flow 연동 — 이슈/PR/머지 자동화 |
+| BL-023 | [#28](https://github.com/bluejayA/aidlc-devflow/issues/28) | P1 | Flow 패널 내부 스텝 진행 표시 |
+| BL-021 | [#25](https://github.com/bluejayA/aidlc-devflow/issues/25) | P1 | GitHub Flow 연동 — 이슈/PR/머지 자동화 |
 
 **3순위 — 장기 (P3, 이슈 미생성)**
 
@@ -120,6 +120,6 @@ pytest tests/test_step_order.py         # 스텝 순서
 
 ## 참고
 
-- GitHub 리포: [bluejayA/devflow-aidlc-like](https://github.com/bluejayA/devflow-aidlc-like)
+- GitHub 리포: [bluejayA/aidlc-devflow](https://github.com/bluejayA/aidlc-devflow)
 - 원본 참조: [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
 - 백로그 전체: Claude Code 메모리 `memory/backlog_aidlc.md`
