@@ -198,6 +198,51 @@ STOP.
 - `aidlc-requesting-code-review` — 리뷰어 서브에이전트 dispatch
 - `aidlc-executing-plans` — 별도 세션 실행 (세션 자체가 격리)
 
+## Council Review Mode
+
+### 리뷰 모드 3종
+
+| 모드 | 참여 에이전트 | 사용 시점 |
+|------|------------|----------|
+| **single** | Claude 서브에이전트 | 기존 단일 리뷰 (R1) |
+| **council-lite** | Claude 의장 + 외부 AI 1개 | 외부 AI가 1개만 설치된 경우 (R2) |
+| **council-full** | Claude 의장 + Codex + Gemini | 외부 AI가 모두 설치된 경우 (R2) |
+
+### R 서브옵션 규약
+
+게이트에서 `R) 리뷰 요청` 선택 시 서브옵션을 제시한다:
+- `R1)` 단일 리뷰 — 기존 동작 유지 (artifact-reviewer 또는 code-quality-reviewer)
+- `R2)` Council 리뷰 — CLI 환경에 따라 council-lite 또는 council-full
+- `Ra)` 자동 선택 — risk score 기반 모드 결정 (기본값)
+
+CLI 감지 → 가용 모드 판별: `_shared/patterns/council-cli-detection.md` 참조
+
+### 결과 저장 경로 규약
+
+- 설계 리뷰: `devflow-docs/inception/design-review-raw/{codex,gemini,synthesis}.md`
+- 코드 리뷰: `devflow-docs/construction/{unit}/code-review-raw/{codex,gemini,synthesis}.md`
+- council-lite에서 외부 AI가 1개면 해당 AI 이름의 파일 1개만 생성
+
+### 의장 종합 후 사용자 승인 필수
+
+의장(Claude)이 synthesis.md를 작성한 후 반드시:
+1. Gate Decision + 내용을 사용자에게 표시
+2. 사용자 승인을 대기 (A: 수정 반영 / B: 현재 상태 승인)
+3. 사용자 응답 없이 자동 진행 금지
+
+### Graceful Degradation
+
+- 외부 AI CLI 미설치 → single 모드로 폴백 (에러 없음)
+- agent-council 플러그인 미설치 → R1만 가용, R2/Ra 비활성 안내
+- council 리뷰 중 외부 AI 응답 실패 → 해당 에이전트 결과 없이 의장이 가용한 결과만으로 종합
+
+### 프로토콜 참조
+
+council 리뷰의 상세 절차 (risk scoring, 프롬프트, 스키마, 충돌 해결):
+`_shared/reviewers/council-review-protocol.md`
+
+---
+
 ## Session Continuity 규약
 
 - `_shared/patterns/session-continuity.md` — 아티팩트 로딩 규칙, session-summary 템플릿, 재검증 프로토콜

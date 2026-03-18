@@ -44,9 +44,24 @@ metadata:
 ### Step 1: Depth 확인
 
 - **Minimal**: 리뷰 스킵. "리뷰 스킵 (Minimal depth)" 반환
-- **Standard/Comprehensive**: 아래 2-stage 실행
+- **Standard/Comprehensive**: 아래 Step 1.5로 진행
 
-### Step 2: Stage 1 — Spec Compliance
+### Step 1.5: 리뷰 모드 선택 (Standard 이상)
+
+리뷰 모드를 선택한다. 호출 시 모드가 지정되면 해당 모드를 사용하고, 미지정이면 기본값(R1).
+
+```
+리뷰 모드:
+R1) 단일 리뷰 (기존 2-stage) ← 기본
+R2) Council 리뷰
+Ra) 자동 선택 (risk score 기반)
+```
+
+**R1 선택**: Step 2 → Step 3 → Step 4 (기존 동작 그대로)
+
+**R2/Ra 선택**: Step 2c (Council 리뷰)로 진행
+
+### Step 2: Stage 1 — Spec Compliance (R1 모드)
 
 spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바로 진행.
 
@@ -65,6 +80,35 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
    - ✅ Approved → 결과 반환
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
    - Recommendations만 → 루프 종료 (수정 권장)
+
+### Step 2c: Council 리뷰 (R2/Ra 모드)
+
+R2 또는 Ra 선택 시 기존 2-stage 대신 council 리뷰를 실행한다.
+
+1. `_shared/patterns/council-cli-detection.md` 절차 실행:
+   - CLI 감지 → 가용 AI 목록 표시 → 사용자에게 참여 AI 확인 (전부/일부/없이)
+   - 사용자 선택으로 모드 확정 (council-full/council-lite/single)
+   - Ra 선택 시: 확정된 모드 범위 내에서 Risk Scoring으로 single/council 자동 결정
+   - single 확정 시: Step 2(기존 2-stage)로 전환
+2. council-review-protocol의 **코드 리뷰용 프롬프트**로 에이전트 dispatch
+   - agent-council 플러그인을 통해 외부 AI 호출
+   - 리뷰 입력 번들 (파일 경로만 전달):
+     - 리뷰 대상: git diff + 변경 파일 경로
+     - 참조: 테스트 결과 요약, `requirements.md`
+   - council-lite 시: 병합 프롬프트 사용 (1개 AI가 두 관점 수행)
+3. 결과 저장: `devflow-docs/construction/{unit}/code-review-raw/{codex,gemini,synthesis}.md`
+4. Claude 의장이 개별 결과를 읽고 synthesis.md 작성 (충돌 해결 4단계 적용)
+5. **synthesis 결과를 사용자에게 표시 + 승인 대기**:
+   ```
+   [Council Code Review 결과]
+   Gate Decision: [PASS|CONDITIONAL|FAIL]
+   Rationale: [판정 근거]
+   Action Items: [수정 항목]
+
+   A) 리뷰 반영하여 수정
+   B) 현재 상태로 승인
+   ```
+6. 결과를 Step 4 형식으로 반환 (council 모드 표시 추가)
 
 ### Step 4: 결과 반환
 
