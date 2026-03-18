@@ -12,22 +12,14 @@ from pathlib import Path
 
 import pytest
 
+from constants import LOGICAL_ACTIONS
+
 SKILLS_DIR = Path(__file__).parent.parent / "skills"
 
 ORCHESTRATORS = [
     "aidlc-inception-orchestrator",
     "aidlc-construction-orchestrator",
 ]
-
-# Logical actions: gate-option targets that represent workflow actions
-# rather than graph nodes (e.g., 'next-unit', 'INCEPTION-complete').
-LOGICAL_ACTIONS = {
-    "next-unit",
-    "branch-name-confirm",
-    "inception-routing",
-    "code-generation-plan",
-    "code-generation-generate",
-}
 
 
 # --- Helpers ---
