@@ -11,3 +11,8 @@ __pycache__/
 *.pyc
 uv.lock
 main.py
+
+# 환경변수
+.env
+.env.local
+.env.*.local
