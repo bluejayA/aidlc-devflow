@@ -1,0 +1,24 @@
+name: "Inception — Standard with user stories + NFR"
+orchestrator: aidlc-inception-orchestrator
+inputs:
+  complexity: Standard
+  choices:
+    workspace-detection: B
+    complexity-declaration: B
+    requirements-analysis: B
+    pre-planning: A
+    user-stories: B
+    nfr-requirements-mode: A
+    nfr-requirements-result: B
+    workflow-planning-approach: A
+    workflow-planning-env: C
+expect:
+  stage_path:
+    - workspace-detection
+    - complexity-declaration
+    - requirements-analysis
+    - pre-planning
+    - user-stories
+    - nfr-requirements
+    - workflow-planning
+  final_stage: workflow-planning

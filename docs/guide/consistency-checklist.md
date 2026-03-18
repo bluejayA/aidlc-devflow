@@ -85,3 +85,19 @@
 ## 전체 완료 ✅
 
 모든 정합성 이슈가 해결되었습니다. (2026-03-17)
+
+---
+
+## 상시 체크 — 메타 태그 동기화
+
+> 오케스트레이터 SKILL.md 수정 시 반드시 확인.
+
+메타 태그(`@gate`, `@gate-option`, `@step`, `@condition`)가 삽입된 파일을 수정할 때:
+
+- [ ] 게이트 추가/삭제 시 `@gate` + `@gate-option` 태그도 함께 수정했는가
+- [ ] 스텝 순서 변경 시 `@step` 번호를 재조정했는가
+- [ ] 조건 분기 변경 시 `@condition` 태그를 업데이트했는가
+- [ ] `bash tests/run-all.sh` 실행 시 전체 통과하는가
+
+**검증 방법**: `bash tests/run-all.sh` — 69개 테스트가 불일치를 자동 검출
+**규격 참조**: `_shared/patterns/meta-tag-standard.md` → Maintenance 섹션

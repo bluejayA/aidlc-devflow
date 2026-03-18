@@ -24,6 +24,14 @@ workspace-detection → [Complexity Gate] → requirements-analysis → [Open Qu
 ```
 
 ## The Orchestration Loop
+<!-- @step:1 id=workspace-detection -->
+<!-- @step:2 id=complexity-declaration -->
+<!-- @step:3 id=requirements-analysis -->
+<!-- @step:4 id=pre-planning -->
+<!-- @step:5 id=user-stories skip-when=Minimal -->
+<!-- @step:6 id=nfr-requirements skip-when=Minimal -->
+<!-- @step:7 id=workflow-planning -->
+<!-- @step:8 id=application-design -->
 
 아래 순서대로 스테이지를 순회한다. 각 스테이지에서:
 
@@ -60,6 +68,9 @@ devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호�
 ## 게이트 정의
 
 ### 1. workspace-detection 게이트 [조건부 게이트]
+<!-- @gate: workspace-detection -->
+<!-- @gate-option: A -> workspace-detection {재호출} -->
+<!-- @gate-option: B -> complexity-declaration -->
 
 스킬 반환값에서 Greenfield/Brownfield 확인.
 
@@ -78,6 +89,9 @@ B) 확인, 다음 단계 진행 → Complexity Declaration Gate
 ```
 
 ### 2. Complexity Declaration Gate
+<!-- @gate: complexity-declaration -->
+<!-- @gate-option: A -> complexity-declaration {adjust} -->
+<!-- @gate-option: B -> requirements-analysis -->
 
 workspace-detection 결과를 기반으로 복잡도를 선언.
 
@@ -94,6 +108,10 @@ B) 승인 → devflow-state의 ## Complexity 업데이트 → requirements-analy
 Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Complexity: [level]"`
 
 ### 3. requirements-analysis 게이트 [조건부 게이트]
+<!-- @gate: requirements-analysis -->
+<!-- @gate-option: A -> requirements-analysis {questions} -->
+<!-- @gate-option: B -> pre-planning -->
+<!-- @gate-option: C -> requirements-analysis {변경요청} -->
 
 패턴: `열린 질문: [N]개`
 
@@ -125,6 +143,12 @@ B) 승인, 다음 단계 진행
 ```
 
 ### 4. Pre-Planning 분기 [자동분기 + 조건부 게이트]
+<!-- @gate: pre-planning -->
+<!-- @condition: complexity==Minimal -> workflow-planning -->
+<!-- @condition: complexity==Comprehensive -> user-stories -->
+<!-- @gate-option: A -> user-stories -->
+<!-- @gate-option: B -> nfr-requirements -->
+<!-- @gate-option: C -> workflow-planning -->
 
 requirements-analysis 게이트 통과 후, workflow-planning 호출 전에 실행.
 Pre-Planning은 INCEPTION 내 스테이지 그룹명이며, workflow-plan.md의 `### PRE-PLANNING` 섹션에 결과가 기록된다.
@@ -149,6 +173,10 @@ B → NFR-Requirements 게이트로 진행 (user-stories 스킵)
 C → workflow-planning으로 직행
 
 ### 5. User-Stories 게이트 [표준 게이트 + Hold]
+<!-- @gate: user-stories -->
+<!-- @gate-option: A -> user-stories {재호출} -->
+<!-- @gate-option: B -> nfr-requirements -->
+<!-- @gate-option: H -> nfr-requirements {held} -->
 
 Pre-Planning Gate에서 user-stories 실행이 결정된 경우에만.
 aidlc-user-stories 호출 → 결과 게이트:
@@ -161,6 +189,10 @@ H) 보류 (나중에 돌아옴) → HELD 상태 저장, NFR-Requirements 게이�
 ```
 
 ### 6. NFR-Requirements 게이트 [모드 선택 게이트 + 표준 게이트 + Hold]
+<!-- @gate: nfr-requirements-mode -->
+<!-- @gate-option: A -> nfr-requirements {generate} -->
+<!-- @gate-option: B -> nfr-requirements {import} -->
+<!-- @gate-option: S -> workflow-planning {skipped} -->
 
 Pre-Planning Gate에서 nfr-requirements 실행이 결정된 경우에만.
 
@@ -177,6 +209,10 @@ A → `"Mode: GENERATE"` 인라인 신호로 aidlc-nfr-requirements 호출
 B → `"Mode: IMPORT"` 인라인 신호로 aidlc-nfr-requirements 호출
 S → SKIPPED 상태 저장, workflow-planning으로 진행
 
+<!-- @gate: nfr-requirements-result -->
+<!-- @gate-option: A -> nfr-requirements {재호출} -->
+<!-- @gate-option: B -> workflow-planning -->
+<!-- @gate-option: H -> workflow-planning {held} -->
 **6b. 결과 게이트**:
 ```
 [nfr-requirements 결과 표시]
@@ -186,6 +222,11 @@ H) 보류 (나중에 돌아옴) → HELD 상태 저장, workflow-planning으로 
 ```
 
 ### 7. workflow-planning 게이트 [2단계 게이트]
+<!-- @gate: workflow-planning-approach -->
+<!-- @gate-option: A -> workflow-planning-env -->
+<!-- @gate-option: B -> workflow-planning-env -->
+<!-- @gate-option: C -> workflow-planning-env {comprehensive-only} -->
+<!-- @gate-option: D -> workflow-planning {재호출} -->
 
 **1단계: 접근법 선택**
 ```
@@ -203,6 +244,10 @@ D) 변경 요청 → workflow-planning 재호출
 - workflow-plan.md의 `**Selected Approach**` 업데이트
 - `## Approved Stages`를 선택된 접근법 기준으로 업데이트
 
+<!-- @gate: workflow-planning-env -->
+<!-- @gate-option: A -> workflow-planning {재호출} -->
+<!-- @gate-option: B -> branch-name-confirm -->
+<!-- @gate-option: C -> inception-routing -->
 **2단계: 개발 환경 설정**
 ```
 개발 환경을 설정합니다.
@@ -245,6 +290,9 @@ A 선택 시: `"Branch: feature/[이름]"` 인라인 신호로 aidlc-using-git-w
 브랜치 이름은 생성 전에 확인 완료되었으므로, 테스트 실패가 없으면 자동 진행한다.
 
 ### INCEPTION → CONSTRUCTION 라우팅
+<!-- @condition: application-design==included -> application-design -->
+<!-- @condition: application-design==skipped,units-generation==included -> CONSTRUCTION/units-generation -->
+<!-- @condition: application-design==skipped,units-generation==skipped -> CONSTRUCTION/code-generation -->
 
 workflow-plan.md의 `## Approved Stages`를 읽어 분기:
 - `application-design: included` → application-design 게이트 실행
@@ -256,6 +304,9 @@ workflow-plan.md의 `## Approved Stages`를 읽어 분기:
 `application-design: included`인 경우에만 실행.
 
 #### 8a. LIST 게이트 [표준 게이트]
+<!-- @gate: application-design-list -->
+<!-- @gate-option: A -> application-design {재호출} -->
+<!-- @gate-option: B -> application-design-detail -->
 
 ```
 [application-design LIST 결과 표시]
@@ -266,6 +317,10 @@ B) [depth에 따라 조건부 표시]
 ```
 
 #### 8b. DETAIL 게이트 [리뷰 연계 게이트] (Standard/Comprehensive만)
+<!-- @gate: application-design-detail -->
+<!-- @gate-option: A -> application-design-detail {재호출} -->
+<!-- @gate-option: B -> INCEPTION-complete -->
+<!-- @gate-option: R -> application-design-detail {review} -->
 
 ```
 [application-design DETAIL 결과 표시]

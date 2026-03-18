@@ -1,0 +1,16 @@
+name: "Construction — Comprehensive with functional design"
+orchestrator: aidlc-construction-orchestrator
+inputs:
+  complexity: Comprehensive
+  choices:
+    units-generation: B
+    functional-design: B
+    code-plan: B
+    code-generation-result: B
+    build-and-test-result: A
+expect:
+  stage_path:
+    - context-load
+    - revalidation
+    - stage-decision
+  final_stage: stage-decision

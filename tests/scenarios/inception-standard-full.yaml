@@ -1,0 +1,19 @@
+name: "Inception — Standard full path with pre-planning skip"
+orchestrator: aidlc-inception-orchestrator
+inputs:
+  complexity: Standard
+  choices:
+    workspace-detection: B
+    complexity-declaration: B
+    requirements-analysis: B
+    pre-planning: C
+    workflow-planning-approach: A
+    workflow-planning-env: C
+expect:
+  stage_path:
+    - workspace-detection
+    - complexity-declaration
+    - requirements-analysis
+    - pre-planning
+    - workflow-planning
+  final_stage: workflow-planning
