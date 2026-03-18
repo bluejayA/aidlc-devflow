@@ -267,12 +267,14 @@ B) 다음 단계 진행
 ## 참고 자료
 
 - [AWS AI-DLC 방법론 블로그](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
-- [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
-- [obra/superpowers](https://github.com/obra/superpowers)
+- [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows) — MIT-0 License, Copyright Amazon.com, Inc.
+- [obra/superpowers](https://github.com/obra/superpowers) — MIT License, Copyright Jesse Vincent
 - [Skill Guide 준수 리뷰](docs/analysis/2026-03-10-skill-guide-review.md)
+
+서드파티 라이선스 상세: [THIRD-PARTY-NOTICES](THIRD-PARTY-NOTICES)
 
 ---
 
 ## 라이선스
 
-MIT License
+[MIT License](LICENSE)
