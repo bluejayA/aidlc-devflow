@@ -63,7 +63,36 @@ Check for the following indicators:
 - 복수 매니페스트 존재 시: 모두 나열, 주 언어 판단하지 않음
 - 모노레포 구조: 1단계 깊이 제약으로 하위 매니페스트는 탐색하지 않음
 
-**2) Code Structure** — 디렉토리 트리 + 진입점:
+**2) Git Activity** — 최근 활동 기반 핫스팟:
+
+```bash
+git log --oneline -20  # 최근 커밋 20개 요약
+git log --pretty=format: --name-only -20 | sort | uniq -c | sort -rn | head -10  # 최근 변경 파일 top 10
+```
+
+수집 항목:
+- 최근 커밋 메시지 요약 (진행 중인 작업 파악)
+- 최근 변경이 집중된 디렉토리/파일 top 5 (핫스팟)
+- 마지막 커밋 날짜 (프로젝트 활성 여부)
+
+git 저장소가 아니면 이 항목을 스킵한다.
+
+**3) Existing Documentation** — 기존 문서 감지:
+
+아래 파일/디렉토리 존재 여부를 확인하고, 존재하면 핵심 내용 1~2줄 요약:
+
+| 감지 대상 | 설명 |
+|----------|------|
+| `README.md` | 프로젝트 소개, 설치/실행 방법 |
+| `CLAUDE.md` | Claude Code 지시사항 |
+| `CONTRIBUTING.md` | 기여 가이드 |
+| `ARCHITECTURE.md` | 아키텍처 문서 |
+| `docs/` 디렉토리 | 추가 문서 존재 여부 + 파일 수 |
+| `ADR/` 또는 `decisions/` | 아키텍처 결정 기록 |
+
+없는 항목은 기록하지 않는다.
+
+**4) Code Structure** — 디렉토리 트리 + 진입점:
 
 - 1단계 깊이 디렉토리 트리 (대규모 프로젝트 토큰 방지)
 - 진입점 파일 식별 (`main.py`, `index.ts`, `cmd/` 등)
@@ -76,6 +105,23 @@ Check for the following indicators:
 | `cmd/` + `internal/` + `pkg/` | Go 표준 레이아웃 |
 | `src/` + `tests/` | src 레이아웃 |
 | 위에 해당 없음 | "특정 패턴 미감지" |
+
+**5) Coding Patterns (Sampled)** — 핵심 파일 샘플링:
+
+진입점 파일 중 **가장 작은 파일 1~2개**를 실제로 읽어 코딩 패턴을 추출한다.
+
+추출 항목:
+- 네이밍 컨벤션 (camelCase, snake_case, 파일명 규칙)
+- import/require 구조 (절대 경로, 상대 경로, alias)
+- 에러 핸들링 패턴 (try-catch, Result type, error return)
+- 주석 스타일 (JSDoc, docstring, 한국어/영어)
+- 코드 구조 패턴 (함수형, 클래스 기반, 모듈 패턴)
+
+제약:
+- 200줄 이하 파일만 대상 (토큰 효율)
+- 200줄 초과 시 처음 100줄만 읽기
+- 진입점이 없으면 `src/` 또는 `lib/` 내 가장 작은 파일 선택
+- 적절한 파일을 찾지 못하면 이 항목을 스킵한다
 
 ### Step 3: Save artifact
 
@@ -104,10 +150,25 @@ Create `devflow-docs/inception/workspace.md`:
 - **Test Framework**: [테스트 프레임워크]
 - **Key Dependencies**: [주요 의존성 목록]
 
+## Git Activity
+- **Last Commit**: [날짜 — 프로젝트 활성 여부]
+- **Recent Focus**: [최근 변경 집중 디렉토리/파일 top 5]
+- **Recent Commits**: [최근 커밋 메시지 3~5줄 요약]
+
+## Existing Documentation
+- [감지된 문서 목록 — 각 1~2줄 요약]
+
 ## Code Structure
 - **Directory Layout**: [1단계 트리]
 - **Entry Points**: [진입점 파일]
 - **Observed Patterns**: [관찰된 패턴 — 보이는 것만]
+
+## Coding Patterns (Sampled)
+- **Source**: [샘플링한 파일명]
+- **Naming**: [네이밍 컨벤션]
+- **Imports**: [import 구조]
+- **Error Handling**: [에러 핸들링 패턴]
+- **Comments**: [주석 스타일]
 ```
 
 **Requires Path Confirmation 기준:**
