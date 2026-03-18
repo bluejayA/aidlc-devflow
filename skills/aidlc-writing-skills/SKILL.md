@@ -155,7 +155,18 @@ metadata:
 
 ### 2단계: 최소 동작 스킬 작성 (GREEN)
 
-압박 시나리오를 통과시키는 최소한의 스킬을 작성한다:
+**Step A — 구조 패턴 추천**: 1단계에서 파악한 스킬 목적을 기반으로, `_shared/patterns/skill-design-patterns.md`의 결정 트리를 내부적으로 적용하여 구조 패턴(Tool Wrapper / Generator / Reviewer / Inversion / Pipeline)을 자동 판별한다. 사용자에게는 **효과 중심으로 설명**한다:
+
+```
+📐 구조 패턴: **[패턴명]**
+- 이유: [왜 이 패턴이 적합한지 1문장]
+- 구조: [디렉토리 구성 요약]
+- 변경하려면 말씀해 주세요. 아니면 이대로 진행합니다.
+```
+
+> 5가지 패턴을 나열하여 사용자에게 선택을 강요하지 않는다. 사용자가 교정하거나 전문가가 패턴명으로 직접 지정하는 것은 허용.
+
+**Step B — 최소 동작 스킬 작성**: 선택한 구조 패턴의 디렉토리 구조를 따라 압박 시나리오를 통과시키는 최소한의 스킬을 작성한다:
 
 - 모든 기능을 한 번에 넣으려 하지 않는다
 - 핵심 프로세스 하나가 올바르게 동작하는 것이 먼저다
@@ -163,7 +174,8 @@ metadata:
 
 > 스킬 구조 설계 원칙: `_shared/patterns/skill-writing-guide.md` 참조
 > 규율 강제 스킬의 언어 설계: `_shared/patterns/persuasion-principles.md` 참조
-> 패턴 선택: `_shared/patterns/skill-pattern-catalog.md` 참조
+> 행동 패턴 선택: `_shared/patterns/skill-pattern-catalog.md` 참조
+> 구조 패턴 상세: `_shared/patterns/skill-design-patterns.md` 참조
 
 ### 3단계: 배포 전 검증 (REFACTOR)
 
@@ -260,21 +272,40 @@ description: Use when code implementation is needed for a defined unit or featur
 
 ---
 
-### Example 3: 패턴 카탈로그를 활용한 신규 스킬 설계
+### Example 3: 행동 패턴 + 구조 패턴을 조합한 신규 스킬 설계
 
 **상황**: "배포 전 보안 검사" 스킬을 새로 만들어야 함
 
-**1단계 — 패턴 선택**:
-`skill-pattern-catalog.md`에서 패턴 선택 가이드를 따름:
-- 규율 강제인가? → 예 (보안 검사 스킵은 심각한 결과)
-- → **Iron Law 패턴** 선택
+**1단계 — 압박 시나리오(RED)**: 에이전트가 "급하니까 보안 검사 스킵하자"며 배포 진행
 
-**2단계 — 구조 템플릿 복사**:
-Iron Law 패턴의 구조 템플릿에서 시작:
+**2단계 Step A — 구조 패턴 자동 추천**:
+Claude가 결정 트리를 적용:
+- 체크리스트 기반 평가인가? → 예
+- → 구조 패턴: **Reviewer** (OWASP 체크리스트 기반 보안 평가)
+
+```
+📐 구조 패턴: **Reviewer**
+- 이유: 보안 체크리스트 기준으로 코드를 평가하는 구조
+- 구조: SKILL.md + references/security-checklist.md
+- 변경하려면 말씀해 주세요. 아니면 이대로 진행합니다.
+```
+
+**2단계 Step A — 행동 패턴 선택**:
+`skill-pattern-catalog.md`에서:
+- 규율 강제인가? → 예 (보안 검사 스킵은 심각한 결과)
+- → 행동 패턴: **Iron Law**
+
+**2단계 Step B — 최소 동작 스킬 작성**:
+Iron Law 행동 패턴 + Reviewer 구조 패턴 조합:
 ```markdown
 ## 철의 법칙
 > NO DEPLOYMENT WITHOUT SECURITY CHECK FIRST
 위반 시: 배포 취소, 보안 검사부터 재시작
+
+## 리뷰 프로세스
+1. `references/security-checklist.md` 로드
+2. 대상 코드를 항목별 대조
+3. 심각도별 결과 보고
 ```
 
 **3단계 — persuasion-principles 적용**:

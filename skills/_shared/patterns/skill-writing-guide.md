@@ -3,7 +3,7 @@
 <!-- 스킬 SKILL.md 작성의 실전 원칙 + TDD 테스트 방법론 통합 문서. writing-skills가 참조한다. -->
 
 > aidlc 스킬을 효과적으로 작성하기 위한 실전 가이드.
-> 개념 배경은 `devflow-conventions.md`, 패턴 카탈로그는 `skill-pattern-catalog.md`, 설득 원칙은 `persuasion-principles.md` 참조.
+> 개념 배경은 `devflow-conventions.md`, 행동 패턴은 `skill-pattern-catalog.md`, 구조 패턴은 `skill-design-patterns.md`, 설득 원칙은 `persuasion-principles.md` 참조.
 
 ---
 

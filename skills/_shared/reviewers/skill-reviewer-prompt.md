@@ -15,6 +15,7 @@ Agent tool (general-purpose):
     **Skill to review:** [SKILL_FILE_PATH]
     **Reference standards:**
     - Reference: skills/_shared/patterns/skill-writing-guide.md
+    - Reference: skills/_shared/patterns/skill-design-patterns.md
 
     ## 1. 구조 검증 (skill-writing-guide.md 기준)
 
@@ -45,6 +46,15 @@ Agent tool (general-purpose):
     | 트리거 명확성 | description이 "무엇을 하는가" + "언제 사용하는가"를 명확히 전달하는가 |
     | 키워드 풍부성 | 한국어/영어 동의어, 사용자 관점 키워드가 충분히 포함되어 있는가 |
     | 경계 명확성 | 유사 스킬과의 상호 배타 조건이 명확한가 (키워드 중복으로 잘못된 스킬이 선택될 여지가 없는가) |
+
+    ## 4. 구조 패턴 검증 (skill-design-patterns.md 기준)
+
+    | 항목 | 검증 기준 |
+    |------|----------|
+    | 패턴 식별 가능성 | 스킬의 목적에서 구조 패턴(Tool Wrapper/Generator/Reviewer/Inversion/Pipeline)이 식별 가능한가 |
+    | 디렉토리 구조 | 식별된 패턴의 권장 디렉토리 구조를 따르는가 (예: Reviewer → references/에 체크리스트 분리) |
+    | 패턴 적합성 | 스킬의 실제 동작이 식별된 구조 패턴과 부합하는가 (예: 체크리스트 평가인데 Generator로 되어 있지 않은가) |
+    | 패턴 합성 | 복합 패턴인 경우, 각 내부 단계의 패턴이 명확한가 |
 
     ## CRITICAL
 
