@@ -326,10 +326,13 @@ B) [depth에 따라 조건부 표시]
 [application-design DETAIL 결과 표시]
 A) 변경 요청 → application-design: DETAIL 재호출
 B) 승인, INCEPTION 완료
-R) 리뷰 요청 → artifact-reviewer dispatch 후 결과와 함께 게이트 재표시
+R) 리뷰 요청
+   R1) 단일 리뷰 (Claude artifact-reviewer) — 기존 동작
+   R2) Council 리뷰 (Codex + Gemini + Claude 의장)
+   Ra) 자동 선택 (risk score 기반) ← 기본
 ```
 
-**R 선택 시 리뷰 프로세스:**
+**R1 선택 시 (기존 동작):**
 1. `_shared/reviewers/artifact-reviewer-prompt.md`를 서브에이전트로 dispatch
    - 리뷰 대상: `devflow-docs/inception/application-design.md`
    - 참조 컨텍스트: `requirements.md`, `nfr-requirements.md` (있으면), `workspace.md`
@@ -340,6 +343,33 @@ R) 리뷰 요청 → artifact-reviewer dispatch 후 결과와 함께 게이트 �
    B) 리뷰 참고, 현재 상태로 승인 → INCEPTION 완료
    ```
 3. conventions 리뷰 루프 규약 적용 (Issues → 수정 권장, Recommendations → 참고)
+
+**R2/Ra 선택 시 (Council 리뷰):**
+1. `_shared/patterns/council-cli-detection.md` 절차 실행:
+   - CLI 감지 → 가용 AI 목록 표시 → 사용자에게 참여 AI 확인 (전부/일부/없이)
+   - 사용자 선택으로 모드 확정 (council-full/council-lite/single)
+   - Ra 선택 시: 확정된 모드 범위 내에서 Risk Scoring으로 single/council 자동 결정
+2. council-review-protocol의 **설계 리뷰용 프롬프트**로 에이전트 dispatch
+   - agent-council 플러그인을 통해 외부 AI 호출
+   - 리뷰 입력 번들 (파일 경로만 전달):
+     - 리뷰 대상: `devflow-docs/inception/application-design.md`
+     - 참조: `requirements.md`, `nfr-requirements.md` (있으면), `workspace.md`
+   - council-lite 시: 병합 프롬프트 사용 (1개 AI가 두 관점 수행)
+3. 결과 저장: `devflow-docs/inception/design-review-raw/{codex,gemini,synthesis}.md`
+4. Claude 의장이 개별 결과를 읽고 synthesis.md 작성 (충돌 해결 4단계 적용)
+5. **synthesis 결과를 사용자에게 표시 + 승인 대기**:
+   ```
+   [Council 리뷰 결과]
+   Gate Decision: [PASS|CONDITIONAL|FAIL]
+   Rationale: [판정 근거]
+
+   Consensus: [합의 사항]
+   Divergence: [충돌 + 의장 판정]
+   Action Items: [수정 항목]
+
+   A) 리뷰 반영하여 수정 → application-design: DETAIL 재호출
+   B) 현재 상태로 승인 → INCEPTION 완료
+   ```
 
 **DETAIL 호출 시 NFR Design 활성화 판단:**
 3가지 조건 모두 충족 시 인라인 신호 추가:

@@ -153,12 +153,21 @@ B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 <!-- @gate: code-generation-result -->
 <!-- @gate-option: A -> code-generation-generate {재호출} -->
 <!-- @gate-option: B -> next-unit -->
+<!-- @gate-option: R -> code-generation-result {review} -->
 ```
 [code-generation 완료 결과 표시]
 [리뷰 결과 표시 (Standard 이상)]
 A) 수정 요청 → code-generation: GENERATE 재호출
 B) 승인, 다음 unit 진행
+R) 리뷰 요청
+   R1) 단일 리뷰 (Claude code-reviewer)
+   R2) Council 리뷰 (Codex + Gemini + Claude 의장)
+   Ra) 자동 선택 (risk score 기반) ← 기본
 ```
+
+**R 선택 시**: `aidlc-requesting-code-review`를 해당 모드(R1/R2/Ra) 파라미터와 함께 호출.
+requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of Truth).
+Council 리뷰 결과는 사용자 승인 후 게이트를 재표시한다.
 
 승인 후:
 - devflow-state의 `## Completed Units`에 unit명 추가
