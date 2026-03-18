@@ -1,4 +1,4 @@
-# devflow-aidlc-like
+# aidlc-devflow
 
 ![version](https://img.shields.io/badge/version-1.1.0-blue)
 ![skills](https://img.shields.io/badge/skills-27-green)
