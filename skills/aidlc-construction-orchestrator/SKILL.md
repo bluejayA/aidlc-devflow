@@ -99,7 +99,7 @@ B) systematic-debugging으로 즉시 조사
 <!-- @gate-option: B -> code-generation -->
 ```
 [units-generation 결과 표시]
-A) 변경 요청 → units-generation 재호출
+A) 변경 요청 (예: unit 분할/병합, 구현 순서 변경 등) → units-generation 재호출
 B) 승인, 코드 생성 진행
 ```
 
@@ -124,7 +124,7 @@ units-generation이 스킵된 경우, 단일 unit으로 처리한다.
 <!-- @gate-option: B -> code-generation-plan -->
 ```
 [functional-design 결과 표시]
-A) 변경 요청 → functional-design 재호출
+A) 변경 요청 (예: 도메인 엔티티, 비즈니스 규칙, API 계약 등) → functional-design 재호출
 B) 승인, 코드 생성 진행
 ```
 
@@ -141,7 +141,7 @@ B) 승인, 코드 생성 진행
 ```
 [code-generation Plan 결과 표시]
 [리뷰 결과 표시 (Standard 이상)]
-A) 변경 요청 → code-generation 재호출
+A) 변경 요청 (예: 구현 계획 수정, 접근 방식 변경 등) → code-generation 재호출
 B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 ```
 
@@ -157,7 +157,7 @@ B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 ```
 [code-generation 완료 결과 표시]
 [리뷰 결과 표시 (Standard 이상)]
-A) 수정 요청 → code-generation: GENERATE 재호출
+A) 변경 요청 (예: 구현 방식, 테스트 범위, 에러 핸들링 등) → code-generation: GENERATE 재호출
 B) 승인, 다음 unit 진행
 R) 리뷰 요청
    R1) 단일 리뷰 (Claude code-reviewer)
@@ -194,7 +194,7 @@ build-and-test 결과에 따라 분기:
 ```
 [build-and-test 결과 표시]
 A) CONSTRUCTION 완료 승인
-B) 추가 수정 요청 → code-generation 재호출
+B) 추가 변경 요청 (예: 테스트 보완, 성능 개선 등) → code-generation 재호출
 ```
 
 **테스트 실패 시:**

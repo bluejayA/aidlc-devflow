@@ -122,7 +122,7 @@ Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Com
 [requirements-analysis 결과 표시]
 A) 미해결 질문 처리 → aidlc-requirements-analysis: QUESTIONS 재호출
 B) 현재 가정으로 유지하고 다음 단계로 진행
-C) 변경 요청 → requirements-analysis 재호출
+C) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis 재호출
 ```
 
 A) 선택 시: `"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"` 인라인 신호로 재호출 → 반환 → `열린 질문: [N]개` 패턴 재확인
@@ -138,7 +138,7 @@ B) 가정 승인, 다음 단계 진행
 **N == 0이고 가정 없음:**
 ```
 [requirements-analysis 결과 표시]
-A) 변경 요청 → requirements-analysis 재호출
+A) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis 재호출
 B) 승인, 다음 단계 진행
 ```
 
@@ -183,7 +183,7 @@ aidlc-user-stories 호출 → 결과 게이트:
 
 ```
 [user-stories 결과 표시]
-A) 변경 요청 → user-stories 재호출
+A) 변경 요청 (예: 스토리 분할, 수용 기준 수정, 액터 변경 등) → user-stories 재호출
 B) 승인, 다음 단계 진행 → NFR-Requirements 게이트
 H) 보류 (나중에 돌아옴) → HELD 상태 저장, NFR-Requirements 게이트로 진행
 ```
@@ -216,7 +216,7 @@ S → SKIPPED 상태 저장, workflow-planning으로 진행
 **6b. 결과 게이트**:
 ```
 [nfr-requirements 결과 표시]
-A) 변경 요청 → nfr-requirements 재호출
+A) 변경 요청 (예: 성능 기준, 보안 요건, 가용성 목표 등) → nfr-requirements 재호출
 B) 승인, 다음 단계 진행 → workflow-planning
 H) 보류 (나중에 돌아옴) → HELD 상태 저장, workflow-planning으로 진행
 ```
@@ -236,7 +236,7 @@ H) 보류 (나중에 돌아옴) → HELD 상태 저장, workflow-planning으로 
 A) [A안명] 선택
 B) [B안명] 선택
 C) [C안명] 선택 (Comprehensive만)
-D) 변경 요청 → workflow-planning 재호출
+D) 변경 요청 (예: 접근법 수정, 스테이지 포함/제외 등) → workflow-planning 재호출
 ```
 
 선택 후:
@@ -252,7 +252,7 @@ D) 변경 요청 → workflow-planning 재호출
 ```
 개발 환경을 설정합니다.
 
-A) 변경 요청 → workflow-planning 재호출
+A) 변경 요청 (예: 개발 환경 설정 변경 등) → workflow-planning 재호출
 B) Git worktree로 격리 개발 (main 브랜치 보호) → 브랜치 이름 확인 게이트로
 C) 현재 브랜치에서 바로 시작
 ```
@@ -310,7 +310,7 @@ workflow-plan.md의 `## Approved Stages`를 읽어 분기:
 
 ```
 [application-design LIST 결과 표시]
-A) 변경 요청 → application-design 재호출
+A) 변경 요청 (예: 컴포넌트 추가/삭제, 책임 분리 등) → application-design 재호출
 B) [depth에 따라 조건부 표시]
    - Minimal: 승인, INCEPTION 완료 → INCEPTION 완료
    - Standard/Comprehensive: 승인, 상세 설계 진행 → application-design: DETAIL 호출
@@ -324,7 +324,7 @@ B) [depth에 따라 조건부 표시]
 
 ```
 [application-design DETAIL 결과 표시]
-A) 변경 요청 → application-design: DETAIL 재호출
+A) 변경 요청 (예: 인터페이스 수정, 의존성 변경, 데이터 구조 등) → application-design: DETAIL 재호출
 B) 승인, INCEPTION 완료
 R) 리뷰 요청
    R1) 단일 리뷰 (Claude artifact-reviewer) — 기존 동작
