@@ -55,6 +55,8 @@ metadata:
 
 ### 1단계: READ — 전체 피드백 읽기
 
+> **DO NOT proceed to 2단계 until all feedback is read and listed.** 부분만 읽고 반응하지 않는다.
+
 모든 피드백을 한 번에 읽는다. 아직 동의하거나 반박하지 않는다.
 
 - PR의 모든 코멘트를 목록화한다
@@ -82,6 +84,8 @@ metadata:
 ---
 
 ### 3단계: VERIFY — 코드에서 직접 확인
+
+> **DO NOT proceed to 4단계 until each claim is verified against actual code.** 확인 없이 동의/거부하지 않는다.
 
 리뷰어의 주장을 코드에서 직접 확인한다:
 
@@ -117,6 +121,8 @@ metadata:
 ---
 
 ### 5단계: RESPOND — 근거 있는 응답
+
+> **DO NOT respond until 4단계 evaluation is complete for all issues.** 평가 없는 응답은 아첨이거나 방어적 거부다.
 
 각 이슈에 대해 세 가지 중 하나로 응답한다:
 
