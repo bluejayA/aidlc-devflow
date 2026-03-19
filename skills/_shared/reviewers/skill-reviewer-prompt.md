@@ -26,7 +26,15 @@ Agent tool (general-purpose):
     | description 시작 | "Use when..."으로 시작하는가 |
     | description 내용 | 워크플로우 요약이 포함되어 있지 않은가 (트리거 조건만 기술) |
     | description 길이 | 1024자 이하인가 |
-    | 필수 섹션 | Trigger, Examples (2개 이상), Troubleshooting (2개 이상) 존재하는가 |
+    | 필수 섹션 | invoke_mode별 기준 적용 (아래 표 참조) |
+
+    **invoke_mode별 필수 섹션:**
+
+    | 섹션 | user-invocable | orchestrator-only |
+    |------|---------------|-------------------|
+    | Trigger | 필수 | 선택 |
+    | Examples (2개+) | 필수 | 선택 |
+    | Troubleshooting / Common Issues / Error Handling (2개+) | 필수 | 필수 |
     | 줄 수 | 500줄 이하인가 (초과 시 분리 권고) |
 
     ## 2. 내용 검증 (skill-writing-guide.md 기준)
