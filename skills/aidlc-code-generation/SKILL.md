@@ -1,6 +1,6 @@
 ---
 name: aidlc-code-generation
-description: Use when a defined unit or feature needs code implementation, or when "코드 생성", "구현해줘", "code generation" is requested.
+description: Use when a defined unit or feature needs code implementation with TDD, or when "코드 생성", "구현해줘", "code generation" is requested.
 metadata:
   version: 0.5.0
   author: Jay
