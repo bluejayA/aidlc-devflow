@@ -1,5 +1,29 @@
 # aidlc-devflow 프로젝트 규칙
 
+## GitHub Flow (필수)
+
+### gh CLI 사용
+GitHub 작업은 모두 `gh` CLI로 수행한다. MCP GitHub 도구는 사용하지 않는다.
+
+### 커밋 메시지
+- Conventional Commits 형식: `feat:`, `fix:`, `chore:`, `docs:`
+- 이슈 연결: 진행 중 `refs #N`, 완료 시 `closes #N`
+- HEREDOC으로 멀티라인 메시지 작성
+
+### PR 생성 규칙
+- **body 첫 줄에 `Closes #N`** — 타이틀에만 넣으면 GitHub에서 이슈 연결이 안 됨
+- Summary + Test plan 포함
+- 테스트 통과 확인 후 PR 생성
+- 승인 없이 push/merge 금지
+
+### 수정 전 영향도 확인
+코드를 변경하기 전에 다음을 확인한다:
+1. 변경하려는 텍스트/키워드를 다른 파일에서 참조하는지 Grep으로 확인
+2. 핵심 특성 키워드(TDD, Review 등)를 삭제하는 경우, 의도적인지 재확인
+3. 출력 경로(output_path 등) 변경 시, 하류에서 해당 경로를 참조하지 않는지 확인
+
+---
+
 ## 백로그-GitHub 이슈 연동 (필수)
 
 ### 백로그 등록 시
