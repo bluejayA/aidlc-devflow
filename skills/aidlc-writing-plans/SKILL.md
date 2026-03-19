@@ -1,6 +1,6 @@
 ---
 name: aidlc-writing-plans
-description: 설계 문서를 상세 구현 계획으로 변환. aidlc-workflow-planning(INCEPTION 실행 계획)과 구분 — 이 스킬은 태스크별 구현 계획 작성.
+description: Use when a design document needs to be converted into a detailed implementation plan with task breakdown, or when "구현 계획 작성", "plan 만들어줘" is requested. Not for INCEPTION workflow planning — use aidlc-workflow-planning instead.
 metadata:
   version: 0.1.0
   author: Jay

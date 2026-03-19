@@ -1,6 +1,6 @@
 ---
 name: aidlc-construction-orchestrator
-description: Use when CONSTRUCTION phase begins, to orchestrate code generation, testing, and completion stages for each unit.
+description: Use when CONSTRUCTION phase begins, to manage the full build cycle for each unit from implementation through verification.
 metadata:
   version: 0.6.0
   author: Jay
