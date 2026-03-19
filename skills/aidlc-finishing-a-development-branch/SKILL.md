@@ -179,7 +179,7 @@ devflow는 PR 머지 후 종료 처리됩니다.
 git status
 
 # 필요시
-git add -p  # 검토 후 선택적 스테이징
+git add <changed-files>  # 변경된 파일을 명시적으로 스테이징
 git commit -m "WIP: [작업 내용]"
 # 또는
 git stash push -m "[작업 내용] — 나중에 처리"
