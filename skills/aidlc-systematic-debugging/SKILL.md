@@ -88,6 +88,8 @@ metadata:
 
 ### 2단계: 패턴 분석
 
+> **DO NOT proceed to 3단계 until a difference table between success/failure cases is documented.** 차이점 없이 가설을 세우면 추측 수정이 된다.
+
 1. **작동하는 케이스 찾기**
    - 같은 코드 경로에서 성공하는 케이스를 찾는다
    - "A는 되는데 B는 안 된다"는 패턴이 나오면 A와 B의 차이를 비교한다
@@ -109,6 +111,8 @@ metadata:
 ---
 
 ### 3단계: 가설 및 테스트
+
+> **DO NOT proceed to 4단계 until the hypothesis is verified or falsified.** 가설이 틀리면 2단계로 돌아간다.
 
 1. **단일 가설 수립**
    - 한 번에 하나의 가설만 세운다

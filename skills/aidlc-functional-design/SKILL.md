@@ -2,7 +2,7 @@
 name: aidlc-functional-design
 description: Use when a unit needs detailed functional design including domain entities, business rules, and API contracts before code generation.
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -22,30 +22,15 @@ unit별 비즈니스 로직을 상세 설계한다. application-design(아키텍
 
 ## 실행 모드
 
+오케스트레이터가 인라인 신호로 모드를 전달한다. 모드 선택은 이 스킬에서 하지 않음 (Orchestrator-Centric).
+
 `_shared/patterns/three-mode-selection.md` 참조.
 
 | 모드 | 동작 |
 |------|------|
-| Together | Step별 순차 설계, Hold 가능 |
-| Import | 기존 설계 문서 검증 |
-| Skip | devflow-state에 SKIPPED 기록 |
-
-## Execution Modes
-
-오케스트레이터가 인라인 신호로 모드를 전달한다. 모드 선택은 이 스킬에서 하지 않음 (Orchestrator-Centric).
-
-### Together (기본)
-Step별 순차 실행. 각 Step 사이 사용자 확인 가능.
-
-### Import
-사용자가 기존 설계 문서를 제공하면:
-1. 파일 수신
-2. 형식 검증 (필수 섹션 존재)
-3. 내용 검토 (누락/모순 식별)
-4. 피드백 제시 → 사용자 확정
-
-### Skip
-`devflow-state`에 SKIPPED 기록 후 Return to Orchestrator.
+| Together | Step별 순차 설계. 각 Step 사이 사용자 확인 가능 |
+| Import | 기존 설계 문서 검증 — 파일 수신 → 형식 검증 → 내용 검토 → 피드백 → 사용자 확정 |
+| Skip | devflow-state에 SKIPPED 기록 후 Return to Orchestrator |
 
 ## Together 모드 Steps
 
@@ -81,16 +66,28 @@ Step별 순차 실행. 각 Step 사이 사용자 확인 가능.
 
 ## Review
 
-`_shared/devflow-conventions.md` Review Workflow 참조.
+conventions Review Workflow 적용.
+- 산출물: devflow-docs/construction/{unit}/functional-design.md
+- 리뷰어: artifact-reviewer-prompt.md
 
-## Return
+## Return to Orchestrator
 
-```
-STOP.
+conventions 표준 형식. 반환 필드:
+- 엔티티: [count]개
+- 비즈니스 규칙: [count]개
+- 에러 시나리오: [count]개
+- 산출물: devflow-docs/construction/{unit}/functional-design.md
+- 리뷰: [✅ 승인됨 | ⏭ 스킵 (Minimal/Standard)]
 
-**Functional Design 완료**
-- 산출물: `devflow-docs/construction/{unit}/functional-design.md`
-- 엔티티: [N]개
-- 비즈니스 규칙: [N]개
-- 에러 시나리오: [N]개
-```
+## Error Handling
+
+### 도메인 지식이 부족할 때
+unit의 요구사항(requirements.md)에 비즈니스 규칙이 충분히 기술되지 않은 경우:
+- application-design.md에서 해당 unit의 컴포넌트 설명 참조
+- 그래도 부족하면 사용자에게 구체적 질문 (예: "결제 실패 시 재시도 정책이 있는가?")
+- 가정으로 진행하지 않는다
+
+### Import 문서가 형식에 맞지 않을 때
+사용자가 제공한 설계 문서에 필수 섹션(엔티티, 비즈니스 규칙)이 없는 경우:
+- 누락 섹션을 명시하고 보완을 요청
+- 부분 Import 후 나머지를 Together 모드로 채우는 하이브리드 진행 가능
