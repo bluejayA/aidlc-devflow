@@ -235,6 +235,24 @@ claude plugins install https://github.com/bluejayA/aidlc-devflow.git
 
 ---
 
+## 차별적 특징
+
+### 스킬 개발 풀사이클 도구 내장
+
+aidlc-devflow는 스킬을 실행하는 플러그인일 뿐 아니라, **스킬을 만들고 검증하는 도구 체계**를 내장하고 있습니다.
+
+| 단계 | 도구 | 설명 |
+|------|------|------|
+| **설계** | `skill-pattern-catalog` (행동 7종) + `skill-design-patterns` (구조 5종) | 결정 트리로 적합한 패턴을 자동 추천 |
+| **작성** | `aidlc-writing-skills` + `skill-writing-guide` + `persuasion-principles` | TDD 방식 스킬 개발. CSO 원칙 + 점진적 공개 |
+| **리뷰** | `skill-reviewer` 서브에이전트 | 메타데이터 정합성, 패턴 적합성, 게이트 선언 검증 |
+| **테스트** | 3-Layer 정적 검증 (0토큰) | L1 그래프 검증 → L2 라우팅 시뮬레이터 → L3 스텝 순서 체커 |
+| **운영** | 정합성 체크리스트 + 영향도 분석 규약 | 스킬 수정 시 참조·호출·연동 파급 확인 |
+
+새 스킬을 추가하거나 기존 스킬을 수정할 때, 설계부터 검증까지 일관된 품질을 유지할 수 있습니다.
+
+---
+
 ## AI-DLC 3대 패턴
 
 ### 1. 명시적 승인 게이팅
