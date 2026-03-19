@@ -253,27 +253,19 @@ D) 변경 요청 (예: 접근법 수정, 스테이지 포함/제외 등) → wor
 개발 환경을 설정합니다.
 
 A) 변경 요청 (예: 개발 환경 설정 변경 등) → workflow-planning 재호출
-B) Git worktree로 격리 개발 (main 브랜치 보호) → 브랜치 이름 확인 게이트로
+B) Git worktree로 격리 개발 (main 브랜치 보호) → 브랜치 이름 도출 후 바로 워크트리 생성
 C) 현재 브랜치에서 바로 시작
 ```
 
-### 브랜치 이름 확인 게이트
+### 브랜치 이름 도출 및 워크트리 생성
 
-개발 환경 설정에서 B (Git Worktree) 선택 시, 워크트리 생성 전에 브랜치 이름을 먼저 확인한다.
+개발 환경 설정에서 B (Git Worktree) 선택 시, 브랜치 이름을 도출하여 표시하고 바로 워크트리를 생성한다 (확인 게이트 없음).
 
-`devflow-docs/inception/requirements.md`의 `## User Intent`에서 브랜치 이름을 도출하여 표시:
-```
-브랜치 이름: feature/[도출된 이름]
-
-A) 이 이름으로 워크트리 생성 → aidlc-using-git-worktrees 호출 (브랜치 이름 전달)
-B) 브랜치 이름 변경 → 사용자 입력 받아 재확인
-```
-
-브랜치 이름 도출 규칙은 `aidlc-using-git-worktrees`의 Step 2와 동일:
+`devflow-docs/inception/requirements.md`의 `## User Intent`에서 브랜치 이름을 도출:
 - 한국어/영어 혼합 → 영어 키워드 추출 (2-4단어)
 - 공백/특수문자 → 하이픈 치환, 소문자, `feature/` 접두사
 
-A 선택 시: `"Branch: feature/[이름]"` 인라인 신호로 aidlc-using-git-worktrees 호출
+도출된 브랜치 이름을 표시 후 `"Branch: feature/[이름]"` 인라인 신호로 aidlc-using-git-worktrees 즉시 호출
 
 ### 워크트리 결과 게이트
 
@@ -287,7 +279,7 @@ A 선택 시: `"Branch: feature/[이름]"` 인라인 신호로 aidlc-using-git-w
 ⚠️ 베이스라인 테스트 실패 시: A) aidlc-systematic-debugging 먼저 / B) 실패 인지 후 진행
 ```
 
-브랜치 이름은 생성 전에 확인 완료되었으므로, 테스트 실패가 없으면 자동 진행한다.
+테스트 실패가 없으면 자동 진행한다.
 
 ### INCEPTION → CONSTRUCTION 라우팅
 <!-- @condition: application-design==included -> application-design -->
