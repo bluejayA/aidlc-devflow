@@ -1,5 +1,7 @@
 # aidlc-devflow
 
+[English](README.en.md) | 한국어
+
 ![version](https://img.shields.io/badge/version-1.1.0-blue)
 ![skills](https://img.shields.io/badge/skills-27-green)
 ![tests](https://img.shields.io/badge/tests-95-brightgreen)
