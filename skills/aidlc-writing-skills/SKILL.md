@@ -214,6 +214,25 @@ metadata:
 - [ ] description 키워드가 사용자가 사용할 법한 표현을 포함하는가?
 - [ ] 1024자 이하인가?
 
+### 최적화 게이트 (REFACTOR 완료 후)
+
+배포 전 검증 체크리스트가 모두 통과하면 (Standard/Comprehensive: skill-reviewer Approved):
+
+```
+A) 스킬 완성 — description 수동 검증으로 충분
+B) 정량적 최적화 — skill-creator로 eval + description 최적화 실행
+```
+
+> 사용자 선택 없이 진행하지 않는다.
+
+**B 선택 시**: Skill tool로 `skill-creator` 호출. skill-creator가 eval 생성 → 벤치마크 → description 최적화를 자체 워크플로우로 수행. 완료 후 이 스킬로 돌아와 결과 확인.
+
+**skill-creator 미설치 시**: B 선택지를 표시하지 않고 A만 제시. 안내 문구:
+```
+A) 스킬 완성
+ℹ️ skill-creator 플러그인이 설치되면 정량적 최적화(eval + description 최적화)도 가능합니다.
+```
+
 ---
 
 ## Examples
