@@ -214,6 +214,21 @@ STOP.
 
 ## Council Review Mode
 
+### 4-stage와 Council의 관계
+
+두 차원은 **직교**한다:
+- **4-stage** (관점 축): "무엇을 볼 것인가" — Spec, Quality, Security, Maintainability
+- **Council** (실행 주체 축): "누가 볼 것인가" — Claude 단독 vs 다모델 편향 보완
+
+Council 모드에서도 4-stage 관점은 그대로 적용된다. Council이 바꾸는 것은 Stage 2-4의 실행 주체이다. Stage 1(Spec Compliance)은 요구사항 대조(사실 확인)이므로 항상 Claude 서브에이전트가 수행한다.
+
+| Stage | single (R1) | council (R2) |
+|-------|-------------|--------------|
+| Stage 1 (Spec) | Claude 서브에이전트 | Claude 서브에이전트 |
+| Stage 2 (Quality) | Claude 서브에이전트 | Codex + Claude 의장 |
+| Stage 3 (Security) | Claude 서브에이전트 | Gemini + Claude 의장 |
+| Stage 4 (Maintainability) | Claude 서브에이전트 | Codex + Claude 의장 |
+
 ### 리뷰 모드 3종
 
 | 모드 | 참여 에이전트 | 사용 시점 |
