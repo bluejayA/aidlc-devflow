@@ -177,10 +177,11 @@ class TestProcessGate:
         result = _process_gate("g1", gates_by_id, {}, {"g1": "A"}, "Standard")
         assert result == "__next__"
 
-    def test_unknown_choice_returns_next(self):
+    def test_unknown_choice_stops(self):
+        """Unknown choice (e.g. interrupt) should stop, not continue."""
         gates = self._make_context()
         result = _process_gate("g1", gates, {}, {"g1": "Z"}, "Standard")
-        assert result == "__next__"
+        assert result is None
 
 
 # --- simulate (edge cases) ---

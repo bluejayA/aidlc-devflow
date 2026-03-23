@@ -1,0 +1,17 @@
+name: "Construction — interrupt at code-plan gate stops for user confirmation"
+description: |
+  사용자가 code-plan 게이트에서 선택지 밖 발화(X) 시,
+  라우팅 엔진은 해당 게이트에서 정지한다 (인터럽트 핸들러가 SKILL.md 레벨에서 처리).
+  기존 동작(알 수 없는 선택지 → __next__)과 달리, 인터럽트 경로에서 멈춤을 검증.
+orchestrator: aidlc-construction-orchestrator
+inputs:
+  complexity: Standard
+  choices:
+    units-generation: B
+    code-plan: X
+expect:
+  stage_path:
+    - context-load
+    - revalidation
+    - stage-decision
+  final_stage: stage-decision

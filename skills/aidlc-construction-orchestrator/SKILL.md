@@ -225,6 +225,12 @@ build-and-test에서 테스트/빌드 실패 시 사용자가 debugging을 선�
    ```
 3. debugging Return 수신 후 `aidlc-build-and-test` 재실행
 
+## Interrupt Handling
+<!-- @interrupt: global -->
+
+모든 게이트에서 사용자 응답이 선택지 밖 자유 발화인 경우:
+→ `_shared/patterns/interrupt-handler.md` 참조하여 인터럽트 게이트 프로토콜 실행.
+
 ## Audit Logging
 
 각 게이트 결정 시 devflow-audit에 기록:
