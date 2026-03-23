@@ -1,0 +1,17 @@
+name: "Inception — interrupt at requirements gate stops for user confirmation"
+description: |
+  사용자가 requirements-analysis 게이트에서 선택지 밖 발화(X) 시,
+  라우팅 엔진은 해당 게이트에서 정지한다.
+orchestrator: aidlc-inception-orchestrator
+inputs:
+  complexity: Standard
+  choices:
+    workspace-detection: B
+    complexity-declaration: B
+    requirements-analysis: X
+expect:
+  stage_path:
+    - workspace-detection
+    - complexity-declaration
+    - requirements-analysis
+  final_stage: requirements-analysis

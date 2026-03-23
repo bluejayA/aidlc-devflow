@@ -99,7 +99,7 @@ def _process_gate(
     gate = gates_by_id[gate_id]
     target = _resolve_choice(gate, choice)
     if target is None:
-        return "__next__"
+        return None  # Unknown choice = stop (interrupt handler at SKILL.md level)
     if target == gate_id:
         return "__next__"
     return target

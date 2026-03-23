@@ -374,6 +374,14 @@ R) 리뷰 요청
 
 ---
 
+## Interrupt Handling
+<!-- @interrupt: global -->
+
+모든 게이트에서 사용자 응답이 선택지 밖 자유 발화인 경우:
+→ `_shared/patterns/interrupt-handler.md` 참조하여 인터럽트 게이트 프로토콜 실행.
+
+---
+
 ## Error Handling
 
 ### Stage skill 호출 실패

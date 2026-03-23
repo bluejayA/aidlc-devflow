@@ -52,6 +52,15 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 - **표준 게이트**: A) 변경 요청 / B) 승인
 - **조건부 게이트**: 반환값 패턴에 따라 선택지 분기
 - **리뷰 연계 게이트**: 리뷰 결과를 포함하는 게이트
+- **인터럽트 게이트**: 선택지 밖 자유 발화 시 의도 분류 → 라우팅 (모든 게이트에 암묵적 적용)
+
+### 인터럽트 프로토콜
+
+사용자가 게이트 선택지 밖의 요청을 할 때의 처리 규약. `_shared/patterns/interrupt-handler.md`에 정의.
+
+- **적용 범위**: `construction-orchestrator`, `inception-orchestrator`의 모든 게이트
+- **using-devflow와의 관계**: entry orchestrator의 "Auxiliary Skill 라우팅"은 Phase 레벨에서 작동. 인터럽트 핸들러는 sub-orchestrator의 게이트 레벨에서 작동. 두 메커니즘은 상호 보완적이며 충돌하지 않음
+- **핵심 원칙**: 조용히 라우팅 금지. 항상 사용자에게 현재 단계 + 대상 스킬을 표시하고 확인을 받은 후 라우팅
 
 ## 리뷰 규약
 
