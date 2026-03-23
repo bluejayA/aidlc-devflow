@@ -214,10 +214,6 @@ claude plugins install https://github.com/bluejayA/devflow-marketplace.git
 # 2. aidlc 플러그인이 자동으로 포함됩니다
 ```
 
-마켓플레이스에는 두 가지 구현체가 포함되어 있습니다:
-- `aidlc` — 이 플러그인 (Orchestrator-Centric)
-- `devflow` — 분산형 구현체 (Enhanced Skills)
-
 ### 방법 2: 단독 설치
 
 이 플러그인만 직접 설치합니다:
