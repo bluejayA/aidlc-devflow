@@ -147,6 +147,8 @@ A) REST API — 우리 팀 표준, API Gateway 연동 가능
 | **리뷰 루프 최대 횟수** | `## 리뷰 규약` | 5회 | 빠른 iteration 필요 시 3회로 축소 |
 | **서브에이전트 모델 선택** | `## Subagent Dispatch Rules` | 역할별 분리 | 비용 절감 시 모든 역할에 동일 모델 |
 | **Brainstorming 필수 여부** | `## Brainstorming HARD-GATE` | 항상 필수 | 반복 작업에 한해 스킵 허용 |
+| **session-summary 조기 업데이트** | `session-continuity.md` | 핵심 결정 시점마다 | 단순 작업에서 비활성화 가능 |
+| **인터럽트 핸들러** | `interrupt-handler.md` | 모든 게이트에 적용 | 의도 분류 테이블 커스터마이징 가능 |
 
 ### 조정 방법
 
@@ -218,14 +220,22 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 ### 새 스킬 추가 시 참조 문서 맵
 
 ```
-1. skill-writing-guide.md      ← 구조 설계 원칙 + TDD 방법론 (자유도, 점진적 공개, 500줄, 압박 시나리오)
+1. skill-writing-guide.md        ← 구조 설계 원칙 + TDD 방법론 (자유도, 점진적 공개, 500줄, 압박 시나리오)
    ↓
-2. skill-pattern-catalog.md    ← 7개 패턴 중 적합한 것 선택
+2. skill-design-patterns.md      ← 구조 패턴 5종 (Tool Wrapper, Generator, Reviewer, Inversion, Pipeline)
    ↓
-3. writing-skills SKILL.md     ← TDD 프로세스 (RED → GREEN → REFACTOR)
+3. skill-pattern-catalog.md      ← 행동 패턴 7종 (Iron Law, Gate, Review Loop 등)
    ↓
-4. skill-reviewer-prompt.md    ← 배포 전 자동 검증
+4. persuasion-principles.md      ← 규율 강제 스킬 언어 설계 (Authority, Commitment, Social Proof)
+   ↓
+5. writing-skills SKILL.md       ← TDD 프로세스 (RED → GREEN → REFACTOR)
+   ↓
+6. skill-reviewer-prompt.md      ← 배포 전 자동 검증
+   ↓
+7. [선택] skill-creator 최적화   ← description 정량적 최적화 (writing-skills REFACTOR 게이트에서 선택)
 ```
+
+외부 공개 가이드: `docs/guide/skill-design-patterns/` — aidlc 내부 참조 없이 독립적으로 읽을 수 있는 버전
 
 ### 기존 스킬 수정 시 영향 범위 확인
 
