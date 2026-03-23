@@ -86,6 +86,8 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 - `_shared/reviewers/artifact-reviewer-prompt.md` — INCEPTION 산출물
 - `_shared/reviewers/code-plan-reviewer-prompt.md` — 코드 계획
 - `_shared/reviewers/code-reviewer-prompt.md` — 구현 코드 (Spec + Quality 통합)
+- `_shared/reviewers/security-reviewer-prompt.md` — 보안/엣지케이스 심층 분석 (Standard 이상)
+- `_shared/reviewers/maintainability-reviewer-prompt.md` — 유지보수성/기술부채 평가 (Comprehensive)
 
 ### Escalation 메시지 형식
 ```
@@ -181,7 +183,10 @@ STOP.
 
 - 독립적 태스크 2개 이상일 때만 서브에이전트 디스패치
 - 구현 서브에이전트 병렬 실행 금지 (충돌 방지)
-- Two-stage review 필수: `aidlc-requesting-code-review` 스킬이 spec compliance → code quality 순서로 실행 (순서 변경 금지)
+- 리뷰 Stage 3 (Security) + Stage 4 (Maintainability)는 병렬 dispatch 허용 (독립적 관점, 상호 의존 없음)
+- 코드 리뷰 단계: `aidlc-requesting-code-review` 스킬이 depth에 따라 실행
+  - **Standard**: 3-stage (spec compliance → code quality → security)
+  - **Comprehensive**: 4-stage (spec compliance → code quality → security + maintainability 병렬)
 - Model Selection: mechanical task → haiku, integration → sonnet, architecture/review → opus
 
 ## 서브에이전트 컨텍스트 격리
