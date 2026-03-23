@@ -86,6 +86,8 @@ LIST 모드에서는 컴포넌트 목록을 `devflow-docs/inception/application-
 | [Name] | [한 줄 책임] | [Type] |
 ```
 
+**session-summary 중간 기록**: LIST 완료 후 session-summary.md의 `## Completed Work`에 `[~] application-design — LIST 완료 ([N]개 컴포넌트)` 업데이트.
+
 → Return to Orchestrator (목록 반환)
 
 ### Step 4: DETAIL Mode — 상세 설계
@@ -151,6 +153,8 @@ DETAIL 모드에서만 실행.
 conventions Review Workflow 적용.
 - 산출물: devflow-docs/inception/application-design.md
 - 리뷰어: artifact-reviewer-prompt.md
+
+**session-summary 중간 기록**: DETAIL 모드에서 각 컴포넌트 상세 설계 완료 시 `[~] application-design — DETAIL [N]/[M] 컴포넌트 완료` 업데이트.
 
 ## Return to Orchestrator
 

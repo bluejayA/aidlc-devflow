@@ -66,6 +66,8 @@ After writing the plan, display it and STOP:
 
 The orchestrator will present the approval gate. Do NOT write any code yet.
 
+**session-summary 중간 기록**: Plan 작성 완료 후 session-summary.md의 `## Completed Work`에 `[~] code-generation — Plan 작성 완료, 승인 대기` 업데이트.
+
 ### PART 2 — Generation (오케스트레이터 승인 후)
 
 When invoked with explicit generation instruction such as:
@@ -79,6 +81,7 @@ orchestrator has signaled to proceed with generation.
    b. GREEN: 최소 구현 → 실행 → 해당 테스트 + 전체 테스트 통과 확인
    c. REFACTOR: 정리 → 전체 테스트 재실행
    d. 체크박스 [x] 표시 (하위 RED/Verify RED/GREEN/Verify GREEN/REFACTOR 포함)
+   e. **session-summary 중간 기록**: Step 완료마다 `[~] code-generation — Step [N]/[M] 완료` 업데이트
 3. Iron Law 위반 시: 해당 코드 삭제 후 RED부터 재시작
 4. 모든 Step 완료 후 Self-Review 체크리스트 수행 (`_shared/tdd-protocol.md` 참조)
 5. 자가 수정 후 Save plan progress to `devflow-docs/construction/[unit-name]/code-plan.md`
