@@ -11,7 +11,7 @@ metadata:
 
 # aidlc-requesting-code-review
 
-<!-- 코드 리뷰 요청의 Single Source of Truth. 2-stage review (spec compliance → code quality) 실행. -->
+<!-- 코드 리뷰 요청의 Single Source of Truth. Standard 3-stage / Comprehensive 4-stage review 실행. -->
 
 ## Trigger
 
@@ -24,7 +24,7 @@ metadata:
 
 ## Purpose
 
-2-stage code review를 실행하고 결과를 반환한다.
+depth에 따라 3-stage (Standard) 또는 4-stage (Comprehensive) code review를 실행하고 결과를 반환한다.
 이 스킬이 코드 리뷰 프로세스의 유일한 정의이다 — 다른 스킬은 리뷰 로직을 자체 구현하지 않고 이 스킬을 호출한다.
 
 ---
@@ -52,7 +52,7 @@ metadata:
 
 ```
 리뷰 모드:
-R1) 단일 리뷰 (기존 2-stage) ← 기본
+R1) 단일 리뷰 (3-stage Standard / 4-stage Comprehensive) ← 기본
 R2) Council 리뷰
 Ra) 자동 선택 (risk score 기반)
 ```
@@ -185,18 +185,19 @@ SDD에서 호출 시, SDD가 리뷰 대상(변경 파일)과 spec/plan 경로를
 
 ## Examples
 
-### Example 1: Standalone — PR 전 리뷰
+### Example 1: Standalone — PR 전 리뷰 (Standard)
 
 ```
 사용자: "이 변경사항 리뷰해줘"
 
 [depth: Standard, spec 미제공]
 → Stage 1 스킵 (spec 없음)
-→ Stage 2: code-quality-reviewer dispatch
+→ Stage 2: code-quality-reviewer dispatch → ✅ Approved
+→ Stage 3: security-reviewer dispatch → ✅ Secure
 → 결과: ✅ Ready to merge / Recommendations 2건
 ```
 
-### Example 2: SDD에서 자동 호출
+### Example 2: SDD에서 자동 호출 (Standard)
 
 ```
 SDD: 태스크 3 완료, requesting-code-review 호출
@@ -207,7 +208,21 @@ SDD: 태스크 3 완료, requesting-code-review 호출
 → Stage 1: spec-reviewer → ❌ Issues 1건 (누락된 에러 핸들링)
 → 수정 후 재리뷰 → ✅ Spec compliant
 → Stage 2: code-quality-reviewer → ✅ Approved
+→ Stage 3: security-reviewer → ✅ Secure
 → 결과: Ready to merge
+```
+
+### Example 3: Comprehensive 리뷰
+
+```
+[depth: Comprehensive, spec 제공]
+→ Stage 1: spec-reviewer → ✅ Spec compliant
+→ Stage 2: code-quality-reviewer → ✅ Approved
+→ Stage 3 + 4 병렬 dispatch:
+  → security-reviewer → ❌ Issues 1건 (SQL injection 위험)
+  → maintainability-reviewer → ✅ Maintainable
+→ 수정 후 Stage 3 재리뷰 → ✅ Secure
+→ 결과: Ready to merge / Recommendations 1건
 ```
 
 ---
