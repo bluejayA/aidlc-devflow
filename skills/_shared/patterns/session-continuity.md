@@ -55,12 +55,59 @@
 | 시점 | 트리거 |
 |------|--------|
 | INCEPTION 스테이지 완료 | Inception Orchestrator가 각 스테이지 게이트 승인 시 업데이트 (최초 생성 포함) |
+| **스테이지 내부 핵심 결정** | Stage Skill이 내부 핵심 결정 시점에 중간 기록 (조기 업데이트) |
 | Phase 전환 | INCEPTION → CONSTRUCTION 전환 시 Entry Orchestrator가 업데이트 |
 | Unit 완료 | Construction Orchestrator가 unit 구현 게이트 승인 시 업데이트 |
 | CONSTRUCTION 완료 | Entry Orchestrator가 최종 업데이트 |
 
 session-summary.md는 INCEPTION 첫 번째 스테이지 완료 시 생성됨.
 INCEPTION 중간에 세션이 끊겨도 재개 시 이 파일로 맥락 복원 가능.
+
+### 조기 업데이트 규약 (스테이지 내부 중간 기록)
+
+긴 스테이지 스킬이 내부 핵심 결정 시점에 session-summary.md를 업데이트한다.
+세션이 스테이지 도중에 끊겨도 맥락을 복원할 수 있도록 하기 위함.
+
+#### 스킬별 핵심 결정 시점
+
+| 스킬 | 중간 기록 시점 |
+|------|--------------|
+| `requirements-analysis` | 해석 분기 확정 후, 핵심 질문 답변 후 |
+| `application-design` | LIST 완료 후, DETAIL 주요 결정 후 |
+| `code-generation` | Plan 승인 후, TDD Step 완료마다 |
+
+#### 중간 기록 형식
+
+`## Completed Work` 섹션에 진행 중 스테이지를 `[~]` 마커로 표시한다:
+
+```markdown
+### INCEPTION
+- [x] workspace-detection — Brownfield
+- [~] requirements-analysis — 해석 확정(B안), 질문 2/5 완료
+```
+
+```markdown
+### CONSTRUCTION
+- [~] code-generation — Plan 승인, Step 3/8 완료
+```
+
+`## For Next Session` 섹션에 미결 맥락을 기록한다:
+
+```markdown
+## For Next Session
+- requirements-analysis: 질문 3~5 미답변. 질문 3은 "실시간 vs 배치" 선택
+- 주의: 해석 B안(REST API) 확정됨, 변경 불필요
+```
+
+#### 스킬 내 업데이트 지침 형식
+
+각 스킬에 아래 형태로 2~3줄만 추가한다:
+
+```markdown
+**session-summary 중간 기록**: [핵심 결정] 후 session-summary.md의
+`## Completed Work`에 `[~] [stage] — [진행 상황]` 업데이트 +
+`## For Next Session`에 미결 맥락 기록.
+```
 
 ### 파일 위치
 

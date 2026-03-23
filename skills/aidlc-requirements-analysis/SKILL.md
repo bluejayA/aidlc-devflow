@@ -95,6 +95,8 @@ C) [해석 3] — [한 줄 설명, 있는 경우]
 
 선택된 해석을 requirements.md의 `## User Intent`에 반영한다.
 
+**session-summary 중간 기록**: 해석 확정 후 session-summary.md의 `## Completed Work`에 `[~] requirements-analysis — 해석 확정([선택]안)` 업데이트 + `## For Next Session`에 미결 질문 목록 기록.
+
 #### Ambiguity Resolution Loop (Standard / Comprehensive)
 
 해석 선택 후, 다음 모호성 신호를 탐지한다:
@@ -132,6 +134,7 @@ A와 B 중에서 상충할 때 어느 쪽을 우선하시겠어요?
    - 처리 방식: "실시간 처리가 필요한가요, 배치로 충분한가요?"
    - 사용자 유형: "단일 사용자인가요, 다중 사용자인가요?"
    - 각 답변 후 Ambiguity Resolution Loop 발동 여부 판단.
+   - **session-summary 중간 기록**: 각 핵심 질문 답변 후 `[~] requirements-analysis — 질문 N/M 완료` 업데이트.
 
 #### Comprehensive
 1. Full intent analysis (Step 2에서 확정된 해석 기반)
