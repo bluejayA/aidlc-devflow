@@ -105,22 +105,27 @@ depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하�
 
 ### Step 2c: Council 리뷰 (R2/Ra 모드)
 
-R2 또는 Ra 선택 시 기존 2-stage 대신 council 리뷰를 실행한다.
+R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
 
-1. `_shared/patterns/council-cli-detection.md` 절차 실행:
+> **4-stage와 Council의 관계**: 4-stage는 "무엇을 볼 것인가"(관점 커버리지), Council은 "누가 볼 것인가"(다모델 편향 보완). 두 차원은 직교한다. Council이 바꾸는 것은 Stage 2-4의 실행 주체이지, 관점 자체를 대체하지 않는다.
+
+1. **Stage 1 (Spec Compliance)**: spec/plan 제공 시 Claude 서브에이전트로 실행 (R1과 동일)
+   - 요구사항 대조는 사실 확인이므로 외부 AI 불필요
+2. `_shared/patterns/council-cli-detection.md` 절차 실행:
    - CLI 감지 → 가용 AI 목록 표시 → 사용자에게 참여 AI 확인 (전부/일부/없이)
    - 사용자 선택으로 모드 확정 (council-full/council-lite/single)
    - Ra 선택 시: 확정된 모드 범위 내에서 Risk Scoring으로 single/council 자동 결정
-   - single 확정 시: Step 2(기존 2-stage)로 전환
-2. council-review-protocol의 **코드 리뷰용 프롬프트**로 에이전트 dispatch
-   - agent-council 플러그인을 통해 외부 AI 호출
+   - single 확정 시: Step 3(Stage 2)으로 전환하여 R1 흐름으로 진행
+3. **Stage 2-4를 council-review-protocol로 dispatch**:
+   - Codex 관점: Stage 2 (Quality) + Stage 4 (Maintainability, Comprehensive만)
+   - Gemini 관점: Stage 3 (Security/Edge-case)
+   - council-lite 시: 병합 프롬프트 사용 (1개 AI가 모든 관점 수행)
    - 리뷰 입력 번들 (파일 경로만 전달):
      - 리뷰 대상: git diff + 변경 파일 경로
      - 참조: 테스트 결과 요약, `requirements.md`
-   - council-lite 시: 병합 프롬프트 사용 (1개 AI가 두 관점 수행)
-3. 결과 저장: `devflow-docs/construction/{unit}/code-review-raw/{codex,gemini,synthesis}.md`
-4. Claude 의장이 개별 결과를 읽고 synthesis.md 작성 (충돌 해결 4단계 적용)
-5. **synthesis 결과를 사용자에게 표시 + 승인 대기**:
+4. 결과 저장: `devflow-docs/construction/{unit}/code-review-raw/{codex,gemini,synthesis}.md`
+5. Claude 의장이 개별 결과를 읽고 synthesis.md 작성 (충돌 해결 4단계 적용)
+6. **synthesis 결과를 사용자에게 표시 + 승인 대기**:
    ```
    [Council Code Review 결과]
    Gate Decision: [PASS|CONDITIONAL|FAIL]
@@ -130,7 +135,7 @@ R2 또는 Ra 선택 시 기존 2-stage 대신 council 리뷰를 실행한다.
    A) 리뷰 반영하여 수정
    B) 현재 상태로 승인
    ```
-6. 결과를 Step 4 형식으로 반환 (council 모드 표시 추가)
+7. 결과를 Step 4 형식으로 반환 (council 모드 표시 추가)
 
 ### Step 4: 결과 반환
 
