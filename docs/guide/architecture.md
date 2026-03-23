@@ -6,46 +6,44 @@ aidlc 플러그인의 내부 구조를 설명합니다. 스킬 개발자와 기�
 
 ## 3단 위임 체인
 
+```mermaid
+graph TD
+    Entry["Entry Orchestrator<br/>(aidlc-using-devflow)<br/>Phase 라우터: New/Resume + Phase 전환"]
+
+    Entry --> INC["INCEPTION Orchestrator<br/>스테이지 순서 + 게이트 관리"]
+    Entry --> CON["CONSTRUCTION Orchestrator<br/>Unit별 반복 + 게이트 관리"]
+
+    INC --> IS["Stage Skill<br/>실제 작업 수행"]
+    CON --> CS["Stage Skill<br/>실제 작업 수행"]
+
+    IS --> IR["Review Sub-agent<br/>산출물 검증"]
+    CS --> CR["Review Sub-agent<br/>산출물 검증"]
+
+    IS -.->|결과 반환| INC
+    CS -.->|결과 반환| CON
+
+    style Entry fill:#4a90d9,color:#fff
+    style INC fill:#7ab648,color:#fff
+    style CON fill:#7ab648,color:#fff
+    style IS fill:#f5a623,color:#fff
+    style CS fill:#f5a623,color:#fff
+    style IR fill:#9b59b6,color:#fff
+    style CR fill:#9b59b6,color:#fff
 ```
-+--------------------------------------------------+
-|  Entry Orchestrator (aidlc-using-devflow)         |
-|  Phase 라우터: New/Resume + Phase 전환             |
-+--------------------------------------------------+
-         |                              |
-         v                              v
-+--------------------+    +------------------------+
-| INCEPTION          |    | CONSTRUCTION           |
-| Orchestrator       |    | Orchestrator           |
-| 스테이지 순서 +    |    | Unit별 반복 +          |
-| 게이트 관리        |    | 게이트 관리            |
-+--------------------+    +------------------------+
-    |    ^                     |    ^
-    v    |                     v    |
-+-------------+           +-------------+
-| Stage Skill |           | Stage Skill |
-| 실제 작업   |           | 실제 작업   |
-+------+------+           +------+------+
-       |                         |
-       v                         v
-+----------------+        +----------------+
-| Review         |        | Review         |
-| Sub-agent      |        | Sub-agent      |
-+----------------+        +----------------+
 
---- 인터럽트 흐름 (어느 게이트에서든 발동) ---
+### 인터럽트 흐름 (어느 게이트에서든 발동)
 
-  사용자: "버그가 있어" (게이트 A/B가 아닌 자유 발화)
-       |
-       v
-  [ 인터럽트 감지 ]
-       |
-       v
-  현재 [stage] 단계입니다.
-  요청은 [target-skill]에 해당합니다.
-  A) 중단하고 진행  B) 현재 계속
-       |
-       A 선택 시: devflow-state에 중단 지점 기록
-       → target-skill 실행 → 완료 후 복귀 게이트
+```mermaid
+graph LR
+    User["사용자: 게이트 밖 발화<br/>(예: '버그가 있어')"] --> Detect["인터럽트 감지"]
+    Detect --> Confirm{"현재 [stage] 단계입니다.<br/>요청은 [target]에 해당합니다.<br/>A) 중단+진행 B) 계속"}
+    Confirm -->|A| Save["devflow-state에<br/>중단 지점 기록"]
+    Save --> Target["target-skill 실행"]
+    Target --> Return{"복귀 게이트<br/>A) 원래 지점 복귀<br/>B) 다른 작업"}
+    Confirm -->|B| Resume["원래 게이트 재표시"]
+
+    style Detect fill:#e74c3c,color:#fff
+    style Target fill:#f5a623,color:#fff
 ```
 
 각 계층은 자기 역할만 하고 빠진다:
@@ -60,34 +58,33 @@ aidlc 플러그인의 내부 구조를 설명합니다. 스킬 개발자와 기�
 
 ### INCEPTION 실행 흐름
 
-```
-  [START]
-     |
-     v
-  workspace-detection ──── 결과 표시
-     |
-     v
-  Complexity 선언 ──────── Minimal / Standard / Comprehensive
-     |
-     v
-  requirements-analysis ── 해석 분기 → 질문 → 산출물
-     |                     (session-summary 중간 기록)
-     v
-  Pre-Planning ─────────── Minimal: 자동 스킵
-     |                     Standard: A) 둘 다 / B) NFR만 / C) 스킵
-     |                     Comprehensive: 자동 포함
-     ├── user-stories (조건부)
-     └── nfr-requirements (조건부)
-     |
-     v
-  workflow-planning ────── 접근법 2~3개 제시 → 사용자 선택
-     |                     → 개발 환경 (worktree / 현재 브랜치)
-     v
-  application-design ───── 조건부 (workflow-plan에서 included일 때)
-     |                     LIST → [게이트] → DETAIL
-     |                     (session-summary 중간 기록)
-     v
-  [INCEPTION 완료 → CONSTRUCTION 전환]
+```mermaid
+graph TD
+    S["START"] --> WD["workspace-detection"]
+    WD --> CX{"Complexity 선언<br/>Minimal / Standard / Comprehensive"}
+    CX --> RA["requirements-analysis<br/>해석 분기 → 질문 → 산출물<br/>(session-summary 중간 기록)"]
+    RA --> PP{"Pre-Planning 분기"}
+
+    PP -->|Minimal| WP["workflow-planning"]
+    PP -->|Standard| PPG{"A) 둘 다<br/>B) NFR만<br/>C) 스킵"}
+    PP -->|Comprehensive| US["user-stories"]
+
+    PPG -->|A| US
+    PPG -->|B| NFR["nfr-requirements"]
+    PPG -->|C| WP
+
+    US --> NFR
+    NFR --> WP
+
+    WP --> AD{"application-design<br/>포함 여부"}
+    AD -->|included| ADL["application-design<br/>LIST → DETAIL<br/>(session-summary 중간 기록)"]
+    AD -->|skipped| DONE["INCEPTION 완료<br/>→ CONSTRUCTION 전환"]
+    ADL --> DONE
+
+    style S fill:#333,color:#fff
+    style DONE fill:#7ab648,color:#fff
+    style RA fill:#f5a623,color:#fff
+    style ADL fill:#f5a623,color:#fff
 ```
 
 | 스테이지 | 실행 조건 | 산출물 |
@@ -101,38 +98,31 @@ aidlc 플러그인의 내부 구조를 설명합니다. 스킬 개발자와 기�
 
 ### CONSTRUCTION 실행 흐름
 
-```
-  [INCEPTION 완료]
-     |
-     v
-  units-generation (조건부) ── Unit 목록 생성
-     |
-     v
-  ┌─────────── Unit별 반복 ───────────┐
-  |                                    |
-  |  functional-design (조건부)        |
-  |     |                              |
-  |     v                              |
-  |  code-generation                   |
-  |     ├── PART 1: Plan 작성          |
-  |     |   (session-summary 중간 기록) |
-  |     |   [게이트: 승인/변경]         |
-  |     └── PART 2: TDD 실행          |
-  |         Step 1 → Step 2 → ...      |
-  |         (session-summary 중간 기록) |
-  |         [게이트: 승인/변경/리뷰]    |
-  |                                    |
-  └────── 다음 Unit ──────────────────┘
-     |
-     v
-  build-and-test ──── 전체 빌드 + 테스트
-     |
-     v
-  [CONSTRUCTION 완료]
-     |
-     v
-  finishing-a-development-branch
-     A) 로컬 병합  B) PR 생성  C) 유지  D) 폐기
+```mermaid
+graph TD
+    INC["INCEPTION 완료"] --> UG{"units-generation<br/>포함 여부"}
+    UG -->|included| UGL["units-generation<br/>Unit 목록 생성"]
+    UG -->|skipped| CG
+
+    UGL --> LOOP
+
+    subgraph LOOP ["Unit별 반복"]
+        FD{"functional-design<br/>(Comprehensive만)"} --> CG["code-generation"]
+        CG --> P1["PART 1: Plan 작성<br/>(session-summary 중간 기록)<br/>게이트: 승인/변경"]
+        P1 --> P2["PART 2: TDD 실행<br/>Step 1 → Step 2 → ...<br/>(session-summary 중간 기록)<br/>게이트: 승인/변경/리뷰"]
+    end
+
+    P2 -->|다음 Unit| FD
+    P2 -->|전체 완료| BT["build-and-test<br/>전체 빌드 + 테스트"]
+
+    BT --> DONE["CONSTRUCTION 완료"]
+    DONE --> FB{"finishing-branch<br/>A) 로컬 병합<br/>B) PR 생성<br/>C) 유지<br/>D) 폐기"}
+
+    style INC fill:#7ab648,color:#fff
+    style DONE fill:#7ab648,color:#fff
+    style CG fill:#f5a623,color:#fff
+    style P1 fill:#f5a623,color:#fff
+    style P2 fill:#f5a623,color:#fff
 ```
 
 | 스테이지 | 실행 조건 | 산출물 |
@@ -147,23 +137,23 @@ aidlc 플러그인의 내부 구조를 설명합니다. 스킬 개발자와 기�
 
 오케스트레이터가 사용하는 게이트 유형 (`_shared/gate-patterns.md`):
 
-```
-게이트 유형 결정 트리:
+```mermaid
+graph TD
+    R["산출물 반환됨"] --> Q1{"반환값에<br/>패턴 매칭 필요?"}
+    Q1 -->|Yes| C1["조건부 게이트"]
+    Q1 -->|No| Q2{"리뷰 결과<br/>포함?"}
+    Q2 -->|Yes| C2["리뷰 연계 게이트"]
+    Q2 -->|No| Q3{"보류 가능?"}
+    Q3 -->|Yes| C3["표준 + Hold"]
+    Q3 -->|No| Q4{"모드 선택<br/>필요?"}
+    Q4 -->|Yes| C4["모드 선택 게이트"]
+    Q4 -->|No| C5["표준 게이트"]
 
-  산출물 반환됨
-     |
-     ├── 반환값에 패턴 매칭 필요? ──── Yes → 조건부 게이트
-     |
-     ├── 리뷰 결과 포함? ──────────── Yes → 리뷰 연계 게이트
-     |
-     ├── 보류(Hold) 가능? ─────────── Yes → 표준 + Hold
-     |
-     ├── 실행 모드 선택 필요? ──────── Yes → 모드 선택 게이트
-     |
-     └── 그 외 ────────────────────── 표준 게이트
+    INT["모든 게이트에 암묵적 적용"] -.-> Q5{"사용자 발화가<br/>선택지 밖?"}
+    Q5 -->|Yes| C6["인터럽트 게이트"]
 
-  (모든 게이트에 암묵적 적용)
-     └── 사용자 발화가 선택지 밖? ──── Yes → 인터럽트 게이트
+    style C6 fill:#e74c3c,color:#fff
+    style INT fill:#e74c3c,color:#fff
 ```
 
 | 패턴 | 선택지 | 사용처 |
@@ -194,18 +184,25 @@ aidlc 플러그인의 내부 구조를 설명합니다. 스킬 개발자와 기�
 
 ## 세션 연속성
 
-```
-  정상 흐름:
-  스테이지 시작 → [핵심 결정마다 session-summary 중간 기록] → 스테이지 완료 → 오케스트레이터 게이트 승인 → session-summary 업데이트
+```mermaid
+graph LR
+    subgraph 정상흐름 ["정상 흐름"]
+        A1["스테이지 시작"] --> A2["핵심 결정마다<br/>session-summary<br/>중간 기록 [~]"]
+        A2 --> A3["스테이지 완료"]
+        A3 --> A4["게이트 승인"]
+        A4 --> A5["session-summary<br/>업데이트 [x]"]
+    end
 
-  세션 끊김 시:
-  [session-summary에 [~] 마커로 진행 상황 기록됨]
-     |
-     v
-  다음 세션:
-  devflow-state.md 읽기 → session-summary.md 읽기
-     → [~] 마커로 중단 지점 파악
-     → 해당 스테이지부터 재개
+    subgraph 세션끊김 ["세션 끊김 → 재개"]
+        B1["session-summary에<br/>[~] 마커 기록됨"] --> B2["다음 세션"]
+        B2 --> B3["devflow-state +<br/>session-summary 읽기"]
+        B3 --> B4["[~] 마커로<br/>중단 지점 파악"]
+        B4 --> B5["해당 스테이지<br/>부터 재개"]
+    end
+
+    style A2 fill:#f5a623,color:#fff
+    style B1 fill:#e74c3c,color:#fff
+    style B5 fill:#7ab648,color:#fff
 ```
 
 ### session-summary 업데이트 타이밍
@@ -240,14 +237,16 @@ aidlc 플러그인의 내부 구조를 설명합니다. 스킬 개발자와 기�
 
 ### 리뷰 루프
 
-```
-  산출물 생성
-     |
-     v
-  리뷰어 dispatch ──→ Issues 있음? ──→ 수정 ──→ 재dispatch
-     |                                           (최대 5회)
-     ├── Recommendations만? ──→ 종료 (수정 권장)
-     └── 5회 초과? ──→ 사용자 escalate
+```mermaid
+graph LR
+    A["산출물 생성"] --> B["리뷰어 dispatch"]
+    B --> C{"Issues?"}
+    C -->|Yes| D["수정"]
+    D --> B
+    C -->|Recommendations만| E["종료<br/>(수정 권장)"]
+    C -->|5회 초과| F["사용자 escalate"]
+
+    style F fill:#e74c3c,color:#fff
 ```
 
 ### 리뷰어 프롬프트
@@ -326,17 +325,18 @@ writing-skills의 REFACTOR 단계 완료 후:
 
 ### 검증 파이프라인
 
-```
-  SKILL.md (메타 태그 포함)
-     |
-     v
-  [parse-skills.js] ──→ tests/graph/*.json (그래프 추출)
-     |
-     v
-  [pytest]
-     ├── L1: 구조 무결성 (dead-end, unreachable, circular)
-     ├── L2: 라우팅 시뮬레이션 (YAML fixtures + 인터럽트 시나리오)
-     └── L3: 스텝 순서 + 필수 스텝 검증
+```mermaid
+graph TD
+    SK["SKILL.md<br/>(메타 태그 포함)"] --> PA["parse-skills.js"]
+    PA --> GR["tests/graph/*.json<br/>(그래프 추출)"]
+    GR --> L1["L1: 구조 무결성<br/>dead-end, unreachable, circular"]
+    GR --> L2["L2: 라우팅 시뮬레이션<br/>YAML fixtures +<br/>인터럽트 시나리오"]
+    GR --> L3["L3: 스텝 순서 +<br/>필수 스텝 검증"]
+
+    style SK fill:#4a90d9,color:#fff
+    style L1 fill:#7ab648,color:#fff
+    style L2 fill:#7ab648,color:#fff
+    style L3 fill:#7ab648,color:#fff
 ```
 
 ### 현재 적용 범위
