@@ -303,7 +303,8 @@ writing-skills의 REFACTOR 단계 완료 후:
 | `persuasion-principles.md` | 규율 강제 언어 설계 |
 | `skill-pattern-catalog.md` | 행동 패턴 7종 |
 | `question-format-guide.md` | 질문 설계 원칙 |
-| `tech-stack-defaults.md` | 기술 카탈로그 |
+| `tech-stack-defaults.md` | 기술 스택 인덱스 (프리셋 + 정책) |
+| `tech-stack-catalog.md` | 기술 카탈로그 |
 | `meta-tag-standard.md` | 메타 태그 규격 + 유지보수 |
 
 ---

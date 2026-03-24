@@ -2,7 +2,7 @@
 name: aidlc-requirements-analysis
 description: Use when user requirements need to be analyzed, structured into a requirements document, or when open questions from a previous analysis need resolution.
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -117,6 +117,58 @@ A와 B 중에서 상충할 때 어느 쪽을 우선하시겠어요?
 - 반환 텍스트에 "가정으로 처리된 항목: [N]개 — [목록]" 포함
 - STOP (승인 대기 없음 — 오케스트레이터 gate에서 표시)
 
+### Step 2b: Tech Stack Selection (조건부)
+
+> Minimal depth에서도 실행한다. 기술 스택은 이후 모든 단계의 전제 조건이므로.
+
+#### 2b-1: 스킵 판단 (카탈로그 Read 없이)
+
+다음 3가지 소스를 순서대로 확인한다:
+
+| 우선순위 | 소스 | 확인 방법 |
+|---------|------|----------|
+| 1 | CLAUDE.md 사전 지정 | `workspace.md`의 `## Pre-specified Tech Stack` 섹션 존재 여부. 있으면 해당 항목은 확정 |
+| 2 | Brownfield 감지 | `workspace.md`의 `## Technology Stack` (Brownfield) 섹션. Language, Framework, DB 등이 감지되었으면 해당 항목은 확정 |
+| 3 | 사용자 프리셋 | `tech-stack-defaults.md`의 `## 사용자 프리셋` 섹션 확인 |
+
+**스킵 판단 결과:**
+- **전체 스킵**: 소스 1 또는 2에서 Language + Framework + DB + Testing이 모두 확정됨 → `[기술 스택: 사전 지정 — 질문 스킵]` 기록, Step 3으로
+- **부분 스킵**: 일부만 확정 → 미확정 계층만 2b-2로
+- **스킵 불가**: Greenfield + CLAUDE.md 미지정 → 모든 계층 2b-2로
+
+#### 2b-2: 카탈로그 선택 (필요할 때만 Read)
+
+미커버 계층에 대해 순서대로 처리:
+
+**1. 프리셋 확인**: `tech-stack-defaults.md`에 해당 계층의 프리셋이 있으면:
+```
+[계층] 기술 스택에 프리셋이 있습니다:
+→ [프리셋 기술 조합]
+
+이대로 사용하시겠습니까? (Y/n)
+```
+- Y → 프리셋 수용, 다음 계층으로 (카탈로그 Read 불필요)
+- n → 카탈로그에서 선택 (아래)
+
+**2. 카탈로그 선택**: `tech-stack-catalog.md`의 해당 계층 섹션을 Read
+- 선택지 2~5개 구성, 첫 번째 옵션에 `(권장)` 표시 (question-format-guide.md 원칙)
+- "직접 입력" 포함 여부는 `tech-stack-defaults.md`의 정책 모드에 따름:
+  - **open**: `X) 직접 입력` 포함
+  - **guided**: `X) 직접 입력 (사유 필수)` — 선택 시 사유 질문 → requirements.md에 기록
+  - **strict**: 직접 입력 미포함
+
+**결과 기록**: `requirements.md`의 `## Technology Stack` 섹션에:
+
+```markdown
+## Technology Stack
+
+| 계층 | 선택 | 소스 | 비고 |
+|------|------|------|------|
+| [계층명] | [기술명] | [CLAUDE.md | Brownfield 감지 | 프리셋 | 카탈로그 선택 | 직접 입력] | [비고] |
+```
+
+guided 모드에서 카탈로그 외 기술 선택 시 `## 기술 스택 결정` 섹션에 사유 테이블 추가.
+
 ### Step 3: Execute at chosen depth
 
 #### Minimal
@@ -187,6 +239,11 @@ Create `devflow-docs/inception/requirements.md`:
 ## Non-Functional Requirements
 [Performance, security, etc.]
 
+## Technology Stack
+| 계층 | 선택 | 소스 | 비고 |
+|------|------|------|------|
+[Step 2b 결과]
+
 ## Assumptions
 [List of assumptions made]
 
@@ -206,6 +263,7 @@ conventions 표준 형식. 반환 필드:
 - 분석 깊이: [Minimal | Standard | Comprehensive]
 - 해석 확정: [확정된 해석 한 줄 요약, 또는 "단일 해석 — 확인 불필요"]
 - 기능 요구사항: [count]개
+- 기술 스택: [사전 지정 (질문 스킵) | 프리셋 N개 + 선택 M개 | 전체 선택 N개]
 - 열린 질문: [count]개
 - 가정으로 처리된 항목: [0개 | N개 — 항목명 목록]
 - 산출물: devflow-docs/inception/requirements.md
@@ -221,3 +279,7 @@ conventions 표준 형식. 반환 필드:
 ### Step 2에서 해석이 3가지 이상으로 늘어날 때
 - 가장 가능성 높은 2-3가지로 압축
 - 나머지는 "기타: 다른 방향이라면 직접 설명해주세요"로 열어두기
+
+### Step 2b: tech-stack-defaults.md에 정책 모드가 없을 때
+- 기본값: **open** (직접 입력 자유 허용)
+- tech-stack-defaults.md 파일 자체가 없으면 Step 2b 전체를 스킵하고, 사용자에게 기술 스택을 자유 입력으로 질문

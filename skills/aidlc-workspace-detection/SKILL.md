@@ -2,7 +2,7 @@
 name: aidlc-workspace-detection
 description: Use when starting INCEPTION to detect whether the workspace is greenfield or brownfield and analyze existing code structure.
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -92,6 +92,26 @@ git 저장소가 아니면 이 항목을 스킵한다.
 
 없는 항목은 기록하지 않는다.
 
+### Step 2b: CLAUDE.md 기술 스택 감지
+
+> Greenfield/Brownfield 공통. Step 2a와 독립적으로 실행.
+
+CLAUDE.md 파일의 존재를 직접 확인하고, 기술 스택 섹션을 구조적으로 파싱한다.
+
+**감지 패턴:**
+- `##` 헤딩 중 "기술 스택" 또는 "Tech Stack"을 포함하는 것
+- 헤딩 하위에 `언어:`, `프레임워크:`, `DB:`, `테스트:`, `CI/CD:` 등 키-값 쌍
+
+**감지 결과:**
+- CLAUDE.md 없음 또는 기술 스택 섹션 없음 → 이 단계를 스킵 (이후 requirements-analysis에서 질문으로 수집)
+- 기술 스택 섹션 있음 → 각 항목을 파싱하여 리스트로 추출
+
+**이 단계에서 Coverage 판단은 하지 않는다.** 아키텍처 패턴이 아직 결정되지 않았으므로, 감지된 항목 목록만 기록한다. Coverage 판단은 requirements-analysis Step 2b-1에서 수행.
+
+**제약:**
+- CLAUDE.md 전체를 요약하는 것이 아닌, 기술 스택 섹션만 구조적으로 파싱
+- 파싱 실패 시 (비표준 형식) 스킵
+
 **4) Code Structure** — 디렉토리 트리 + 진입점:
 
 - 1단계 깊이 디렉토리 트리 (대규모 프로젝트 토큰 방지)
@@ -141,6 +161,12 @@ Create `devflow-docs/inception/workspace.md`:
 ## Key Files Found
 [list of significant files, if brownfield]
 
+<!-- CLAUDE.md에 기술 스택이 명시되어 있을 때만 포함. 없으면 이 섹션 생략. -->
+
+## Pre-specified Tech Stack
+- **Source**: CLAUDE.md
+- **Items**: [감지된 항목 목록 — 키: 값 형태로 나열]
+
 <!-- Brownfield일 때만 포함. Greenfield는 이 섹션 없이 저장. -->
 
 ## Technology Stack
@@ -183,6 +209,7 @@ conventions 표준 형식. 반환 필드:
 - 경로 확인 필요: [yes | no]
 - 발견된 주요 파일: [count]개
 - 코드베이스 분석: [포함 | 해당 없음]
+- 사전 지정 기술 스택: [감지됨 (N개 항목) | 미지정]
 - 산출물: devflow-docs/inception/workspace.md
 - 리뷰: 해당 없음 (detection 스테이지 — 사실 수집만 수행)
 

@@ -189,6 +189,6 @@ E) 직접 입력
 
 ## 카탈로그 연결
 
-- 기술 스택 관련 선택지 생성 시 → `tech-stack-defaults.md` 참조
+- 기술 스택 관련 선택지 생성 시 → `tech-stack-defaults.md` (인덱스 + 프리셋 + 정책) + `tech-stack-catalog.md` (카탈로그) 참조
 - 게이트 구조 설계 시 → `gate-patterns.md` 참조
 - 모드 선택(Together/Import/Skip) → `three-mode-selection.md` 참조

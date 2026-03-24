@@ -81,15 +81,37 @@
 - Complexity: Standard
 ```
 
-**동작 원리**: workspace-detection이 CLAUDE.md를 읽고, 기술 스택이 명시되어 있으면 tech-stack-defaults.md 카탈로그를 참조하지 않고 바로 수용합니다. 이 경우 정책 모드(open/guided/strict)가 적용되는 상황 자체가 발생하지 않습니다.
+**동작 원리**: workspace-detection이 CLAUDE.md를 읽고, 기술 스택이 명시되어 있으면 `workspace.md`의 `## Pre-specified Tech Stack`에 기록합니다. 이후 requirements-analysis의 Step 2b에서 이 정보를 확인하고 해당 계층의 질문을 스킵합니다. 정책 모드(open/guided/strict)가 적용되는 상황 자체가 발생하지 않습니다.
+
+### 1-4. 사용자 프리셋
+
+**파일**: `skills/_shared/patterns/tech-stack-defaults.md` → `## 사용자 프리셋` 섹션
+
+자주 사용하는 기술 조합을 프리셋으로 등록하면, 해당 계층의 기술 선택이 "이대로 사용? (Y/n)" 한 줄로 빠르게 통과합니다.
+
+**기본 제공 프리셋**:
+- `Frontend Default`: Next.js + Tailwind CSS v4 + shadcn/ui
+
+**프리셋 추가 방법**: `tech-stack-defaults.md`의 프리셋 테이블에 행 추가
+
+**프리셋 vs CLAUDE.md 차이**:
+
+| 항목 | CLAUDE.md 고정 | 프리셋 |
+|------|---------------|-------|
+| 적용 범위 | 프로젝트 단위 | 플러그인 전체 (모든 프로젝트) |
+| 사용자 확인 | 질문 자체를 스킵 | "이대로 사용?" 확인 1회 |
+| 거부 가능 | 불가 (항상 적용) | 가능 (n → 카탈로그 선택) |
+| 적합한 상황 | 프로젝트별 고정 필요 | 개인 선호 기본값 |
+
+> **권장**: CLAUDE.md 고정과 프리셋은 보완적입니다. CLAUDE.md가 있으면 프리셋보다 우선합니다. CLAUDE.md가 없는 Greenfield 프로젝트에서 프리셋이 시간을 절약합니다.
 
 ### 권장 조합
 
-| 시나리오 | 정책 모드 | 카탈로그 | CLAUDE.md |
-|---------|----------|---------|-----------|
-| 스타트업 (자유) | open | 기본 유지 | 선택 |
-| 중견 기업 (표준 있음, 예외 허용) | **guided** | 표준으로 축소 + 순서 조정 | 템플릿 배포 권장 |
-| 대기업 (엄격한 표준) | strict | 허용 목록만 남김 | 템플릿 필수 배포 |
+| 시나리오 | 정책 모드 | 카탈로그 | CLAUDE.md | 프리셋 |
+|---------|----------|---------|-----------|-------|
+| 스타트업 (자유) | open | 기본 유지 | 선택 | 개인 취향 등록 |
+| 중견 기업 (표준 있음, 예외 허용) | **guided** | 표준으로 축소 + 순서 조정 | 템플릿 배포 권장 | 팀 표준 등록 |
+| 대기업 (엄격한 표준) | strict | 허용 목록만 남김 | 템플릿 필수 배포 | 불필요 (CLAUDE.md 우선) |
 
 ---
 
@@ -200,15 +222,20 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 프로젝트 시작
   → aidlc-using-devflow 호출
     → workspace-detection이 CLAUDE.md 읽음
-      → 기술 스택이 명시되어 있으면 tech-stack 질문 스킵 (정책 모드 불문)
-      → 미명시 항목만 질문 (이때 정책 모드 적용)
+      → 기술 스택이 명시되어 있으면 workspace.md에 Pre-specified Tech Stack 기록
+    → requirements-analysis Step 2b
+      → 사전 지정된 계층은 질문 스킵 (정책 모드 불문)
+      → 미명시 계층: 프리셋 있으면 "이대로 사용? (Y/n)" → 거부 시에만 카탈로그 선택
+      → 프리셋도 없으면 카탈로그에서 선택 (정책 모드 적용)
     → 설계 원칙이 명시되어 있으면 conventions 기본값 대신 적용
 ```
 
 ### 프로파일 없이 시작하면?
 
 - workspace-detection이 Greenfield/Brownfield를 판별하고
-- tech-stack-defaults.md 카탈로그에서 선택지를 생성하여 질문 (정책 모드에 따라 "직접 입력" 동작 결정)
+- requirements-analysis의 Step 2b에서:
+  - 프리셋이 있는 계층은 "이대로 사용? (Y/n)"으로 빠르게 통과
+  - 프리셋이 없는 계층은 tech-stack-catalog.md에서 선택지 생성 (정책 모드 적용)
 - conventions.md의 기본값이 적용
 
 프로파일은 **선택사항**입니다. 없어도 워크플로우는 정상 동작합니다.

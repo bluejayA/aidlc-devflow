@@ -118,7 +118,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_shared/patterns/persuasion-principles.md` | 규율 강제 스킬의 설득 원칙 — 합리화 방지 테이블 작성법 |
 | `_shared/patterns/skill-pattern-catalog.md` | 7개 스킬 패턴 분류 + 선택 가이드 |
 | `_shared/patterns/question-format-guide.md` | 질문 설계 원칙 — 선택지 설계, 수준 적응, 모순 감지 |
-| `_shared/patterns/tech-stack-defaults.md` | 아키텍처별 기술 카탈로그 — 선택지 생성 데이터 |
+| `_shared/patterns/tech-stack-defaults.md` | 기술 스택 인덱스 — 프리셋, 정책 모드, 적용 규칙 |
+| `_shared/patterns/tech-stack-catalog.md` | 계층별 기술 카탈로그 — 선택지 생성 데이터 |
 | `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 8종 (artifact, code-plan, code-reviewer, implementer, spec, quality, skill, spec-document, plan-document) |
 
 #### YAML 메타데이터 규약

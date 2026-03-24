@@ -118,7 +118,8 @@ After each stage completes, the orchestrator presents an approval gate. Stage sk
 | `_shared/patterns/persuasion-principles.md` | Persuasion principles for discipline-enforcing skills — rationalization prevention table methodology |
 | `_shared/patterns/skill-pattern-catalog.md` | 7 skill pattern classifications + selection guide |
 | `_shared/patterns/question-format-guide.md` | Question design principles — option design, level adaptation, contradiction detection |
-| `_shared/patterns/tech-stack-defaults.md` | Architecture-specific tech catalog — option generation data |
+| `_shared/patterns/tech-stack-defaults.md` | Tech stack index — presets, policy modes, application rules |
+| `_shared/patterns/tech-stack-catalog.md` | Layer-specific tech catalog — option generation data |
 | `_shared/reviewers/` | 8 review subagent prompts (artifact, code-plan, code-reviewer, implementer, spec, quality, skill, spec-document, plan-document) |
 
 #### YAML Metadata Convention
