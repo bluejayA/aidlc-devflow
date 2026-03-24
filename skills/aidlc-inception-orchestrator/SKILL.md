@@ -70,7 +70,8 @@ devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호�
 ### 1. workspace-detection 게이트 [조건부 게이트]
 <!-- @gate: workspace-detection -->
 <!-- @gate-option: A -> workspace-detection {재호출} -->
-<!-- @gate-option: B -> complexity-declaration -->
+<!-- @gate-option: B -> reverse-engineering {brownfield-only, plugin-required} -->
+<!-- @gate-option: C -> complexity-declaration -->
 
 스킬 반환값에서 Greenfield/Brownfield 확인.
 
@@ -82,11 +83,18 @@ B) 확인, 다음 단계 진행 → Complexity Declaration Gate
 ```
 
 **Brownfield 경로:**
+
+reverse-engineering 스킬이 사용 가능한지 확인한다. 사용 가능하면 B 옵션을 포함, 불가능하면 A/B(=C) 2-option으로 표시한다.
+
 ```
 [workspace-detection 결과 표시]
 A) 분석 범위 수정 → workspace-detection 재호출
-B) 확인, 다음 단계 진행 → Complexity Declaration Gate
+B) 코드베이스 심층 분석 (reverse-engineering) → reverse-engineering 호출 → 완료 후 Complexity Declaration Gate
+   [reverse-engineering 플러그인 설치 시에만 표시]
+C) 확인, 다음 단계 진행 → Complexity Declaration Gate
 ```
+
+B 선택 시: reverse-engineering 스킬을 호출한다. 완료 후 산출물(`reverse-engineering/`)이 생성되며, 이후 requirements-analysis 호출 시 참조 컨텍스트로 전달한다: `"참조: reverse-engineering/README.md"`
 
 ### 2. Complexity Declaration Gate
 <!-- @gate: complexity-declaration -->
