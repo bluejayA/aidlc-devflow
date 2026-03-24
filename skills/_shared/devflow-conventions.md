@@ -85,7 +85,9 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 - `_shared/reviewers/plan-document-reviewer-prompt.md` — 구현 계획 (writing-plans)
 - `_shared/reviewers/artifact-reviewer-prompt.md` — INCEPTION 산출물
 - `_shared/reviewers/code-plan-reviewer-prompt.md` — 코드 계획
-- `_shared/reviewers/code-reviewer-prompt.md` — 구현 코드 (Spec + Quality 통합)
+- `_shared/reviewers/code-reviewer-prompt.md` — 구현 코드 Spec + Quality 통합 (construction-orchestrator 간편 리뷰용)
+- `_shared/reviewers/spec-reviewer-prompt.md` — Spec compliance 단독 검증 (requesting-code-review Stage 1)
+- `_shared/reviewers/code-quality-reviewer-prompt.md` — 코드 품질 단독 검증 (requesting-code-review Stage 2)
 - `_shared/reviewers/security-reviewer-prompt.md` — 보안/엣지케이스 심층 분석 (Standard 이상)
 - `_shared/reviewers/maintainability-reviewer-prompt.md` — 유지보수성/기술부채 평가 (Comprehensive)
 
@@ -222,26 +224,28 @@ STOP.
 
 Council 모드에서도 4-stage 관점은 그대로 적용된다. Council이 바꾸는 것은 Stage 2-4의 실행 주체이다. Stage 1(Spec Compliance)은 요구사항 대조(사실 확인)이므로 항상 Claude 서브에이전트가 수행한다.
 
-| Stage | single (R1) | council (R2) |
-|-------|-------------|--------------|
-| Stage 1 (Spec) | Claude 서브에이전트 | Claude 서브에이전트 |
-| Stage 2 (Quality) | Claude 서브에이전트 | Codex + Claude 의장 |
-| Stage 3 (Security) | Claude 서브에이전트 | Gemini + Claude 의장 |
-| Stage 4 (Maintainability) | Claude 서브에이전트 | Codex + Claude 의장 |
+| Stage | single (R1) | council (R2) | teams (R3) |
+|-------|-------------|--------------|------------|
+| Stage 1 (Spec) | Claude 서브에이전트 | Claude 서브에이전트 | Claude 서브에이전트 |
+| Stage 2 (Quality) | Claude 서브에이전트 | Codex + Claude 의장 | Agent Teams 병렬 리뷰 |
+| Stage 3 (Security) | Claude 서브에이전트 | Gemini + Claude 의장 | Agent Teams 병렬 리뷰 |
+| Stage 4 (Maintainability) | Claude 서브에이전트 | Codex + Claude 의장 | Agent Teams 병렬 리뷰 |
 
-### 리뷰 모드 3종
+### 리뷰 모드 4종
 
 | 모드 | 참여 에이전트 | 사용 시점 |
 |------|------------|----------|
 | **single** | Claude 서브에이전트 | 기존 단일 리뷰 (R1) |
 | **council-lite** | Claude 의장 + 외부 AI 1개 | 외부 AI가 1개만 설치된 경우 (R2) |
 | **council-full** | Claude 의장 + Codex + Gemini | 외부 AI가 모두 설치된 경우 (R2) |
+| **teams** | Agent Teams (리뷰어 간 소통) | 리뷰어 협업이 필요한 경우 (R3) |
 
 ### R 서브옵션 규약
 
 게이트에서 `R) 리뷰 요청` 선택 시 서브옵션을 제시한다:
 - `R1)` 단일 리뷰 — 기존 동작 유지 (artifact-reviewer 또는 code-quality-reviewer)
 - `R2)` Council 리뷰 — CLI 환경에 따라 council-lite 또는 council-full
+- `R3)` Agent Teams 협업 리뷰 — 리뷰어 간 소통 기반 (`_shared/patterns/review-team-protocol.md`)
 - `Ra)` 자동 선택 — risk score 기반 모드 결정 (기본값)
 
 CLI 감지 → 가용 모드 판별: `_shared/patterns/council-cli-detection.md` 참조
