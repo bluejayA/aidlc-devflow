@@ -147,9 +147,10 @@ class TestNoDeadEnds:
     def test_no_dead_ends(self, load_graph, name):
         graph = load_graph(name)
         node_ids = collect_node_ids(graph)
+        ext_refs = set(graph.get("externalRefs", []))
         dead_ends = [
             t for t in collect_targets(graph)
-            if t not in node_ids and not is_external_ref(t) and not skill_exists(t)
+            if t not in node_ids and t not in ext_refs and not is_external_ref(t) and not skill_exists(t)
         ]
         assert dead_ends == [], f"Dead-end targets in {name}: {dead_ends}"
 
@@ -181,9 +182,10 @@ class TestNoUnknownRefs:
     def test_no_unknown_refs(self, load_graph, name):
         graph = load_graph(name)
         node_ids = collect_node_ids(graph)
+        ext_refs = set(graph.get("externalRefs", []))
         unknown = [
             t for t in collect_targets(graph)
-            if t not in node_ids and not is_external_ref(t) and not skill_exists(t)
+            if t not in node_ids and t not in ext_refs and not is_external_ref(t) and not skill_exists(t)
         ]
         assert unknown == [], f"Unknown external refs in {name}: {unknown}"
 

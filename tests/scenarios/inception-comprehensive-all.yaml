@@ -3,7 +3,7 @@ orchestrator: aidlc-inception-orchestrator
 inputs:
   complexity: Comprehensive
   choices:
-    workspace-detection: B
+    workspace-detection: C
     complexity-declaration: B
     requirements-analysis: B
     user-stories: B
