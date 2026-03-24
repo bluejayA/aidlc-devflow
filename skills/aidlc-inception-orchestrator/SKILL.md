@@ -75,6 +75,9 @@ devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호�
 
 스킬 반환값에서 Greenfield/Brownfield 확인.
 
+**reverse-engineering 가용성 검사:**
+시스템 프롬프트의 사용 가능한 스킬 목록에서 `reverse-engineering:reverse-engineering`이 존재하는지 확인한다.
+
 **Greenfield 경로:**
 ```
 [workspace-detection 결과 표시]
