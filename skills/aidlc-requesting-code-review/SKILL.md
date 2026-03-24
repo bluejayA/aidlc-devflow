@@ -109,7 +109,6 @@ depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하�
 ### Step 2c: Council 리뷰 (R2/Ra 모드)
 
 R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
-
 > **4-stage와 Council의 관계**: 4-stage는 "무엇을 볼 것인가"(관점 커버리지), Council은 "누가 볼 것인가"(다모델 편향 보완). 두 차원은 직교한다. Council이 바꾸는 것은 Stage 2-4의 실행 주체이지, 관점 자체를 대체하지 않는다.
 
 1. **Stage 1 (Spec Compliance)**: spec/plan 제공 시 Claude 서브에이전트로 실행 (R1과 동일)
