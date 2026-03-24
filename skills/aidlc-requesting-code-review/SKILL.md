@@ -41,12 +41,12 @@ depth에 따라 3-stage (Standard) 또는 4-stage (Comprehensive) code review를
 
 ## 프로세스
 
-### Step 1: Depth 확인
+### 0. Depth 확인
 
 - **Minimal**: 리뷰 스킵. "리뷰 스킵 (Minimal depth)" 반환
-- **Standard/Comprehensive**: 아래 Step 1.5로 진행
+- **Standard/Comprehensive**: 리뷰 모드 선택으로 진행
 
-### Step 1.5: 리뷰 모드 선택 (Standard 이상)
+### 0.1. 리뷰 모드 선택 (Standard 이상)
 
 리뷰 모드를 선택한다. 호출 시 모드가 지정되면 해당 모드를 사용하고, 미지정이면 기본값(R1).
 
@@ -58,13 +58,17 @@ R3) Agent Teams 협업 리뷰 (리뷰어 간 소통 기반)
 Ra) 자동 선택 (risk score 기반)
 ```
 
-**R1 선택**: Step 2 → Step 3 → Step 4 (기존 동작 그대로)
+**R1 선택**: Stage 1 → Stage 2 → Stage 3 → Stage 4 (기존 동작 그대로)
 
-**R2/Ra 선택**: Step 2c (Council 리뷰)로 진행
+**R2/Ra 선택**: Council 리뷰로 진행
 
-**R3 선택**: Step 2t (Agent Teams 리뷰)로 진행
+**R3 선택**: Agent Teams 리뷰로 진행
 
-### Step 2: Stage 1 — Spec Compliance (R1 모드)
+---
+
+### R1 흐름: 단일 리뷰
+
+#### Stage 1 — Spec Compliance
 
 spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바로 진행.
 
@@ -75,38 +79,40 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
    - ❌ Issues Found → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
    - Recommendations만 → Stage 2로 (수정 권장)
 
-### Step 3: Stage 2 — Code Quality
+#### Stage 2 — Code Quality
 
 1. `_shared/reviewers/code-quality-reviewer-prompt.md` 읽기
 2. 서브에이전트 dispatch — 리뷰 대상 전달
 3. 결과 확인:
-   - ✅ Approved → Step 3.5로
+   - ✅ Approved → Stage 3으로
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
-   - Recommendations만 → 루프 종료, Step 3.5로 (수정 권장)
+   - Recommendations만 → 루프 종료, Stage 3으로 (수정 권장)
 
-### Step 3.5: Stage 3 — Security/Edge-case (Standard 이상)
+#### Stage 3 — Security/Edge-case (Standard 이상)
 
 depth가 **Standard 이상**이면 실행. Minimal은 스킵.
 
 1. `_shared/reviewers/security-reviewer-prompt.md` 서브에이전트 dispatch
 2. 결과 확인:
-   - ✅ 통과 → Step 3.6 또는 Step 4로
+   - ✅ 통과 → Stage 4 또는 결과 반환으로
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
    - Recommendations만 → 루프 종료 (수정 권장)
 
-### Step 3.6: Stage 4 — Maintainability (Comprehensive만)
+#### Stage 4 — Maintainability (Comprehensive만)
 
-depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하고 Step 4로 진행.
+depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하고 결과 반환으로 진행.
 
 1. `_shared/reviewers/maintainability-reviewer-prompt.md` 서브에이전트 dispatch
 2. 결과 확인:
-   - ✅ 통과 → Step 4로
+   - ✅ 통과 → 결과 반환으로
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
    - Recommendations만 → 루프 종료 (수정 권장)
 
 > **Comprehensive에서의 병렬화**: Stage 3과 4가 모두 실행되는 Comprehensive에서는 두 리뷰어를 **병렬 dispatch** 가능 (독립적 관점, 상호 의존 없음).
 
-### Step 2c: Council 리뷰 (R2/Ra 모드)
+---
+
+### R2/Ra 흐름: Council 리뷰
 
 R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
 > **4-stage와 Council의 관계**: 4-stage는 "무엇을 볼 것인가"(관점 커버리지), Council은 "누가 볼 것인가"(다모델 편향 보완). 두 차원은 직교한다. Council이 바꾸는 것은 Stage 2-4의 실행 주체이지, 관점 자체를 대체하지 않는다.
@@ -117,7 +123,7 @@ R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
    - CLI 감지 → 가용 AI 목록 표시 → 사용자에게 참여 AI 확인 (전부/일부/없이)
    - 사용자 선택으로 모드 확정 (council-full/council-lite/single)
    - Ra 선택 시: 확정된 모드 범위 내에서 Risk Scoring으로 single/council 자동 결정
-   - single 확정 시: Step 3(Stage 2)으로 전환하여 R1 흐름으로 진행
+   - single 확정 시: R1 흐름의 Stage 2로 전환하여 이후 Stage 3 → Stage 4 순서대로 진행
 3. **Stage 2-4를 council-review-protocol로 dispatch**:
    - Codex 관점: Stage 2 (Quality) + Stage 4 (Maintainability, Comprehensive만)
    - Gemini 관점: Stage 3 (Security/Edge-case)
@@ -137,9 +143,11 @@ R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
    A) 리뷰 반영하여 수정
    B) 현재 상태로 승인
    ```
-7. 결과를 Step 4 형식으로 반환 (council 모드 표시 추가)
+7. 결과를 결과 반환 형식으로 반환 (council 모드 표시 추가)
 
-### Step 2t: Agent Teams 리뷰 (R3 모드)
+---
+
+### R3 흐름: Agent Teams 리뷰
 
 R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 협업 리뷰를 수행한다.
 
@@ -154,7 +162,7 @@ R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 
      - Standard: quality-reviewer + security-reviewer (+ spec-reviewer if spec 제공)
      - Comprehensive: + maintainability-reviewer
    - 리뷰어들이 병렬로 리뷰 수행 + SendMessage로 발견 사항 공유
-   - 팀 리드가 모든 결과 수신 후 종합 (Step 4 형식으로 변환)
+   - 팀 리드가 모든 결과 수신 후 종합 (결과 반환 형식으로 변환)
    - TeamDelete로 팀 정리
    - **이슈 수정 루프**: Needs fixes 판정 시 수정 후 팀 재생성하여 re-review (최대 5회, 초과 시 사용자 escalate — R1과 동일 제한)
 4. **종합 결과를 사용자에게 표시 + 승인 대기**:
@@ -167,14 +175,16 @@ R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 
    A) 리뷰 반영하여 수정
    B) 현재 상태로 승인
    ```
-5. 결과를 Step 4 형식으로 반환 (teams 모드 표시 추가)
+5. 결과를 결과 반환 형식으로 반환 (teams 모드 표시 추가)
 
 **에러 핸들링**:
 - TeamCreate 실패 → "Agent Teams를 사용할 수 없습니다. R1으로 전환합니다." 안내 후 R1 흐름으로 자동 전환
 - Agent spawn 실패 (일부 리뷰어) → 성공한 리뷰어 결과만 종합 + 실패한 관점은 "⏭ 스킵 (spawn 실패)" 표시
 - 전체 Agent spawn 실패 → R1 fallback
 
-### Step 4: 결과 반환
+---
+
+### 결과 반환
 
 ```
 ## Code Review 결과
