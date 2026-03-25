@@ -32,9 +32,9 @@
 
 ### 1-2. 카탈로그 커스터마이즈
 
-**파일**: `skills/_shared/patterns/tech-stack-defaults.md` → 기술 카탈로그 섹션
+**파일**: `skills/_shared/patterns/tech-stack-catalog.md`
 
-정책 모드와 별도로, 카탈로그 자체를 조직 표준에 맞게 조정합니다.
+정책 모드와 별도로, 카탈로그 자체를 조직 표준에 맞게 조정합니다. 카탈로그는 토큰 최적화를 위해 인덱스(`tech-stack-defaults.md`)와 분리되어 있으며, 기술 스택 질문이 필요할 때만 Read됩니다.
 
 | 항목 | 방법 | 예시 |
 |------|------|------|

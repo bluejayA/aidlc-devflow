@@ -223,6 +223,30 @@ claude plugins install https://github.com/bluejayA/devflow-marketplace.git
 claude plugins install https://github.com/bluejayA/aidlc-devflow.git
 ```
 
+### 권장 Hook: main 브랜치 직접 push 방지
+
+devflow는 feature 브랜치에서 작업 후 PR을 통해 머지하는 것을 전제합니다. Claude가 실수로 main/master에 직접 push하는 것을 방지하려면 글로벌 설정(`~/.claude/settings.json`)에 다음 hook을 추가하세요:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command // empty' | grep -qE 'git\\s+push\\s+.*\\b(main|master)\\b' && echo '{\"decision\":\"block\",\"reason\":\"BLOCK: main/master 브랜치에 직접 push 금지. feature 브랜치를 사용하세요.\"}' && exit 2 || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+> 기존 hooks가 있다면 `PreToolUse` 배열에 merge하세요. 교체하면 기존 hook이 사라집니다.
+
 ### 설치 확인
 
 설치 후 새 세션을 시작하면 안내 메시지가 자동 표시됩니다:
