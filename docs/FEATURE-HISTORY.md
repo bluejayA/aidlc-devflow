@@ -94,6 +94,13 @@ devflow 파이프라인에 GitHub Flow를 옵트인으로 연동했다. INCEPTIO
 
 ---
 
+## 2026-03-25 — 기술 스택 워크플로우 연동 + 사용자 프리셋
+
+### #77 tech-stack-defaults 워크플로우 연동 + 카탈로그 분리
+`tech-stack-defaults.md`가 존재하지만 어떤 스킬에서도 참조하지 않아 실제 devflow에서 사용되지 않는 갭이 있었다. 인덱스(`tech-stack-defaults.md`, 120줄)와 카탈로그(`tech-stack-catalog.md`, 147줄)로 분리하여 토큰 최적화하고, workspace-detection에 CLAUDE.md 기술 스택 감지(Step 2b), requirements-analysis에 조건부 기술 스택 선택(Step 2b)을 추가하여 워크플로우를 실제로 연결했다. 사용자 프리셋 기능도 도입하여 자주 사용하는 기술 조합(예: Frontend Default — Next.js + Tailwind CSS v4 + shadcn/ui)을 등록하면 "이대로 사용? (Y/n)" 한 줄로 통과할 수 있다.
+
+---
+
 ## 2026-03-23 — 리뷰 체계 고도화 + 오케스트레이터 유연성
 
 ### #56 skill-creator 통합 — 정량적 최적화 게이트

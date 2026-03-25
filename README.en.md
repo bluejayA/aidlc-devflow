@@ -227,6 +227,30 @@ Install this plugin directly:
 claude plugins install https://github.com/bluejayA/aidlc-devflow.git
 ```
 
+### Recommended Hook: Prevent Direct Push to Main
+
+devflow assumes work happens on feature branches with PR-based merging. To prevent Claude from accidentally pushing directly to main/master, add this hook to your global settings (`~/.claude/settings.json`):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command // empty' | grep -qE 'git\\s+push\\s+.*\\b(main|master)\\b' && echo '{\"decision\":\"block\",\"reason\":\"BLOCK: Direct push to main/master is prohibited. Use a feature branch.\"}' && exit 2 || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+> If you already have hooks, merge this into the existing `PreToolUse` array. Replacing will remove existing hooks.
+
 ### Verify Installation
 
 After installation, start a new session and the welcome message appears automatically:
