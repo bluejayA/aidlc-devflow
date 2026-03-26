@@ -2,7 +2,7 @@
 name: aidlc-requirements-analysis
 description: Use when user requirements need to be analyzed, structured into a requirements document, or when open questions from a previous analysis need resolution.
 metadata:
-  version: 0.5.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -37,6 +37,29 @@ Step 1, 2, 3, 4는 실행하지 않는다.
 
 ### QUESTIONS 모드 반환값
 미해결 질문이 남아있으면 `열린 질문: [N]개` 패턴을 포함하여 반환. 모두 해결되면 `열린 질문: 0개`.
+
+### UPDATE 모드
+호출 텍스트에 `UPDATE` 키워드 포함 시 활성화:
+`"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [변경 내용] 반영"`
+
+UPDATE 모드에서는:
+1. `devflow-docs/inception/requirements.md` 읽기 (기존 분석)
+2. 변경 요청과 기존 요구사항을 대조하여 **연관성 판단**:
+   - **연관 요구사항 있음** (동일 기능/영역) → 해당 항목을 기반으로 수정/확장 (우선순위 변경, 기준 보강 등). Edit 도구로 해당 섹션만 교체
+   - **연관 요구사항 없음** (새로운 기능) → 신규 항목으로 기존 목록에 추가. Edit 도구로 삽입
+   - **요구사항 삭제** → 해당 항목 삭제 + 연쇄 영향 확인 (Assumptions, Open Questions에서 관련 항목 제거/갱신)
+3. 변경이 다른 섹션에 영향을 주는지 확인:
+   - Assumptions: 변경으로 무효화된 가정이 있으면 제거 또는 갱신
+   - Open Questions: 변경에서 새 질문이 발생하면 추가
+   - Technology Stack, Non-Functional Requirements: 영향이 있으면 갱신
+4. `## Change Log` 섹션에 변경 내역 기록: `- [ISO 8601] UPDATE: [변경 요약]`
+5. `requirements.md` 업데이트 후 STOP
+
+**도구 선택**: 부분 업데이트에는 반드시 Edit 도구를 사용한다. Write 도구로 전체 덮어쓰기 금지.
+
+Step 1, 2, 3, 4, 5는 실행하지 않는다.
+
+**UPDATE 범위 제한**: User Intent 자체를 변경하는 요청은 UPDATE 대상이 아니다. "방향을 바꾸고 싶다"는 요청에는 "전체 재분석이 필요합니다"라고 안내하고 일반 모드로 재호출을 유도한다.
 
 ## Execute
 

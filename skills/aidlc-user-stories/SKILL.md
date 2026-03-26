@@ -2,7 +2,7 @@
 name: aidlc-user-stories
 description: Use when requirements need to be converted into INVEST-compliant user stories with acceptance criteria.
 metadata:
-  version: 0.6.0
+  version: 0.7.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -23,6 +23,24 @@ metadata:
 ### IMPORT 모드
 User-stories는 IMPORT 미지원. requirements-analysis 결과를 기반으로 생성하는 것이 핵심 가치.
 IMPORT 신호 수신 시: "User-stories는 IMPORT 미지원입니다. GENERATE 모드로 실행합니다." 메시지 후 GENERATE 진행.
+
+### UPDATE 모드
+호출 텍스트에 `UPDATE` 키워드 포함 시 활성화:
+`"aidlc-user-stories: UPDATE — 기존 스토리 유지, [변경 내용] 반영"`
+
+UPDATE 모드에서는:
+1. `devflow-docs/inception/user-stories.md` 읽기 (기존 스토리)
+2. `devflow-docs/inception/requirements.md` 읽기 (변경된 요구사항)
+3. 변경 요청과 기존 스토리를 대조하여 **연관성 판단**:
+   - **연관 스토리 있음** (동일 액터/기능 범위) → 해당 스토리를 기반으로 수정/확장 (수용 기준 보강, 우선순위 변경 등). Edit 도구로 해당 섹션만 교체
+   - **연관 스토리 없음** (새로운 액터/기능) → 신규 스토리로 기존 목록에 추가 (번호는 기존 마지막 번호 이후부터). Edit 도구로 삽입
+   - **요구사항 삭제로 스토리가 불필요** → 해당 스토리 삭제 (번호 재부여 안 함)
+4. `## Change Log` 섹션에 변경 내역 기록: `- [ISO 8601] UPDATE: [변경 요약]`
+5. `user-stories.md` 업데이트 후 STOP
+
+**도구 선택**: 부분 업데이트에는 반드시 Edit 도구를 사용한다. Write 도구로 전체 덮어쓰기 금지.
+
+Step 1, 2, 3, 4는 실행하지 않는다.
 
 ## Execute
 
@@ -76,6 +94,11 @@ Create `devflow-docs/inception/user-stories.md`:
 - Given [context], When [action], Then [result]
 **Priority**: [Must | Should | Could]
 ```
+
+### Step 4 참고: 기존 파일이 존재할 때
+
+인라인 신호 없이 재호출되었는데 `user-stories.md`가 이미 존재하면 **UPDATE로 간주**한다.
+기존 내용 보존이 기본값이다.
 
 ## Review
 

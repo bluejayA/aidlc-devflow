@@ -122,7 +122,7 @@ Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Com
 <!-- @gate: requirements-analysis -->
 <!-- @gate-option: A -> requirements-analysis {questions} -->
 <!-- @gate-option: B -> pre-planning -->
-<!-- @gate-option: C -> requirements-analysis {변경요청} -->
+<!-- @gate-option: C -> requirements-analysis {UPDATE} -->
 
 패턴: `열린 질문: [N]개`
 
@@ -133,25 +133,30 @@ Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Com
 [requirements-analysis 결과 표시]
 A) 미해결 질문 처리 → aidlc-requirements-analysis: QUESTIONS 재호출
 B) 현재 가정으로 유지하고 다음 단계로 진행
-C) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis 재호출
+C) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis UPDATE 재호출
 ```
 
 A) 선택 시: `"aidlc-requirements-analysis: QUESTIONS — 기존 분석 유지, 미해결 질문만 처리"` 인라인 신호로 재호출 → 반환 → `열린 질문: [N]개` 패턴 재확인
+C) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
 
 **N == 0이고 가정 있음:**
 ```
 [requirements-analysis 결과 표시]
 가정으로 처리된 항목이 있습니다: [목록]
-A) 가정 수정 → requirements-analysis 재호출
+A) 가정 수정 → requirements-analysis UPDATE 재호출
 B) 가정 승인, 다음 단계 진행
 ```
+
+A) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
 
 **N == 0이고 가정 없음:**
 ```
 [requirements-analysis 결과 표시]
-A) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis 재호출
+A) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis UPDATE 재호출
 B) 승인, 다음 단계 진행
 ```
+
+A) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
 
 ### 4. Pre-Planning 분기 [자동분기 + 조건부 게이트]
 <!-- @gate: pre-planning -->
@@ -185,7 +190,7 @@ C → workflow-planning으로 직행
 
 ### 5. User-Stories 게이트 [표준 게이트 + Hold]
 <!-- @gate: user-stories -->
-<!-- @gate-option: A -> user-stories {재호출} -->
+<!-- @gate-option: A -> user-stories {UPDATE} -->
 <!-- @gate-option: B -> nfr-requirements -->
 <!-- @gate-option: H -> nfr-requirements {held} -->
 
@@ -194,10 +199,12 @@ aidlc-user-stories 호출 → 결과 게이트:
 
 ```
 [user-stories 결과 표시]
-A) 변경 요청 (예: 스토리 분할, 수용 기준 수정, 액터 변경 등) → user-stories 재호출
+A) 변경 요청 (예: 스토리 분할, 수용 기준 수정, 액터 변경 등) → user-stories UPDATE 재호출
 B) 승인, 다음 단계 진행 → NFR-Requirements 게이트
 H) 보류 (나중에 돌아옴) → HELD 상태 저장, NFR-Requirements 게이트로 진행
 ```
+
+A) 선택 시: `"aidlc-user-stories: UPDATE — 기존 스토리 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
 
 ### 6. NFR-Requirements 게이트 [모드 선택 게이트 + 표준 게이트 + Hold]
 <!-- @gate: nfr-requirements-mode -->
