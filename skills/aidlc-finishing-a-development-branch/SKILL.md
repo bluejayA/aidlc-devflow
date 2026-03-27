@@ -119,7 +119,7 @@ git worktree prune
 
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
-2. `devflow-docs/devflow-state.md`를 `devflow-docs/devflow-state-archived-[timestamp].md`로 이름 변경
+2. state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
 3. devflow-audit에 로깅: `"Flow finished — option A (local merge)"`
 
 ---
@@ -241,7 +241,7 @@ git branch -D [branch-name]
 
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
-2. `devflow-docs/devflow-state.md`를 `devflow-docs/devflow-state-archived-[timestamp].md`로 이름 변경
+2. state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
 3. devflow-audit에 로깅: `"Flow finished — option D (discarded)"`
 
 ---
@@ -250,10 +250,10 @@ git branch -D [branch-name]
 
 | 옵션 | 워크트리 처리 | devflow 처리 |
 |------|------------|------------|
-| A (로컬 병합) | 워크트리 제거 (`git worktree remove`) | `finished` + 아카이브 |
+| A (로컬 병합) | 워크트리 제거 (`git worktree remove`) | `finished` + `.archive/`로 이동 |
 | B (PR 생성) | 워크트리 유지 (PR 머지 후 처리) | state 유지 (PR 머지 후 종료) |
 | C (브랜치 유지) | 워크트리 유지 | state 유지 |
-| D (폐기) | 워크트리 강제 제거 (`--force`) | `finished` + 아카이브 |
+| D (폐기) | 워크트리 강제 제거 (`--force`) | `finished` + `.archive/`로 이동 |
 
 ---
 

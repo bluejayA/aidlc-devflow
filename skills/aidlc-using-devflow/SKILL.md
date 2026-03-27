@@ -42,8 +42,34 @@ metadata:
    🔵 INCEPTION  → 무엇을 만들지 결정
    🟢 CONSTRUCTION → 어떻게 만들지 결정
    ```
-2. `devflow-docs/` 디렉토리 생성 (하위 `inception/`, `construction/` 포함)
-3. `devflow-docs/devflow-state.md` 초기화:
+2. **기존 산출물 확인 게이트**: `devflow-docs/inception/` 디렉토리에 산출물(`.md` 파일)이 존재하는지 확인한다.
+
+   **산출물이 없으면** → Step 3으로 진행 (정상 새 시작)
+
+   **산출물이 있으면** → 기존 산출물 처리 게이트 제시:
+   ```
+   ## 기존 INCEPTION 산출물 발견
+
+   이전 작업의 설계 산출물이 남아있습니다:
+   - [파일 목록 표시: requirements.md, application-design.md 등]
+
+   A) 기존 설계 기반으로 보완 (UPDATE 모드)
+      → 이전 요구사항/설계를 유지하고 새 기능을 추가합니다
+   B) 처음부터 새로 시작 (기존 산출물 아카이브)
+      → 기존 inception/, construction/ 을 .archive/로 이동 후 새로 시작합니다
+   ```
+
+   A 선택 시:
+   - devflow-audit에 로깅: `"New flow — UPDATE mode (preserving existing artifacts)"`
+   - 이후 inception-orchestrator에서 호출하는 각 스테이지 스킬이 기존 파일을 감지하면 UPDATE 모드로 동작
+
+   B 선택 시:
+   - `devflow-docs/inception/`을 `devflow-docs/.archive/inception-[timestamp]/`로 이동
+   - `devflow-docs/construction/`을 `devflow-docs/.archive/construction-[timestamp]/`로 이동 (있으면)
+   - devflow-audit에 로깅: `"New flow — clean start (artifacts archived)"`
+
+3. `devflow-docs/` 디렉토리 생성 (하위 `inception/`, `construction/` 포함 — 이미 있으면 유지)
+4. `devflow-docs/devflow-state.md` 초기화:
    ```markdown
    # DevFlow State
 
@@ -59,8 +85,8 @@ metadata:
    ## Selected Approach
    (pending)
    ```
-4. devflow-audit에 로깅: "New aidlc session started" + 사용자 원래 요청
-5. `aidlc-inception-orchestrator` 호출
+5. devflow-audit에 로깅: "New aidlc session started" + 사용자 원래 요청
+6. `aidlc-inception-orchestrator` 호출
 
 ### Resume Flow
 
@@ -80,7 +106,9 @@ metadata:
 → 새 작업을 시작합니다.
 ```
 
-state를 `devflow-state-archived-[timestamp].md`로 이름 변경 후 New Flow 진행.
+state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동 후 New Flow 진행.
+- `devflow-docs/.archive/devflow-state-[timestamp].md`
+- `devflow-docs/.archive/session-summary-[timestamp].md` (있으면)
 
 #### Phase가 `complete`이고 `## Finishing Choice`가 `B (PR pending)`인 경우
 
@@ -100,13 +128,13 @@ C) PR 확인 후 결정
 A 선택 시:
 - `gh pr view [PR URL] --json state`로 머지 확인 (가능한 경우)
 - devflow-state의 `## Current Phase`를 `finished`로 업데이트
-- state를 `devflow-state-archived-[timestamp].md`로 이름 변경
+- state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
 - 워크트리 존재 시 제거 (`git worktree remove` + `git worktree prune`)
 - devflow-audit에 로깅: `"Flow finished — PR merged"`
 - 새 작업 시작 여부 안내
 
 B 선택 시:
-- state를 `devflow-state-archived-[timestamp].md`로 이름 변경
+- state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
 - New Flow 진행
 
 C 선택 시:
@@ -145,8 +173,7 @@ A 선택 시:
   - `CONSTRUCTION` → `aidlc-construction-orchestrator` 호출
 
 B 선택 시:
-- 기존 state를 `devflow-state-archived-[timestamp].md`로 이름 변경
-- 기존 session-summary를 `session-summary-archived-[timestamp].md`로 이름 변경 (있으면)
+- 기존 state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
 - New Flow 진행
 
 ## Phase 전환
@@ -215,9 +242,31 @@ CONSTRUCTION 도중 사용자가 아래 상황을 보고하면 해당 스킬로 
 
 ### devflow-state.md 손상
 상태 파일 파싱 불가 시:
-1. `devflow-state-backup-[timestamp].md`로 백업
+1. `devflow-docs/.archive/devflow-state-backup-[timestamp].md`로 백업
 2. 새 세션 시작 (기존 산출물은 그대로 활용)
 
 ### Stage skill 호출 실패
 스킬이 예상치 못한 결과를 반환하면:
 A) 해당 단계 재시도 / B) 단계 스킵 (devflow-state에 skipped 기록)
+
+## Archive Convention
+
+모든 아카이브 파일은 `devflow-docs/.archive/`에 저장한다. 디렉토리가 없으면 첫 아카이브 시 생성한다.
+
+### 아카이브 대상 및 경로
+
+| 대상 | 아카이브 경로 |
+|------|-------------|
+| devflow-state.md | `.archive/devflow-state-[timestamp].md` |
+| session-summary.md | `.archive/session-summary-[timestamp].md` |
+| devflow-state.md (손상 백업) | `.archive/devflow-state-backup-[timestamp].md` |
+| inception/ (B: 새로 시작) | `.archive/inception-[timestamp]/` |
+| construction/ (B: 새로 시작) | `.archive/construction-[timestamp]/` |
+
+### 아카이브 일관성 규칙
+
+**state와 session-summary는 항상 함께 아카이브한다.** 어떤 경로로 아카이브가 발생하든 두 파일 모두 이동한다 (session-summary가 없으면 state만).
+
+### 아카이브 파일은 읽지 않는다
+
+아카이브된 파일은 이력 보존 목적이다. 어떤 스킬도 `.archive/` 내부 파일을 참조하지 않는다. 필요 시 사용자가 수동으로 확인한다.
