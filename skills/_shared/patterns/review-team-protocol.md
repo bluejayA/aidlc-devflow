@@ -47,13 +47,18 @@ Agent:
   name: "{reviewer-name}"
   prompt: |
     당신은 {reviewer-role}입니다.
+    프로젝트 루트: {project-root}
     리뷰 대상: {review-target}
     참조 컨텍스트: {context-files}
+
+    중요: 모든 파일 경로는 프로젝트 루트 기준이다. 파일을 읽을 때 반드시 프로젝트 루트를 prefix로 사용하라.
 
     {agents/{reviewer-name}.md}의 검토 기준에 따라 리뷰를 수행하세요.
     완료 후 팀 리드에게 결과를 SendMessage로 보고하세요.
     다른 리뷰어의 발견 사항과 관련된 내용이 있으면 해당 리뷰어에게 DM하세요.
 ```
+
+**`{project-root}` 결정 방법**: `devflow-state.md`의 `## Worktree` → `path` 값이 있으면 해당 워크트리의 절대 경로, 없으면 현재 CWD.
 
 모든 리뷰어를 **동시에 spawn** (병렬 실행).
 

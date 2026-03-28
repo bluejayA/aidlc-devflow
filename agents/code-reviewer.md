@@ -1,3 +1,10 @@
+---
+tools:
+  - Read
+  - Glob
+  - Grep
+---
+
 # Code Reviewer Agent
 
 ## 역할

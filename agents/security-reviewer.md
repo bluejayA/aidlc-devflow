@@ -1,3 +1,11 @@
+---
+tools:
+  - Read
+  - Glob
+  - Grep
+  - SendMessage
+---
+
 # Security & Edge-case Reviewer Agent
 
 ## 역할

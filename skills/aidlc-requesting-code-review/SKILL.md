@@ -68,12 +68,24 @@ Ra) 자동 선택 (risk score 기반)
 
 ### R1 흐름: 단일 리뷰
 
+#### Step 0 — 프로젝트 루트 결정
+
+`devflow-docs/devflow-state.md`의 `## Worktree` → `path` 값을 확인한다.
+- **값이 있으면**: 해당 워크트리의 절대 경로를 `{project-root}`로 사용
+- **값이 없거나 `none`이면**: 현재 CWD를 `{project-root}`로 사용
+
+이후 모든 Stage의 서브에이전트 dispatch 시 `{project-root}`를 프롬프트에 포함한다:
+```
+프로젝트 루트: {project-root}
+중요: 모든 파일 경로는 프로젝트 루트 기준이다. 파일을 읽을 때 반드시 프로젝트 루트를 prefix로 사용하라.
+```
+
 #### Stage 1 — Spec Compliance
 
 spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바로 진행.
 
 1. `_shared/reviewers/spec-reviewer-prompt.md` 읽기
-2. 서브에이전트 dispatch — 리뷰 대상 + spec/plan 경로 전달
+2. 서브에이전트 dispatch — `{project-root}` + 리뷰 대상 + spec/plan 경로 전달
 3. 결과 확인:
    - ✅ Spec compliant → Stage 2로
    - ❌ Issues Found → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
@@ -82,7 +94,7 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
 #### Stage 2 — Code Quality
 
 1. `_shared/reviewers/code-quality-reviewer-prompt.md` 읽기
-2. 서브에이전트 dispatch — 리뷰 대상 전달
+2. 서브에이전트 dispatch — `{project-root}` + 리뷰 대상 전달
 3. 결과 확인:
    - ✅ Approved → Stage 3으로
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
@@ -92,7 +104,7 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
 
 depth가 **Standard 이상**이면 실행. Minimal은 스킵.
 
-1. `_shared/reviewers/security-reviewer-prompt.md` 서브에이전트 dispatch
+1. `_shared/reviewers/security-reviewer-prompt.md` 서브에이전트 dispatch (`{project-root}` 포함)
 2. 결과 확인:
    - ✅ 통과 → Stage 4 또는 결과 반환으로
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
@@ -102,7 +114,7 @@ depth가 **Standard 이상**이면 실행. Minimal은 스킵.
 
 depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하고 결과 반환으로 진행.
 
-1. `_shared/reviewers/maintainability-reviewer-prompt.md` 서브에이전트 dispatch
+1. `_shared/reviewers/maintainability-reviewer-prompt.md` 서브에이전트 dispatch (`{project-root}` 포함)
 2. 결과 확인:
    - ✅ 통과 → 결과 반환으로
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
