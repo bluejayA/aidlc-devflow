@@ -1,3 +1,11 @@
+---
+tools:
+  - Read
+  - Glob
+  - Grep
+  - SendMessage
+---
+
 # Code Quality Reviewer Agent
 
 ## 역할

@@ -1,3 +1,11 @@
+---
+tools:
+  - Read
+  - Glob
+  - Grep
+  - SendMessage
+---
+
 # Maintainability & Future Risk Reviewer Agent
 
 ## 역할

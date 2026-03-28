@@ -1,3 +1,11 @@
+---
+tools:
+  - Read
+  - Glob
+  - Grep
+  - SendMessage
+---
+
 # Spec Compliance Reviewer Agent
 
 ## 역할
