@@ -41,31 +41,22 @@
 - 복사-붙여넣기 코드 — 추상화 기회가 명확한 중복
 - 버전 고정 없는 의존성
 
+## Rubric
+
+Score each item using the Maintainability Reviewer rubric from the schema:
+
+| Item | How to Assess |
+|------|--------------|
+| Coupling Assessment | Evaluate component dependencies and change propagation |
+| Change Impact Scope | Count files affected by future changes to this code |
+| Tech Debt Indicators | Count TODO/FIXME, deprecated APIs, copy-paste code |
+
 ## Issue Classification
 
 - **Critical**: 반드시 수정 (순환 의존, 변경 시 광범위한 파급, 폐기 예정 API 의존)
 - **Important**: 수정 권장 (높은 결합도, 테스트-구현 과결합, 가독성 저해)
 - **Minor**: 선택적 (추상화 기회, 네이밍 개선, 문서화 제안)
 
-## Report Format
+## Output Format
 
-```
-## Maintainability & Future Risk Review
-
-**Scope**: [변경 파일 목록]
-
-### Change Impact Summary
-[이 변경의 유지보수 영향 요약 — 결합도, 변경 전파 범위]
-
-### Issues
-**Critical:** [있으면 — file:line, 리스크, 영향 범위, 수정 방안]
-**Important:** [있으면]
-**Minor:** [있으면]
-
-### Tech Debt Indicators
-- [발견된 기술 부채 징후 목록]
-
-### Assessment
-**Status:** Maintainable | Issues Found
-**Reasoning:** [기술적 판단]
-```
+Read `_shared/patterns/review-feedback-schema.md` and follow the output template exactly. Use the Maintainability Reviewer rubric in the Score table. Include Change Impact analysis in the Context section. Report Verdict as PASS, CONDITIONAL, or FAIL per the schema criteria.

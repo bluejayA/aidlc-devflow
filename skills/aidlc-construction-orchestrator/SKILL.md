@@ -105,6 +105,32 @@ B) 승인, 코드 생성 진행
 
 승인 후: devflow-state에 unit 목록 기록
 
+### 1.5. SDD 모드 게이트 (Multi-unit만)
+<!-- @gate: sdd-mode -->
+<!-- @gate-option: A -> subagent-driven-development {SDD} -->
+<!-- @gate-option: B -> code-generation {인라인} -->
+
+units-generation 승인 후, unit 수를 확인하여 SDD 모드 게이트를 제시한다.
+
+**unit 1개**: 게이트 없이 인라인 모드 자동 적용 → 섹션 2로 진행.
+
+**unit 2개 이상**: SDD 모드 게이트 제시:
+```
+unit이 [N]개입니다. 컨텍스트 격리를 위해 SDD 모드를 권장합니다.
+
+A) SDD 모드 (기본) — unit별 서브에이전트로 컨텍스트 리셋
+   → aidlc-subagent-driven-development에 위임
+B) 인라인 모드 — 현재 컨텍스트에서 순차 실행
+```
+
+**A (SDD 모드) 선택 시:**
+1. Comprehensive에서 functional-design이 포함된 경우, SDD 호출 **전에** orchestrator가 unit별로 functional-design을 실행한다
+2. `aidlc-subagent-driven-development` 호출 (인라인 신호: `"SDD: units=[devflow-docs/inception/units.md], summary=[devflow-docs/session-summary.md], complexity=[level]"`)
+3. SDD 모드에서는 개별 unit 게이트(code-plan 게이트, 구현 게이트)가 **비활성화** — SDD 스킬의 태스크 완료 + R1 리뷰가 품질 게이트 역할
+4. SDD 완료 후 → build-and-test(섹션 3)로 바로 진행
+
+**B (인라인 모드) 선택 시:** 기존 섹션 2 루프 그대로 실행.
+
 ### 2. code-generation (Multi-unit 핸들링)
 
 `devflow-docs/inception/units.md`에서 구현 순서를 읽는다.
