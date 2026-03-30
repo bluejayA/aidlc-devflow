@@ -1,0 +1,18 @@
+# Note: auto-fix loop is transparent preprocessing inside orchestrator,
+# not modeled by L2 routing engine. This scenario verifies the gate path
+# after successful auto-fix (same as normal success path).
+name: "Construction — Auto-fix success after test failure"
+orchestrator: aidlc-construction-orchestrator
+inputs:
+  complexity: Standard
+  choices:
+    units-generation: B
+    code-plan: B
+    code-generation-result: B
+    build-and-test-result: A
+expect:
+  stage_path:
+    - context-load
+    - revalidation
+    - stage-decision
+  final_stage: stage-decision

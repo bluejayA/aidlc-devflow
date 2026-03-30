@@ -28,6 +28,7 @@ Execute build and full test suite after all units are implemented, then generate
 2. **소스 파일** — `.py`, `.go`, `.ts`, `.js`, `.rs`, `.java`
 3. **Code plans** — `devflow-docs/construction/*/code-plan.md`에서 생성된 파일 목록
 4. **units.md** — `devflow-docs/inception/units.md` (있으면) — unit 간 통합 포인트
+5. **Verification Contract** — `devflow-docs/construction/{unit}/code-plan.md`의 `## Verification Contract` 섹션을 확인한다. 섹션이 있으면 검증 명령을 Step 3에서 우선 사용한다. 섹션이 없으면 기존 동작(프로젝트 타입 자동 감지)을 유지한다. auto-fix 후 재실행 시에도 Verification Contract의 검증 명령 전체를 다시 실행한다.
 
 ### Step 2: 빌드 실행
 
@@ -97,6 +98,7 @@ Run: `[정확한 명령어]`
 conventions 표준 형식. 반환 필드:
 - 빌드: ✅ 성공 | ❌ 실패 ([에러 요약])
 - 테스트: ✅ [N]개 통과, 0 실패 | ❌ [N]개 통과, [M]개 실패
+- Verification Contract: [완료 조건 pass/fail 체크리스트] (계약이 있는 경우에만 포함)
 - 산출물: build-instructions.md, test-instructions.md
 
 ## Error Handling

@@ -173,6 +173,13 @@ for (const filePath of skillFiles) {
     graph.conditions.length > 0
   ) {
     const outputPath = join(outputDir, `${graph.name}.json`);
+    // Preserve externalRefs from existing JSON if present
+    try {
+      const existing = JSON.parse(readFileSync(outputPath, "utf-8"));
+      if (existing.externalRefs) {
+        graph.externalRefs = existing.externalRefs;
+      }
+    } catch (_) { /* file doesn't exist yet, skip */ }
     writeFileSync(outputPath, JSON.stringify(graph, null, 2) + "\n");
     parsedCount++;
   }

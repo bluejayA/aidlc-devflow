@@ -183,23 +183,53 @@ Council 리뷰 결과는 사용자 승인 후 게이트를 재표시한다.
 
 `aidlc-build-and-test` 호출
 
+#### 3a. Auto-fix 전처리 (Self-Healing Loop)
+
+build-and-test 결과를 받은 후, 완료 게이트를 표시하기 **전에** 자동 수정을 시도한다.
+
+**즉시 게이트로 전달 (auto-fix 스킵):**
+- 빌드 실패 (컴파일 에러, 설정 문제, 의존성 누락)
+- 환경 문제 (missing binary, permission denied)
+- 리스크 태그에 `auth/security` 표시된 unit의 오류
+- 에러 메시지에 `auth`, `permission`, `forbidden`, `unauthorized` 키워드 포함 시 (리스크 태그 누락 방어)
+
+**auto-fix 대상 (코드 수정으로 해결 가능한 객관적 오류):**
+- 테스트 실패 (assertion error, runtime error in tests)
+- 린트 에러 (formatting, unused imports, type errors)
+
+**auto-fix 루프 (최대 3회):**
+1. 실패한 테스트명 + 에러 메시지 추출
+2. `code-generation: GENERATE — auto-fix for [unit-name]: [실패 테스트명], [에러 메시지 요약]` 재호출
+3. `aidlc-build-and-test` 재실행
+4. 종료 조건 확인:
+   - 성공 → 완료 게이트 (성공 분기)로 전달. `"(auto-fix [N]회 적용됨)"` 안내 추가
+   - plateau (연속 2회 동일 테스트명 집합 실패, 또는 실패 수가 감소하지 않음) → 완료 게이트 (실패 분기)로 전달
+   - 3회 도달 → 완료 게이트 (실패 분기)로 전달
+5. 각 시도를 devflow-audit에 기록: `[timestamp] auto-fix attempt [N]/3: [에러 요약] → [수정 내용]`
+6. auto-fix 루프 내에서 code-generation 호출이 실패하면 즉시 루프 중단 후 완료 게이트(실패 분기)로 전달
+7. 루프 완료 시 session-summary에 `auto-fix [N]회 적용` 형태로 요약 기록
+
+auto-fix 실패 시 완료 게이트에 실패 보고서(시도한 수정 목록, 각 시도 결과) 추가 표시.
+
 #### 완료 게이트 [조건부 게이트]
 <!-- @gate: build-and-test-result -->
 <!-- @gate-option: A -> CONSTRUCTION-complete -->
 <!-- @gate-option: B -> code-generation-plan {추가수정} -->
 
-build-and-test 결과에 따라 분기:
+build-and-test 결과 (auto-fix 전처리 후)에 따라 분기:
 
 **빌드 성공 + 테스트 전체 통과 시:**
 ```
 [build-and-test 결과 표시]
+(auto-fix [N]회 적용됨 — 해당 시에만 표시)
 A) CONSTRUCTION 완료 승인
 B) 추가 변경 요청 (예: 테스트 보완, 성능 개선 등) → code-generation 재호출
 ```
 
-**테스트 실패 시:**
+**테스트 실패 시 (auto-fix 소진 포함):**
 ```
 [build-and-test 결과 표시 — 실패 테스트 목록 포함]
+[auto-fix 실패 보고서 — 해당 시에만 표시]
 A) systematic-debugging으로 조사
 B) 실패를 무시하고 완료 (devflow-state에 "테스트 실패 [N]건 미해결" 기록)
 ```
@@ -213,7 +243,7 @@ A) systematic-debugging으로 조사
 
 ### Debugging 라우팅
 
-build-and-test에서 테스트/빌드 실패 시 사용자가 debugging을 선택하면:
+build-and-test에서 테스트/빌드 실패 시 (auto-fix 소진 후) 사용자가 debugging을 선택하면:
 
 1. `aidlc-systematic-debugging` 호출
 2. debugging 완료 시 Return 수신:

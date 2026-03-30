@@ -53,6 +53,20 @@ Create a code generation plan with checkboxes:
 - [ ] [test name]: [what it verifies]
 
 > 각 테스트는 Implementation Steps의 RED 단계에서 작성된다. 별도 테스트 단계가 아님.
+
+## Verification Contract
+
+### 완료 조건
+- [ ] [구체적 기능 요건 1]
+- [ ] [구체적 기능 요건 2]
+
+### 검증 명령
+- `[test command]` — [what it verifies]
+- `[lint command]` — [what it checks]
+
+### 리스크 태그
+- [ ] auth/security — [해당 시 표시]
+- [ ] DB schema change — [해당 시 표시]
 ```
 
 After writing the plan, display it and STOP:
@@ -72,6 +86,11 @@ The orchestrator will present the approval gate. Do NOT write any code yet.
 
 When invoked with explicit generation instruction such as:
 `"code-generation: GENERATE — proceed with the approved plan for [unit-name]"`
+
+Or when invoked with auto-fix error context:
+`"code-generation: GENERATE — auto-fix for [unit-name]: [failed test], [error summary]"`
+
+When error context is present, fix only the failing part instead of re-executing the full plan. Use the error message and failed test name to identify the affected Implementation Step.
 
 Or when the conversation context clearly contains an approved plan and the
 orchestrator has signaled to proceed with generation.
