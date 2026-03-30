@@ -23,12 +23,31 @@ metadata:
 - 태스크가 대부분 독립적일 때
 - 서브에이전트 지원 환경 (Claude Code 등)
 
+## 입력 모드
+
+### 모드 1: 계획 파일 기반 (기본)
+사용자가 직접 호출하거나 `aidlc-writing-plans`에서 호출 시. 계획 파일에서 태스크 목록을 읽는다.
+
+### 모드 2: Orchestrator 위임 모드 (units.md 기반)
+`aidlc-construction-orchestrator`가 SDD 모드로 호출 시.
+
+**호출 신호**: `"SDD: units=[devflow-docs/inception/units.md], summary=[devflow-docs/session-summary.md], complexity=[level]"`
+
+이 신호를 받으면:
+1. units.md에서 unit 목록을 읽고, 각 unit을 태스크로 변환
+2. session-summary.md에서 unit 완료 상태 + units.md의 인터페이스 정의만 참조
+3. **컨텍스트 격리**: 각 unit 서브에이전트에 이전 unit의 code-plan, 구현 코드, 변경 파일 목록 전달 금지
+4. **finishing-branch 비활성화**: orchestrator 위임 모드에서는 `aidlc-finishing-a-development-branch` 호출을 스킵. orchestrator가 후속 처리
+5. **최종 코드 리뷰 비활성화**: orchestrator가 build-and-test를 별도 실행하므로 SDD 내 최종 리뷰 스킵
+6. 모든 unit의 R1 리뷰 통과 → orchestrator에 제어 반환
+
 ## 프로세스 (태스크 반복)
 
 > **순차 실행 필수**: Task 1의 리뷰까지 완전 완료 → Task 2 시작. 태스크 간 병렬 실행 금지.
 
 ### 1. 계획 읽기
-- 계획 파일에서 전체 태스크 텍스트 + 컨텍스트 추출
+- **모드 1**: 계획 파일에서 전체 태스크 텍스트 + 컨텍스트 추출
+- **모드 2**: units.md에서 unit 목록 추출. 각 unit의 구현 범위를 태스크로 변환
 - 태스크 목록 생성
 
 ### 2. 구현 서브에이전트 디스패치

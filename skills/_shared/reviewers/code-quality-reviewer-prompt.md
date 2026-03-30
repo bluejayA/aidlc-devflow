@@ -18,19 +18,23 @@
 3. **아키텍처**: 기존 패턴 준수, 적절한 추상화 수준
 4. **에러 핸들링**: 적절한 에러 처리, 실패 경로의 명확성, 에러 전파 일관성
 5. **DRY**: 불필요한 중복 없음, 적절한 추상화 수준
-6. **기본 보안 체크** (명백한 취약점만 — 심층 분석은 Stage 3 전담):
-   - Injection (SQL, Command, XSS) — 외부 입력이 쿼리/명령/출력에 직접 들어가는 경우
-   - 하드코딩된 시크릿/크레덴셜
-   - 안전하지 않은 설정 (debug=True, CORS * 등)
+
+## Rubric
+
+Score each item using the Code Quality Reviewer rubric from the schema:
+
+| Item | How to Assess |
+|------|--------------|
+| Complexity | Count high-complexity functions (cyclomatic complexity, deep nesting) |
+| Test Coverage | Evaluate behavior coverage: core paths, edge cases, failure paths |
+| Error Handling | Check error paths are handled consistently across all entry points |
 
 ## Issue Classification
 
-- **Critical**: 반드시 수정 (버그, 명백한 보안 취약점, 데이터 손실 위험)
+- **Critical**: 반드시 수정 (버그, 데이터 손실 위험)
 - **Important**: 수정 권장 (성능, 유지보수성, 테스트 갭)
 - **Minor**: 선택적 (스타일, 네이밍 개선)
 
-## Report Format
+## Output Format
 
-**Strengths**: [잘된 점]
-**Issues**: [Critical/Important/Minor 분류별 목록]
-**Assessment**: ✅ Approved | ❌ Requires Changes (Critical/Important 이슈 시)
+Read `_shared/patterns/review-feedback-schema.md` and follow the output template exactly. Use the Code Quality Reviewer rubric in the Score table. Report Verdict as PASS, CONDITIONAL, or FAIL per the schema criteria.

@@ -86,39 +86,39 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
 
 1. `_shared/reviewers/spec-reviewer-prompt.md` 읽기
 2. 서브에이전트 dispatch — `{project-root}` + 리뷰 대상 + spec/plan 경로 전달
-3. 결과 확인:
-   - ✅ Spec compliant → Stage 2로
-   - ❌ Issues Found → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
-   - Recommendations만 → Stage 2로 (수정 권장)
+3. 결과 확인 (Verdict 기준):
+   - PASS → Stage 2로
+   - FAIL → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
+   - CONDITIONAL → Stage 2로 (수정 권장)
 
 #### Stage 2 — Code Quality
 
 1. `_shared/reviewers/code-quality-reviewer-prompt.md` 읽기
 2. 서브에이전트 dispatch — `{project-root}` + 리뷰 대상 전달
-3. 결과 확인:
-   - ✅ Approved → Stage 3으로
-   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
-   - Recommendations만 → 루프 종료, Stage 3으로 (수정 권장)
+3. 결과 확인 (Verdict 기준):
+   - PASS → Stage 3으로
+   - FAIL → 수정 후 re-dispatch (최대 5회)
+   - CONDITIONAL → Stage 3으로 (수정 권장)
 
 #### Stage 3 — Security/Edge-case (Standard 이상)
 
 depth가 **Standard 이상**이면 실행. Minimal은 스킵.
 
 1. `_shared/reviewers/security-reviewer-prompt.md` 서브에이전트 dispatch (`{project-root}` 포함)
-2. 결과 확인:
-   - ✅ 통과 → Stage 4 또는 결과 반환으로
-   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
-   - Recommendations만 → 루프 종료 (수정 권장)
+2. 결과 확인 (Verdict 기준):
+   - PASS → Stage 4 또는 결과 반환으로
+   - FAIL → 수정 후 re-dispatch (최대 5회)
+   - CONDITIONAL → 루프 종료 (수정 권장)
 
 #### Stage 4 — Maintainability (Comprehensive만)
 
 depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하고 결과 반환으로 진행.
 
 1. `_shared/reviewers/maintainability-reviewer-prompt.md` 서브에이전트 dispatch (`{project-root}` 포함)
-2. 결과 확인:
-   - ✅ 통과 → 결과 반환으로
-   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
-   - Recommendations만 → 루프 종료 (수정 권장)
+2. 결과 확인 (Verdict 기준):
+   - PASS → 결과 반환으로
+   - FAIL → 수정 후 re-dispatch (최대 5회)
+   - CONDITIONAL → 루프 종료 (수정 권장)
 
 > **Comprehensive에서의 병렬화**: Stage 3과 4가 모두 실행되는 Comprehensive에서는 두 리뷰어를 **병렬 dispatch** 가능 (독립적 관점, 상호 의존 없음).
 
@@ -148,7 +148,7 @@ R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
 6. **synthesis 결과를 사용자에게 표시 + 승인 대기**:
    ```
    [Council Code Review 결과]
-   Gate Decision: [PASS|CONDITIONAL|FAIL]
+   Verdict: [PASS|CONDITIONAL|FAIL]
    Rationale: [판정 근거]
    Action Items: [수정 항목]
 
@@ -176,11 +176,11 @@ R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 
    - 리뷰어들이 병렬로 리뷰 수행 + SendMessage로 발견 사항 공유
    - 팀 리드가 모든 결과 수신 후 종합 (결과 반환 형식으로 변환)
    - TeamDelete로 팀 정리
-   - **이슈 수정 루프**: Needs fixes 판정 시 수정 후 팀 재생성하여 re-review (최대 5회, 초과 시 사용자 escalate — R1과 동일 제한)
+   - **이슈 수정 루프**: FAIL 또는 CONDITIONAL 판정 시 수정 후 팀 재생성하여 re-review (최대 5회, 초과 시 사용자 escalate — R1과 동일 제한)
 4. **종합 결과를 사용자에게 표시 + 승인 대기**:
    ```
    [Agent Teams Code Review 결과]
-   Assessment: [Ready to merge | Needs fixes]
+   Verdict: [PASS | CONDITIONAL | FAIL]
    Cross-cutting Issues: [리뷰어 간 소통에서 도출된 교차 이슈]
    Issues: [분류별 목록]
 
@@ -198,16 +198,20 @@ R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 
 
 ### 결과 반환
 
+각 Stage의 리뷰어는 `_shared/patterns/review-feedback-schema.md`의 출력 포맷을 따른다. Synthesis는 개별 Verdict를 worst-of 로직으로 집계한다.
+
 ```
 ## Code Review 결과
-- Stage 1 (Spec Compliance): ✅ 통과 | ❌ 이슈 | ⏭ 스킵 (spec 미제공)
-- Stage 2 (Code Quality): ✅ 통과 | ❌ 이슈
-- Stage 3 (Security/Edge-case): ✅ 통과 | ❌ 이슈 | ⏭ 스킵 (Minimal)
-- Stage 4 (Maintainability): ✅ 통과 | ❌ 이슈 | ⏭ 스킵 (Standard 이하)
-- Assessment: Ready to merge | Needs fixes
-- Issues: [있으면 목록]
-- Recommendations: [있으면 목록]
+- Stage 1 (Spec Compliance): PASS | CONDITIONAL | FAIL | ⏭ 스킵 (spec 미제공)
+- Stage 2 (Code Quality): PASS | CONDITIONAL | FAIL
+- Stage 3 (Security/Edge-case): PASS | CONDITIONAL | FAIL | ⏭ 스킵 (Minimal)
+- Stage 4 (Maintainability): PASS | CONDITIONAL | FAIL | ⏭ 스킵 (Standard 이하)
+- Verdict: PASS | CONDITIONAL | FAIL (worst-of across all stages)
+- Issues: [있으면 — severity + file:line 테이블]
+- Score: [루브릭 항목별 🟢/🟡/🔴 집계]
 ```
+
+**Verdict 집계 (worst-of)**: 어느 Stage든 FAIL이면 전체 FAIL. FAIL 없이 CONDITIONAL 있으면 전체 CONDITIONAL. 모두 PASS면 전체 PASS.
 
 ---
 
@@ -256,9 +260,9 @@ SDD에서 호출 시, SDD가 리뷰 대상(변경 파일)과 spec/plan 경로를
 
 [depth: Standard, spec 미제공]
 → Stage 1 스킵 (spec 없음)
-→ Stage 2: code-quality-reviewer dispatch → ✅ Approved
-→ Stage 3: security-reviewer dispatch → ✅ Secure
-→ 결과: ✅ Ready to merge / Recommendations 2건
+→ Stage 2: code-quality-reviewer dispatch → PASS
+→ Stage 3: security-reviewer dispatch → PASS
+→ Verdict: PASS / Recommendations 2건
 ```
 
 ### Example 2: SDD에서 자동 호출 (Standard)
@@ -269,24 +273,24 @@ SDD: 태스크 3 완료, requesting-code-review 호출
   spec: docs/plans/auth-plan.md Task 3
   depth: Standard
 
-→ Stage 1: spec-reviewer → ❌ Issues 1건 (누락된 에러 핸들링)
-→ 수정 후 재리뷰 → ✅ Spec compliant
-→ Stage 2: code-quality-reviewer → ✅ Approved
-→ Stage 3: security-reviewer → ✅ Secure
-→ 결과: Ready to merge
+→ Stage 1: spec-reviewer → FAIL (누락된 에러 핸들링)
+→ 수정 후 재리뷰 → PASS
+→ Stage 2: code-quality-reviewer → PASS
+→ Stage 3: security-reviewer → PASS
+→ Verdict: PASS
 ```
 
 ### Example 3: Comprehensive 리뷰
 
 ```
 [depth: Comprehensive, spec 제공]
-→ Stage 1: spec-reviewer → ✅ Spec compliant
-→ Stage 2: code-quality-reviewer → ✅ Approved
+→ Stage 1: spec-reviewer → PASS
+→ Stage 2: code-quality-reviewer → PASS
 → Stage 3 + 4 병렬 dispatch:
-  → security-reviewer → ❌ Issues 1건 (SQL injection 위험)
-  → maintainability-reviewer → ✅ Maintainable
-→ 수정 후 Stage 3 재리뷰 → ✅ Secure
-→ 결과: Ready to merge / Recommendations 1건
+  → security-reviewer → FAIL (SQL injection 위험)
+  → maintainability-reviewer → PASS
+→ 수정 후 Stage 3 재리뷰 → PASS
+→ Verdict: PASS / Recommendations 1건
 ```
 
 ### Example 4: Agent Teams 협업 리뷰 (Standard)
@@ -305,7 +309,7 @@ SDD: 태스크 3 완료, requesting-code-review 호출
   - Cross-cutting: 입력 검증 누락이 품질+보안 모두에 영향
   - Issues: Important 2건 (중복 제거됨, 원래 3건)
 → TeamDelete
-→ 결과: Needs fixes / Important 2건
+→ Verdict: CONDITIONAL / Important 2건
 ```
 
 ---

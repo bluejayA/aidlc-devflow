@@ -19,6 +19,7 @@
 - **민감 데이터 노출**: 로그에 비밀번호/토큰, 평문 저장, 불필요한 데이터 반환
 - **입력 검증 부재**: 사용자 입력 미검증, 타입/범위 체크 누락, allowlist vs denylist
 - **안전하지 않은 설정**: CORS *, debug=True, CSRF 비활성, 과도한 권한
+- **기본 보안 체크** (code-quality에서 이관): Injection, 하드코딩된 시크릿/크레덴셜, 안전하지 않은 설정
 
 ### 2. 언어별 보안 주의사항
 - **Python**: `eval()`/`exec()`, `pickle` 역직렬화, subprocess `shell=True`, `yaml.load()` without SafeLoader
@@ -44,31 +45,22 @@
 - 신뢰 경계(trust boundary)를 넘는 데이터에 대한 검증 여부
 - 에러 메시지에 내부 구현 정보 노출 여부
 
+## Rubric
+
+Score each item using the Security Reviewer rubric from the schema:
+
+| Item | How to Assess |
+|------|--------------|
+| OWASP Compliance | Check applicable OWASP items against implementation |
+| Auth/Authz Validation | Verify all auth checks are present and correct |
+| Input Validation Coverage | Trace external inputs to ensure validation at trust boundaries |
+
 ## Issue Classification
 
 - **Critical**: 반드시 수정 (보안 취약점, 데이터 손실/유출 위험, 악용 가능한 논리 오류)
 - **Important**: 수정 권장 (잠재적 엣지케이스 미처리, 방어적 프로그래밍 부족)
 - **Minor**: 선택적 (보안 강화 제안, 추가 검증 권장)
 
-## Report Format
+## Output Format
 
-```
-## Security & Edge-case Review
-
-**Scope**: [변경 파일 목록]
-
-### Threat Surface
-[이 변경이 노출하는 주요 위협 영역 요약]
-
-### Issues
-**Critical:** [있으면 — file:line, 공격 벡터, 영향, 수정 방안]
-**Important:** [있으면]
-**Minor:** [있으면]
-
-### Edge Cases Checked
-- [검증한 엣지케이스 목록과 결과]
-
-### Assessment
-**Status:** Secure | Issues Found
-**Reasoning:** [기술적 판단]
-```
+Read `_shared/patterns/review-feedback-schema.md` and follow the output template exactly. Use the Security Reviewer rubric in the Score table. Include Threat Surface analysis in the Context section. Report Verdict as PASS, CONDITIONAL, or FAIL per the schema criteria.

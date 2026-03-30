@@ -1,11 +1,10 @@
-name: "Construction — Multi unit standard path"
+name: "Construction — Multi unit standard path (SDD mode)"
 orchestrator: aidlc-construction-orchestrator
 inputs:
   complexity: Standard
   choices:
     units-generation: B
-    code-plan: B
-    code-generation-result: B
+    sdd-mode: A
     build-and-test-result: A
 expect:
   stage_path:
