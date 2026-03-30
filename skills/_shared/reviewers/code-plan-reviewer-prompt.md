@@ -23,6 +23,7 @@
 | **파일 구조** | 파일 경로 명확, 단일 책임, 과도한 크기 아님 |
 | **검증 단계** | 각 태스크에 검증 방법 포함 |
 | **TDD 사이클** | 각 Implementation Step이 RED-GREEN-REFACTOR 하위 단계를 포함하는가 |
+| **Verification Contract** | `## Verification Contract` 섹션 존재. 완료 조건 1개 이상, 검증 명령 1개 이상 필수 |
 
 ## 출력 형식
 
