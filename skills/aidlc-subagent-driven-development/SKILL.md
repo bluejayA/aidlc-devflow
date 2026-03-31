@@ -1,6 +1,8 @@
 ---
 name: aidlc-subagent-driven-development
-description: Use when executing an implementation plan in the current session with independent tasks that benefit from fresh subagent context per task.
+description: |
+  현재 세션에서 구현 계획을 실행할 때 사용. 독립 태스크별 신규 서브에이전트 컨텍스트 활용.
+  Use when executing an implementation plan in the current session with independent tasks that benefit from fresh subagent context per task.
 metadata:
   version: 0.2.0
   author: Jay
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Subagent-Driven Development
+
+<!-- 출력 언어: 한국어 (Korean) -->
 
 태스크별 신규 서브에이전트를 디스패치하여 구현하고, 2단계 리뷰(spec → quality)로 품질을 보장한다.
 

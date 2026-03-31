@@ -1,6 +1,8 @@
 ---
 name: aidlc-systematic-debugging
-description: Use when a bug is reported, a test is failing, behavior is unexpected, an error is thrown, a fix attempt is not working, or any symptom requires diagnosis before a code change is made.
+description: |
+  버그 신고, 테스트 실패, 예상 밖 동작, 에러 발생, 수정 시도 실패 등 코드 변경 전 진단이 필요한 모든 증상에 사용.
+  Use when a bug is reported, a test is failing, behavior is unexpected, an error is thrown, a fix attempt is not working, or any symptom requires diagnosis before a code change is made.
 metadata:
   version: 0.2.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-systematic-debugging
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 체계적 디버깅: 원인 규명 없이 수정 금지 -->
 
 ## 철의 법칙

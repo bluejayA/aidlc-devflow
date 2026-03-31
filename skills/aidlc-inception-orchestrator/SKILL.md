@@ -11,6 +11,7 @@ metadata:
 
 # aidlc-inception-orchestrator
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- INCEPTION Phase 오케스트레이터: 스테이지 순서 + 게이트 관리 -->
 <!-- 게이트 패턴 참조: _shared/gate-patterns.md -->
 

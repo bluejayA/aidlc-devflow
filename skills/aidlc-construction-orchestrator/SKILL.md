@@ -11,6 +11,7 @@ metadata:
 
 # aidlc-construction-orchestrator
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- CONSTRUCTION Phase 오케스트레이터: 코드 생성 + 빌드/테스트 관리 -->
 <!-- 게이트 패턴 참조: _shared/gate-patterns.md -->
 <!-- 리뷰 정책: Standard 이상에서 리뷰 서브에이전트 dispatch (스킬 내부에서 처리) -->

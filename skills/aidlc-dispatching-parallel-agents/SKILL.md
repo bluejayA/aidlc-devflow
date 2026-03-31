@@ -1,6 +1,8 @@
 ---
 name: aidlc-dispatching-parallel-agents
-description: Use when two or more independent tasks can be executed simultaneously, when different domains need separate investigation, or when waiting for one task to complete before starting another would waste time.
+description: |
+  2개 이상 독립 태스크를 동시에 실행하거나, 다른 도메인을 별도로 조사하거나, 순차 대기가 시간 낭비일 때 사용.
+  Use when two or more independent tasks can be executed simultaneously, when different domains need separate investigation, or when waiting for one task to complete before starting another would waste time.
 metadata:
   version: 0.1.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-dispatching-parallel-agents
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 병렬 에이전트 디스패치: 독립적 문제를 동시에 해결 -->
 
 > 서브에이전트 컨텍스트 격리: `_shared/devflow-conventions.md` 참조

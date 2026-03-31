@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-user-stories
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 사용자 스토리 생성: 요구사항을 INVEST 기준 스토리로 변환 -->
 <!-- Hold/Skip: _shared/import-review-protocol.md 참조 -->
 

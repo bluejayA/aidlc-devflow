@@ -1,6 +1,8 @@
 ---
 name: aidlc-verification-before-completion
-description: Use when about to claim a task is complete, say "it should work", declare a fix is done, say "tests pass", or make any success assertion before running the actual verification commands.
+description: |
+  태스크 완료를 주장하거나, "될 것 같다", 수정 완료를 선언하거나, "테스트 통과"라고 말하기 전에 실제 검증 명령을 실행해야 할 때 사용.
+  Use when about to claim a task is complete, say "it should work", declare a fix is done, say "tests pass", or make any success assertion before running the actual verification commands.
 metadata:
   version: 0.2.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-verification-before-completion
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 완료 선언 전 신선한 검증 증거 필수 -->
 <!-- TDD 관련 검증은 _shared/tdd-protocol.md 참조 -->
 

@@ -1,6 +1,8 @@
 ---
 name: aidlc-superpowers-tracking
-description: Use when comparing aidlc skills and patterns against superpowers updates, tracking gaps, or planning feature adoption from superpowers releases.
+description: |
+  aidlc 스킬과 패턴을 superpowers 업데이트와 비교하거나, 격차를 추적하거나, superpowers 릴리스의 기능 도입을 계획할 때 사용.
+  Use when comparing aidlc skills and patterns against superpowers updates, tracking gaps, or planning feature adoption from superpowers releases.
 metadata:
   version: 0.1.0
   author: Jay
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Superpowers Tracking
+
+<!-- 출력 언어: 한국어 (Korean) -->
 
 세션에서 사용된 스킬과 패턴을 추적하고, 워크플로우 개선을 위한 인사이트를 제공한다.
 

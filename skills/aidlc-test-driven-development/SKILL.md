@@ -1,6 +1,8 @@
 ---
 name: aidlc-test-driven-development
-description: Use when writing any production code, fixing bugs, or refactoring — enforces RED-GREEN-REFACTOR cycle with no exceptions.
+description: |
+  프로덕션 코드 작성, 버그 수정, 리팩토링 시 사용 — 예외 없이 RED-GREEN-REFACTOR 사이클을 강제.
+  Use when writing any production code, fixing bugs, or refactoring — enforces RED-GREEN-REFACTOR cycle with no exceptions.
 metadata:
   version: 0.1.0
   author: Jay
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Test-Driven Development
+
+<!-- 출력 언어: 한국어 (Korean) -->
 
 > **Skill Type: Rigid** — 정확히 따를 것. 상황에 맞게 적응하지 않는다.
 

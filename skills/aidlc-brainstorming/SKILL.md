@@ -1,6 +1,8 @@
 ---
 name: aidlc-brainstorming
-description: Use when turning an idea into a design, creating a new feature, or when any creative/exploratory work needs structured design before implementation.
+description: |
+  아이디어를 설계로 전환하거나, 새로운 기능을 만들거나, 구현 전 구조화된 설계가 필요한 창의적/탐색적 작업에 사용.
+  Use when turning an idea into a design, creating a new feature, or when any creative/exploratory work needs structured design before implementation.
 metadata:
   version: 0.1.0
   author: Jay
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Brainstorming
+
+<!-- 출력 언어: 한국어 (Korean) -->
 
 아이디어를 설계 문서로 전환한다.
 

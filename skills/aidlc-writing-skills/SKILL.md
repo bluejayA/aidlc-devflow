@@ -1,6 +1,8 @@
 ---
 name: aidlc-writing-skills
-description: Use when creating a new SKILL.md file, editing an existing skill, validating a skill before deployment, or when any process documentation needs to be defined as an executable skill.
+description: |
+  새 SKILL.md 파일 생성, 기존 스킬 편집, 배포 전 스킬 검증, 또는 프로세스 문서를 실행 가능한 스킬로 정의할 때 사용.
+  Use when creating a new SKILL.md file, editing an existing skill, validating a skill before deployment, or when any process documentation needs to be defined as an executable skill.
 metadata:
   version: 0.1.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-writing-skills
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 스킬 작성: 프로세스 문서화의 TDD -->
 
 ## 철의 법칙

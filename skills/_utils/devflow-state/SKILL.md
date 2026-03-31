@@ -11,6 +11,7 @@ metadata:
 
 # devflow-state
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- devflow-state: devflow-docs/devflow-state.md 파일을 읽고 쓰는 유틸 -->
 <!-- 다른 모든 devflow skill에서 상태 공유에 사용 -->
 

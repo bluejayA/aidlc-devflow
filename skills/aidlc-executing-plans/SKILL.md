@@ -1,6 +1,8 @@
 ---
 name: aidlc-executing-plans
-description: Use when executing an implementation plan in a separate session with checkpoint reviews and session resume support.
+description: |
+  별도 세션에서 구현 계획을 실행할 때 사용. 체크포인트 리뷰와 세션 재개를 지원.
+  Use when executing an implementation plan in a separate session with checkpoint reviews and session resume support.
 metadata:
   version: 0.3.0
   author: Jay
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Executing Plans
+
+<!-- 출력 언어: 한국어 (Korean) -->
 
 구현 계획 파일을 배치 단위로 실행한다.
 

@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-code-generation
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 코드 생성: Plan 작성 후 오케스트레이터 승인을 받아 코드 생성 -->
 
 ## Purpose

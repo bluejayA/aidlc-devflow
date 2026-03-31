@@ -1,6 +1,8 @@
 ---
 name: aidlc-finishing-a-development-branch
-description: Use when implementation is done and all tests pass, and a decision is needed on what to do with the development branch — merge, PR, keep, or discard.
+description: |
+  구현이 완료되고 모든 테스트가 통과한 후, 개발 브랜치를 머지, PR, 유지, 폐기 중 어떻게 처리할지 결정할 때 사용.
+  Use when implementation is done and all tests pass, and a decision is needed on what to do with the development branch — merge, PR, keep, or discard.
 metadata:
   version: 0.1.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-finishing-a-development-branch
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 개발 브랜치 마무리: 병합, PR, 유지, 폐기 중 하나를 선택 -->
 
 ## Trigger
