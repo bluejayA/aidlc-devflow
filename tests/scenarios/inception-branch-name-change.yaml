@@ -1,4 +1,4 @@
-name: "Inception — Standard with worktree setup"
+name: "Inception — Branch name confirm and change"
 orchestrator: aidlc-inception-orchestrator
 inputs:
   complexity: Standard

@@ -113,5 +113,5 @@ SKILL.md 수정 후 `bash tests/run-all.sh` 실행으로 태그 불일치를 검
 
 ### 현재 태그 적용 범위
 
-- `aidlc-inception-orchestrator/SKILL.md` — 8 steps, 11 gates, 5 conditions
-- `aidlc-construction-orchestrator/SKILL.md` — 3 steps, 5 gates
+- `aidlc-inception-orchestrator/SKILL.md` — 9 steps, 13 gates, 5 conditions
+- `aidlc-construction-orchestrator/SKILL.md` — 3 steps, 6 gates, 1 override

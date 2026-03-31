@@ -161,16 +161,45 @@ B) 승인, 코드 생성 진행
 
 `aidlc-code-generation` 호출 (unit명 + Complexity 인라인 전달: `"Complexity: [level]"`)
 
-#### code-plan 게이트 [리뷰 연계 게이트]
+#### code-plan 게이트 [리뷰 연계 게이트 + Override 변형]
 <!-- @gate: code-plan -->
 <!-- @gate-option: A -> code-generation-plan {재호출} -->
 <!-- @gate-option: B -> code-generation-generate -->
+<!-- @gate-option: C -> code-generation-generate {override} -->
+
+리뷰 결과에 따라 게이트 분기가 달라진다:
+
+**리뷰 PASS / 리뷰 없음 (Minimal depth):**
 ```
 [code-generation Plan 결과 표시]
 [리뷰 결과 표시 (Standard 이상)]
 A) 변경 요청 (예: 구현 계획 수정, 접근 방식 변경 등) → code-generation 재호출
 B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 ```
+
+**리뷰 FAIL / CONDITIONAL:**
+```
+[code-generation Plan 결과 표시]
+[리뷰 결과 — Verdict: FAIL/CONDITIONAL + 이슈 목록 표시]
+A) 리뷰 이슈 수정 요청 → code-generation 재호출
+B) 수정 후 승인, 코드 생성 진행 → code-generation: GENERATE 호출
+C) 리뷰 이슈를 인지하고 현재 상태로 진행 (오버라이드) → code-generation: GENERATE 호출
+```
+
+C 선택 시:
+1. 사용자에게 오버라이드 사유 입력을 요청한다
+2. devflow-audit에 override 이벤트 기록:
+   ```
+   - timestamp: [ISO 8601]
+   - type: override
+   - gate: code-plan
+   - review-verdict: [FAIL|CONDITIONAL]
+   - reason: [사용자 입력 사유]
+   - issues-acknowledged: [리뷰 이슈 목록]
+   ```
+3. code-generation: GENERATE 호출로 진행
+
+리뷰 결과가 FAIL/CONDITIONAL로 반환될 때마다 C 옵션을 포함하여 게이트를 표시한다. 리뷰 루프 5회 소진 시에는 conventions escalation 메시지가 우선한다.
 
 #### 2c. code-generation Generate 호출
 
@@ -325,6 +354,7 @@ K 선택/스킵 모두 devflow-audit에 로깅:
 각 게이트 결정 시 devflow-audit에 기록:
 결정 이유 포함 (session-continuity 규약 참조).
 - 스테이지명, 타임스탬프, 사용자 선택 (A/B/C), 결정 이유, 리뷰 결과 (있으면)
+- override 이벤트: code-plan 게이트 C 선택 시 별도 형식 (code-plan 게이트 섹션 참조)
 
 ## Error Handling
 

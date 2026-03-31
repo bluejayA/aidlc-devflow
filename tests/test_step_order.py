@@ -34,6 +34,7 @@ VALID_SKIP_MODES = {
     "Comprehensive",
     "no-completed-units",
     "QUESTIONS",
+    "no-held-items",
 }
 
 
