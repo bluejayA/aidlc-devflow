@@ -1,6 +1,6 @@
 {
   "name": "aidlc",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (Orchestrator-Centric, 27개 skill + 1개 유틸리티, 11개 공유 패턴, 10개 리뷰어, 4-stage 코드 리뷰 Distrust by Default, Agent Teams R3 모드, 기술 스택 프리셋 + 조건부 선택, 메타 태그 검증, Knowledge Compounding)",
   "skills": "./skills"
 }
