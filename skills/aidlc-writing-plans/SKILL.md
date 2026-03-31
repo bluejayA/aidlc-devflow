@@ -1,6 +1,8 @@
 ---
 name: aidlc-writing-plans
-description: Use when a design document needs to be converted into a detailed implementation plan with task breakdown, or when "구현 계획 작성", "plan 만들어줘" is requested. Not for INCEPTION workflow planning — use aidlc-workflow-planning instead.
+description: |
+  설계 문서를 상세 구현 계획으로 변환하거나, "구현 계획 작성", "plan 만들어줘" 요청 시 사용. INCEPTION 워크플로우 계획은 aidlc-workflow-planning 사용.
+  Use when a design document needs to be converted into a detailed implementation plan with task breakdown, or when "구현 계획 작성", "plan 만들어줘" is requested. Not for INCEPTION workflow planning — use aidlc-workflow-planning instead.
 metadata:
   version: 0.1.0
   author: Jay
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Writing Plans
+
+<!-- 출력 언어: 한국어 (Korean) -->
 
 설계 문서(spec)를 엔지니어가 zero context에서도 실행 가능한 구현 계획으로 변환한다.
 

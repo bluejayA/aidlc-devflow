@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-requirements-analysis
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 요구사항 분석: 적응형 깊이로 사용자 의도와 요구사항을 분석 -->
 
 ## Purpose

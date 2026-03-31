@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-application-design
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 애플리케이션 설계: 신규 컴포넌트/서비스 구조 설계 -->
 
 ## Purpose

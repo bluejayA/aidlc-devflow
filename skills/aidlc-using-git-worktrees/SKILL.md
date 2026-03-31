@@ -11,6 +11,7 @@ metadata:
 
 # aidlc-using-git-worktrees
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 격리 개발 워크트리 생성 — Construction 진입 전 실행 -->
 
 ## Purpose

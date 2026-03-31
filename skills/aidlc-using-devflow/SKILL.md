@@ -1,6 +1,8 @@
 ---
 name: aidlc-using-devflow
-description: Use when starting a new project with AIDLC workflow, resuming an existing devflow session, or when "devflow 시작" or "devflow 재개" is requested.
+description: |
+  AIDLC 워크플로우로 새 프로젝트를 시작하거나, 기존 devflow 세션을 재개하거나, "devflow 시작" 또는 "devflow 재개" 요청 시 사용.
+  Use when starting a new project with AIDLC workflow, resuming an existing devflow session, or when "devflow 시작" or "devflow 재개" is requested.
 metadata:
   version: 0.5.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-using-devflow
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- Entry Orchestrator: Phase 라우터. 3단 위임 체인의 최상위 -->
 <!-- 아키텍처 참조: skills/_shared/devflow-conventions.md -->
 

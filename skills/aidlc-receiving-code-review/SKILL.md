@@ -1,6 +1,8 @@
 ---
 name: aidlc-receiving-code-review
-description: Use when receiving code review feedback, PR comments, inline suggestions, or any critique of written code that requires a response or action.
+description: |
+  코드 리뷰 피드백, PR 코멘트, 인라인 제안, 또는 작성한 코드에 대한 비평을 받아 응답이나 조치가 필요할 때 사용.
+  Use when receiving code review feedback, PR comments, inline suggestions, or any critique of written code that requires a response or action.
 metadata:
   version: 0.1.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-receiving-code-review
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 코드 리뷰 수신: 아첨 없이, 기술적 근거로 응답 -->
 
 ## Trigger

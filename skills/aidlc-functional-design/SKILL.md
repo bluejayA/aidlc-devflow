@@ -12,6 +12,8 @@ metadata:
 
 # aidlc-functional-design
 
+<!-- 출력 언어: 한국어 (Korean) -->
+
 unit별 비즈니스 로직을 상세 설계한다. application-design(아키텍처 수준)과 code-generation(구현 수준) 사이의 갭을 메운다.
 
 ## 조건부 실행

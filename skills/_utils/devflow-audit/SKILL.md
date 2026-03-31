@@ -11,6 +11,7 @@ metadata:
 
 # devflow-audit
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- devflow-audit: devflow-docs/audit.md에 append-only로 모든 상호작용을 기록 -->
 <!-- 사용자 입력과 AI 응답을 원문 그대로 보존 -->
 

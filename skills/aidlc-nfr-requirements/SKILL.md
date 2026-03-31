@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-nfr-requirements
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 비기능 요구사항 수집: 도메인 + 프로파일 기반 체계적 NFR 수집 -->
 <!-- IMPORT 모드: _shared/import-review-protocol.md 참조 -->
 

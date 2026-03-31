@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-units-generation
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 작업 단위 분해: 복잡한 시스템을 병렬 개발 가능한 단위로 분해 -->
 
 ## Purpose

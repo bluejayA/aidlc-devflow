@@ -1,6 +1,8 @@
 ---
 name: aidlc-requesting-code-review
-description: Use when a task or unit implementation is complete and needs code review before merging, or when the user explicitly requests a code review on their changes.
+description: |
+  태스크나 unit 구현이 완료되어 머지 전 코드 리뷰가 필요할 때, 또는 사용자가 명시적으로 코드 리뷰를 요청할 때 사용.
+  Use when a task or unit implementation is complete and needs code review before merging, or when the user explicitly requests a code review on their changes.
 metadata:
   version: 0.1.0
   author: Jay
@@ -11,6 +13,7 @@ metadata:
 
 # aidlc-requesting-code-review
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 코드 리뷰 요청의 Single Source of Truth. Standard 3-stage / Comprehensive 4-stage review 실행. -->
 
 ## Trigger

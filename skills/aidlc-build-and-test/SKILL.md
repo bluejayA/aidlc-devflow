@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-build-and-test
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 빌드 실행 + 전체 테스트 실행 + 지침 문서 생성: 모든 unit 완료 후 실행 -->
 
 ## Purpose

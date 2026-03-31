@@ -12,6 +12,7 @@ metadata:
 
 # aidlc-workspace-detection
 
+<!-- 출력 언어: 한국어 (Korean) -->
 <!-- 워크스페이스 분석: 그린필드/브라운필드 판단, 기존 코드베이스 스캔 -->
 
 ## Purpose
