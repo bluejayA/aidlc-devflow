@@ -2,7 +2,7 @@
 name: aidlc-construction-orchestrator
 description: Use when CONSTRUCTION phase begins, to manage the full build cycle for each unit from implementation through verification.
 metadata:
-  version: 0.6.0
+  version: 0.7.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -179,21 +179,19 @@ B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
 <!-- @gate: code-generation-result -->
 <!-- @gate-option: A -> code-generation-generate {재호출} -->
 <!-- @gate-option: B -> next-unit -->
-<!-- @gate-option: R -> code-generation-result {review} -->
+<!-- @gate-option: S -> next-unit {skip-review} -->
 ```
 [code-generation 완료 결과 표시]
-[리뷰 결과 표시 (Standard 이상)]
+[리뷰 결과 표시 — Verdict: PASS/CONDITIONAL/FAIL (Standard 이상, 자동 실행)]
 A) 변경 요청 (예: 구현 방식, 테스트 범위, 에러 핸들링 등) → code-generation: GENERATE 재호출
 B) 승인, 다음 unit 진행
-R) 리뷰 요청
-   R1) 단일 리뷰 (Claude code-reviewer)
-   R2) Council 리뷰 (Codex + Gemini + Claude 의장)
-   Ra) 자동 선택 (risk score 기반) ← 기본
+S) 이번 unit 리뷰 스킵 (opt-out, 현재 unit에만 적용)
 ```
 
-**R 선택 시**: `aidlc-requesting-code-review`를 해당 모드(R1/R2/Ra) 파라미터와 함께 호출.
+**리뷰 자동 실행 (인라인 모드, Standard 이상)**: `aidlc-requesting-code-review`를 R1(단일 리뷰) 모드로 자동 호출.
+Council/Teams 리뷰를 원하면 자유 발화로 요청 → Interrupt Handler가 처리.
 requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of Truth).
-Council 리뷰 결과는 사용자 승인 후 게이트를 재표시한다.
+**Minimal depth**: 리뷰 없음. S 옵션 없이 A/B만 제시.
 
 승인 후:
 - devflow-state의 `## Completed Units`에 unit명 추가
@@ -271,6 +269,8 @@ A) systematic-debugging으로 조사
 
 build-and-test에서 테스트/빌드 실패 시 (auto-fix 소진 후) 사용자가 debugging을 선택하면:
 
+0. build-and-test 실패 시점의 에러 메시지(테스트명 + 에러 출력)를 컨텍스트에 보존한다
+   — 이 error_message는 K 게이트에서 devflow-solutions에 전달하는 데 사용
 1. `aidlc-systematic-debugging` 호출
 2. debugging 완료 시 Return 수신:
    ```
@@ -279,7 +279,39 @@ build-and-test에서 테스트/빌드 실패 시 (auto-fix 소진 후) 사용자
    - 수정 내용: [요약]
    - 테스트: [회귀 테스트명] 추가됨
    ```
-3. debugging Return 수신 후 `aidlc-build-and-test` 재실행
+3. K 게이트 표시 (재진입 방지: devflow-audit에 현재 unit + compound 로그 있으면 K 미표시):
+   ```
+   [systematic-debugging 완료]
+   - 근본 원인: [요약]
+   - 수정 내용: [요약]
+
+   K) 학습 기록 저장 → devflow-solutions 호출
+      → 이 해결 사례를 구조화하여 devflow-docs/solutions/에 저장합니다
+   →) 바로 build-and-test 재실행 (기본)
+   ```
+4. K 선택 시:
+   - `devflow-solutions` STORE 호출 (debugging Return 4필드 + 보존된 error_message)
+   - verdict별 안내:
+     - SAVE: "✅ 솔루션 저장 완료: {saved_path}" 표시
+     - DUPLICATE: "⚠️ 유사한 솔루션이 이미 존재합니다: {similar_to}\n   저장을 건너뜁니다." 표시
+     - REJECT: "❌ 솔루션 저장 실패: {reason}\n   Privacy 위반 또는 형식 오류로 저장하지 않았습니다." 표시
+   - verdict 표시 후 `aidlc-build-and-test` 재실행
+5. K 스킵(기본 →) 시: 바로 `aidlc-build-and-test` 재실행
+
+K 선택/스킵 모두 devflow-audit에 로깅:
+```
+- timestamp: [ISO 8601]
+- type: compound
+- unit: [unit-name]
+- action: [save | skip]
+- verdict: [SAVE | DUPLICATE | REJECT | null (skip 시)]
+- path: [saved_path | null]
+```
+
+**재진입 방지**: devflow-audit의 최근 로그에서 현재 unit + compound 타입 로그 존재 시 K 미표시.
+동일 build-and-test 실패 건 내에서만 적용. 새로운 실패에서는 다시 K 표시.
+
+**Step 1.5 재검증 Debugging에는 K 게이트를 적용하지 않는다.** K 게이트는 본 Debugging 라우팅(build-and-test 실패 후)에서만 표시.
 
 ## Interrupt Handling
 <!-- @interrupt: global -->

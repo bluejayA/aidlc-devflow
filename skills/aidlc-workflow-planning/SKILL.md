@@ -29,6 +29,10 @@ Read (if they exist):
 - `devflow-docs/inception/user-stories.md` — 사용자 스토리 (있으면)
 - `devflow-docs/inception/nfr-requirements.md` — NFR 요구사항 (있으면)
 
+<!-- @hook: pre-search-solutions — inactive until BL-057 -->
+<!-- Activation condition: devflow-docs/solutions/ exists AND 15+ solution files -->
+<!-- When active: search solutions by error_signature before debugging -->
+
 ### Step 2: Generate approaches (2-3개)
 
 요구사항과 workspace를 기반으로 접근법을 생성한다.
