@@ -21,7 +21,7 @@ metadata:
 workspace-detection → [Complexity Gate] → requirements-analysis → [Open Questions Gate]
   → [Pre-Planning Gate] → (user-stories) → (nfr-requirements)
   → workflow-planning → [Approach Proposal Gate]
-  → (application-design + NFR Design) → 완료
+  → (application-design + NFR Design) → [HELD Revisit Gate] → 완료
 ```
 
 ## The Orchestration Loop
@@ -33,6 +33,7 @@ workspace-detection → [Complexity Gate] → requirements-analysis → [Open Qu
 <!-- @step:6 id=nfr-requirements skip-when=Minimal -->
 <!-- @step:7 id=workflow-planning -->
 <!-- @step:8 id=application-design -->
+<!-- @step:9 id=held-revisit skip-when=no-held-items -->
 
 아래 순서대로 스테이지를 순회한다. 각 스테이지에서:
 
@@ -272,19 +273,45 @@ D) 변경 요청 (예: 접근법 수정, 스테이지 포함/제외 등) → wor
 개발 환경을 설정합니다.
 
 A) 변경 요청 (예: 개발 환경 설정 변경 등) → workflow-planning 재호출
-B) Git worktree로 격리 개발 (main 브랜치 보호) → 브랜치 이름 도출 후 바로 워크트리 생성
+B) Git worktree로 격리 개발 (main 브랜치 보호) → 브랜치 이름 확인 후 워크트리 생성
 C) 현재 브랜치에서 바로 시작
 ```
 
-### 브랜치 이름 도출 및 워크트리 생성
+### 브랜치 이름 도출 및 확인 게이트
+<!-- @gate: branch-name-confirm -->
+<!-- @gate-option: A -> branch-name-confirm {변경} -->
+<!-- @gate-option: B -> worktree-create -->
 
-개발 환경 설정에서 B (Git Worktree) 선택 시, 브랜치 이름을 도출하여 표시하고 바로 워크트리를 생성한다 (확인 게이트 없음).
+개발 환경 설정에서 B (Git Worktree) 선택 시, 브랜치 이름을 도출하여 사용자에게 확인 기회를 제공한다.
 
-`devflow-docs/inception/requirements.md`의 `## User Intent`에서 브랜치 이름을 도출:
+**브랜치 이름 도출:**
+
+devflow-docs/inception/requirements.md의 ## User Intent에서 브랜치 이름을 도출:
 - 한국어/영어 혼합 → 영어 키워드 추출 (2-4단어)
-- 공백/특수문자 → 하이픈 치환, 소문자, `feature/` 접두사
+- 공백/특수문자 → 하이픈 치환, 소문자, feature/ 접두사
 
-도출된 브랜치 이름을 표시 후 `"Branch: feature/[이름]"` 인라인 신호로 aidlc-using-git-worktrees 즉시 호출
+**도출 실패 처리:**
+
+도출 결과가 비어 있거나 부적절할 경우 (예: 의미 없는 키워드, 너무 짧거나 긴 이름):
+```
+브랜치 이름을 자동으로 도출하지 못했습니다.
+사용할 브랜치 이름을 직접 입력해 주세요 (예: my-feature-name):
+feature/[입력값]
+```
+
+입력값에 feature/ 접두사를 자동 적용하고 소문자·하이픈 규칙을 적용한 후, 아래 확인 게이트를 표시한다.
+
+**확인 게이트:**
+
+```
+도출된 브랜치 이름: feature/[이름]
+
+A) 변경 → 원하는 이름 입력 (feature/ 접두사 자동 적용, 소문자·하이픈 규칙 적용)
+B) 확인, 이 이름으로 워크트리 생성
+```
+
+A 선택 시: devflow-audit에 브랜치명 변경 이벤트 기록 → 사용자가 입력한 이름에 feature/ 접두사 적용 및 명명 규칙(소문자, 하이픈) 적용 후 게이트 재표시
+B 선택 시: devflow-audit에 브랜치명 확정 이벤트 기록 → "Branch: feature/[이름]" 인라인 신호로 aidlc-using-git-worktrees 호출
 
 ### 워크트리 결과 게이트
 
@@ -390,6 +417,49 @@ R) 리뷰 요청
 
 충족 시: `"aidlc-application-design: DETAIL — NFR Design 포함"`
 미충족 시: `"aidlc-application-design: DETAIL"` (기존대로)
+
+### 9. HELD 항목 재방문 게이트 [조건부 게이트]
+<!-- @gate: held-revisit -->
+<!-- @gate-option: A -> held-revisit {재방문} -->
+<!-- @gate-option: B -> INCEPTION-complete {held-유지} -->
+
+application-design 게이트 통과 후, INCEPTION 완료 직전에 1회 실행.
+
+**조건 확인**: devflow-state에서 HELD 항목 검색.
+- `user-stories: HELD` 또는 `nfr-requirements: HELD` 항목이 있는지 확인.
+
+**HELD 항목 없음**: 자동 스킵 → INCEPTION 완료로 진행.
+
+**HELD 항목 있음**: 아래 게이트 표시.
+
+```
+INCEPTION 완료 전, 보류된 항목이 있습니다:
+- [HELD 항목 목록 표시]
+
+A) 재방문 → 해당 스킬 재호출 (결과에 따라 HELD 해제 또는 유지)
+B) HELD 상태 유지하고 완료 진행
+```
+
+**A 선택 시 — 재방문 흐름:**
+HELD 항목이 복수이면, 각 항목을 순차 재호출하며 항목별 서브게이트를 제시한다.
+모든 항목 처리 완료 후 최상위 HELD 재방문 게이트는 재표시하지 않는다.
+
+1. HELD 항목 순서대로 해당 스킬을 재호출한다:
+   - user-stories: HELD → aidlc-user-stories 호출 (기존 산출물 컨텍스트 전달)
+   - nfr-requirements: HELD → aidlc-nfr-requirements 호출 (기존 산출물 컨텍스트 전달)
+2. 각 스킬 반환 후 표준 게이트 제시:
+   A) 변경 요청 → 스킬 재호출
+   B) 승인 → devflow-state에서 HELD 해제 (status: COMPLETED), devflow-audit에 기록
+   H) 이번에도 보류 → HELD 상태 유지, devflow-audit에 재방문-보류 기록
+3. 모든 HELD 항목 처리 완료 후 INCEPTION 완료로 진행.
+
+**B 선택 시:**
+- devflow-audit에 HELD 유지 결정 기록 (항목명 + 이유)
+- INCEPTION 완료로 진행.
+
+**재방문 결과 기록 (devflow-state + session-summary):**
+- devflow-state: 항목별 최종 상태 업데이트
+- session-summary ## Key Decisions에 재방문 결정 기록
 
 ---
 

@@ -37,6 +37,28 @@ A) 리뷰 이슈 수정 요청 → 스킬 재호출
 B) 승인, 다음 단계 진행
 ```
 
+## 리뷰 연계 게이트 + Override 변형 (Review-Aware Gate + Override)
+
+리뷰 결과가 FAIL 또는 CONDITIONAL일 때 사용자가 리뷰 이슈를 인지하고 진행할 수 있는 오버라이드 옵션을 제공하는 게이트. 현재 code-plan 게이트에만 적용.
+
+리뷰 PASS / 리뷰 없음 (Minimal depth) 시:
+```
+[스킬이 리뷰 완료 후 반환]
+[리뷰 결과 요약 표시]
+A) 변경 요청 → 스킬 재호출
+B) 승인, 다음 단계 진행
+```
+
+리뷰 FAIL / CONDITIONAL 시:
+```
+[리뷰 결과 — Verdict + 이슈 목록 표시]
+A) 리뷰 이슈 수정 요청 → 스킬 재호출
+B) 수정 후 승인, 다음 단계 진행
+C) 리뷰 이슈를 인지하고 현재 상태로 진행 (오버라이드)
+```
+
+C 선택 시 devflow-audit에 오버라이드 사유 기록 필수.
+
 ## 표준 게이트 + Hold 변형 (Standard Gate + Hold)
 
 표준 게이트에 보류(Hold) 옵션을 추가한 변형. Pre-Planning 스테이지에서 사용.
