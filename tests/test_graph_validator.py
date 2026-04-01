@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from constants import LOGICAL_ACTIONS
+from constants import EXTERNAL_PLUGIN_REFS, LOGICAL_ACTIONS
 
 SKILLS_DIR = Path(__file__).parent.parent / "skills"
 
@@ -52,7 +52,9 @@ def is_external_ref(target: str) -> bool:
         return True
     if target.startswith("CONSTRUCTION") or target.startswith("INCEPTION"):
         return True
-    return target in LOGICAL_ACTIONS
+    if target in LOGICAL_ACTIONS:
+        return True
+    return target in EXTERNAL_PLUGIN_REFS
 
 
 def skill_exists(name: str) -> bool:
