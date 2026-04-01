@@ -2,7 +2,7 @@
 name: aidlc-workspace-detection
 description: Use when starting INCEPTION to detect whether the workspace is greenfield or brownfield and analyze existing code structure.
 metadata:
-  version: 0.5.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
@@ -20,6 +20,31 @@ metadata:
 Analyze the current workspace to determine project type and context.
 
 ## Execute
+
+### Step 0: 기존 분석 확인 (델타 모드)
+
+`devflow-docs/inception/workspace.md`가 이미 존재하는지 확인한다.
+
+**존재하지 않으면** → Step 1로 진행 (풀스캔)
+
+**존재하면** → 델타 분석 수행:
+
+1. 기존 `workspace.md`를 읽어 이전 분석 내용을 확보한다. **파싱 실패 시 (비표준 형식, 손상 등) → Step 1로 진행 (풀스캔으로 전환)**
+2. 변경 감지를 수행한다:
+   - 매니페스트 파일 변경 여부: `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml` 등의 존재/부재 변화 또는 내용 변경
+   - Git 커밋 변화: `git log --oneline -5`로 최근 커밋이 이전 분석의 Recent Commits와 다른지 확인
+   - CLAUDE.md 변경 여부: 기술 스택 섹션의 내용 변화 확인
+3. 변경 판정:
+   - **변경 없음**: 기존 내용 유지, `**Timestamp**`만 갱신하여 저장. `**Source**` 필드에 `이전 분석([이전 Timestamp 값]) 기반 — 변경 없음` 기록 → Step 3으로 직행
+   - **변경 있음**: 아래 매핑에 따라 해당 섹션만 재분석하여 기존 내용을 업데이트. `**Source**` 필드에 `이전 분석([이전 Timestamp 값]) 기반 + 델타 업데이트` 기록 → Step 3으로 직행
+
+**변경 유형 → 재분석 섹션 매핑:**
+
+| 변경 감지 대상 | 재분석 섹션 |
+|--------------|-----------|
+| 매니페스트 파일 | Technology Stack, Key Dependencies |
+| Git 커밋 | Git Activity (Recent Commits, Recent Focus) |
+| CLAUDE.md 기술 스택 | Pre-specified Tech Stack |
 
 ### Step 1: Scan workspace
 
@@ -155,6 +180,7 @@ Create `devflow-docs/inception/workspace.md`:
 **Timestamp**: [ISO 8601]
 **Project Root**: [현재 작업 디렉토리 절대 경로]
 **Requires Path Confirmation**: [true | false]
+**Source**: [신규 분석 | 이전 분석([이전 Timestamp 값]) 기반 — 변경 없음 | 이전 분석([이전 Timestamp 값]) 기반 + 델타 업데이트]
 
 ## Project Structure
 [brief description of what was found]

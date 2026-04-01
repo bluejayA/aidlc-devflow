@@ -4,7 +4,7 @@ description: |
   AIDLC 워크플로우로 새 프로젝트를 시작하거나, 기존 devflow 세션을 재개하거나, "devflow 시작" 또는 "devflow 재개" 요청 시 사용.
   Use when starting a new project with AIDLC workflow, resuming an existing devflow session, or when "devflow 시작" or "devflow 재개" is requested.
 metadata:
-  version: 0.5.0
+  version: 0.6.0
   author: Jay
   category: ai-dlc-workflow
   invoke_mode: user-invocable
@@ -45,21 +45,32 @@ metadata:
    🔵 INCEPTION  → 무엇을 만들지 결정
    🟢 CONSTRUCTION → 어떻게 만들지 결정
    ```
-2. **기존 산출물 확인 게이트**: `devflow-docs/inception/` 디렉토리에 산출물(`.md` 파일)이 존재하는지 확인한다.
+2. **기존 산출물 확인 게이트**: `devflow-docs/inception/` 디렉토리에 산출물(`.md` 파일, workspace.md 제외)이 존재하는지 확인한다. 또한 `devflow-docs/.archive/` 내 이전 세션 수를 카운트한다 (`inception-*` 디렉토리 수).
 
-   **산출물이 없으면** → Step 3으로 진행 (정상 새 시작)
+   **산출물이 없는 경우**:
+   - `.archive/`에 이전 세션이 있으면 이력 안내 후 Step 3으로 진행:
+     ```
+     (현재 inception/ 산출물 없음)
+     이전 아카이브: [N]개 세션 (.archive/에서 참조 가능)
 
-   **산출물이 있으면** → 기존 산출물 처리 게이트 제시:
+     → 새 작업을 시작합니다.
+     ```
+   - `.archive/`도 없으면 안내 없이 Step 3으로 진행 (정상 새 시작)
+
+   **산출물이 있는 경우** → `requirements.md`에서 `## User Intent` 내용과 `**Depth**` 값, `**Timestamp**` 값을 읽어 기존 산출물 처리 게이트를 제시한다. `requirements.md`가 없거나 해당 섹션이 비어 있으면 "(정보 없음)"으로 대체한다:
    ```
    ## 기존 INCEPTION 산출물 발견
 
-   이전 작업의 설계 산출물이 남아있습니다:
-   - [파일 목록 표시: requirements.md, application-design.md 등]
+   이전 작업: "[User Intent 1줄 요약]" ([Timestamp 날짜], [Depth])
+   산출물: [파일 목록] ([N]개)
+   이전 아카이브: [N]개 세션 (.archive/에서 참조 가능)
 
    A) 기존 설계 기반으로 보완 (UPDATE 모드)
       → 이전 요구사항/설계를 유지하고 새 기능을 추가합니다
    B) 처음부터 새로 시작 (기존 산출물 아카이브)
       → 기존 inception/, construction/ 을 .archive/로 이동 후 새로 시작합니다
+      ※ workspace.md는 유지됩니다
+      ※ 이전 산출물은 .archive/에서 언제든 참조 가능합니다
    ```
 
    A 선택 시:
@@ -67,9 +78,11 @@ metadata:
    - 이후 inception-orchestrator에서 호출하는 각 스테이지 스킬이 기존 파일을 감지하면 UPDATE 모드로 동작
 
    B 선택 시:
+   - `devflow-docs/inception/workspace.md`가 있으면 임시로 보존 (이동 전 별도 보관)
    - `devflow-docs/inception/`을 `devflow-docs/.archive/inception-[timestamp]/`로 이동
    - `devflow-docs/construction/`을 `devflow-docs/.archive/construction-[timestamp]/`로 이동 (있으면)
-   - devflow-audit에 로깅: `"New flow — clean start (artifacts archived)"`
+   - 보존한 `workspace.md`를 새로 생성된 `devflow-docs/inception/workspace.md`로 복원
+   - devflow-audit에 로깅: `"New flow — clean start (artifacts archived, workspace.md preserved)"`
 
 3. `devflow-docs/` 디렉토리 생성 (하위 `inception/`, `construction/` 포함 — 이미 있으면 유지)
 4. `devflow-docs/devflow-state.md` 초기화:
@@ -263,13 +276,13 @@ A) 해당 단계 재시도 / B) 단계 스킵 (devflow-state에 skipped 기록)
 | devflow-state.md | `.archive/devflow-state-[timestamp].md` |
 | session-summary.md | `.archive/session-summary-[timestamp].md` |
 | devflow-state.md (손상 백업) | `.archive/devflow-state-backup-[timestamp].md` |
-| inception/ (B: 새로 시작) | `.archive/inception-[timestamp]/` |
+| inception/ (B: 새로 시작) | `.archive/inception-[timestamp]/` (workspace.md 제외 — 복원) |
 | construction/ (B: 새로 시작) | `.archive/construction-[timestamp]/` |
 
 ### 아카이브 일관성 규칙
 
 **state와 session-summary는 항상 함께 아카이브한다.** 어떤 경로로 아카이브가 발생하든 두 파일 모두 이동한다 (session-summary가 없으면 state만).
 
-### 아카이브 파일은 읽지 않는다
+### 아카이브 참조 정책
 
-아카이브된 파일은 이력 보존 목적이다. 어떤 스킬도 `.archive/` 내부 파일을 참조하지 않는다. 필요 시 사용자가 수동으로 확인한다.
+`.archive/`는 이전 산출물의 참조 저장소이다. 사용자 요청 또는 컨텍스트상 필요할 때 (예: 이전 기능의 요구사항 참고, NFR 재활용 등) 언제든 탐색·참조할 수 있다.
