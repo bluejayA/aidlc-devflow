@@ -4,7 +4,8 @@
 node_modules/
 .claude/
 .private-journal/
-devflow-docs/
+devflow-docs/*
+!devflow-docs/backlog.md
 __pycache__/
 .venv/
 .python-version

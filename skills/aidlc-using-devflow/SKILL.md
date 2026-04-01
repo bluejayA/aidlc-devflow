@@ -101,14 +101,32 @@ metadata:
    ## Selected Approach
    (pending)
    ```
-5. devflow-audit에 로깅: "New aidlc session started" + 사용자 원래 요청
-6. `aidlc-inception-orchestrator` 호출
+5. **백로그 확인 (Lazy Loading)**: `devflow-docs/backlog.md`가 존재하면:
+   - `## Next`, `## Open` 섹션의 항목 수(`- **BL-` 패턴)만 카운트한다. 파일 내용은 로드하지 않는다.
+   - 안내 표시:
+     ```
+     백로그: Next [N]건, Open [M]건
+     → 백로그를 확인하려면 "백로그 보여줘"라고 요청하세요.
+     ```
+   - 사용자가 요청하지 않으면 내용을 로드하지 않고 다음 단계로 진행한다.
+   - 파일이 없으면 이 단계를 건너뛴다.
+6. devflow-audit에 로깅: "New aidlc session started" + 사용자 원래 요청
+7. `aidlc-inception-orchestrator` 호출
 
 ### Resume Flow
 
 1. `devflow-docs/devflow-state.md` 읽기
 2. `devflow-docs/session-summary.md` 읽기 (있으면)
-3. `## Current Phase` 값에 따라 분기:
+3. **백로그 확인 (Lazy Loading)**: `devflow-docs/backlog.md`가 존재하면:
+   - `## Next`, `## Open` 섹션의 항목 수(`- **BL-` 패턴)만 카운트한다. 파일 내용은 로드하지 않는다.
+   - 안내 표시:
+     ```
+     백로그: Next [N]건, Open [M]건
+     → 백로그를 확인하려면 "백로그 보여줘"라고 요청하세요.
+     ```
+   - 사용자가 요청하지 않으면 내용을 로드하지 않고 다음 단계로 진행한다.
+   - 파일이 없으면 이 단계를 건너뛴다.
+4. `## Current Phase` 값에 따라 분기:
 
 #### Phase가 `finished`인 경우
 
