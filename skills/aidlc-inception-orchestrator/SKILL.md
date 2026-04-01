@@ -151,7 +151,10 @@ A) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [
 
 **N == 0이고 가정 없음:**
 
-> 요구사항 분석 완료 — 열린 질문 없음, 가정 없음. 다음 단계로 진행합니다.
+```
+요구사항 분석 완료 — 열린 질문 없음, 가정 없음.
+→ 다음 단계로 진행합니다.
+```
 
 게이트 없이 자동 진행한다. 변경이 필요하면 사용자가 인터럽트(자유 발화)로 요청 가능.
 
@@ -168,12 +171,16 @@ Pre-Planning은 INCEPTION 내 스테이지 그룹명이며, workflow-plan.md의 
 Minimal/Comprehensive는 자동 분기, Standard만 사용자 게이트.
 
 **Minimal complexity**: 자동 스킵. 사용자에게 안내 후 workflow-planning으로 직행:
-
-> Minimal complexity — Pre-Planning(User Stories, NFR) 자동 스킵 → 워크플로우 계획으로 진행합니다.
+```
+Minimal complexity — Pre-Planning(User Stories, NFR) 자동 스킵
+→ 워크플로우 계획으로 진행합니다.
+```
 
 **Comprehensive complexity**: 자동 포함. 사용자에게 안내 후 User-Stories 게이트로 진행:
-
-> Comprehensive complexity — Pre-Planning(User Stories + NFR) 자동 포함 → User Stories 작성을 시작합니다.
+```
+Comprehensive complexity — Pre-Planning(User Stories + NFR) 자동 포함
+→ User Stories 작성을 시작합니다.
+```
 
 **Standard complexity**: 3-option 게이트 제시
 
