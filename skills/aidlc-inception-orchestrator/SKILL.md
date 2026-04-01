@@ -117,8 +117,9 @@ B) 승인
 
 Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Complexity: [level]"`
 
-### 3. requirements-analysis 게이트 [조건부 게이트]
+### 3. requirements-analysis 게이트 [조건부 게이트 + 자동진행]
 <!-- @gate: requirements-analysis -->
+<!-- @condition: N==0,assumptions==0 -> pre-planning {auto} -->
 <!-- @gate-option: A -> requirements-analysis {questions} -->
 <!-- @gate-option: B -> pre-planning -->
 <!-- @gate-option: C -> requirements-analysis {UPDATE} -->
@@ -149,13 +150,10 @@ B) 가정 승인, 다음 단계 진행
 A) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
 
 **N == 0이고 가정 없음:**
-```
-[requirements-analysis 결과 표시]
-A) 변경 요청 (예: 요구사항 추가/삭제, 우선순위 변경 등) → requirements-analysis UPDATE 재호출
-B) 승인, 다음 단계 진행
-```
 
-A) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
+> 요구사항 분석 완료 — 열린 질문 없음, 가정 없음. 다음 단계로 진행합니다.
+
+게이트 없이 자동 진행한다. 변경이 필요하면 사용자가 인터럽트(자유 발화)로 요청 가능.
 
 ### 4. Pre-Planning 분기 [자동분기 + 조건부 게이트]
 <!-- @gate: pre-planning -->
