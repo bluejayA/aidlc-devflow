@@ -17,7 +17,11 @@
 
 ### 3단계: 백로그 파일 생성
 
-`memory/backlog_[project].md` 파일을 "백로그 템플릿"에서 복사하여 생성한다.
+`devflow-docs/backlog.md` 파일을 "백로그 템플릿"에서 복사하여 생성한다.
+
+### (선택) GitHub 이슈 연동 활성화
+
+프로젝트 `CLAUDE.md`에 `<!-- github-issues: enabled -->` 설정을 추가하면 GitHub 이슈 자동 생성/연결이 활성화된다. 기본값은 disabled (파일 기반 백로그만 운영).
 
 ---
 
@@ -58,19 +62,27 @@ GitHub 작업은 모두 `gh` CLI로 수행한다. MCP GitHub 도구는 사용하
 
 ## 프로젝트별 규칙 (CLAUDE.md용)
 
-백로그-GitHub 이슈 연동이 필요한 프로젝트에 아래를 추가한다. `[owner/repo]`와 `[project]`를 실제 값으로 교체.
+백로그 관리가 필요한 프로젝트에 아래를 추가한다. `[owner/repo]`를 실제 값으로 교체.
 
 ```markdown
-## 백로그-GitHub 이슈 연동 (필수)
+## 백로그 관리
 
-### 백로그 등록 시
-- `memory/backlog_[project].md`에 항목 추가
+### 백로그 파일
+- 위치: `devflow-docs/backlog.md`
+- 구조: Next (3-5건) / Open / Someday
+- Done 항목은 파일에서 제거 (git history로 추적)
+
+### GitHub 이슈 연동
+<!-- github-issues: enabled -->
+> 아래 규칙은 `github-issues: enabled`일 때만 적용한다.
+> disabled일 때는 `devflow-docs/backlog.md` 파일 기반으로만 운영한다.
+
+**백로그 등록 시:**
+- `devflow-docs/backlog.md`에 항목 추가
 - GitHub 이슈를 `enhancement` 라벨로 동시 생성 (`[owner/repo]`)
 - 백로그에 이슈 번호와 링크 기록
 
-### 백로그 구현 시
-백로그 항목을 구현하여 커밋할 때, 연결된 GitHub 이슈와 반드시 연동한다.
-
+**백로그 구현 시:**
 1. **커밋 메시지에 이슈 번호 포함**
    - 진행 중: `refs #N`
    - 완료 시: `closes #N` (머지 시 이슈 자동 클로즈)
@@ -79,68 +91,50 @@ GitHub 작업은 모두 `gh` CLI로 수행한다. MCP GitHub 도구는 사용하
    - 구현 시작 시: 간략한 접근 방식 코멘트
    - 커밋 완료 시: 변경 내용 요약 + 커밋 해시 코멘트
 
-3. **백로그 파일 상태 동기화**
-   - 구현 완료 시 `backlog_[project].md`의 상태를 `Done`으로 변경
-   - 현황 카운트(Open/Done/Closed) 갱신
+3. **백로그 파일 정리**
+   - 구현 완료 시 `devflow-docs/backlog.md`에서 해당 항목 제거
 ```
 
 ---
 
 ## 백로그 템플릿
 
-`memory/backlog_[project].md`로 저장한다.
+`devflow-docs/backlog.md`로 저장한다.
 
 ```markdown
----
-name: [프로젝트명] 백로그
-description: [프로젝트] 개선사항 백로그. 카테고리별 정리. GitHub Issues 연동.
-type: project
----
+# Backlog
 
-## 백로그 현황
-
-- **Open**: 0건
-- **Done**: 0건
-- **Closed**: 0건
-- **마지막 정리**: YYYY-MM-DD
+> **완료 항목 조회 방법:**
+> - GitHub: `is:issue is:closed` 필터
+> - Claude: "완료된 백로그 항목 보여줘" 요청 (git history 검색)
 
 ---
 
-## CAT-A: [카테고리명]
+## Next
 
-> [카테고리 설명]
-
-### BL-001: [제목] [P1]
-- **상태**: Open
-- **GitHub**: [#N](https://github.com/[owner/repo]/issues/N)
-- **등록일**: YYYY-MM-DD
-- **출처**: [어디서 발견/요청되었는가]
-- **현재 동작**: [현재 어떻게 동작하는가]
-- **제안**: [어떻게 변경할 것인가]
-- **영향 범위**: [변경되는 파일/컴포넌트]
+(즉시 착수할 3-5건)
+- **BL-001**: [제목] [P1] [#N](https://github.com/[owner/repo]/issues/N)
 
 ---
 
-## CAT-B: [카테고리명]
+## Open
 
-> [카테고리 설명]
+(확인된 개선사항)
+- **BL-002**: [제목] [P2] [#N](https://github.com/[owner/repo]/issues/N)
 
-(항목 추가)
+---
+
+## Someday
+
+(아이디어 단계)
+- **BL-003**: [제목] [P3] [#N](https://github.com/[owner/repo]/issues/N)
 ```
 
-### 백로그 항목 필드 설명
+### 백로그 항목 형식
 
-| 필드 | 필수 | 설명 |
-|------|------|------|
-| 상태 | 필수 | Open / Done / Closed (사유) |
-| GitHub | 필수 | 이슈 링크 |
-| 등록일 | 필수 | 절대 날짜 (상대 날짜 금지) |
-| 출처 | 필수 | 발견 경위 |
-| 현재 동작 | 권장 | 변경 전 상태 |
-| 제안 | 필수 | 변경 내용 |
-| 영향 범위 | 필수 | 변경되는 파일/컴포넌트 |
-| 선행 | 선택 | 의존하는 다른 BL |
-| 관련 | 선택 | 관련된 다른 BL |
+각 항목은 **1줄**로 작성한다: `- **BL-NNN**: [제목] [Px] [#N](link)`
+
+상세 정보가 필요한 경우 GitHub 이슈에 기록한다 (github-issues: enabled일 때).
 
 ### 우선순위 기준
 
@@ -178,8 +172,7 @@ type: project
    └→ git checkout main && git pull
 
 6. 동기화
-   └→ 백로그 상태 → Done
-   └→ 현황 카운트 갱신
+   └→ 백로그에서 완료 항목 제거
 ```
 
 ---
@@ -192,4 +185,4 @@ gh issue close [N] --repo [owner/repo] \
   --comment "[클로즈 사유]"
 ```
 
-백로그에도 상태를 `Closed (not_planned) — [사유]`로 업데이트.
+백로그에서도 해당 항목을 제거한다.

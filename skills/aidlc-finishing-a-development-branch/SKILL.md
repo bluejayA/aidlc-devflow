@@ -120,6 +120,16 @@ git worktree prune
 [워크트리 제거: [worktree-path]] (워크트리 사용 시)
 ```
 
+**백로그 Next 정리 제안**: `devflow-docs/backlog.md`가 존재하면:
+```
+백로그 Next를 정리할까요?
+- 완료된 항목 제거
+- Open에서 새 항목 승격
+
+→ "정리" 또는 "건너뛰기"
+```
+사용자가 "정리"를 선택하면 파일을 열어 함께 정리한다. "건너뛰기"하면 그대로 진행한다.
+
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
 2. state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
@@ -169,6 +179,16 @@ devflow는 PR 머지 후 종료 처리됩니다.
 ```
 
 **워크트리는 PR이 머지될 때까지 유지한다. 이 단계에서 제거하지 않는다.**
+
+**백로그 Next 정리 제안**: `devflow-docs/backlog.md`가 존재하면:
+```
+백로그 Next를 정리할까요?
+- 완료된 항목 제거
+- Open에서 새 항목 승격
+
+→ "정리" 또는 "건너뛰기"
+```
+사용자가 "정리"를 선택하면 파일을 열어 함께 정리한다. "건너뛰기"하면 그대로 진행한다.
 
 **devflow state 유지**: 옵션 B에서는 devflow-state.md를 아카이브하지 않는다. PR 머지 후 다음 세션에서 using-devflow가 PR 머지 확인 → 종료 처리를 안내한다. devflow-state에 `## Finishing Choice`를 `B (PR pending)` + `## PR URL`을 `[github-pr-url]`로 기록한다.
 

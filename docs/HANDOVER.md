@@ -91,7 +91,7 @@ AI-DLC 방법론을 오케스트레이터 중심 아키텍처로 구현한 Claud
 2. **TDD Iron Law**: 실패 테스트 없이 프로덕션 코드 작성 금지
 3. **증거 우선**: 완료 주장 전 반드시 검증 실행
 4. **정합성 체크**: 스킬 수정 시 `docs/guide/consistency-checklist.md` 확인
-5. **백로그-GitHub 연동**: 커밋 시 `refs #N` / `closes #N` + 이슈 코멘트 + 백로그 상태 동기화
+5. **백로그-GitHub 연동** (`github-issues: enabled` 시): 커밋 시 `refs #N` / `closes #N` + 이슈 코멘트 + 완료 항목 백로그에서 제거
 
 ### 테스트 실행
 
@@ -122,4 +122,4 @@ pytest tests/test_step_order.py         # 스텝 순서
 
 - GitHub 리포: [bluejayA/aidlc-devflow](https://github.com/bluejayA/aidlc-devflow)
 - 원본 참조: [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
-- 백로그 전체: Claude Code 메모리 `memory/backlog_aidlc.md`
+- 백로그 전체: `devflow-docs/backlog.md`
