@@ -10,7 +10,6 @@
 ## Next
 
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
-(BL-079, BL-080 완료)
 
 ---
 
@@ -37,6 +36,5 @@
 - **BL-067**: NFR 기본값 테이블 정의 [P3] [#112](https://github.com/bluejayA/aidlc-devflow/issues/112)
 - **BL-068**: units 위상 정렬 검증 게이트 [P3] [#113](https://github.com/bluejayA/aidlc-devflow/issues/113)
 - **BL-069**: auto-fix 에러 분류 정교화 [P3] [#114](https://github.com/bluejayA/aidlc-devflow/issues/114)
-- **BL-070**: 디버깅 루프 소프트 리밋 [P3] [#115](https://github.com/bluejayA/aidlc-devflow/issues/115)
 - **BL-071**: workflow-planning 다이어그램 선택 접근법 반영 [P3] [#116](https://github.com/bluejayA/aidlc-devflow/issues/116)
 - **BL-073**: 컨텍스트 누적 최적화 — 스테이지별 점진 로딩 [P3] [#118](https://github.com/bluejayA/aidlc-devflow/issues/118)

@@ -356,6 +356,14 @@ K 선택/스킵 모두 devflow-audit에 로깅:
 
 **Step 1.5 재검증 Debugging에는 K 게이트를 적용하지 않는다.** K 게이트는 본 Debugging 라우팅(build-and-test 실패 후)에서만 표시.
 
+**디버깅 루프 소프트 리밋**: 동일 unit에서 debugging→build-and-test 루프는 **최대 3회**까지. 3회 실패 시 에스컬레이션:
+```
+⚠️ 동일 unit에서 디버깅 3회 실패 — 자동 복구 한계
+
+A) 수동으로 디버깅 계속 (루프 카운트 리셋)
+B) 이 unit을 실패 상태로 완료 (devflow-state에 "빌드/테스트 실패 미해결" 기록)
+```
+
 ## Interrupt Handling
 <!-- @interrupt: global -->
 
