@@ -9,7 +9,8 @@
 
 ## Next
 
-(현재 비어 있음 — Open에서 승격 필요)
+- **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
+(BL-079, BL-080 완료)
 
 ---
 
@@ -18,7 +19,6 @@
 - **BL-042**: 행동 테스트 계층 (Layer 2) — LLM 기반 스킬 동작 검증 [P2] [#61](https://github.com/bluejayA/aidlc-devflow/issues/61)
 - **BL-044**: Multi-Unit Construction Agent Teams — 독립 유닛 병렬 구현 + 인터페이스 조율 [P2] [#70](https://github.com/bluejayA/aidlc-devflow/issues/70)
 - **BL-045**: dispatching-parallel-agents Agent Teams 강화 — 실행 중 충돌 감지/조율 [P2] [#71](https://github.com/bluejayA/aidlc-devflow/issues/71)
-- **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
 - **BL-052**: Playwright E2E 자동 검증 + 평가기 비대칭 도구 설계 [P2] [#92](https://github.com/bluejayA/aidlc-devflow/issues/92)
 
 
@@ -40,5 +40,3 @@
 - **BL-070**: 디버깅 루프 소프트 리밋 [P3] [#115](https://github.com/bluejayA/aidlc-devflow/issues/115)
 - **BL-071**: workflow-planning 다이어그램 선택 접근법 반영 [P3] [#116](https://github.com/bluejayA/aidlc-devflow/issues/116)
 - **BL-073**: 컨텍스트 누적 최적화 — 스테이지별 점진 로딩 [P3] [#118](https://github.com/bluejayA/aidlc-devflow/issues/118)
-- **BL-079**: Worktree 필드 미기록 — using-git-worktrees에서 devflow-state 기록 누락 [P3] [#129](https://github.com/bluejayA/aidlc-devflow/issues/129)
-- **BL-080**: devflow-state 템플릿에 Finishing Choice / PR URL 필드 추가 [P3] [#130](https://github.com/bluejayA/aidlc-devflow/issues/130)

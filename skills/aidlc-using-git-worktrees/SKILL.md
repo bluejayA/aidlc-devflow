@@ -149,6 +149,15 @@ git worktree add "$PATH" -b "$BRANCH"
 
 ---
 
+## devflow-state 업데이트
+
+<!-- @state-update: 워크트리 생성 완료 → devflow-state Worktree 필드 기록 -->
+워크트리 생성 완료 후 `devflow-docs/devflow-state.md`의 `## Worktree` 필드를 업데이트한다:
+- `branch`: [branch-name]
+- `path`: [.worktrees/xxx]
+
+스킵된 경우(git 미사용): `branch: none`, `path: none`으로 기록.
+
 ## Return to Orchestrator
 
 conventions 표준 형식. 반환 필드:
