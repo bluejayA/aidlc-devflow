@@ -9,7 +9,9 @@
 
 ## Next
 
-(현재 비어 있음 — Open에서 승격 필요)
+- **BL-063**: 세션 재개 재검증 최대 횟수 제한 [P2] [#108](https://github.com/bluejayA/aidlc-devflow/issues/108)
+- **BL-065**: SDD 모드 functional-design 전달 문서화 [P2] [#110](https://github.com/bluejayA/aidlc-devflow/issues/110)
+- **BL-074**: 오류 복구 경로 정의 — tech-stack 카탈로그 부재 등 폴백 [P2] [#119](https://github.com/bluejayA/aidlc-devflow/issues/119)
 
 ---
 
@@ -20,11 +22,7 @@
 - **BL-045**: dispatching-parallel-agents Agent Teams 강화 — 실행 중 충돌 감지/조율 [P2] [#71](https://github.com/bluejayA/aidlc-devflow/issues/71)
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
 - **BL-052**: Playwright E2E 자동 검증 + 평가기 비대칭 도구 설계 [P2] [#92](https://github.com/bluejayA/aidlc-devflow/issues/92)
-- **BL-063**: 세션 재개 재검증 최대 횟수 제한 [P2] [#108](https://github.com/bluejayA/aidlc-devflow/issues/108)
-- **BL-065**: SDD 모드 functional-design 전달 문서화 [P2] [#110](https://github.com/bluejayA/aidlc-devflow/issues/110)
-- **BL-066**: NFR 모드 게이트 소유권 명확화 [P2] [#111](https://github.com/bluejayA/aidlc-devflow/issues/111)
-- **BL-077**: NFR 게이트 통합 — nfr-requirements-mode 삭제 + 스킬 내부 모드 위임 [P2] [#125](https://github.com/bluejayA/aidlc-devflow/issues/125)
-- **BL-074**: 오류 복구 경로 정의 — tech-stack 카탈로그 부재 등 폴백 [P2] [#119](https://github.com/bluejayA/aidlc-devflow/issues/119)
+
 
 ---
 
