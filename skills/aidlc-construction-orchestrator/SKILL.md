@@ -215,7 +215,7 @@ C 선택 시:
 [리뷰 결과 표시 — Verdict: PASS/CONDITIONAL/FAIL (Standard 이상, 자동 실행)]
 A) 변경 요청 (예: 구현 방식, 테스트 범위, 에러 핸들링 등) → code-generation: GENERATE 재호출
 B) 승인, 다음 unit 진행
-S) 이번 unit 리뷰 스킵 (opt-out, 현재 unit에만 적용)
+S) 리뷰어 이슈를 무시하고 진행 (audit 기록됨, 다음 unit은 정상 리뷰)
 ```
 
 **리뷰 자동 실행 (인라인 모드, Standard 이상)**: `aidlc-requesting-code-review`를 R1(단일 리뷰) 모드로 자동 호출.
