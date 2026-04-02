@@ -78,7 +78,15 @@ B) systematic-debugging으로 즉시 조사
 ```
 → A: 전체 실행 후 실패 있으면 debugging 라우팅
 → B: 바로 `aidlc-systematic-debugging` 호출
-→ debugging Return 수신 후 재검증 재실행 (Step 1.5 반복)
+→ debugging Return 수신 후 재검증 재실행 (Step 1.5 반복, 최대 2회)
+
+**재검증 최대 횟수**: 재검증→debugging→재검증 루프는 **최대 2회**까지. 2회 실패 시 에스컬레이션:
+```
+⚠️ 재검증 2회 실패 — 자동 복구 불가
+
+A) 수동으로 디버깅 계속
+B) 재검증 건너뛰고 다음 unit 진행 (devflow-state에 "재검증 실패 미해결" 기록)
+```
 
 ### Step 2: 스테이지 결정
 

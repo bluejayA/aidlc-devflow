@@ -182,7 +182,7 @@ CONSTRUCTION 세션 재개 시 construction-orchestrator가 실행.
 ### 재검증 후 복귀 경로
 
 재검증 실패 → debugging 완료 시:
-- construction-orchestrator: debugging Return 수신 → 재검증 재실행
+- construction-orchestrator: debugging Return 수신 → 재검증 재실행 (최대 2회, 초과 시 에스컬레이션)
 - executing-plans: debugging 완료 → 재검증 재실행 → 통과 시 정상 재개
 
 ### 프로세스
