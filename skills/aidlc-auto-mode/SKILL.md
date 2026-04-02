@@ -1,11 +1,10 @@
 ---
 name: aidlc-auto-mode
 description: |
+  Use when user explicitly requests "auto 모드", "자동 모드", "auto mode", or "알아서 만들어줘".
   초보자를 위한 완전 자동 devflow. greenfield 전용.
   요구사항 입력 → inception → construction → build-test를 자동 진행하며
-  각 flow 종료 시 5개 에이전트 리뷰 필수.
-  Use for fully automated devflow for beginners. Greenfield only.
-  Triggers: "auto 모드", "자동 모드", "auto mode", "알아서 만들어줘"
+  각 flow 종료 시 멀티에이전트 리뷰 필수.
 metadata:
   version: 0.1.0
   author: Jay
@@ -24,6 +23,24 @@ metadata:
 
 "auto 모드", "자동 모드", "auto mode", "알아서 만들어줘" 키워드가 명시적으로 포함된 경우에만 활성화.
 그 외 모든 개발 요청은 기존 `aidlc-using-devflow`로 라우팅.
+
+## Examples
+
+```
+user: "auto 모드로 TODO 앱 만들어줘"
+→ greenfield 확인 → INCEPTION 자동 → 사용자 확인 → CONSTRUCTION 자동 → 완료
+
+user: "자동 모드로 로그인이 있는 블로그 만들어줘"
+→ 고위험 가정 게이트(인증 방식) → 사용자 확인 → 코드 생성 → 완료
+```
+
+## Troubleshooting
+
+| 상황 | 대응 |
+|------|------|
+| 터미널을 닫거나 세션이 끊겼을 때 | "auto 모드"로 다시 시작하면 자동 감지하여 이어서 진행 제안 |
+| 요구사항이 모호해서 반복 실패 | 고위험 가정 게이트에서 핵심 결정을 확인. 그래도 실패 시 단계별 모드로 전환 |
+| "이거 아닌데요" — 결과가 기대와 다를 때 | 다음 요청에서 구체적으로 무엇이 다른지 설명하면 auto 모드로 재진행 |
 
 ## On Activation
 
@@ -160,6 +177,7 @@ decision-log에 판단 상세 기록.
 | 서비스/컴포넌트 | 단일 | 2-3개 | 4개 이상 |
 | DB | 불필요 | 단일 | 복수 또는 복잡 스키마 |
 | 외부 연동 | 없음 | 1-2개 | 3개 이상 |
+| 대표 예시 | CLI 도구, 유틸리티 | CRUD 웹앱, REST API | 마이크로서비스, 플랫폼 |
 
 복수 기준이 다른 레벨 → 높은 쪽으로 선언. 각 기준별 근거를 decision-log 기록.
 
@@ -212,12 +230,12 @@ B → 수정 반영 후 requirements-analysis UPDATE 재호출.
 모든 INCEPTION 스테이지 완료 후 실행.
 사용자에게: "설계를 검토하고 있습니다... (5개 관점)"
 
-5개 리뷰어를 병렬 dispatch (프롬프트 경로 확인됨):
-1. spec-reviewer — `agents/spec-reviewer.md` (대상: requirements.md, user-stories.md)
-2. code-reviewer — `agents/code-reviewer.md` (대상: application-design.md)
-3. quality-reviewer — `agents/quality-reviewer.md` (대상: 전체 inception 산출물)
-4. security-reviewer — `agents/security-reviewer.md` (대상: nfr-requirements.md, application-design.md)
-5. maintainability-reviewer — `agents/maintainability-reviewer.md` (대상: application-design.md)
+5개 리뷰어를 병렬 dispatch (subagent_type 사용):
+1. `aidlc:spec-reviewer` (대상: requirements.md, user-stories.md)
+2. `aidlc:code-reviewer` (대상: application-design.md)
+3. `aidlc:quality-reviewer` (대상: 전체 inception 산출물)
+4. `aidlc:security-reviewer` (대상: nfr-requirements.md, application-design.md)
+5. `aidlc:maintainability-reviewer` (대상: application-design.md)
 
 **결과 처리:**
 - ALL PASS → 사용자 확인 게이트로.
@@ -305,7 +323,7 @@ auto-fix 루프 (테스트 실패, 린트 에러):
 
 ### CONSTRUCTION 리뷰 (필수)
 
-사용자에게: "코드를 검토하고 있습니다... (5개 관점)"
+사용자에게: "코드를 검토하고 있습니다... (4개 관점)"
 `aidlc-requesting-code-review` R1 호출. 인라인 신호: `"Review: full-depth"`
 R1이 4단계 리뷰 수행:
 - Stage 1: `_shared/reviewers/spec-reviewer-prompt.md`
@@ -382,23 +400,18 @@ auto 전용 메타데이터(auto-fix 횟수, 리뷰 라운드 등)는 auto-decis
 
 ### decision-log 포맷
 
-```markdown
-## [ISO-8601] [stage-name]
-- decision: [결정 내용]
-- reason: [판단 근거]
-- alternatives_considered: [고려한 대안]
-- assumptions: [가정 목록, 있으면]
-```
+`skills/aidlc-auto-mode/decision-log-format.md` 참조.
 
-리뷰 결과:
-```markdown
-## [ISO-8601] [phase]-review
-- reviewers: [목록]
-- results: [리뷰어별 verdict + issues]
-- auto-fix-attempt: [N/3]
-- fix-detail: [수정 내용]
-- final: [ALL PASS | ESCALATE]
-```
+### devflow 전환 시나리오
+
+에스컬레이션 또는 사용자 요청으로 devflow 전환 시:
+
+| 시나리오 | devflow-state 상태 | using-devflow 동작 |
+|---------|-------------------|-------------------|
+| INCEPTION 중 에스컬레이션 | `Phase: INCEPTION`, `Stage: [현재]` | inception-orch가 해당 stage부터 재개 |
+| INCEPTION 확인 후 전환 | `Phase: CONSTRUCTION`, `Stage: (pending)` | construction-orch가 정상 라우팅 |
+| CONSTRUCTION 중 에스컬레이션 | `Phase: CONSTRUCTION`, `Stage: [현재]` | construction-orch가 해당 stage부터 재개 |
+| 완료 후 전환 | `Phase: complete` | finishing-branch 안내 |
 
 ---
 
