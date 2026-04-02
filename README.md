@@ -2,7 +2,7 @@
 
 [English](README.en.md) | 한국어
 
-![version](https://img.shields.io/badge/version-1.6.0-blue)
+![version](https://img.shields.io/badge/version-1.8.0-blue)
 ![skills](https://img.shields.io/badge/skills-28+3_utils-green)
 ![tests](https://img.shields.io/badge/tests-269-brightgreen)
 
