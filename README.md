@@ -2,9 +2,9 @@
 
 [English](README.en.md) | 한국어
 
-![version](https://img.shields.io/badge/version-1.1.0-blue)
-![skills](https://img.shields.io/badge/skills-27-green)
-![tests](https://img.shields.io/badge/tests-95-brightgreen)
+![version](https://img.shields.io/badge/version-1.6.0-blue)
+![skills](https://img.shields.io/badge/skills-27+3_utils-green)
+![tests](https://img.shields.io/badge/tests-269-brightgreen)
 
 AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 Claude Code 개발 워크플로우 플러그인입니다.
 
@@ -53,13 +53,15 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ---
 
-## Skills 목록 (26개)
+## Skills 목록 (27개 + 유틸리티 3개)
 
 ### AI-DLC 핵심 스테이지
 
 | Skill | 역할 |
 |-------|------|
-| `aidlc-using-devflow` | 오케스트레이터. 전체 라이프사이클 소유 및 구동 |
+| `aidlc-using-devflow` | Entry Orchestrator. 전체 라이프사이클 소유 및 구동. @resume-rules로 세션 재개 분기 관리 |
+| `aidlc-inception-orchestrator` | INCEPTION Phase Orchestrator. 스테이지 순서 + 게이트 관리 |
+| `aidlc-construction-orchestrator` | CONSTRUCTION Phase Orchestrator. unit 루프 + 빌드/테스트/디버깅 관리 |
 | `aidlc-workspace-detection` | 그린필드/브라운필드 판단 + Brownfield 시 tech-stack/code-structure 수집 |
 | `aidlc-requirements-analysis` | 적응형 요구사항 분석. 해석 분기 시 선택지 제시 |
 | `aidlc-user-stories` | 요구사항을 INVEST 기준 사용자 스토리로 변환 (조건부, Pre-Planning) |
@@ -90,7 +92,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `aidlc-systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 + 실패 이력 분석 |
 | `aidlc-verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 + 회귀 테스트 RED-GREEN 검증 |
 | `aidlc-finishing-a-development-branch` | 개발 완료 후 병합/PR/유지/폐기 처리 |
-| `aidlc-requesting-code-review` | 2-stage 코드 리뷰 요청 (spec compliance → code quality). 리뷰 로직의 Single Source of Truth |
+| `aidlc-requesting-code-review` | 4-stage 코드 리뷰 요청 (R1 단일/R2 Council/R3 Agent Teams/Ra 자동). Distrust by Default. 리뷰 로직의 Single Source of Truth |
 | `aidlc-receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
 | `aidlc-dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
 | `aidlc-writing-skills` | 새 스킬 개발 시 TDD 방식 + CSO 원칙 적용 |
@@ -99,8 +101,9 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 | Skill | 역할 |
 |-------|------|
-| `_utils/devflow-state` | `devflow-docs/devflow-state.md` 읽기/쓰기 |
+| `_utils/devflow-state` | `devflow-docs/devflow-state.md` 읽기/쓰기. Worktree, Finishing Choice, PR URL 필드 포함 |
 | `_utils/devflow-audit` | `devflow-docs/audit.md` append-only 로깅 |
+| `_utils/devflow-solutions` | Knowledge Compounding — 디버깅 해결 사례 구조화 저장/검색 |
 
 ### 공유 규약 문서
 
@@ -120,7 +123,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_shared/patterns/question-format-guide.md` | 질문 설계 원칙 — 선택지 설계, 수준 적응, 모순 감지 |
 | `_shared/patterns/tech-stack-defaults.md` | 기술 스택 인덱스 — 프리셋, 정책 모드, 적용 규칙 |
 | `_shared/patterns/tech-stack-catalog.md` | 계층별 기술 카탈로그 — 선택지 생성 데이터 |
-| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 8종 (artifact, code-plan, code-reviewer, implementer, spec, quality, skill, spec-document, plan-document) |
+| `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 12종 (artifact, code-plan, code-quality, code, council-review-protocol, implementer, maintainability, plan-document, security, skill, spec-document, spec) |
 
 #### YAML 메타데이터 규약
 
@@ -156,7 +159,9 @@ devflow-docs/
 │   └── build-and-test/
 │       ├── build-instructions.md  # 빌드 지침
 │       └── test-instructions.md   # 테스트 지침
-├── devflow-state.md        # 현재 단계 상태 (세션 재개용)
+├── backlog.md              # 백로그 (Next/Open/Someday 3단계)
+├── session-summary.md      # 세션 요약 (재개 시 맥락 복원)
+├── devflow-state.md        # 현재 단계 상태 (세션 재개용, @resume-rules 참조)
 └── audit.md                # 전체 상호작용 로그 (append-only)
 ```
 

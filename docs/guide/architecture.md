@@ -258,8 +258,12 @@ graph LR
 | `artifact-reviewer-prompt.md` | INCEPTION 산출물 | application-design 게이트 |
 | `spec-reviewer-prompt.md` | Spec compliance | requesting-code-review Stage 1 |
 | `code-quality-reviewer-prompt.md` | 코드 품질 + OWASP | requesting-code-review Stage 2 |
+| `security-reviewer-prompt.md` | 보안 리뷰 | requesting-code-review Stage 3 |
+| `maintainability-reviewer-prompt.md` | 유지보수성 리뷰 | requesting-code-review Stage 4 |
 | `code-reviewer-prompt.md` | Spec + Quality 통합 | construction-orchestrator |
 | `code-plan-reviewer-prompt.md` | 코드 계획 | code-generation PART 1 |
+| `council-review-protocol.md` | Council/Teams 리뷰 프로토콜 | requesting-code-review R2/R3 |
+| `implementer-prompt.md` | 서브에이전트 구현자 | subagent-driven-development |
 | `skill-reviewer-prompt.md` | 스킬 검증 | writing-skills REFACTOR |
 
 ### Depth 정책
@@ -342,8 +346,10 @@ graph TD
 
 ### 현재 적용 범위
 
-- `aidlc-inception-orchestrator` — 8 steps, 11 gates, 5 conditions
-- `aidlc-construction-orchestrator` — 3 steps, 5 gates, 1 interrupt
+- `aidlc-inception-orchestrator` — 8 steps, 12 gates, 5 conditions, 4 `@state-update`
+- `aidlc-construction-orchestrator` — 3 steps, 5 gates, 1 interrupt, 3 `@state-update`
+- `aidlc-using-devflow` — `@resume-rules` (5분기) + 3 `@state-update`
+- `aidlc-finishing-a-development-branch` — 3 `@state-update` (옵션 A/B/D)
 
 규격 상세: `_shared/patterns/meta-tag-standard.md`
 
@@ -387,11 +393,12 @@ skills/
 |   ├── gate-patterns.md           <- 게이트 패턴 (인터럽트 포함)
 |   ├── tdd-protocol.md            <- TDD 규약
 |   ├── import-review-protocol.md  <- Import/Generate 프로토콜
-|   ├── patterns/                  <- 공유 패턴 (12개)
-|   └── reviewers/                 <- 리뷰어 프롬프트 (8개)
+|   ├── patterns/                  <- 공유 패턴 (16개)
+|   └── reviewers/                 <- 리뷰어 프롬프트 (12개)
 ├── _utils/
 |   ├── devflow-audit/             <- 감사 로그
-|   └── devflow-state/             <- 상태 관리
+|   ├── devflow-solutions/         <- Knowledge Compounding 캐시
+|   └── devflow-state/             <- 상태 관리 (Worktree, Finishing Choice, PR URL 포함)
 hooks/
 ├── hooks.json                     <- SessionStart 이벤트
 └── session-start                  <- 안내 메시지 출력
@@ -408,7 +415,13 @@ tests/
 ├── test_graph_validator.py        <- L1 정적 그래프 검증
 ├── test_routing_simulator.py      <- L2 라우팅 시뮬레이션
 ├── test_routing_engine.py         <- 엔진 단위 테스트
-└── test_step_order.py             <- L3 스텝 순서 검증
+├── test_step_order.py             <- L3 스텝 순서 검증
+├── test_construction_k_gate.py    <- K-gate + 리뷰 게이트 검증
+├── test_verification_contract.py  <- Verification Contract + Self-Healing
+├── test_quantitative_rubric.py    <- 정량 루브릭 계산
+├── test_devflow_solutions.py      <- Knowledge Compounding
+├── test_agent_teams_review.py     <- Agent Teams 협업 리뷰
+└── test_conftest_fixtures.py      <- conftest 픽스처 검증
 docs/
 ├── guide/                         <- 가이드 문서
 |   └── skill-design-patterns/     <- 스킬 설계 패턴 외부 공개 가이드

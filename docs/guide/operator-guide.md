@@ -171,6 +171,11 @@ A) REST API — 우리 팀 표준, API Gateway 연동 가능
 | **Brainstorming 필수 여부** | `## Brainstorming HARD-GATE` | 항상 필수 | 반복 작업에 한해 스킵 허용 |
 | **session-summary 조기 업데이트** | `session-continuity.md` | 핵심 결정 시점마다 | 단순 작업에서 비활성화 가능 |
 | **인터럽트 핸들러** | `interrupt-handler.md` | 모든 게이트에 적용 | 의도 분류 테이블 커스터마이징 가능 |
+| **재검증 최대 횟수** | `construction-orchestrator` Step 1.5 | 2회 | 안정적 환경에서 1회로 축소 가능 |
+| **디버깅 루프 리밋** | `construction-orchestrator` Debugging 라우팅 | 3회 | 복잡한 프로젝트에서 5회로 확대 가능 |
+| **Lazy Loading 게이트** | `using-devflow` Resume/New Flow | 활성 | 백로그 미사용 시 영향 없음 |
+| **GitHub 이슈 연동** | 프로젝트 `CLAUDE.md` | enabled | `<!-- github-issues: disabled -->` 로 비활성화 |
+| **NFR 도메인 프리셋** | 프로젝트 `CLAUDE.md` | 없음 | [nfr-domain-presets.md](nfr-domain-presets.md) 참조 |
 
 ### 조정 방법
 

@@ -166,14 +166,25 @@ devflow-docs/
 │   ├── workspace.md          ← 워크스페이스 분석 결과
 │   ├── requirements.md       ← 요구사항 문서
 │   ├── workflow-plan.md      ← 워크플로우 계획
-│   ├── application-design.md ← 설계 문서 (선택)
-│   └── session-summary.md    ← 세션 요약 (재개용)
+│   └── application-design.md ← 설계 문서 (선택)
 ├── construction/
 │   └── {unit-name}/
 │       ├── functional-design.md ← 기능 설계
 │       └── code-plan.md         ← 코드 계획
-└── devflow-state.md          ← 상태 추적
+├── backlog.md                ← 백로그 (Next/Open/Someday)
+├── session-summary.md        ← 세션 요약 (재개용)
+├── devflow-state.md          ← 상태 추적
+└── audit.md                  ← 상호작용 로그
 ```
+
+### 세션 재개 시
+
+재개 시 devflow-state의 상태에 따라 자동 분기됩니다:
+- `finished` → 이전 플로우 아카이브 후 새 작업 시작
+- `complete + PR pending` → PR 머지 확인
+- `INCEPTION/CONSTRUCTION` → 해당 단계에서 재개
+
+백로그가 있으면 건수만 표시하고, 내용은 요청 시에만 로드합니다 (Lazy Loading).
 
 ---
 
