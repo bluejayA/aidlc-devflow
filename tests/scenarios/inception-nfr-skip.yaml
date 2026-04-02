@@ -1,4 +1,4 @@
-name: "Inception — Standard pre-planning NFR skip"
+name: "Inception — Standard pre-planning skip (NFR 미실행)"
 orchestrator: aidlc-inception-orchestrator
 inputs:
   complexity: Standard
@@ -6,8 +6,7 @@ inputs:
     workspace-detection: C
     complexity-declaration: B
     requirements-analysis: B
-    pre-planning: B
-    nfr-requirements-mode: S
+    pre-planning: C
     workflow-planning-approach: A
     workflow-planning-env: C
 expect:
@@ -16,6 +15,5 @@ expect:
     - complexity-declaration
     - requirements-analysis
     - pre-planning
-    - nfr-requirements
     - workflow-planning
   final_stage: workflow-planning

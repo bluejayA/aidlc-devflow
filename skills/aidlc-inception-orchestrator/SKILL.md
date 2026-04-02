@@ -221,9 +221,9 @@ A) 선택 시: `"aidlc-user-stories: UPDATE — 기존 스토리 유지, [사용
 <!-- @gate: nfr-requirements-mode -->
 <!-- @gate-option: A -> nfr-requirements {generate} -->
 <!-- @gate-option: B -> nfr-requirements {import} -->
-<!-- @gate-option: S -> workflow-planning {skipped} -->
 
 Pre-Planning Gate에서 nfr-requirements 실행이 결정된 경우에만.
+NFR을 건너뛰려면 Pre-Planning Gate에서 C(워크플로우 직행)를 선택한다.
 
 **6a. 모드 선택 (오케스트레이터 소유)**:
 ```
@@ -231,12 +231,10 @@ NFR 요구사항을 어떻게 진행하시겠습니까?
 
 A) Claude가 질문하며 수집 (GENERATE)
 B) 이미 작성된 NFR 문서가 있음 (IMPORT)
-S) 이 단계 건너뛰기 (SKIP)
 ```
 
 A → `"Mode: GENERATE"` 인라인 신호로 aidlc-nfr-requirements 호출
 B → `"Mode: IMPORT"` 인라인 신호로 aidlc-nfr-requirements 호출
-S → SKIPPED 상태 저장, workflow-planning으로 진행
 
 <!-- @gate: nfr-requirements-result -->
 <!-- @gate-option: A -> nfr-requirements {재호출} -->
