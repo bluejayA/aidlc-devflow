@@ -9,7 +9,7 @@
 
 ## Next
 
-- **BL-074**: 오류 복구 경로 정의 — tech-stack 카탈로그 부재 등 폴백 [P2] [#119](https://github.com/bluejayA/aidlc-devflow/issues/119)
+(현재 비어 있음 — Open에서 승격 필요)
 
 ---
 
