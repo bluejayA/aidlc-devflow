@@ -9,6 +9,7 @@
 
 ## Next
 
+- **BL-078**: auto-mode Layer 2 eval — P0 시나리오 3건 릴리스 전 실행 [P1] [#142](https://github.com/bluejayA/aidlc-devflow/issues/142)
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
 
 ---
