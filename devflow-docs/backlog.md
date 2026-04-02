@@ -9,7 +9,7 @@
 
 ## Next
 
-- **BL-075**: devflow-state 상태 전환 문서화 [P2] [#120](https://github.com/bluejayA/aidlc-devflow/issues/120)
+(현재 비어 있음 — Open에서 승격 필요)
 
 ---
 
