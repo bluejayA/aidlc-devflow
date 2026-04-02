@@ -175,6 +175,7 @@ A와 B 중에서 상충할 때 어느 쪽을 우선하시겠어요?
 - n → 카탈로그에서 선택 (아래)
 
 **2. 카탈로그 선택**: `tech-stack-catalog.md`의 해당 계층 섹션을 Read
+- `tech-stack-catalog.md`가 없으면 카탈로그 선택을 스킵하고, 해당 계층을 자유 입력으로 질문한다.
 - 선택지 2~5개 구성, 첫 번째 옵션에 `(권장)` 표시 (question-format-guide.md 원칙)
 - "직접 입력" 포함 여부는 `tech-stack-defaults.md`의 정책 모드에 따름:
   - **open**: `X) 직접 입력` 포함
