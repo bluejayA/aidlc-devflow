@@ -33,7 +33,6 @@
 - **BL-058**: Self-Healing × Knowledge Compounding 통합 — 경험 기반 자동 수정 [P3] [#98](https://github.com/bluejayA/aidlc-devflow/issues/98)
 - **BL-017**: infrastructure-design 스킬 [P3] [#37](https://github.com/bluejayA/aidlc-devflow/issues/37)
 - **BL-019**: 장기 컨셉 — C4 Model, operations phase [P3] [#39](https://github.com/bluejayA/aidlc-devflow/issues/39)
-- **BL-067**: NFR 기본값 테이블 정의 [P3] [#112](https://github.com/bluejayA/aidlc-devflow/issues/112)
 - **BL-068**: units 위상 정렬 검증 게이트 [P3] [#113](https://github.com/bluejayA/aidlc-devflow/issues/113)
 - **BL-069**: auto-fix 에러 분류 정교화 [P3] [#114](https://github.com/bluejayA/aidlc-devflow/issues/114)
 - **BL-071**: workflow-planning 다이어그램 선택 접근법 반영 [P3] [#116](https://github.com/bluejayA/aidlc-devflow/issues/116)
