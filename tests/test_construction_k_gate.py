@@ -232,8 +232,8 @@ class TestFR1ReviewAutoExecution:
 
     def test_s_option_exists(self):
         content = read_skill()
-        assert re.search(r"S\).*스킵|S\).*skip", content, re.IGNORECASE), (
-            "구현 게이트에 S(스킵) 옵션이 없음"
+        assert re.search(r"S\).*무시.*진행|S\).*스킵|S\).*skip", content, re.IGNORECASE), (
+            "구현 게이트에 S(스킵/무시) 옵션이 없음"
         )
 
     def test_auto_review_execution(self):

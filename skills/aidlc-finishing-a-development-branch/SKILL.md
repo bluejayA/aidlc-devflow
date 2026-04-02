@@ -130,6 +130,7 @@ git worktree prune
 ```
 사용자가 "정리"를 선택하면 파일을 열어 함께 정리한다. "건너뛰기"하면 그대로 진행한다.
 
+<!-- @state-update: 옵션 A 완료 → Current Phase를 finished로 -->
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
 2. state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
@@ -190,6 +191,7 @@ devflow는 PR 머지 후 종료 처리됩니다.
 ```
 사용자가 "정리"를 선택하면 파일을 열어 함께 정리한다. "건너뛰기"하면 그대로 진행한다.
 
+<!-- @state-update: 옵션 B PR 생성 → Finishing Choice + PR URL 기록 -->
 **devflow state 유지**: 옵션 B에서는 devflow-state.md를 아카이브하지 않는다. PR 머지 후 다음 세션에서 using-devflow가 PR 머지 확인 → 종료 처리를 안내한다. devflow-state에 `## Finishing Choice`를 `B (PR pending)` + `## PR URL`을 `[github-pr-url]`로 기록한다.
 
 ---
@@ -262,6 +264,7 @@ git branch -D [branch-name]
 [삭제된 워크트리: [worktree-path]] (워크트리 사용 시)
 ```
 
+<!-- @state-update: 옵션 D 폐기 → Current Phase를 finished로 -->
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
 2. state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동

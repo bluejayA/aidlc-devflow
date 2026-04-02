@@ -39,6 +39,7 @@ workspace-detection → [Complexity Gate] → requirements-analysis → [Open Qu
 
 ### Step A: 스킬 호출
 
+<!-- @state-update: stage 시작 → devflow-state Current Stage를 실행 스테이지로 갱신 -->
 devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호출한다.
 호출 시 필요한 파라미터는 인라인으로 전달한다:
 - Complexity: `"Complexity: [level]"`
@@ -50,6 +51,7 @@ devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호�
 
 ### Step B-1: session-summary 업데이트
 
+<!-- @state-update: stage 완료 → devflow-state Current Stage 갱신 + Completed Stages 추가 -->
 게이트 승인 후 `devflow-docs/session-summary.md`를 업데이트한다:
 - 파일이 없으면 신규 생성 (`_shared/patterns/session-continuity.md`의 템플릿 참조)
 - `## Completed Work > ### INCEPTION`에 완료 스테이지 추가: `- [x] [stage-name] — [핵심 결과 한 줄]`
@@ -115,6 +117,7 @@ A) 조정 요청
 B) 승인
 ```
 
+<!-- @state-update: Complexity 승인 → devflow-state Complexity 기록 -->
 Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Complexity: [level]"`
 
 ### 3. requirements-analysis 게이트 [조건부 게이트 + 자동진행]
@@ -265,6 +268,7 @@ C) [C안명] 선택 (Comprehensive만)
 D) 변경 요청 (예: 접근법 수정, 스테이지 포함/제외 등) → workflow-planning 재호출
 ```
 
+<!-- @state-update: 접근법 선택 → devflow-state Selected Approach + Approved Stages 업데이트 -->
 선택 후:
 - devflow-state의 `## Selected Approach` 업데이트
 - workflow-plan.md의 `**Selected Approach**` 업데이트

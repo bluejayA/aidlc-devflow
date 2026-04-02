@@ -21,12 +21,10 @@
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
 - **BL-052**: Playwright E2E 자동 검증 + 평가기 비대칭 도구 설계 [P2] [#92](https://github.com/bluejayA/aidlc-devflow/issues/92)
 - **BL-063**: 세션 재개 재검증 최대 횟수 제한 [P2] [#108](https://github.com/bluejayA/aidlc-devflow/issues/108)
-- **BL-064**: S 게이트 사용자 안내 강화 [P2] [#109](https://github.com/bluejayA/aidlc-devflow/issues/109)
 - **BL-065**: SDD 모드 functional-design 전달 문서화 [P2] [#110](https://github.com/bluejayA/aidlc-devflow/issues/110)
 - **BL-066**: NFR 모드 게이트 소유권 명확화 [P2] [#111](https://github.com/bluejayA/aidlc-devflow/issues/111)
 - **BL-077**: NFR 게이트 통합 — nfr-requirements-mode 삭제 + 스킬 내부 모드 위임 [P2] [#125](https://github.com/bluejayA/aidlc-devflow/issues/125)
 - **BL-074**: 오류 복구 경로 정의 — tech-stack 카탈로그 부재 등 폴백 [P2] [#119](https://github.com/bluejayA/aidlc-devflow/issues/119)
-- **BL-075**: devflow-state 상태 전환 문서화 [P2] [#120](https://github.com/bluejayA/aidlc-devflow/issues/120)
 
 ---
 
@@ -46,3 +44,5 @@
 - **BL-070**: 디버깅 루프 소프트 리밋 [P3] [#115](https://github.com/bluejayA/aidlc-devflow/issues/115)
 - **BL-071**: workflow-planning 다이어그램 선택 접근법 반영 [P3] [#116](https://github.com/bluejayA/aidlc-devflow/issues/116)
 - **BL-073**: 컨텍스트 누적 최적화 — 스테이지별 점진 로딩 [P3] [#118](https://github.com/bluejayA/aidlc-devflow/issues/118)
+- **BL-079**: Worktree 필드 미기록 — using-git-worktrees에서 devflow-state 기록 누락 [P3] [#129](https://github.com/bluejayA/aidlc-devflow/issues/129)
+- **BL-080**: devflow-state 템플릿에 Finishing Choice / PR URL 필드 추가 [P3] [#130](https://github.com/bluejayA/aidlc-devflow/issues/130)
