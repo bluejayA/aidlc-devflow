@@ -63,6 +63,14 @@ When creating or updating the state file, maintain this exact structure:
 - branch: [feature/xxx | none]
 - path: [.worktrees/xxx | none]
 
+## Finishing Choice
+<!-- finishing-branch 옵션 B 선택 시 기록. 옵션 A/D는 즉시 finished로 전환 -->
+[B (PR pending) | none]
+
+## PR URL
+<!-- finishing-branch 옵션 B에서 PR 생성 시 기록 -->
+[github-pr-url | none]
+
 ## Extension Configuration
 <!-- 활성화된 extension 목록 -->
 - security: [enabled | disabled]
