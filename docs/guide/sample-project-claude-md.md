@@ -53,3 +53,18 @@ GitHub 작업은 모두 `gh` CLI로 수행한다. MCP GitHub 도구는 사용하
 
 3. **백로그 파일 정리**
    - 구현 완료 시 `devflow-docs/backlog.md`에서 해당 항목 제거
+
+---
+
+## NFR 기본 도메인 (선택)
+
+> NFR 수집 시 도메인 질문을 스킵하고 아래 기본값을 우선 적용합니다.
+> 예제: [nfr-domain-presets.md](nfr-domain-presets.md)
+
+```markdown
+### NFR 기본 도메인
+- 프로젝트 도메인: [도메인명]
+- 가용성: [기본값]
+- 응답 시간: [기본값]
+- 보안: [기본값]
+```
