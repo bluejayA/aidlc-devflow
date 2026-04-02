@@ -3,7 +3,7 @@
 [English](README.en.md) | 한국어
 
 ![version](https://img.shields.io/badge/version-1.6.0-blue)
-![skills](https://img.shields.io/badge/skills-27+3_utils-green)
+![skills](https://img.shields.io/badge/skills-28+3_utils-green)
 ![tests](https://img.shields.io/badge/tests-269-brightgreen)
 
 AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 Claude Code 개발 워크플로우 플러그인입니다.
@@ -12,6 +12,8 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 `aidlc-using-devflow` 하나가 전체 라이프사이클을 소유하고 구동하며, 나머지 stage skill은 순수 실행자로 동작합니다.
 
 > **처음이신가요?** 👉 [AIDLC와 함께 개발하기](docs/guide/how-it-works.md) — 기술 용어 없이 전체 흐름을 쉽게 설명합니다.
+
+> **초보자라면?** 👉 [Auto Mode 가이드](docs/guide/auto-mode-guide.md) — 요구사항만 입력하면 설계부터 코드까지 자동 완성
 
 > **사용법** 👉 [사용자 가이드](docs/guide/user-guide.md) — 시작, 질문 방식, 게이트, 독립 스킬 사용법
 
@@ -28,6 +30,10 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 오케스트레이터가 Stage Routing Table에 따라 전체 라이프사이클을 순차적으로 구동합니다.
 각 stage 완료 후 오케스트레이터가 직접 승인 게이트를 제시합니다. Stage skill은 실행 결과만 반환하고 즉시 종료합니다.
+
+### Auto Mode (초보자용)
+
+"auto 모드로 만들어줘"라고 요청하면 `aidlc-auto-mode`가 활성화됩니다. 설계부터 코드 생성, 빌드/테스트까지 Claude가 자율적으로 진행하며, 각 flow 종료 시 멀티에이전트 리뷰를 필수로 거칩니다. INCEPTION 완료 후 한 번만 사용자 확인을 받고, 이후는 최종 결과물까지 자동 진행합니다. 자세한 내용은 [Auto Mode 가이드](docs/guide/auto-mode-guide.md)를 참조하세요.
 
 ---
 
@@ -53,7 +59,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ---
 
-## Skills 목록 (27개 + 유틸리티 3개)
+## Skills 목록 (28개 + 유틸리티 3개)
 
 ### AI-DLC 핵심 스테이지
 
@@ -84,6 +90,12 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `aidlc-subagent-driven-development` | 태스크별 서브에이전트 실행 + 2단계 리뷰 (spec → quality) |
 | `aidlc-executing-plans` | 구현 계획 배치 실행 + 세션 재개 지원 |
 | `aidlc-superpowers-tracking` | 세션 스킬 사용 추적 + 워크플로우 개선 인사이트 |
+
+### Auto Mode
+
+| Skill | 역할 |
+|-------|------|
+| `aidlc-auto-mode` | 초보자용 완전 자동 devflow. greenfield 전용. INCEPTION→CONSTRUCTION→BUILD를 자동 진행하며 멀티에이전트 리뷰 필수 |
 
 ### 개발 품질 도구
 
@@ -162,7 +174,9 @@ devflow-docs/
 ├── backlog.md              # 백로그 (Next/Open/Someday 3단계)
 ├── session-summary.md      # 세션 요약 (재개 시 맥락 복원)
 ├── devflow-state.md        # 현재 단계 상태 (세션 재개용, @resume-rules 참조)
-└── audit.md                # 전체 상호작용 로그 (append-only)
+├── audit.md                # 전체 상호작용 로그 (append-only)
+├── auto-decision-log-inception.md     # (auto-mode) INCEPTION 자율 판단 로그
+└── auto-decision-log-construction.md  # (auto-mode) CONSTRUCTION 자율 판단 로그
 ```
 
 ---
@@ -259,6 +273,7 @@ devflow는 feature 브랜치에서 작업 후 PR을 통해 머지하는 것을 �
 ```
 🔧 AIDLC devflow 플러그인이 설치되어 있습니다.
 시작하려면: "devflow 시작해줘"
+초보자라면: "auto 모드로 만들어줘"
 ```
 
 ---
