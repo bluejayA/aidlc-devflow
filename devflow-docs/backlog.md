@@ -9,7 +9,6 @@
 
 ## Next
 
-- **BL-065**: SDD 모드 functional-design 전달 문서화 [P2] [#110](https://github.com/bluejayA/aidlc-devflow/issues/110)
 - **BL-074**: 오류 복구 경로 정의 — tech-stack 카탈로그 부재 등 폴백 [P2] [#119](https://github.com/bluejayA/aidlc-devflow/issues/119)
 
 ---

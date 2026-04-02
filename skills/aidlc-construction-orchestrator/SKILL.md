@@ -135,7 +135,9 @@ B) 인라인 모드 — 현재 컨텍스트에서 순차 실행
 
 **A (SDD 모드) 선택 시:**
 1. Comprehensive에서 functional-design이 포함된 경우, SDD 호출 **전에** orchestrator가 unit별로 functional-design을 실행한다
-2. `aidlc-subagent-driven-development` 호출 (인라인 신호: `"SDD: units=[devflow-docs/inception/units.md], summary=[devflow-docs/session-summary.md], complexity=[level]"`)
+2. `aidlc-subagent-driven-development` 호출 (인라인 신호: `"SDD: units=[devflow-docs/inception/units.md], summary=[devflow-docs/session-summary.md], complexity=[level], functional-designs=[devflow-docs/inception/functional-design-*.md]"`)
+   - functional-design 산출물이 있으면 경로를 인라인 신호에 포함. SDD가 서브에이전트에 전달한다.
+   - functional-design이 없으면 (Standard 이하) 해당 필드 생략
 3. SDD 모드에서는 개별 unit 게이트(code-plan 게이트, 구현 게이트)가 **비활성화** — SDD 스킬의 태스크 완료 + R1 리뷰가 품질 게이트 역할
 4. SDD 완료 후 → build-and-test(섹션 3)로 바로 진행
 

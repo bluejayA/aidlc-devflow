@@ -35,15 +35,16 @@ metadata:
 ### 모드 2: Orchestrator 위임 모드 (units.md 기반)
 `aidlc-construction-orchestrator`가 SDD 모드로 호출 시.
 
-**호출 신호**: `"SDD: units=[devflow-docs/inception/units.md], summary=[devflow-docs/session-summary.md], complexity=[level]"`
+**호출 신호**: `"SDD: units=[devflow-docs/inception/units.md], summary=[devflow-docs/session-summary.md], complexity=[level], functional-designs=[devflow-docs/inception/functional-design-*.md]"`
 
 이 신호를 받으면:
 1. units.md에서 unit 목록을 읽고, 각 unit을 태스크로 변환
 2. session-summary.md에서 unit 완료 상태 + units.md의 인터페이스 정의만 참조
-3. **컨텍스트 격리**: 각 unit 서브에이전트에 이전 unit의 code-plan, 구현 코드, 변경 파일 목록 전달 금지
-4. **finishing-branch 비활성화**: orchestrator 위임 모드에서는 `aidlc-finishing-a-development-branch` 호출을 스킵. orchestrator가 후속 처리
-5. **최종 코드 리뷰 비활성화**: orchestrator가 build-and-test를 별도 실행하므로 SDD 내 최종 리뷰 스킵
-6. 모든 unit의 R1 리뷰 통과 → orchestrator에 제어 반환
+3. **functional-design 전달**: `functional-designs` 필드가 있으면 해당 unit의 functional-design 산출물을 서브에이전트에 컨텍스트로 전달한다. 서브에이전트는 functional-design을 재실행하지 않는다. 필드가 없으면 (Standard 이하) 건너뛴다.
+4. **컨텍스트 격리**: 각 unit 서브에이전트에 이전 unit의 code-plan, 구현 코드, 변경 파일 목록 전달 금지
+5. **finishing-branch 비활성화**: orchestrator 위임 모드에서는 `aidlc-finishing-a-development-branch` 호출을 스킵. orchestrator가 후속 처리
+6. **최종 코드 리뷰 비활성화**: orchestrator가 build-and-test를 별도 실행하므로 SDD 내 최종 리뷰 스킵
+7. 모든 unit의 R1 리뷰 통과 → orchestrator에 제어 반환
 
 ## 프로세스 (태스크 반복)
 
