@@ -104,6 +104,7 @@ A) 변경 요청 (예: unit 분할/병합, 구현 순서 변경 등) → units-g
 B) 승인, 코드 생성 진행
 ```
 
+<!-- @state-update: units-generation 승인 → devflow-state에 unit 목록 기록 -->
 승인 후: devflow-state에 unit 목록 기록
 
 ### 1.5. SDD 모드 게이트 (Multi-unit만)
@@ -137,6 +138,7 @@ B) 인라인 모드 — 현재 컨텍스트에서 순차 실행
 `devflow-docs/inception/units.md`에서 구현 순서를 읽는다.
 units-generation이 스킵된 경우, 단일 unit으로 처리한다.
 
+<!-- @state-update: unit 루프 진입 → devflow-state Active Unit을 현재 unit으로 설정 -->
 **각 unit에 대해 아래를 반복:**
 
 #### 2a. functional-design (조건부)
@@ -223,6 +225,7 @@ Council/Teams 리뷰를 원하면 자유 발화로 요청 → Interrupt Handler�
 requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of Truth).
 **Minimal depth**: 리뷰 없음. S 옵션 없이 A/B만 제시.
 
+<!-- @state-update: unit 완료 → devflow-state Completed Units 추가 + Active Unit 갱신 -->
 승인 후:
 - devflow-state의 `## Completed Units`에 unit명 추가
 - `devflow-docs/session-summary.md` 업데이트: Completed Work에 unit 추가 + `**Commit**` 필드에 현재 HEAD hash

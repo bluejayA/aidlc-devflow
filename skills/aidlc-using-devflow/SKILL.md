@@ -128,6 +128,14 @@ metadata:
    - 파일이 없으면 이 단계를 건너뛴다.
 4. `## Current Phase` 값에 따라 분기:
 
+<!-- @resume-rules (상태 분기 요약)
+  finished                          → archive state+summary, then New Flow
+  complete + Finishing=="B (PR pending)" → PR 머지 확인 게이트
+  complete (Finishing 없음)          → finishing-branch 실행 안내
+  INCEPTION | CONSTRUCTION          → 해당 orchestrator 호출
+  파싱 불가 (Error Handling)          → 백업 + New Flow
+-->
+
 #### Phase가 `finished`인 경우
 
 이전 플로우가 완전히 종료된 상태. 아카이브 처리가 누락된 경우.
@@ -159,6 +167,7 @@ B) PR 아직 진행 중 → 다른 작업 시작
 C) PR 확인 후 결정
 ```
 
+<!-- @state-update: PR 머지 확인 → Current Phase를 finished로 -->
 A 선택 시:
 - `gh pr view [PR URL] --json state`로 머지 확인 (가능한 경우)
 - devflow-state의 `## Current Phase`를 `finished`로 업데이트
@@ -214,6 +223,7 @@ B 선택 시:
 
 ### INCEPTION 완료 시
 
+<!-- @state-update: INCEPTION 완료 → Current Phase를 CONSTRUCTION으로 -->
 `aidlc-inception-orchestrator`가 INCEPTION 완료를 반환하면:
 1. devflow-state의 `## Current Phase`를 `CONSTRUCTION`으로 업데이트
 2. `devflow-docs/session-summary.md` 업데이트:
@@ -224,6 +234,7 @@ B 선택 시:
 
 ### CONSTRUCTION 완료 시
 
+<!-- @state-update: CONSTRUCTION 완료 → Current Phase를 complete로 -->
 `aidlc-construction-orchestrator`가 CONSTRUCTION 완료를 반환하면:
 1. devflow-state의 `## Current Phase`를 `complete`로 업데이트
 2. `devflow-docs/session-summary.md` 최종 업데이트:
