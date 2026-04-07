@@ -1,0 +1,89 @@
+{
+  "skill_name": "aidlc-auto-mode",
+  "description": "auto-mode Layer 2 eval — P0 시나리오 3건 (릴리스 차단 필수)",
+  "skill_path": "skills/aidlc-auto-mode/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "name": "p0-1-greenfield-e2e",
+      "prompt": "auto 모드로 TODO 앱 만들어줘. 할 일 추가, 삭제, 완료 체크 기능이 필요해.",
+      "expected_output": "auto-mode 전체 플로우 완료: greenfield 감지 → INCEPTION 자동 진행 → 사용자 확인 → CONSTRUCTION 자동 진행 → build-test → 완료",
+      "gate_script": {
+        "inception-confirm": "B (좋습니다, 코드 생성을 시작합니다)",
+        "high-risk-assumption": "A (맞습니다, 계속 진행)",
+        "final-result": "B (나중에 실행하겠습니다)",
+        "session-chaining": "C (종료)"
+      },
+      "expectations": [
+        "auto-mode가 greenfield로 감지하고 자동 진행 시작",
+        "devflow-state.md가 생성되고 Phase가 INCEPTION → CONSTRUCTION → complete로 전이",
+        "auto-decision-log-inception.md가 생성되고 각 스테이지별 판단 기록 존재",
+        "auto-decision-log-construction.md가 생성되고 코드 생성/빌드 판단 기록 존재",
+        "session-summary.md가 생성되고 완료 스테이지 목록 포함",
+        "requirements.md가 devflow-docs/inception/에 생성됨",
+        "workflow-plan.md가 devflow-docs/inception/에 생성되고 Selected Approach 확정됨",
+        "INCEPTION 리뷰가 실행됨 (5개 리뷰어 dispatch 또는 리뷰 결과 기록)",
+        "CONSTRUCTION 리뷰가 실행됨 (requesting-code-review 호출 기록)",
+        "build-and-test가 실행되고 결과가 표시됨",
+        "사용자 확인 게이트가 A/B 선택지 형식으로 1회 제시됨 (INCEPTION 후)",
+        "최종 결과물에 생성 파일 수 + 테스트 통과 수 표시",
+        "[OUTCOME] Complexity 자동 선언이 decision-log에 근거와 함께 기록됨",
+        "[OUTCOME] 기술 스택 자동 선택이 decision-log에 근거와 함께 기록됨",
+        "[OUTCOME] 에스컬레이션 메시지가 초보자 친화 톤으로 작성됨 (기술 용어 최소화)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "p0-2-devflow-transition",
+      "prompt": "auto 모드로 간단한 메모 앱 만들어줘. 메모 작성, 목록 보기, 삭제 기능.",
+      "expected_output": "auto-mode INCEPTION 완료 후 사용자가 단계별 모드로 전환. devflow-state + session-summary + workflow-plan 정합성 유지.",
+      "gate_script": {
+        "inception-confirm": "A (수정할 부분이 있습니다 → '하나씩 확인하면서 진행하기')",
+        "escalation-choice": "A (하나씩 확인하면서 진행하기)"
+      },
+      "expectations": [
+        "auto-mode가 INCEPTION 자동 진행을 완료함",
+        "INCEPTION 리뷰가 실행됨 (5개 리뷰어 결과)",
+        "사용자 확인 게이트에서 A 선택 후 단계별 모드 전환 안내 표시",
+        "devflow-state.md의 Phase가 CONSTRUCTION, Stage가 유효한 값으로 기록됨",
+        "devflow-state.md의 Selected Approach + Approved Stages가 빈 값이 아닌 유효한 값",
+        "session-summary.md에 INCEPTION 완료 스테이지 목록이 기록됨",
+        "workflow-plan.md가 존재하고 Selected Approach가 확정됨",
+        "auto-decision-log-inception.md의 마지막 항목이 전환 이벤트 기록",
+        "[OUTCOME] 전환 후 using-devflow의 construction-orchestrator가 정상 라우팅 가능한 상태",
+        "[OUTCOME] devflow-state의 Complexity, Selected Approach, Approved Stages가 모두 유효하여 수동 devflow에서 바로 이어갈 수 있음"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "p0-3-session-resume",
+      "prompt": "auto 모드",
+      "expected_output": "기존 in-progress 세션을 자동 감지하고, 산출물 교차 검증 후 이어서 진행.",
+      "setup": {
+        "description": "fixtures/p0-3-resume-state/ 파일들을 devflow-docs/에 복사하여 in-progress 상태를 시뮬레이션",
+        "fixture_path": "fixtures/p0-3-resume-state/",
+        "files": [
+          "devflow-docs/devflow-state.md",
+          "devflow-docs/auto-decision-log-inception.md",
+          "devflow-docs/session-summary.md",
+          "devflow-docs/inception/requirements.md",
+          "devflow-docs/inception/workspace.md"
+        ]
+      },
+      "gate_script": {
+        "session-detect": "A (이어서 진행하기)"
+      },
+      "expectations": [
+        "auto-mode가 기존 세션을 자동 감지하고 재개 제안 표시 (A/B 선택지)",
+        "진행 상황 표시: 완료된 스테이지 수 포함",
+        "A 선택 후 devflow-state.md를 읽어 Current Phase/Stage 확인",
+        "session-summary.md를 읽어 완료 작업 맥락 복원",
+        "Current Stage에 (in-progress) 포함 시 산출물 존재 여부로 교차 검증 수행",
+        "교차 검증 통과 후 해당 Phase의 다음 스테이지부터 자동 진행 재개",
+        "decision-log에 session-resumed 이벤트 기록",
+        "[OUTCOME] 재개 후 이전 완료 스테이지가 재실행되지 않음 (중복 실행 방지)",
+        "[OUTCOME] 재개 후 생성되는 산출물이 이전 산출물과 충돌하지 않음 (append-only 규칙 준수)"
+      ]
+    }
+  ]
+}
