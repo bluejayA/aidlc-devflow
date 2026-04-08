@@ -73,6 +73,17 @@ metadata:
 - 문서 상단에 `**Complexity:** [Minimal|Standard|Comprehensive]` 기록
 - 커밋
 
+### Step 5.5: Self-Review Checklist
+
+저장된 설계 문서를 아래 4항목으로 셀프리뷰한다. 이슈 발견 시 즉시 인라인 수정 후 재저장. re-review 없이 다음 단계로 진행.
+
+1. **Placeholder scan** — TBD, TODO, "추후 결정", 불완전 섹션, 모호한 요구사항이 남아있는가?
+2. **Internal consistency** — 섹션 간 모순이 없는가? 아키텍처 설명과 기능 요구사항이 일치하는가?
+3. **Scope check** — 이 설계가 단일 구현 계획(writing-plans)으로 분해 가능한가? 아니면 추가 분해가 필요한가?
+4. **Ambiguity check** — 두 가지 이상 해석이 가능한 요구사항이 있는가?
+
+수정 사항이 있으면 파일 업데이트 후 Step 6으로 진행.
+
 ### Step 6: Spec Review + 사용자 리뷰 + 전환
 
 **Spec Review Loop** (conventions 리뷰 루프 규약 참조):

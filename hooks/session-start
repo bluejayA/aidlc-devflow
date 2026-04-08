@@ -4,6 +4,11 @@
 
 PLUGIN_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
+# 서브에이전트 모드: 온보딩 스킵
+if [ -n "${CLAUDE_AGENT_ID:-}" ]; then
+  exit 0
+fi
+
 cat << 'MSG'
 🔧 AIDLC devflow 플러그인이 설치되어 있습니다.
 
