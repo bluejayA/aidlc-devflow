@@ -88,8 +88,7 @@ metadata:
 
 **Spec Review Loop** (conventions 리뷰 루프 규약 참조):
 
-1. **Minimal depth**: 리뷰 스킵, 바로 사용자 리뷰 게이트로
-2. **Standard/Comprehensive depth**:
+1. **Minimal / Standard / Comprehensive depth**:
    - `_shared/reviewers/spec-document-reviewer-prompt.md`를 서브에이전트로 dispatch
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
    - Recommendations만 → 루프 종료 (수정 권장)

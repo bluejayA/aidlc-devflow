@@ -144,7 +144,7 @@ conventions Review Workflow 적용.
 ### PART 1 (Plan)
 - 산출물: devflow-docs/construction/[unit-name]/code-plan.md
 - 리뷰어: code-plan-reviewer-prompt.md
-- **Depth 정책**: Minimal → 리뷰 스킵, Standard/Comprehensive → code-plan-reviewer dispatch
+- **Depth 정책**: Minimal/Standard/Comprehensive → code-plan-reviewer dispatch (R1)
 
 ### PART 2 (Generate)
 - 산출물: 구현된 소스 파일

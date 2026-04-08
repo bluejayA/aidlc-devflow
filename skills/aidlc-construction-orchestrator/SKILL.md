@@ -233,7 +233,7 @@ S) 리뷰어 이슈를 무시하고 진행 (audit 기록됨, 다음 unit은 정�
 **리뷰 자동 실행 (인라인 모드, Standard 이상)**: `aidlc-requesting-code-review`를 R1(단일 리뷰) 모드로 자동 호출.
 Council/Teams 리뷰를 원하면 자유 발화로 요청 → Interrupt Handler가 처리.
 requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of Truth).
-**Minimal depth**: 리뷰 없음. S 옵션 없이 A/B만 제시.
+**Minimal depth**: R1 단일 리뷰 자동 실행 (Standard와 동일).
 
 <!-- @state-update: unit 완료 → devflow-state Completed Units 추가 + Active Unit 갱신 -->
 승인 후:

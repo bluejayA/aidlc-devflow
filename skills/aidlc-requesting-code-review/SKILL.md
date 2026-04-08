@@ -46,10 +46,9 @@ depth에 따라 3-stage (Standard) 또는 4-stage (Comprehensive) code review를
 
 ### 0. Depth 확인
 
-- **Minimal**: 리뷰 스킵. "리뷰 스킵 (Minimal depth)" 반환
-- **Standard/Comprehensive**: 리뷰 모드 선택으로 진행
+- **Minimal / Standard / Comprehensive**: 리뷰 모드 선택으로 진행
 
-### 0.1. 리뷰 모드 선택 (Standard 이상)
+### 0.1. 리뷰 모드 선택
 
 리뷰 모드를 선택한다. 호출 시 모드가 지정되면 해당 모드를 사용하고, 미지정이면 기본값(R1).
 

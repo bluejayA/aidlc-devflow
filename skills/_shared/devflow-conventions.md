@@ -65,8 +65,8 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 ## 리뷰 규약
 
 ### Depth 정책
-- **Minimal**: 리뷰 스킵, 바로 Return to Orchestrator
-- **Standard / Comprehensive**: 리뷰 서브에이전트 dispatch
+- **Minimal / Standard**: R1 단일 리뷰어 순차 dispatch
+- **Comprehensive**: R1 기본 + Maintainability 추가 (4-stage)
 - depth 확인 (fallback 우선순위):
   1. 호출 텍스트의 인라인 depth 신호
   2. `workflow-plan.md`의 `## Stage Depths`

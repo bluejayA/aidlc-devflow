@@ -9,8 +9,9 @@
 
 ## Next
 
-- **BL-078**: auto-mode Layer 2 eval — P0 시나리오 3건 릴리스 전 실행 [P1] [#142](https://github.com/bluejayA/aidlc-devflow/issues/142)
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
+- **BL-082**: SDD Brownfield stub blind spot — stub scan + adapter 검증 + 리뷰 CRITICAL 즉시수정 [P2] [#147](https://github.com/bluejayA/aidlc-devflow/issues/147)
+- **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145)
 
 ---
 
@@ -26,7 +27,6 @@
 
 ## Someday
 
-- **BL-021**: GitHub Flow 연동 — 이슈 생성 + 스테이지별 코멘트 + PR/머지 자동화 [P3] [#25](https://github.com/bluejayA/aidlc-devflow/issues/25)
 - **BL-053**: audit 기반 하네스 최적화 + 비용-품질 메트릭 [P3] [#93](https://github.com/bluejayA/aidlc-devflow/issues/93)
 - **BL-054**: 모델별 게이트 프로파일 — 동적 하네스 단순화 [P3] [#94](https://github.com/bluejayA/aidlc-devflow/issues/94)
 - **BL-055**: 리뷰 ROI 자동화 — risk score 기반 리뷰 강도 동적 조절 [P3] [#95](https://github.com/bluejayA/aidlc-devflow/issues/95)
