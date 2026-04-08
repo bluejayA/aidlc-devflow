@@ -90,6 +90,16 @@ Expected: PASS
 - "테스트 통과 확인" — Step
 - "커밋" — Step
 
+## Self-Review Checklist
+
+작성된 구현 계획을 아래 3항목으로 셀프리뷰한다. 이슈 발견 시 즉시 인라인 수정 후 재저장. re-review 없이 Plan Review Loop로 진행.
+
+1. **Spec coverage** — 스펙의 각 섹션/요구사항에 대응하는 구현 태스크가 있는가? 갭이 있으면 나열
+2. **Placeholder scan** — TBD, TODO, 모호한 단계, 누락된 코드 블록, 불완전한 파일 경로가 있는가?
+3. **Type consistency** — 타입, 메서드 시그니처, 속성명이 태스크 간 일관적인가? (예: Task 2에서 `userId`인데 Task 5에서 `user_id`)
+
+수정 사항이 있으면 파일 업데이트 후 Plan Review Loop로 진행.
+
 ## Plan Review Loop
 
 청크(≤1000줄) 단위로 작성 후 리뷰 (conventions 리뷰 루프 규약 참조):
