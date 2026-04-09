@@ -79,48 +79,49 @@ Stage 3 (Security, background) ─┤ 병렬
 
 | Phase | 리뷰 대상 | Claude 리뷰어 | Codex 도구 | 실행 방식 |
 |-------|----------|--------------|-----------|----------|
-| CONSTRUCTION | Stage 2 (Quality) | code-quality-reviewer | `/codex:review` | 자동 (메인 병렬) |
-| INCEPTION | brainstorming Spec | spec-document-reviewer | `/codex:adversarial-review` | 수동 (사용자 판단) |
-| INCEPTION | writing-plans Plan | plan-document-reviewer | `/codex:adversarial-review` | 수동 (사용자 판단) |
+| CONSTRUCTION | Stage 2 (Quality) | code-quality-reviewer | `/codex:review` | 수동 — 실행 가이드 표시 |
+| INCEPTION | brainstorming Spec | spec-document-reviewer | `/codex:adversarial-review` | 수동 — 사용자 판단 |
+| INCEPTION | writing-plans Plan | plan-document-reviewer | `/codex:adversarial-review` | 수동 — 사용자 판단 |
 
 ### 3.2 실행 방식
 
-**CONSTRUCTION (자동)**: Claude 서브에이전트를 background dispatch하고, 메인 컨텍스트에서 `/codex:review`를 동시 실행한다. 서브에이전트는 Bash 권한이 없으므로 Codex는 반드시 메인에서 실행한다.
+**모든 Phase에서 수동 실행**: `/codex:review`와 `/codex:adversarial-review`는 `disable-model-invocation` 제약으로 Claude가 자동 호출할 수 없다. Claude 리뷰 결과와 함께 Codex 실행 가이드를 표시하고, 사용자가 필요 시 직접 실행한다.
 
-**INCEPTION (수동)**: brainstorming/writing-plans는 orchestrator에서 명시적으로 호출되지 않으므로, 자동 Codex 실행 지점이 없다. 사용자가 설계/계획 산출물에 대해 추가 검증이 필요하면 `/codex:adversarial-review`를 직접 실행한다.
+**CONSTRUCTION — requesting-code-review가 실행 가이드 생성:**
 
 ```
-[CONSTRUCTION — R1 Standard]
-Stage 1 (Spec)
+Claude 리뷰 완료
     ↓
-Stage 2 (Quality, background)  ─┐
-/codex:review (메인)            ─┤ 병렬
-Stage 3 (Security, background)  ─┘
-    ↓
-결과 종합 (Claude Verdict + Codex 참고 의견)
+결과 표시 + Codex 실행 가이드:
+  → /codex:review --scope branch
+    브랜치: [branch명], 워크트리: [path]
+    참고: [CONDITIONAL/FAIL stage 관점 힌트]
+    ↓ 사용자 판단
+  실행 또는 스킵
+```
 
-[INCEPTION — 사용자 수동]
+**INCEPTION — 사용자 자율 실행:**
+
+```
 brainstorming/writing-plans 완료 → 산출물 저장
     ↓ 사용자 판단
 /codex:adversarial-review (필요 시 직접 실행)
 ```
 
-### 3.3 Codex 결과 위치
+### 3.3 Codex 실행 가이드 컨텍스트
 
-- Verdict에는 Claude 결과만 반영
-- Codex 결과는 "참고 의견" / "약점 분석"으로 별도 표시
-- 사용자가 Codex 지적을 채택할지 여부를 판단
+requesting-code-review는 다음 정보를 기반으로 실행 가이드를 생성한다:
+
+| 항목 | 소스 |
+|------|------|
+| 워크트리 경로 | `devflow-state.md`의 `## Worktree` → `path` |
+| 브랜치명 | `devflow-state.md`의 `## Worktree` → `branch` |
+| 리뷰 범위 | 워크트리 있음 → `--scope branch`, 없음+staged → `--uncommitted`, 없음+커밋 완료 → `--base main` |
+| 관점 힌트 | CONDITIONAL/FAIL stage의 이슈 요약 |
 
 ### 3.4 Codex 미설치 fallback
 
-```
-리뷰 시작
-  ↓
-Codex CLI 감지 (첫 리뷰 시 1회, 세션 내 캐싱)
-  ├─ 있음 → Claude + Codex 병렬 실행
-  └─ 없음 → "ℹ Codex 미설치 — Claude 단독 리뷰로 진행합니다."
-             Claude-only 실행 (세션당 1회만 안내)
-```
+Codex CLI 미감지(`command -v codex` 실패) 시 실행 가이드를 생략한다. 세션당 1회 감지, 결과 캐싱.
 
 ---
 

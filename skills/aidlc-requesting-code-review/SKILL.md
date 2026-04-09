@@ -93,14 +93,33 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
    - FAIL → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
    - CONDITIONAL → Stage 2로 (수정 권장)
 
-#### Codex 세컨드 오피니언 (Stage 2 병렬)
+#### Codex 세컨드 오피니언 (결과 반환 시 안내)
 
 conventions Codex 세컨드 오피니언 정책 적용.
 
-Stage 2 이후의 병렬 dispatch와 동시에 메인 컨텍스트에서 `/codex:review`를 실행한다.
-- Codex CLI 미감지 시 스킵 (conventions fallback 참조)
-- Codex 결과는 전체 결과 표시 시 "Codex 참고 의견" 섹션으로 별도 표시
-- Codex 타임아웃 시 "Codex 세컨드 오피니언: ⏭ 타임아웃" 표시
+Claude 리뷰 결과 반환 시, Codex 세컨드 오피니언 실행 가이드를 함께 표시한다.
+`/codex:review`는 `disable-model-invocation` 제약으로 자동 호출 불가하므로, 사용자가 필요 시 직접 실행한다.
+
+**안내 생성 규칙:**
+
+1. `devflow-state.md`에서 워크트리 정보를 읽는다:
+   - `## Worktree` → `branch`, `path` 값 확인
+2. 리뷰 대상 범위를 결정한다:
+   - 워크트리 있음 → `--scope branch` (현재 브랜치의 전체 변경)
+   - 워크트리 없음 + staged 변경 → `--uncommitted`
+   - 워크트리 없음 + 커밋 완료 → `--base main` (main 대비 diff)
+3. CONDITIONAL/FAIL stage가 있으면 해당 관점을 힌트로 포함한다
+
+**안내 템플릿:**
+
+```
+> **Codex 세컨드 오피니언**: 추가 검증이 필요하면 아래 명령을 실행하세요.
+> → `/codex:review --scope branch`
+>   브랜치: [branch명], 워크트리: [path]
+>   [CONDITIONAL/FAIL stage가 있으면] 참고: [stage명]에서 [이슈 요약] 발견 — Codex 관점도 확인 권장
+```
+
+Codex CLI 미감지 시 안내를 생략한다 (conventions fallback 참조).
 
 #### Stage 2+3(+4) — Code Quality + Security (+ Maintainability) 병렬
 
