@@ -44,6 +44,8 @@ agent-council 기반 코드 리뷰(R1/R2/R3)에서 타임아웃이 빈번하게 
 | R3 팀 전체 타임아웃 (600초) | 완료된 에이전트 결과만 종합, 미완료 에이전트는 "⏭ 타임아웃" |
 | 모든 리뷰어 타임아웃 | 사용자에게 escalate — "리뷰 실행 불가. A) 재시도 / B) 리뷰 스킵" |
 
+> **R2 (Council) 범위**: R2는 기존 `council-review-protocol.md`의 타임아웃 정책을 유지한다. 이 설계는 R1/R3 + Codex 통합에 집중하며, R2는 별도로 다루지 않는다.
+
 ### 2.3 R1 병렬화 확대
 
 현재 Comprehensive에서만 Stage 3+4 병렬. Standard에서도 Stage 2+3을 병렬 dispatch한다 (Quality와 Security는 독립적 관점).
@@ -62,6 +64,8 @@ Stage 3 (Security, background) ─┤ 병렬
 결과 종합
 총 시간: T1 + max(T2, T3)
 ```
+
+**Stage FAIL 시 병렬 결과 처리**: Stage 2 또는 Stage 3이 FAIL을 반환하면, 다른 stage의 결과는 **유지**한다. FAIL stage만 수정 루프에 진입하고, 이미 PASS한 stage는 재실행하지 않는다.
 
 ### 2.4 R3 부분 완료 허용
 
@@ -83,6 +87,8 @@ Stage 3 (Security, background) ─┤ 병렬
 
 Claude 서브에이전트를 background dispatch하고, 메인 컨텍스트에서 Codex를 동시 실행한다.
 서브에이전트는 Bash 권한이 없으므로 Codex는 반드시 메인에서 실행한다.
+
+**Codex 실행 책임**: INCEPTION(brainstorming/writing-plans)에서 Codex 병렬 실행은 해당 스킬이 아닌 **orchestrator 레벨**에서 수행한다. brainstorming/writing-plans가 서브에이전트로 호출될 수 있으므로, Codex dispatch는 inception-orchestrator가 리뷰 단계에서 직접 실행한다.
 
 ```
 [INCEPTION — brainstorming Spec Review]
@@ -134,12 +140,13 @@ Codex CLI 감지 (첫 리뷰 시 1회, 세션 내 캐싱)
 | `aidlc-requesting-code-review/SKILL.md` | 타임아웃 적용, Stage 2+3 병렬화, Codex 통합 (CONSTRUCTION) |
 | `aidlc-brainstorming/SKILL.md` | Spec Review에 Codex adversarial-review 병렬 |
 | `aidlc-writing-plans/SKILL.md` | Plan Review에 Codex adversarial-review 병렬 |
-| `aidlc-construction-orchestrator/SKILL.md` | 타임아웃 표시 처리 |
+| `aidlc-inception-orchestrator/SKILL.md` | INCEPTION 리뷰 시 Codex 병렬 dispatch 책임 |
 
 ---
 
 ## Assumptions
 
-- Codex CLI가 설치된 환경에서는 `command -v codex`로 감지 가능
-- 서브에이전트 background dispatch 시 메인 컨텍스트에서 Codex 실행이 블로킹되지 않음
+- Codex CLI가 설치된 환경에서는 `command -v codex`로 감지 가능 (기존 `council-cli-detection.md` 패턴 재사용 검토)
+- 서브에이전트 background dispatch 시 메인 컨텍스트에서 Codex 실행이 블로킹되지 않음. 블로킹될 경우 fallback: 순차 실행 (Claude 완료 후 Codex)
 - Codex `/codex:review`와 `/codex:adversarial-review`의 출력 포맷이 사람이 읽을 수 있는 마크다운
+- 타임아웃 기본값(300초/600초)은 현재 관측된 리뷰 소요 시간(~120초 기본 + 대용량 diff 시 초과)에 기반한 경험적 추정치
