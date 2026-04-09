@@ -112,13 +112,20 @@ Expected: PASS
    - 5회 초과 → 사용자 escalate
 2. 승인 → 다음 청크 또는 Execution Handoff
 
-> **Codex 세컨드 오피니언**: 구현 계획에 대해 추가 검증이 필요하면 `/codex:adversarial-review`를 직접 실행할 수 있다.
-
 ## Execution Handoff
 
-계획 저장 후:
+계획 저장 후, Codex CLI 감지(`command -v codex`) 시 실행 가이드를 포함한다:
 
-> "계획이 `docs/plans/<파일명>`에 저장되었습니다. 실행하시겠습니까?"
+```
+계획이 `docs/plans/<파일명>`에 저장되었습니다. 실행하시겠습니까?
+
+> **Codex 세컨드 오피니언**: 추가 검증이 필요하면:
+> → /codex:adversarial-review
+>   대상: <저장된 구현 계획 경로>
+>   탐색 방향: 태스크 분해 누락, 순서 의존성, 테스트 갭
+```
+
+Codex 미감지 시 가이드 생략. 핸드오프 메시지만 표시:
 
 - 서브에이전트 가능 → `aidlc-subagent-driven-development` (권장)
 - 별도 세션 → `aidlc-executing-plans`
