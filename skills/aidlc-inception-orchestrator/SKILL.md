@@ -217,15 +217,14 @@ H) 보류 (나중에 돌아옴) → HELD 상태 저장, NFR-Requirements 게이�
 
 A) 선택 시: `"aidlc-user-stories: UPDATE — 기존 스토리 유지, [사용자 변경 요청 내용] 반영"` 인라인 신호로 재호출
 
-### 6. NFR-Requirements 게이트 [모드 선택 게이트 + 표준 게이트 + Hold]
-<!-- @gate: nfr-requirements-mode -->
+### 6. NFR-Requirements 게이트 [통합 게이트]
+<!-- @gate: nfr-requirements -->
 <!-- @gate-option: A -> nfr-requirements {generate} -->
 <!-- @gate-option: B -> nfr-requirements {import} -->
 
 Pre-Planning Gate에서 nfr-requirements 실행이 결정된 경우에만.
 NFR을 건너뛰려면 Pre-Planning Gate에서 C(워크플로우 직행)를 선택한다.
 
-**6a. 모드 선택 (오케스트레이터 소유)**:
 ```
 NFR 요구사항을 어떻게 진행하시겠습니까?
 
@@ -236,17 +235,7 @@ B) 이미 작성된 NFR 문서가 있음 (IMPORT)
 A → `"Mode: GENERATE"` 인라인 신호로 aidlc-nfr-requirements 호출
 B → `"Mode: IMPORT"` 인라인 신호로 aidlc-nfr-requirements 호출
 
-<!-- @gate: nfr-requirements-result -->
-<!-- @gate-option: A -> nfr-requirements {재호출} -->
-<!-- @gate-option: B -> workflow-planning -->
-<!-- @gate-option: H -> workflow-planning {held} -->
-**6b. 결과 게이트**:
-```
-[nfr-requirements 결과 표시]
-A) 변경 요청 (예: 성능 기준, 보안 요건, 가용성 목표 등) → nfr-requirements 재호출
-B) 승인, 다음 단계 진행 → workflow-planning
-H) 보류 (나중에 돌아옴) → HELD 상태 저장, workflow-planning으로 진행
-```
+스킬 반환 후 결과를 사용자에게 표시한다. 변경 요청은 자유 발화로 처리하고, "승인" 발화 시 workflow-planning으로 진행한다. "보류" 발화 시 HELD 상태 저장 후 workflow-planning으로 진행한다.
 
 ### 7. workflow-planning 게이트 [2단계 게이트]
 <!-- @gate: workflow-planning-approach -->
