@@ -210,8 +210,8 @@ A) 선택 시: `"aidlc-user-stories: UPDATE — 기존 스토리 유지, [사용
 
 ### 6. NFR-Requirements 게이트 [통합 게이트]
 <!-- @gate: nfr-requirements -->
-<!-- @gate-option: A -> nfr-requirements {generate} -->
-<!-- @gate-option: B -> nfr-requirements {import} -->
+<!-- @gate-option: A -> workflow-planning {generate} -->
+<!-- @gate-option: B -> workflow-planning {import} -->
 
 Pre-Planning Gate에서 nfr-requirements 실행이 결정된 경우에만.
 NFR을 건너뛰려면 Pre-Planning Gate에서 C(워크플로우 직행)를 선택한다.
