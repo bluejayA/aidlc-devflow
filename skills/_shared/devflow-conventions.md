@@ -218,10 +218,8 @@ STOP.
 
 - 독립적 태스크 2개 이상일 때만 서브에이전트 디스패치
 - 구현 서브에이전트 병렬 실행 금지 (충돌 방지)
-- 리뷰 Stage 3 (Security) + Stage 4 (Maintainability)는 병렬 dispatch 허용 (독립적 관점, 상호 의존 없음)
+- 리뷰 병렬화: `### 병렬화 정책` 참조 (SSoT)
 - 코드 리뷰 단계: `aidlc-requesting-code-review` 스킬이 depth에 따라 실행
-  - **Standard**: 3-stage (spec compliance → code quality → security)
-  - **Comprehensive**: 4-stage (spec compliance → code quality → security + maintainability 병렬)
 - Model Selection: mechanical task → haiku, integration → sonnet, architecture/review → opus
 
 ## 서브에이전트 컨텍스트 격리
