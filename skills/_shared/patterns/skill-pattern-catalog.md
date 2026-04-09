@@ -520,6 +520,7 @@ metadata:
 | aidlc-executing-plans | | | | | | | ● |
 | aidlc-subagent-driven-development | | | | | | | ● |
 | aidlc-dispatching-parallel-agents | | | | | | | ● |
+| aidlc-requesting-code-review | | | ● | | | | ○ |
 | aidlc-receiving-code-review | | | | | | | ● |
 | aidlc-superpowers-tracking | | | | | | | ● |
 | aidlc-using-devflow | | | | | | | ● |

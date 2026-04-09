@@ -98,7 +98,8 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
 conventions Codex 세컨드 오피니언 정책 적용.
 
 Claude 리뷰 결과 반환 시, Codex 세컨드 오피니언 실행 가이드를 함께 표시한다.
-`/codex:review`는 `disable-model-invocation` 제약으로 자동 호출 불가하므로, 사용자가 필요 시 직접 실행한다.
+
+> **수동 실행 전용**: `/codex:review`는 `disable-model-invocation` 제약으로 Claude가 자동 호출할 수 없다. 아래 가이드를 표시하고 사용자가 직접 실행한다.
 
 **안내 생성 규칙:**
 

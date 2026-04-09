@@ -127,8 +127,8 @@ Expected: PASS
 
 Codex 미감지 시 가이드 생략. 핸드오프 메시지만 표시:
 
-- 서브에이전트 가능 → `aidlc-subagent-driven-development` (권장)
-- 별도 세션 → `aidlc-executing-plans`
+- A) 서브에이전트 기반 → `aidlc-subagent-driven-development` (권장 — 태스크가 대부분 독립적일 때)
+- B) 별도 세션 → `aidlc-executing-plans` (체크포인트 리뷰 + 세션 재개가 필요할 때)
 
 ## 핵심 규칙
 
