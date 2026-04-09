@@ -171,19 +171,10 @@ A) 선택 시: `"aidlc-requirements-analysis: UPDATE — 기존 분석 유지, [
 
 requirements-analysis 게이트 통과 후, workflow-planning 호출 전에 실행.
 Pre-Planning은 INCEPTION 내 스테이지 그룹명이며, workflow-plan.md의 `### PRE-PLANNING` 섹션에 결과가 기록된다.
-Minimal/Comprehensive는 자동 분기, Standard만 사용자 게이트.
 
-**Minimal complexity**: 자동 스킵. 사용자에게 안내 후 workflow-planning으로 직행:
-```
-Minimal complexity — Pre-Planning(User Stories, NFR) 자동 스킵
-→ 워크플로우 계획으로 진행합니다.
-```
+**Minimal complexity**: 안내 없이 workflow-planning으로 직행. devflow-audit에만 `"Pre-Planning skipped (Minimal)"` 기록.
 
-**Comprehensive complexity**: 자동 포함. 사용자에게 안내 후 User-Stories 게이트로 진행:
-```
-Comprehensive complexity — Pre-Planning(User Stories + NFR) 자동 포함
-→ User Stories 작성을 시작합니다.
-```
+**Comprehensive complexity**: 안내 없이 User-Stories 게이트로 직행. devflow-audit에만 `"Pre-Planning included (Comprehensive)"` 기록.
 
 **Standard complexity**: 3-option 게이트 제시
 
