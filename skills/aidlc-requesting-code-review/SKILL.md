@@ -93,36 +93,32 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
    - FAIL → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
    - CONDITIONAL → Stage 2로 (수정 권장)
 
-#### Stage 2 — Code Quality
+#### Codex 세컨드 오피니언 (Stage 2 병렬)
 
-1. `_shared/reviewers/code-quality-reviewer-prompt.md` 읽기
-2. 서브에이전트 dispatch — `{project-root}` + 리뷰 대상 전달
-3. 결과 확인 (Verdict 기준):
-   - PASS → Stage 3으로
-   - FAIL → 수정 후 re-dispatch (최대 5회)
-   - CONDITIONAL → Stage 3으로 (수정 권장)
+conventions Codex 세컨드 오피니언 정책 적용.
 
-#### Stage 3 — Security/Edge-case (Standard 이상)
+Stage 2 이후의 병렬 dispatch와 동시에 메인 컨텍스트에서 `/codex:review`를 실행한다.
+- Codex CLI 미감지 시 스킵 (conventions fallback 참조)
+- Codex 결과는 전체 결과 표시 시 "Codex 참고 의견" 섹션으로 별도 표시
+- Codex 타임아웃 시 "Codex 세컨드 오피니언: ⏭ 타임아웃" 표시
 
-depth가 **Standard 이상**이면 실행. Minimal은 스킵.
+#### Stage 2+3(+4) — Code Quality + Security (+ Maintainability) 병렬
 
-1. `_shared/reviewers/security-reviewer-prompt.md` 서브에이전트 dispatch (`{project-root}` 포함)
-2. 결과 확인 (Verdict 기준):
-   - PASS → Stage 4 또는 결과 반환으로
-   - FAIL → 수정 후 re-dispatch (최대 5회)
-   - CONDITIONAL → 루프 종료 (수정 권장)
+> **타임아웃**: conventions 타임아웃 정책 적용. 개별 리뷰어 기본 300초. 타임아웃 시 "⏭ 타임아웃" 표시, 나머지 결과로 종합.
 
-#### Stage 4 — Maintainability (Comprehensive만)
+Stage 1 완료 후, depth에 따라 병렬 dispatch한다.
 
-depth가 **Comprehensive**인 경우에만 실행. Standard 이하는 스킵하고 결과 반환으로 진행.
+**Minimal**: Stage 2만 단독 실행 (Stage 3 스킵)
+**Standard**: Stage 2 + Stage 3 병렬 dispatch
+**Comprehensive**: Stage 2 + Stage 3 + Stage 4 전부 병렬 dispatch
 
-1. `_shared/reviewers/maintainability-reviewer-prompt.md` 서브에이전트 dispatch (`{project-root}` 포함)
-2. 결과 확인 (Verdict 기준):
-   - PASS → 결과 반환으로
-   - FAIL → 수정 후 re-dispatch (최대 5회)
-   - CONDITIONAL → 루프 종료 (수정 권장)
-
-> **Comprehensive에서의 병렬화**: Stage 3과 4가 모두 실행되는 Comprehensive에서는 두 리뷰어를 **병렬 dispatch** 가능 (독립적 관점, 상호 의존 없음).
+1. `_shared/reviewers/code-quality-reviewer-prompt.md` — Stage 2 서브에이전트 dispatch (background, `{project-root}` 포함)
+2. `_shared/reviewers/security-reviewer-prompt.md` — Stage 3 서브에이전트 dispatch (background, Standard 이상)
+3. `_shared/reviewers/maintainability-reviewer-prompt.md` — Stage 4 서브에이전트 dispatch (background, Comprehensive만)
+4. 모든 결과 수신 후 종합:
+   - 모두 PASS → 결과 반환
+   - 일부 FAIL → FAIL stage만 수정 루프 (PASS stage 결과 유지, 최대 5회)
+   - 모두 FAIL → 모든 stage 수정 루프
 
 ---
 
