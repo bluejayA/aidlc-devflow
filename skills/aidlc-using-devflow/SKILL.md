@@ -128,82 +128,77 @@ metadata:
    - 파일이 없으면 이 단계를 건너뛴다.
 4. `## Current Phase` 값에 따라 분기:
 
-<!-- @resume-rules (상태 분기 요약)
-  finished                          → archive state+summary, then New Flow
-  complete + Finishing=="B (PR pending)" → PR 머지 확인 게이트
-  complete (Finishing 없음)          → finishing-branch 실행 안내
-  INCEPTION | CONSTRUCTION          → 해당 orchestrator 호출
-  파싱 불가 (Error Handling)          → 백업 + New Flow
--->
+### 상태 디스패치 테이블
 
-#### Phase가 `finished`인 경우
+| Phase 값 | 조건 | 동작 | 게이트 |
+|----------|------|------|--------|
+| `finished` | — | 아카이브 → New Flow | 없음 (자동) |
+| `complete` | Finishing == "B (PR pending)" | PR 자동 확인 → 게이트 | A/B |
+| `complete` | Finishing 없음 | — | A/B |
+| `INCEPTION` | — | — | A/B |
+| `CONSTRUCTION` | — | — | A/B |
+| 파싱 불가 | — | 백업 → New Flow | 없음 (자동) |
 
-이전 플로우가 완전히 종료된 상태. 아카이브 처리가 누락된 경우.
+### 자동 처리 경로
 
-```
-## aidlc — 이전 플로우 완료됨
+**`finished`**: state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동 후 New Flow 진행. 사용자 안내 없음.
 
-이전 작업이 완료된 상태입니다.
+**파싱 불가**: `devflow-docs/.archive/devflow-state-backup-[timestamp].md`로 백업 후 New Flow 진행.
 
-→ 새 작업을 시작합니다.
-```
+### 게이트 경로
 
-state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동 후 New Flow 진행.
-- `devflow-docs/.archive/devflow-state-[timestamp].md`
-- `devflow-docs/.archive/session-summary-[timestamp].md` (있으면)
-
-#### Phase가 `complete`이고 `## Finishing Choice`가 `B (PR pending)`인 경우
-
-PR 생성 후 머지 대기 중인 상태.
-
-```
-## aidlc — PR 머지 대기 중
-
-이전 작업의 PR이 아직 열려있습니다.
-PR URL: [## PR URL 값]
-
-A) PR 머지 완료 → devflow 종료 처리
-B) PR 아직 진행 중 → 다른 작업 시작
-C) PR 확인 후 결정
-```
+#### `complete` + PR pending
 
 <!-- @state-update: PR 머지 확인 → Current Phase를 finished로 -->
+
+`gh pr view [PR URL] --json state`로 PR 상태를 자동 확인한 뒤 게이트를 제시한다.
+
+**PR 이미 머지된 경우:**
+```
+## aidlc — PR 머지 확인됨
+
+PR [URL]이 머지되었습니다.
+
+A) devflow 종료 처리 → 아카이브 + 워크트리 정리 + New Flow
+B) 새 작업 시작 (아카이브만)
+```
+
+**PR 아직 열린 경우:**
+```
+## aidlc — PR 대기 중
+
+PR [URL]이 아직 열려있습니다.
+
+A) devflow 종료 처리 (PR 머지 완료로 간주)
+B) 다른 작업 시작 (아카이브)
+```
+
 A 선택 시:
-- `gh pr view [PR URL] --json state`로 머지 확인 (가능한 경우)
 - devflow-state의 `## Current Phase`를 `finished`로 업데이트
-- state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
+- state와 session-summary를 `.archive/`로 이동
 - 워크트리 존재 시 제거 (`git worktree remove` + `git worktree prune`)
 - devflow-audit에 로깅: `"Flow finished — PR merged"`
-- 새 작업 시작 여부 안내
 
 B 선택 시:
-- state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
+- state와 session-summary를 `.archive/`로 이동
 - New Flow 진행
 
-C 선택 시:
-- PR 상태를 `gh pr view`로 확인 후 결과에 따라 A 또는 재안내
-
-#### Phase가 `complete`인 경우 (Finishing Choice 없음)
-
-CONSTRUCTION은 완료됐지만 finishing-branch를 아직 실행하지 않은 상태.
+#### `complete` (Finishing Choice 없음)
 
 ```
 ## aidlc — CONSTRUCTION 완료, 브랜치 처리 대기
-
-INCEPTION + CONSTRUCTION이 완료되었습니다.
 
 A) aidlc-finishing-a-development-branch 실행 → 브랜치 처리
 B) 새 작업 시작 (기존 상태 초기화)
 ```
 
-#### Phase가 `INCEPTION` 또는 `CONSTRUCTION`인 경우 (기존 동작)
+#### `INCEPTION` 또는 `CONSTRUCTION`
 
 ```
 ## aidlc — 진행 중인 작업 발견
 
 현재 단계: [Current Phase] > [Current Stage]
 완료된 스테이지: [list]
-마지막 완료: [session-summary의 최근 완료 항목] (있으면)
 
 A) 이전 작업 재개
 B) 새 작업 시작 (기존 상태 초기화)
@@ -211,12 +206,10 @@ B) 새 작업 시작 (기존 상태 초기화)
 
 A 선택 시:
 - devflow-audit에 로깅: `"Session resumed at [stage] — commit: [git rev-parse --short HEAD]"`
-- `## Current Phase` 확인하여 해당 Phase Orchestrator 호출:
-  - `INCEPTION` → `aidlc-inception-orchestrator` 호출
-  - `CONSTRUCTION` → `aidlc-construction-orchestrator` 호출
+- 해당 Phase Orchestrator 호출
 
 B 선택 시:
-- 기존 state와 session-summary(있으면)를 `devflow-docs/.archive/`로 이동
+- state와 session-summary를 `.archive/`로 이동
 - New Flow 진행
 
 ## Phase 전환

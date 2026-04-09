@@ -8,8 +8,7 @@ inputs:
     requirements-analysis: B
     pre-planning: A
     user-stories: H
-    nfr-requirements-mode: A
-    nfr-requirements-result: B
+    nfr-requirements: A
     workflow-planning-approach: A
     workflow-planning-env: C
 expect:
