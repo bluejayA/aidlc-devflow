@@ -88,20 +88,22 @@ Stage 3 (Security, background) ─┤ 병렬
 Claude 서브에이전트를 background dispatch하고, 메인 컨텍스트에서 Codex를 동시 실행한다.
 서브에이전트는 Bash 권한이 없으므로 Codex는 반드시 메인에서 실행한다.
 
-**Codex 실행 책임**: INCEPTION(brainstorming/writing-plans)에서 Codex 병렬 실행은 해당 스킬이 아닌 **orchestrator 레벨**에서 수행한다. brainstorming/writing-plans가 서브에이전트로 호출될 수 있으므로, Codex dispatch는 inception-orchestrator가 리뷰 단계에서 직접 실행한다.
+**Codex 실행 책임**: INCEPTION(brainstorming/writing-plans)에서 Codex는 **사후 실행** 방식으로 동작한다. brainstorming/writing-plans는 내부에서 Claude 리뷰를 완료하고 산출물을 반환한다. inception-orchestrator가 산출물 반환 후 `/codex:adversarial-review`를 실행하여 약점 분석을 사용자에게 별도 표시한다.
 
 ```
 [INCEPTION — brainstorming Spec Review]
-Claude spec-document-reviewer (background) ─┐
-/codex:adversarial-review (메인)             ─┤ 병렬
-                                             ↓
-결과 종합 (Claude Verdict + Codex 약점 분석)
+brainstorming 스킬 실행 (내부 Claude 리뷰 포함)
+    ↓ 산출물 반환
+/codex:adversarial-review (orchestrator 사후 실행)
+    ↓
+Codex 약점 분석 표시 → 사용자 판단 → 게이트 진행
 
 [INCEPTION — writing-plans Plan Review]
-Claude plan-document-reviewer (background) ─┐
-/codex:adversarial-review (메인)            ─┤ 병렬
-                                            ↓
-결과 종합 (Claude Verdict + Codex 약점 분석)
+writing-plans 스킬 실행 (내부 Claude 리뷰 포함)
+    ↓ 산출물 반환
+/codex:adversarial-review (orchestrator 사후 실행)
+    ↓
+Codex 약점 분석 표시 → 사용자 판단 → Execution Handoff
 
 [CONSTRUCTION — R1 Standard]
 Stage 1 (Spec)
