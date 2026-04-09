@@ -120,79 +120,17 @@ Stage 2+3 병렬 dispatch와 동시에 메인 컨텍스트에서 `/codex:review`
 
 ---
 
-### Task 3: brainstorming + writing-plans — Codex 사후 실행 안내 추가
+### Task 3: brainstorming + writing-plans — Codex 수동 실행 안내 추가
 
 **Files:**
 - Modify: `skills/aidlc-brainstorming/SKILL.md:91` (Step 6 Spec Review Loop)
 - Modify: `skills/aidlc-writing-plans/SKILL.md:107` (Plan Review Loop)
 
-- [ ] **Step 1: brainstorming에 Codex 안내 추가**
-Spec Review Loop 설명에 다음을 추가:
+- [x] **Step 1: brainstorming에 Codex 안내 추가**
+- [x] **Step 2: writing-plans에 동일 안내 추가**
+- [x] **Step 3: 커밋** `fix: INCEPTION Codex 안내를 사용자 수동 실행으로 변경`
 
-```markdown
-> **Codex 세컨드 오피니언**: 이 스킬 완료 후 inception-orchestrator가 산출물에 `/codex:adversarial-review`를 사후 실행한다. 이 스킬은 Claude 리뷰어 결과만 반환한다.
-```
-
-- [ ] **Step 2: writing-plans에 동일 안내 추가**
-Plan Review Loop 설명에 다음을 추가:
-
-```markdown
-> **Codex 세컨드 오피니언**: 이 스킬 완료 후 inception-orchestrator가 산출물에 `/codex:adversarial-review`를 사후 실행한다. 이 스킬은 Claude 리뷰어 결과만 반환한다.
-```
-
-- [ ] **Step 3: 커밋**
-`docs: brainstorming/writing-plans에 Codex 사후 실행 안내`
-
----
-
-### Task 4: inception-orchestrator — Codex 사후 실행 로직 추가
-
-**Files:**
-- Modify: `skills/aidlc-inception-orchestrator/SKILL.md`
-  - `## The Orchestration Loop` 직전 (line 27 부근): Codex CLI 감지
-  - brainstorming 게이트 직후 (brainstorming 결과 표시 후): Codex 사후 실행
-  - writing-plans 게이트 직후: Codex 사후 실행
-
-- [ ] **Step 1: Codex CLI 감지 로직 추가**
-`## The Orchestration Loop` 직전에 다음 섹션을 추가:
-
-```markdown
-### Step 0: Codex CLI 감지
-
-conventions Codex 세컨드 오피니언 정책 적용.
-`command -v codex`로 Codex CLI 가용성을 감지한다 (세션당 1회, 결과 캐싱).
-- 감지 성공: 이후 brainstorming/writing-plans 완료 후 Codex 사후 실행
-- 감지 실패: "ℹ Codex 미설치 — Claude 단독 리뷰로 진행합니다." (1회 안내)
-```
-
-- [ ] **Step 2: brainstorming 완료 후 Codex 사후 실행 로직 추가**
-brainstorming 결과를 사용자에게 표시한 뒤, 게이트 제시 전에:
-
-```markdown
-### brainstorming 완료 후 Codex 사후 리뷰
-
-Codex 가용 시, brainstorming이 저장한 설계 문서에 `/codex:adversarial-review`를 실행한다.
-1. 대상: brainstorming이 저장한 `docs/plans/` 또는 `devflow-docs/inception/` 파일
-2. Codex 결과를 "Codex 약점 분석" 섹션으로 사용자에게 별도 표시
-3. Codex 타임아웃 시 "Codex 세컨드 오피니언: ⏭ 타임아웃" 표시, Claude 결과만으로 진행
-4. 사용자가 Codex 지적을 채택할지 판단 후 게이트 진행
-```
-
-- [ ] **Step 3: writing-plans 완료 후 동일 로직 추가**
-writing-plans 결과를 사용자에게 표시한 뒤, Execution Handoff 전에:
-
-```markdown
-### writing-plans 완료 후 Codex 사후 리뷰
-
-Codex 가용 시, writing-plans가 저장한 구현 계획에 `/codex:adversarial-review`를 실행한다.
-1. 대상: writing-plans가 저장한 `docs/plans/` 파일
-2. Codex 결과를 "Codex 약점 분석" 섹션으로 사용자에게 별도 표시
-3. Codex 타임아웃 시 "Codex 세컨드 오피니언: ⏭ 타임아웃" 표시, Claude 결과만으로 진행
-4. 사용자가 Codex 지적을 채택할지 판단 후 Execution Handoff 진행
-```
-
-- [ ] **Step 4: 커밋**
-`feat: inception-orchestrator에 Codex 사후 실행 로직 추가`
+> **Note**: Task 4 (inception-orchestrator 자동 실행)는 scope out. INCEPTION Codex는 사용자가 필요 시 `/codex:adversarial-review`를 직접 실행.
 
 ---
 

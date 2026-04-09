@@ -110,9 +110,9 @@ Expected: PASS
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
    - Recommendations만 → 루프 종료 (수정 권장)
    - 5회 초과 → 사용자 escalate
+2. 승인 → 다음 청크 또는 Execution Handoff
 
 > **Codex 세컨드 오피니언**: 구현 계획에 대해 추가 검증이 필요하면 `/codex:adversarial-review`를 직접 실행할 수 있다.
-3. 승인 → 다음 청크 또는 Execution Handoff
 
 ## Execution Handoff
 
