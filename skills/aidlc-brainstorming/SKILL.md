@@ -94,6 +94,8 @@ metadata:
    - Recommendations만 → 루프 종료 (수정 권장)
    - 5회 초과 → 사용자 escalate
 
+> **Codex 세컨드 오피니언**: 이 스킬 완료 후 inception-orchestrator가 산출물에 `/codex:adversarial-review`를 사후 실행한다. 이 스킬은 Claude 리뷰어 결과만 반환한다.
+
 **사용자 리뷰 게이트** (리뷰 통과 후):
 > "Spec이 `<경로>`에 저장되었습니다. 리뷰 후 변경사항이 있으면 알려주세요."
 

@@ -110,6 +110,8 @@ Expected: PASS
    - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
    - Recommendations만 → 루프 종료 (수정 권장)
    - 5회 초과 → 사용자 escalate
+
+> **Codex 세컨드 오피니언**: 이 스킬 완료 후 inception-orchestrator가 산출물에 `/codex:adversarial-review`를 사후 실행한다. 이 스킬은 Claude 리뷰어 결과만 반환한다.
 3. 승인 → 다음 청크 또는 Execution Handoff
 
 ## Execution Handoff
