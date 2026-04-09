@@ -96,11 +96,10 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
 Codex CLI 설치 시(`command -v codex`) 리뷰에 병렬로 Codex를 실행한다.
 감지는 세션당 1회, 결과 캐싱. 미설치 시 "ℹ Codex 미설치 �� Claude 단독 리뷰로 진행합니다." (세션당 1회 ��내).
 
-| Phase | Codex 도구 | 실행 주체 |
+| Phase | Codex 도구 | 실행 방식 |
 |-------|-----------|----------|
-| CONSTRUCTION Stage 2 | `/codex:review` | requesting-code-review (메인) |
-| INCEPTION Spec Review | `/codex:adversarial-review` | inception-orchestrator (사후 실행) |
-| INCEPTION Plan Review | `/codex:adversarial-review` | inception-orchestrator (사�� 실행) |
+| CONSTRUCTION Stage 2 | `/codex:review` | 자동 — requesting-code-review가 메인에서 병렬 실행 |
+| INCEPTION Spec/Plan | `/codex:adversarial-review` | 수동 — 사용자가 필요 시 직접 실행 |
 
 - Verdict에는 Claude 결과만 반영
 - Codex 결과는 "참고 의견" / "약점 분석"으로 별도 표시

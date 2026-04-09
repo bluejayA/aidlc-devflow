@@ -77,34 +77,19 @@ Stage 3 (Security, background) ─┤ 병렬
 
 ### 3.1 Phase별 Codex 도구 매핑
 
-| Phase | 리뷰 대상 | Claude 리뷰어 | Codex 도구 (메인 병렬) |
-|-------|----------|--------------|----------------------|
-| INCEPTION | brainstorming Spec Review | spec-document-reviewer | `/codex:adversarial-review` |
-| INCEPTION | writing-plans Plan Review | plan-document-reviewer | `/codex:adversarial-review` |
-| CONSTRUCTION | Stage 2 (Quality) | code-quality-reviewer | `/codex:review` |
+| Phase | 리뷰 대상 | Claude 리뷰어 | Codex 도구 | 실행 방식 |
+|-------|----------|--------------|-----------|----------|
+| CONSTRUCTION | Stage 2 (Quality) | code-quality-reviewer | `/codex:review` | 자동 (메인 병렬) |
+| INCEPTION | brainstorming Spec | spec-document-reviewer | `/codex:adversarial-review` | 수동 (사용자 판단) |
+| INCEPTION | writing-plans Plan | plan-document-reviewer | `/codex:adversarial-review` | 수동 (사용자 판단) |
 
 ### 3.2 실행 방식
 
-Claude 서브에이전트를 background dispatch하고, 메인 컨텍스트에서 Codex를 동시 실행한다.
-서브에이전트는 Bash 권한이 없으므로 Codex는 반드시 메인에서 실행한다.
+**CONSTRUCTION (자동)**: Claude 서브에이전트를 background dispatch하고, 메인 컨텍스트에서 `/codex:review`를 동시 실행한다. 서브에이전트는 Bash 권한이 없으므로 Codex는 반드시 메인에서 실행한다.
 
-**Codex 실행 책임**: INCEPTION(brainstorming/writing-plans)에서 Codex는 **사후 실행** 방식으로 동작한다. brainstorming/writing-plans는 내부에서 Claude 리뷰를 완료하고 산출물을 반환한다. inception-orchestrator가 산출물 반환 후 `/codex:adversarial-review`를 실행하여 약점 분석을 사용자에게 별도 표시한다.
+**INCEPTION (수동)**: brainstorming/writing-plans는 orchestrator에서 명시적으로 호출되지 않으므로, 자동 Codex 실행 지점이 없다. 사용자가 설계/계획 산출물에 대해 추가 검증이 필요하면 `/codex:adversarial-review`를 직접 실행한다.
 
 ```
-[INCEPTION — brainstorming Spec Review]
-brainstorming 스킬 실행 (내부 Claude 리뷰 포함)
-    ↓ 산출물 반환
-/codex:adversarial-review (orchestrator 사후 실행)
-    ↓
-Codex 약점 분석 표시 → 사용자 판단 → 게이트 진행
-
-[INCEPTION — writing-plans Plan Review]
-writing-plans 스킬 실행 (내부 Claude 리뷰 포함)
-    ↓ 산출물 반환
-/codex:adversarial-review (orchestrator 사후 실행)
-    ↓
-Codex 약점 분석 표시 → 사용자 판단 → Execution Handoff
-
 [CONSTRUCTION — R1 Standard]
 Stage 1 (Spec)
     ↓
@@ -113,6 +98,11 @@ Stage 2 (Quality, background)  ─┐
 Stage 3 (Security, background)  ─┘
     ↓
 결과 종합 (Claude Verdict + Codex 참고 의견)
+
+[INCEPTION — 사용자 수동]
+brainstorming/writing-plans 완료 → 산출물 저장
+    ↓ 사용자 판단
+/codex:adversarial-review (필요 시 직접 실행)
 ```
 
 ### 3.3 Codex 결과 위치
@@ -140,9 +130,8 @@ Codex CLI 감지 (첫 리뷰 시 1회, 세션 내 캐싱)
 |------|----------|
 | `_shared/devflow-conventions.md` | 타임아웃 기본값 추가, 병렬화 정책 |
 | `aidlc-requesting-code-review/SKILL.md` | 타임아웃 적용, Stage 2+3 병렬화, Codex 통합 (CONSTRUCTION) |
-| `aidlc-brainstorming/SKILL.md` | Spec Review에 Codex adversarial-review 병렬 |
-| `aidlc-writing-plans/SKILL.md` | Plan Review에 Codex adversarial-review 병렬 |
-| `aidlc-inception-orchestrator/SKILL.md` | INCEPTION 리뷰 시 Codex 병렬 dispatch 책임 |
+| `aidlc-brainstorming/SKILL.md` | Codex 수동 실행 안내 추가 |
+| `aidlc-writing-plans/SKILL.md` | Codex 수동 실행 안내 추가 |
 
 ---
 
