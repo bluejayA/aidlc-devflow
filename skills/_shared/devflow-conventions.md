@@ -72,7 +72,41 @@ Phase 오케스트레이터가 사용하는 게이트 패턴은 `_shared/gate-pa
   2. `workflow-plan.md`의 `## Stage Depths`
   3. `devflow-state.md`의 `## Complexity`
 
-### 리뷰 루프
+### 타임아웃 정책
+
+| 설정 | 기본값 | 비고 |
+|------|--------|------|
+| 개별 리뷰어 타임아웃 | 300초 | 사용자 자유 발화로 세션별 오버라이드 가능 |
+| R3 팀 전체 타임아웃 | 600초 | ��용자 자유 발화로 세션별 오버라이드 가능 |
+
+타임아웃 발생 시:
+- 해당 stage "⏭ 타임아웃" 표시, 나머지 stage 결과로 Verdict 종합
+- 모든 리뷰어 타임아웃 → 사용자 escalate: "리뷰 실행 불가. A) 재시도 / B) 리뷰 스킵"
+
+> R2 (Council)는 기존 council-review-protocol.md 타임아웃 정책을 유지한다.
+
+### 병렬화 정책
+
+- **Standard**: Stage 2 (Quality) + Stage 3 (Security) 병렬 dispatch
+- **Comprehensive**: Stage 2 + Stage 3 + Stage 4 병렬 dispatch
+- Stage FAIL 시: FAIL stage만 수정 루프 진입, PASS stage는 재실행하지 않음
+
+### Codex 세컨�� 오피니언
+
+Codex CLI 설치 시(`command -v codex`) 리뷰에 병렬로 Codex를 실행한다.
+감지는 세션당 1회, 결과 캐싱. 미설치 시 "ℹ Codex 미설치 �� Claude 단독 리뷰로 진행합니다." (세션당 1회 ��내).
+
+| Phase | Codex 도구 | 실행 주체 |
+|-------|-----------|----------|
+| CONSTRUCTION Stage 2 | `/codex:review` | requesting-code-review (메인) |
+| INCEPTION Spec Review | `/codex:adversarial-review` | inception-orchestrator (사후 실행) |
+| INCEPTION Plan Review | `/codex:adversarial-review` | inception-orchestrator (사�� 실행) |
+
+- Verdict에는 Claude 결과만 반영
+- Codex 결과는 "참고 의견" / "약점 분석"으로 별도 표시
+- Codex 타임아�� 시 Claude 결과만으�� 진행
+
+### 리�� 루프
 1. `_shared/reviewers/[type]-prompt.md` 읽기
 2. 서브에이전트 dispatch (산출물 경로 전달)
 3. ✅ Approved → Return to Orchestrator
