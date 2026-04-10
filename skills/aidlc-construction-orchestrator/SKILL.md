@@ -40,7 +40,8 @@ units-generation (조건부) → [units 게이트]
 - `devflow-docs/inception/requirements.md` — 요구사항 맥락 복원
 - `devflow-docs/inception/application-design.md` — 설계 맥락 복원 (있으면)
 - `devflow-docs/inception/units.md` — unit 목록 (있으면)
-- `devflow-docs/session-summary.md` — 이전 세션 맥락 (있으면)
+- `devflow-docs/inception/workspace.md` — brownfield/greenfield 여부 확인 (있으면)
+- `devflow-docs/session-summary.md` — 이전 세션 맥락 (있으면, `## Deferred Stubs` 확인)
 
 <!-- 아티팩트 로딩 규칙: _shared/patterns/session-continuity.md 참조 -->
 
@@ -141,9 +142,38 @@ B) 승인, 코드 생성 진행
 
 **Minimal/Standard**: 이 단계 스킵, 바로 code-generation으로.
 
+#### 2a-1. Stub Scan (Brownfield 전용)
+
+workspace.md에서 brownfield로 확인된 경우에만 실행. Greenfield는 스킵.
+
+프로젝트 루트에서 stub 패턴 스캔:
+```bash
+grep -rn "not yet implemented\|todo!()\|unimplemented!()\|NotImplementedError\|raise NotImplementedError\|UnsupportedOperationException\|TODO(\".*\")\|panic(\"not implemented\")\|panic(\"TODO\")" . --include="*.rs" --include="*.py" --include="*.ts" --include="*.java" --include="*.kt" --include="*.go" --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=.git --exclude-dir=target --exclude-dir=build --exclude-dir=__pycache__
+```
+
+**스캔 결과 처리:**
+- stub 발견 시: code-generation 호출 인라인 컨텍스트에 포함:
+  ```
+  ## Stub 교체 대상 (Brownfield)
+  아래 stub이 이 unit의 구현 범위와 관련될 수 있습니다:
+  - [파일:라인] — [stub 내용]
+  관련 stub이 있다면 실제 구현으로 교체하세요.
+  ```
+- stub 미발견 시: 전달 안 함 (무출력)
+- 스캔 실패 (exit code != 0, 1 제외) 시:
+  ```
+  ⚠️ Stub 스캔 실패 — [에러 메시지]
+  A) 재시도
+  B) 스캔 스킵 (devflow-audit에 "stub-scan-error" 기록)
+  ```
+
+세션 재개 시 `session-summary.md`의 `## Deferred Stubs`가 있으면 해당 항목도 스캔 결과에 포함하여 implementer에 전달한다.
+
+게이트: 없음 (스캔 성공 시). 스캔 실패 시만 조건부 게이트.
+
 #### 2b. code-generation Plan 호출
 
-`aidlc-code-generation` 호출 (unit명 + Complexity 인라인 전달: `"Complexity: [level]"`)
+`aidlc-code-generation` 호출 (unit명 + Complexity 인라인 전달: `"Complexity: [level]"` + Stub Scan 결과 인라인 전달)
 
 #### code-plan 게이트 [리뷰 연계 게이트 + Override 변형]
 <!-- @gate: code-plan -->
@@ -191,6 +221,8 @@ requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of
 모든 unit 완료 시 → build-and-test로 진행
 
 ### 3. build-and-test
+
+workspace.md에서 brownfield로 확인된 경우, 호출 시 인라인 전달: `"Brownfield: true"` — stub 잔존 검증 활성화. Greenfield인 경우 전달하지 않음.
 
 `aidlc-build-and-test` 호출
 
