@@ -2,9 +2,9 @@
 
 English | [한국어](README.md)
 
-![version](https://img.shields.io/badge/version-1.1.0-blue)
-![skills](https://img.shields.io/badge/skills-27-green)
-![tests](https://img.shields.io/badge/tests-95-brightgreen)
+![version](https://img.shields.io/badge/version-1.9.0-blue)
+![skills](https://img.shields.io/badge/skills-28+3_utils-green)
+![tests](https://img.shields.io/badge/tests-278-brightgreen)
 
 A Claude Code development workflow plugin implementing the AI-DLC methodology with an **orchestrator-centric architecture**.
 

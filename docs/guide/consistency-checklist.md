@@ -17,5 +17,5 @@
 - [ ] Resume Flow 분기 변경 시 `@resume-rules` 주석 블록을 업데이트했는가
 - [ ] `bash tests/run-all.sh` 실행 시 전체 통과하는가
 
-**검증 방법**: `bash tests/run-all.sh` — 269개 테스트가 불일치를 자동 검출
+**검증 방법**: `bash tests/run-all.sh` — 278개 테스트가 불일치를 자동 검출
 **규격 참조**: `_shared/patterns/meta-tag-standard.md` → Maintenance 섹션

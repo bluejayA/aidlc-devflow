@@ -2,9 +2,9 @@
 
 [English](README.en.md) | 한국어
 
-![version](https://img.shields.io/badge/version-1.8.0-blue)
+![version](https://img.shields.io/badge/version-1.9.0-blue)
 ![skills](https://img.shields.io/badge/skills-28+3_utils-green)
-![tests](https://img.shields.io/badge/tests-269-brightgreen)
+![tests](https://img.shields.io/badge/tests-278-brightgreen)
 
 AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 Claude Code 개발 워크플로우 플러그인입니다.
 
@@ -55,7 +55,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 9. **aidlc-using-git-worktrees** _(선택적)_ — workflow-planning 승인 직후, main 브랜치 보호를 위한 격리 워크트리 생성
 10. **aidlc-functional-design** _(조건부)_ — Comprehensive 깊이일 때 상세 기능 설계 (도메인 엔티티, 비즈니스 규칙, 데이터 흐름)
 11. **aidlc-code-generation** — Plan → 오케스트레이터 승인 → Generate (TDD Iron Law: RED-GREEN-REFACTOR + Self-Review)
-12. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + 지침 문서 생성
+12. **aidlc-build-and-test** — 전체 빌드 실행 + 테스트 스위트 실행 + Brownfield Stub 잔존 검증 + 지침 문서 생성
 
 ---
 
@@ -135,6 +135,7 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 | `_shared/patterns/question-format-guide.md` | 질문 설계 원칙 — 선택지 설계, 수준 적응, 모순 감지 |
 | `_shared/patterns/tech-stack-defaults.md` | 기술 스택 인덱스 — 프리셋, 정책 모드, 적용 규칙 |
 | `_shared/patterns/tech-stack-catalog.md` | 계층별 기술 카탈로그 — 선택지 생성 데이터 |
+| `_shared/patterns/review-gate-pattern.md` | 리뷰 Verdict 분기 공통 패턴 — Override/Skip/Review 모드 변경 확장 옵션 |
 | `_shared/reviewers/` | 리뷰 서브에이전트 프롬프트 12종 (artifact, code-plan, code-quality, code, council-review-protocol, implementer, maintainability, plan-document, security, skill, spec-document, spec) |
 
 #### YAML 메타데이터 규약

@@ -268,8 +268,9 @@ graph LR
 
 ### Depth 정책
 
-- **Minimal**: 리뷰 스킵
-- **Standard/Comprehensive**: 리뷰 자동 실행
+- **Minimal / Standard**: R1 단일 리뷰어 순차 dispatch (Stage 2만, Stage 3 스킵)
+- **Standard**: Stage 2 + Stage 3 병렬 dispatch
+- **Comprehensive**: Stage 2 + Stage 3 + Stage 4 전부 병렬 dispatch
 - fallback 우선순위: 호출 텍스트 → workflow-plan Stage Depths → devflow-state Complexity
 
 ---
@@ -393,7 +394,7 @@ skills/
 |   ├── gate-patterns.md           <- 게이트 패턴 (인터럽트 포함)
 |   ├── tdd-protocol.md            <- TDD 규약
 |   ├── import-review-protocol.md  <- Import/Generate 프로토콜
-|   ├── patterns/                  <- 공유 패턴 (16개)
+|   ├── patterns/                  <- 공유 패턴 (17개)
 |   └── reviewers/                 <- 리뷰어 프롬프트 (12개)
 ├── _utils/
 |   ├── devflow-audit/             <- 감사 로그
