@@ -51,9 +51,19 @@ stub 발견 시, code-generation 호출 인라인 컨텍스트에 포함:
 
 stub 미발견 시 전달 안 함.
 
+### 스캔 실패 처리
+
+grep 실행 실패 (exit code != 0 이면서 1이 아닌 경우) 시:
+```
+⚠️ Stub 스캔 실패 — [에러 메시지]
+A) 재시도
+B) 스캔 스킵 (devflow-audit에 "stub-scan-error" 기록)
+```
+exit code 1 (매치 없음)은 정상 — stub 미발견으로 처리.
+
 ### 게이트
 
-없음. 정보 전달만.
+없음 (스캔 성공 시). 스캔 실패 시만 조건부 게이트.
 
 ### 토큰 비용
 
@@ -71,7 +81,10 @@ stub 미발견 시 전달 안 함.
 ### 스캔 + 필터링
 
 1. 동일 stub 패턴으로 스캔
-2. `git diff --name-only main...HEAD`로 main 브랜치 대비 변경 파일 목록 추출 (워크트리 없이 main 직접 작업 시 `git diff --name-only HEAD~[커밋수]`)
+2. 변경 파일 목록 추출 — `devflow-state.md`의 `## Worktree` → `branch` 값을 활용:
+   - 워크트리 있음: `git diff --name-only main...HEAD` (워크트리 브랜치 기준)
+   - 워크트리 없음: `git diff --name-only $(git merge-base HEAD origin/main)...HEAD`
+   - diff 결과가 비어있으면 경고: "⚠️ 변경 파일을 감지할 수 없습니다. A) 수동 지정 / B) 전체 스캔"
 3. stub 스캔 결과와 변경 파일 교차 비교
 4. **변경 파일 내 stub만 보고** (무관한 기존 stub은 제외)
 
@@ -97,7 +110,15 @@ B) stub을 인지하고 진행 → 사유 입력 요청 후 session-summary에 [
 ### A/B 선택 동작
 
 - **A**: 사용자가 stub 수정 → build-and-test 재실행
-- **B**: session-summary `## Deferred Stubs` 섹션에 기록 + devflow-audit에 `"stub-deferred: [파일:라인] — [사용자 사유]"` 기록
+- **B**: 사유 입력 요청 후, session-summary `## Deferred Stubs` 구조화 테이블에 기록:
+  ```markdown
+  ## Deferred Stubs
+  | 파일:라인 | stub 내용 | 사유 | 관련 unit | 예상 해결 시점 |
+  |-----------|----------|------|----------|--------------|
+  | src/adapters/http.rs:42 | "not yet implemented" | 현재 scope 밖 | unit-3 | 다음 sprint |
+  ```
+  + devflow-audit에 `"stub-deferred: [파일:라인] — [사유]"` 기록
+  + 다음 세션 재개 시 construction-orchestrator가 `## Deferred Stubs`를 감지하여 Stub Scan에 포함
 
 ### 게이트
 
@@ -118,8 +139,14 @@ B) stub을 인지하고 진행 → 사유 입력 요청 후 session-summary에 [
 
 ---
 
+## Known Limitations
+
+- **Reachable stub 미탐지**: 변경 파일 밖에 있지만 새로 reachable해진 stub은 Phase 1에서 탐지하지 못함. callgraph/import 분석이 필요하며, Phase 3 (BL-084 #152)에서 해결 예정
+- **PR 머지 후 추적 불가**: Deferred Stub은 session-summary에 기록되지만, PR 머지 후 다른 브랜치에서 작업 시 참조되지 않음
+
 ## Assumptions
 
 - `workspace.md`의 brownfield/greenfield 구분이 정확하다
 - stub 패턴이 주요 언어를 커버한다: Rust (`todo!()`, `unimplemented!()`), Python (`NotImplementedError`), Go (`panic("not implemented")`), Java/Kotlin (`UnsupportedOperationException`, `TODO()`), 공통 (`not yet implemented`)
 - 변경 파일 내 stub만 필터링하면 false positive가 낮다
+- grep exit code 1은 "매치 없음" (정상), 그 외 비정상은 scan-error로 처리
