@@ -21,6 +21,8 @@
 - **BL-044**: Multi-Unit Construction Agent Teams — 독립 유닛 병렬 구현 + 인터페이스 조율 [P2] [#70](https://github.com/bluejayA/aidlc-devflow/issues/70)
 - **BL-045**: dispatching-parallel-agents Agent Teams 강화 — 실행 중 충돌 감지/조율 [P2] [#71](https://github.com/bluejayA/aidlc-devflow/issues/71)
 - **BL-052**: Playwright E2E 자동 검증 + 평가기 비대칭 도구 설계 [P2] [#92](https://github.com/bluejayA/aidlc-devflow/issues/92)
+- **BL-083**: 리뷰 CRITICAL 자동 승격 + Brownfield 체크리스트 (BL-082 Phase 2, 선행: BL-082) [P2] [#151](https://github.com/bluejayA/aidlc-devflow/issues/151)
+- **BL-084**: Mock vs Real adapter 테스트 갭 리포트 (BL-082 Phase 3, 선행: BL-082+083) [P2] [#152](https://github.com/bluejayA/aidlc-devflow/issues/152)
 
 
 ---
