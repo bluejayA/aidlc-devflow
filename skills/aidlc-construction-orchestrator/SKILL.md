@@ -57,36 +57,8 @@ units-generation (조건부) → [units 게이트]
 devflow-state의 `## Completed Units`에 완료 unit이 있는 경우에만 실행.
 신규 세션(완료 unit 없음)에서는 스킵.
 
-<!-- 재검증 프로토콜: _shared/patterns/session-continuity.md 참조 -->
-
-1. 직전 완료 unit의 테스트 실행
-2. 결과 분기:
-
-**통과 시:**
-```
-✅ 재검증 통과 — [unit-name] 테스트 [N]개 통과
-다음 작업부터 재개합니다.
-```
-→ Step 2로 진행
-
-**실패 시:**
-```
-⚠️ 재검증 실패 — [unit-name] 테스트 [N]개 중 [M]개 실패
-
-A) 전체 테스트 스위트 실행 (회귀 범위 확인)
-B) systematic-debugging으로 즉시 조사
-```
-→ A: 전체 실행 후 실패 있으면 debugging 라우팅
-→ B: 바로 `aidlc-systematic-debugging` 호출
-→ debugging Return 수신 후 재검증 재실행 (Step 1.5 반복, 최대 2회)
-
-**재검증 최대 횟수**: 재검증→debugging→재검증 루프는 **최대 2회**까지. 2회 실패 시 에스컬레이션:
-```
-⚠️ 재검증 2회 실패 — 자동 복구 불가
-
-A) 수동으로 디버깅 계속
-B) 재검증 건너뛰고 다음 unit 진행 (devflow-state에 "재검증 실패 미해결" 기록)
-```
+`_shared/patterns/session-continuity.md` 섹션 4 "태스크 재검증 프로토콜" 적용.
+통과 시 Step 2로 진행. 실패 시 프로토콜의 분기(debugging 라우팅 / 에스컬레이션) 따름.
 
 ### Step 2: 스테이지 결정
 
