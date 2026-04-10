@@ -40,7 +40,8 @@ units-generation (조건부) → [units 게이트]
 - `devflow-docs/inception/requirements.md` — 요구사항 맥락 복원
 - `devflow-docs/inception/application-design.md` — 설계 맥락 복원 (있으면)
 - `devflow-docs/inception/units.md` — unit 목록 (있으면)
-- `devflow-docs/session-summary.md` — 이전 세션 맥락 (있으면)
+- `devflow-docs/inception/workspace.md` — brownfield/greenfield 여부 확인 (있으면)
+- `devflow-docs/session-summary.md` — 이전 세션 맥락 (있으면, `## Deferred Stubs` 확인)
 
 <!-- 아티팩트 로딩 규칙: _shared/patterns/session-continuity.md 참조 -->
 
