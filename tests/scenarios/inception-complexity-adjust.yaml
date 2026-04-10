@@ -8,7 +8,7 @@ inputs:
     requirements-analysis: B
     pre-planning: C
     workflow-planning-approach: B
-    workflow-planning-env: C
+    workflow-planning-env: B
 expect:
   stage_path:
     - workspace-detection

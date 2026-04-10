@@ -10,7 +10,7 @@ inputs:
     user-stories: H
     nfr-requirements: A
     workflow-planning-approach: A
-    workflow-planning-env: C
+    workflow-planning-env: B
 expect:
   stage_path:
     - workspace-detection

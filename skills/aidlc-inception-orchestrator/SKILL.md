@@ -253,61 +253,47 @@ D) 변경 요청 (예: 접근법 수정, 스테이지 포함/제외 등) → wor
 - `## Approved Stages`를 선택된 접근법 기준으로 업데이트
 
 <!-- @gate: workflow-planning-env -->
-<!-- @gate-option: A -> workflow-planning {재호출} -->
-<!-- @gate-option: B -> branch-name-confirm -->
-<!-- @gate-option: C -> inception-routing -->
+<!-- @gate-option: A -> worktree-create -->
+<!-- @gate-option: B -> inception-routing -->
 **2단계: 개발 환경 설정**
 ```
 개발 환경을 설정합니다.
 
-A) 변경 요청 (예: 개발 환경 설정 변경 등) → workflow-planning 재호출
-B) Git worktree로 격리 개발 (main 브랜치 보호) → 브랜치 이름 확인 후 워크트리 생성
-C) 현재 브랜치에서 바로 시작
+A) Git worktree로 격리 개발 (main 브랜치 보호)
+B) 현재 브랜치에서 바로 시작
 ```
 
-### 브랜치 이름 도출 및 확인 게이트
-<!-- @gate: branch-name-confirm -->
-<!-- @gate-option: A -> branch-name-confirm {변경} -->
-<!-- @gate-option: B -> worktree-create -->
-
-개발 환경 설정에서 B (Git Worktree) 선택 시, 브랜치 이름을 도출하여 사용자에게 확인 기회를 제공한다.
-
-**브랜치 이름 도출:**
+### A 선택 시: 브랜치 이름 도출 + 워크트리 생성
 
 devflow-docs/inception/requirements.md의 ## User Intent에서 브랜치 이름을 도출:
 - 한국어/영어 혼합 → 영어 키워드 추출 (2-4단어)
 - 공백/특수문자 → 하이픈 치환, 소문자, feature/ 접두사
 
-**도출 실패 처리:**
+**정상 도출 시** — 게이트 없이 바로 워크트리 생성 진행:
+```
+⏺ 브랜치 이름: feature/[이름]
+  → 워크트리를 생성합니다. (변경이 필요하면 말씀해 주세요)
+```
 
-도출 결과가 비어 있거나 부적절할 경우 (예: 의미 없는 키워드, 너무 짧거나 긴 이름):
+사용자가 이의를 제기하면 변경된 이름으로 재생성한다.
+
+**도출 실패 시** (비어 있거나 부적절한 경우):
 ```
 브랜치 이름을 자동으로 도출하지 못했습니다.
 사용할 브랜치 이름을 직접 입력해 주세요 (예: my-feature-name):
-feature/[입력값]
 ```
 
-입력값에 feature/ 접두사를 자동 적용하고 소문자·하이픈 규칙을 적용한 후, 아래 확인 게이트를 표시한다.
+입력값에 feature/ 접두사를 자동 적용하고 소문자·하이픈 규칙을 적용한 후 워크트리를 생성한다.
 
-**확인 게이트:**
+devflow-audit에 브랜치명 확정 이벤트 기록 → "Branch: feature/[이름]" 인라인 신호로 aidlc-using-git-worktrees 호출
 
-```
-도출된 브랜치 이름: feature/[이름]
-
-A) 변경 → 원하는 이름 입력 (feature/ 접두사 자동 적용, 소문자·하이픈 규칙 적용)
-B) 확인, 이 이름으로 워크트리 생성
-```
-
-A 선택 시: devflow-audit에 브랜치명 변경 이벤트 기록 → 사용자가 입력한 이름에 feature/ 접두사 적용 및 명명 규칙(소문자, 하이픈) 적용 후 게이트 재표시
-B 선택 시: devflow-audit에 브랜치명 확정 이벤트 기록 → "Branch: feature/[이름]" 인라인 신호로 aidlc-using-git-worktrees 호출
-
-### 워크트리 결과 게이트
+### 워크트리 결과
 
 `aidlc-using-git-worktrees` 반환 후:
 ```
-## aidlc-using-git-worktrees 완료
-
-[스킬 반환 결과 표시]
+워크트리 생성 완료.
+- 경로: .worktrees/feature-[이름]
+- 브랜치: feature/[이름] ([base-commit] 기준)
 
 → 다음 단계로 진행
 ⚠️ 베이스라인 테스트 실패 시: A) aidlc-systematic-debugging 먼저 / B) 실패 인지 후 진행

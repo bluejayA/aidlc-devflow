@@ -9,7 +9,7 @@ inputs:
     pre-planning: B
     nfr-requirements: A
     workflow-planning-approach: B
-    workflow-planning-env: C
+    workflow-planning-env: B
 expect:
   stage_path:
     - workspace-detection
