@@ -54,9 +54,53 @@ Execute build and full test suite after all units are implemented, then generate
    - `pom.xml` → `mvn test`
 2. **전체 테스트 실행** (unit 테스트 + 통합 테스트 포함)
 3. 결과 파싱:
-   - **전체 통과** → Step 4로
+   - **전체 통과** → Step 3.5로
    - **실패 있음** → 실패 테스트 목록 포함하여 Return
      "⚠️ [N]개 테스트 실패. systematic-debugging 권장."
+
+### Step 3.5: Stub 잔존 검증 (Brownfield 전용)
+
+construction-orchestrator가 호출 시 `"Brownfield: true"` 인라인 전달한 경우에만 실행. 미전달 시 스킵하고 Step 4로.
+
+1. Stub Scan과 동일 패턴으로 프로젝트 루트 스캔
+2. 변경 파일 목록 추출:
+   - `devflow-state.md`의 `## Worktree` → `branch` 확인
+   - 워크트리 있음: `git diff --name-only main...HEAD`
+   - 워크트리 없음: `git diff --name-only $(git merge-base HEAD origin/main)...HEAD`
+   - diff 결과 비어있으면: `"⚠️ 변경 파일 감지 불가. A) 수동 지정 / B) 전체 스캔"`
+3. stub 스캔 결과와 변경 파일 교차 비교 — 변경 파일 내 stub만 추출
+
+**관련 stub 없음:**
+```
+✅ Stub 잔존 검증 통과 — 변경 파일 내 미구현 stub 없음
+```
+→ Step 4로 진행
+
+**관련 stub 발견 시 — 조건부 게이트:**
+```
+⚠️ Stub 잔존 발견 — 변경 파일 내 미구현 stub [N]건
+
+| 파일 | 라인 | 내용 |
+|------|------|------|
+| [파일경로] | [라인] | [stub 내용] |
+
+A) stub 수정 후 build-and-test 재실행
+B) stub을 인지하고 진행 → 사유 입력 요청
+```
+
+**A 선택 시:** 사용자가 stub 수정 → build-and-test 재실행 (Step 2부터)
+**B 선택 시:** 사유 입력 요청 후, session-summary `## Deferred Stubs` 구조화 테이블에 기록:
+
+```markdown
+## Deferred Stubs
+| 파일:라인 | stub 내용 | 사유 | 관련 unit | 예상 해결 시점 |
+|-----------|----------|------|----------|--------------|
+```
+
++ devflow-audit에 `"stub-deferred: [파일:라인] — [사유]"` 기록
++ 다음 세션 재개 시 construction-orchestrator가 `## Deferred Stubs`를 감지하여 Stub Scan에 포함
+
+**스캔 실패 시:** 재시도/스킵 게이트 + devflow-audit에 `"stub-scan-error"` 기록
 
 ### Step 4: 지침 문서 생성
 
