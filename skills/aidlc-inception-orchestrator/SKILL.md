@@ -231,7 +231,6 @@ B → `"Mode: IMPORT"` 인라인 신호로 aidlc-nfr-requirements 호출
 <!-- @gate-option: A -> workflow-planning-env -->
 <!-- @gate-option: B -> workflow-planning-env -->
 <!-- @gate-option: C -> workflow-planning-env {comprehensive-only} -->
-<!-- @gate-option: D -> workflow-planning {재호출} -->
 
 **1단계: 접근법 선택**
 ```
@@ -241,8 +240,9 @@ B → `"Mode: IMPORT"` 인라인 신호로 aidlc-nfr-requirements 호출
 A) [A안명] 선택
 B) [B안명] 선택
 C) [C안명] 선택 (Comprehensive만)
-D) 변경 요청 (예: 접근법 수정, 스테이지 포함/제외 등) → workflow-planning 재호출
 ```
+
+변경이 필요하면 자유 발화로 요청 → 인터럽트 핸들러가 workflow-planning을 재호출한다.
 
 <!-- @state-update: 접근법 선택 → devflow-state Selected Approach + Approved Stages 업데이트 -->
 선택 후:
