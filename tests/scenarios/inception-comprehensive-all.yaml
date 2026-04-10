@@ -4,7 +4,7 @@ inputs:
   complexity: Comprehensive
   choices:
     workspace-detection: C
-    complexity-declaration: B
+    complexity-declaration: enter
     requirements-analysis: B
     user-stories: B
     nfr-requirements: A

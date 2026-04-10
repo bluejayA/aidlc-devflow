@@ -159,11 +159,18 @@ class TestNoDeadEnds:
 
 @pytest.mark.parametrize("name", ORCHESTRATORS)
 class TestOptionCompleteness:
-    """Each gate must have at least 2 options."""
+    """Each standard gate must have at least 2 options. Lightweight gates (enter-only) are exempt."""
 
     def test_option_completeness(self, load_graph, name):
         graph = load_graph(name)
-        incomplete = [g["id"] for g in graph["gates"] if len(g["options"]) < 2]
+        lightweight_gates = {
+            g["id"] for g in graph["gates"]
+            if len(g["options"]) == 1 and g["options"][0]["option"] == "enter"
+        }
+        incomplete = [
+            g["id"] for g in graph["gates"]
+            if len(g["options"]) < 2 and g["id"] not in lightweight_gates
+        ]
         assert incomplete == [], f"Gates with < 2 options in {name}: {incomplete}"
 
 

@@ -5,7 +5,7 @@ inputs:
   choices:
     units-generation: B
     code-plan: C
-    code-generation-result: B
+    code-generation-result: enter
     build-and-test-result: A
 expect:
   stage_path:

@@ -230,10 +230,10 @@ class TestFR1ReviewAutoExecution:
             "구현 게이트에서 R 옵션이 아직 존재함 — FR-1에 따라 제거되어야 함"
         )
 
-    def test_s_option_exists(self):
+    def test_review_skip_via_interrupt(self):
         content = read_skill()
-        assert re.search(r"S\).*무시.*진행|S\).*스킵|S\).*skip", content, re.IGNORECASE), (
-            "구현 게이트에 S(스킵/무시) 옵션이 없음"
+        assert re.search(r"리뷰 스킵.*자유 발화|리뷰 스킵.*요청", content), (
+            "구현 게이트에 리뷰 스킵(자유 발화) 안내가 없음"
         )
 
     def test_auto_review_execution(self):
@@ -242,8 +242,8 @@ class TestFR1ReviewAutoExecution:
             "코드 리뷰 자동 실행 명시가 없음"
         )
 
-    def test_minimal_depth_no_review(self):
+    def test_all_depth_auto_review(self):
         content = read_skill()
-        assert re.search(r"Minimal.*리뷰 없음|Minimal depth.*리뷰|Minimal.*S 옵션 없이", content), (
-            "Minimal depth에서 리뷰 없음 예외 명시가 없음"
+        assert re.search(r"모든 depth|R1.*단일 리뷰.*자동 호출.*모든|R1.*모드로 자동 호출", content), (
+            "모든 depth에서 자동 리뷰 실행 명시가 없음"
         )

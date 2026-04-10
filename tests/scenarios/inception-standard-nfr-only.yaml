@@ -4,7 +4,7 @@ inputs:
   complexity: Standard
   choices:
     workspace-detection: C
-    complexity-declaration: B
+    complexity-declaration: enter
     requirements-analysis: B
     pre-planning: B
     nfr-requirements: A

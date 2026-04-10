@@ -7,7 +7,7 @@ inputs:
   complexity: Standard
   choices:
     workspace-detection: C
-    complexity-declaration: B
+    complexity-declaration: enter
     requirements-analysis: X
 expect:
   stage_path:

@@ -103,21 +103,19 @@ C) 확인, 다음 단계 진행 → Complexity Declaration Gate
 
 B 선택 시: reverse-engineering 스킬을 호출한다. 완료 후 산출물(`reverse-engineering/`)이 생성되며, 이후 requirements-analysis 호출 시 참조 컨텍스트로 전달한다: `"참조: reverse-engineering/README.md"`
 
-### 2. Complexity Declaration Gate
-<!-- @gate: complexity-declaration -->
-<!-- @gate-option: A -> complexity-declaration {adjust} -->
-<!-- @gate-option: B -> requirements-analysis -->
+### 2. Complexity Declaration [자동 진행]
+<!-- @auto-proceed: complexity-declaration -> requirements-analysis -->
 
 workspace-detection 결과를 기반으로 복잡도를 선언.
 
 ```
 복잡도: **[Minimal/Standard/Comprehensive]** — [한 줄 이유]
-
-A) 조정 요청
-B) 승인
+→ 다음 단계로 진행합니다. (이전 단계로 돌아가려면 언제든 말씀해 주세요)
 ```
 
-<!-- @state-update: Complexity 승인 → devflow-state Complexity 기록 -->
+게이트 없이 바로 진행한다. 사용자가 조정을 요청하면 인터럽트 핸들러가 처리.
+
+<!-- @state-update: Complexity 선언 → devflow-state Complexity 기록 -->
 Complexity 값을 requirements-analysis 호출 시 인라인으로 전달: `"Complexity: [level]"`
 
 ### 3. requirements-analysis 게이트 [조건부 게이트 + 자동진행]
@@ -307,26 +305,47 @@ devflow-audit에 브랜치명 확정 이벤트 기록 → "Branch: feature/[이�
 <!-- @condition: application-design==skipped,units-generation==skipped -> CONSTRUCTION/code-generation -->
 
 workflow-plan.md의 `## Approved Stages`를 읽어 분기:
-- `application-design: included` → application-design 게이트 실행
-- `application-design: skipped`, `units-generation: included` → INCEPTION 완료, CONSTRUCTION에서 units-generation부터 시작
-- `application-design: skipped`, `units-generation: skipped` → INCEPTION 완료, CONSTRUCTION에서 code-generation 직행
+- `application-design: included` → application-design 게이트 실행 (application-design 완료 후 INCEPTION 완료 체크포인트 실행)
+- `application-design: skipped`, `units-generation: included` → INCEPTION 완료 체크포인트 → CONSTRUCTION에서 units-generation부터 시작
+- `application-design: skipped`, `units-generation: skipped` → INCEPTION 완료 체크포인트 → CONSTRUCTION에서 code-generation 직행
+
+#### INCEPTION 완료 체크포인트 [경량 확인]
+<!-- @gate: inception-complete-checkpoint -->
+<!-- @gate-option: enter -> CONSTRUCTION -->
+
+CONSTRUCTION 전환 전에 INCEPTION 결과를 일괄 요약하고 확인한다.
+
+```
+## INCEPTION 완료 — 결과 요약
+
+- 복잡도: [level]
+- Units: [N]개 ([unit 목록]) / 단일 unit
+- 접근법: [선택된 접근법]
+- 설계: [application-design 포함/스킵]
+
+CONSTRUCTION을 시작합니다. 수정이 필요한 항목이 있으면 말씀해 주세요.
+진행하려면 엔터를 눌러주세요.
+```
+
+사용자가 수정을 요청하면 해당 INCEPTION 스테이지를 재호출한다.
 
 ### 8. application-design 게이트 (조건부 실행)
 
 `application-design: included`인 경우에만 실행.
 
-#### 8a. LIST 게이트 [표준 게이트]
+#### 8a. LIST [경량 확인]
 <!-- @gate: application-design-list -->
-<!-- @gate-option: A -> application-design {재호출} -->
-<!-- @gate-option: B -> application-design-detail -->
+<!-- @gate-option: enter -> application-design-detail -->
 
 ```
 [application-design LIST 결과 표시]
-A) 변경 요청 (예: 컴포넌트 추가/삭제, 책임 분리 등) → application-design 재호출
-B) [depth에 따라 조건부 표시]
-   - Minimal: 승인, INCEPTION 완료 → INCEPTION 완료
-   - Standard/Comprehensive: 승인, 상세 설계 진행 → application-design: DETAIL 호출
+
+→ [Minimal: INCEPTION을 완료합니다 / Standard+: 상세 설계를 진행합니다].
+  변경이 필요하면 말씀해 주세요. (예: 컴포넌트 추가/삭제, 책임 분리)
+  진행하려면 엔터를 눌러주세요.
 ```
+
+사용자가 변경을 요청하면 application-design을 재호출한다.
 
 #### 8b. DETAIL 게이트 [리뷰 연계 게이트] (Standard/Comprehensive만)
 <!-- @gate: application-design-detail -->

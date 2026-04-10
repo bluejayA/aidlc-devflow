@@ -89,8 +89,8 @@ class TestParserInceptionContent:
         for gate in graph["gates"]:
             assert "id" in gate, f"Gate missing 'id': {gate}"
             assert "options" in gate, f"Gate missing 'options': {gate}"
-            assert len(gate["options"]) >= 2, (
-                f"Gate '{gate['id']}' has < 2 options"
+            assert len(gate["options"]) >= 1, (
+                f"Gate '{gate['id']}' has no options"
             )
 
     def test_gate_option_has_target(self, load_graph):

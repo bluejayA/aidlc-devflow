@@ -130,15 +130,18 @@ units-generation이 스킵된 경우, 단일 unit으로 처리한다.
 
 `aidlc-functional-design` 호출 (unit명 전달)
 
-##### 설계 게이트 [표준 게이트]
+##### 설계 [경량 확인]
 <!-- @gate: functional-design -->
-<!-- @gate-option: A -> functional-design {재호출} -->
-<!-- @gate-option: B -> code-generation-plan -->
+<!-- @gate-option: enter -> code-generation-plan -->
 ```
 [functional-design 결과 표시]
-A) 변경 요청 (예: 도메인 엔티티, 비즈니스 규칙, API 계약 등) → functional-design 재호출
-B) 승인, 코드 생성 진행
+
+→ 코드 생성을 진행합니다.
+  변경이 필요하면 말씀해 주세요. (예: 도메인 엔티티, 비즈니스 규칙, API 계약)
+  진행하려면 엔터를 눌러주세요.
 ```
+
+사용자가 변경을 요청하면 functional-design을 재호출한다.
 
 **Minimal/Standard**: 이 단계 스킵, 바로 code-generation으로.
 
@@ -193,21 +196,25 @@ grep -rn "not yet implemented\|todo!()\|unimplemented!()\|NotImplementedError\|r
 
 `"aidlc-code-generation: GENERATE — proceed with the approved plan for [unit-name]"` 인라인 신호로 호출
 
-#### 구현 게이트 [리뷰 연계 게이트]
+#### 구현 [경량 확인 + 리뷰 연계]
 <!-- @gate: code-generation-result -->
-<!-- @gate-option: A -> code-generation-generate {재호출} -->
-<!-- @gate-option: B -> next-unit -->
-<!-- @gate-option: S -> next-unit {skip-review} -->
-`_shared/patterns/review-gate-pattern.md` 적용:
+<!-- @gate-option: enter -> next-unit -->
 
-- A) 변경 요청 → code-generation: GENERATE 재호출
-- B) 승인, 다음 unit 진행
-- 확장 옵션: S) 리뷰 스킵 (audit 기록됨, 다음 unit은 정상 리뷰)
-
-**리뷰 자동 실행 (인라인 모드, Standard 이상)**: `aidlc-requesting-code-review`를 R1(단일 리뷰) 모드로 자동 호출.
+**리뷰 자동 실행**: `aidlc-requesting-code-review`를 R1(단일 리뷰) 모드로 자동 호출 (모든 depth).
 Council/Teams 리뷰를 원하면 자유 발화로 요청 → Interrupt Handler가 처리.
 requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of Truth).
-**Minimal depth**: R1 단일 리뷰 자동 실행 (Standard와 동일).
+
+리뷰 완료 후:
+```
+[code-generation 결과 + 자동 리뷰 결과 표시]
+
+→ 다음 unit을 진행합니다.
+  변경이 필요하면 말씀해 주세요. (예: 구현 수정, 리뷰 반영)
+  진행하려면 엔터를 눌러주세요.
+```
+
+사용자가 변경을 요청하면 code-generation: GENERATE를 재호출한다.
+리뷰 스킵은 자유 발화로 요청 가능 (audit 기록됨).
 
 <!-- @state-update: unit 완료 → devflow-state Completed Units 추가 + Active Unit 갱신 -->
 승인 후:
