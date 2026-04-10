@@ -10,7 +10,6 @@
 ## Next
 
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
-- **BL-082**: SDD Brownfield stub blind spot — stub scan + adapter 검증 + 리뷰 CRITICAL 즉시수정 [P2] [#147](https://github.com/bluejayA/aidlc-devflow/issues/147)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145)
 
 ---
