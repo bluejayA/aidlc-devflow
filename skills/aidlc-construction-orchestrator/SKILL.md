@@ -179,39 +179,13 @@ B) 승인, 코드 생성 진행
 <!-- @gate-option: B -> code-generation-generate -->
 <!-- @gate-option: C -> code-generation-generate {override} -->
 
-리뷰 결과에 따라 게이트 분기가 달라진다:
+`_shared/patterns/review-gate-pattern.md` 적용. 리뷰 결과에 따라 게이트 분기:
 
-**리뷰 PASS / 리뷰 없음 (Minimal depth):**
-```
-[code-generation Plan 결과 표시]
-[리뷰 결과 표시 (Standard 이상)]
-A) 변경 요청 (예: 구현 계획 수정, 접근 방식 변경 등) → code-generation 재호출
-B) 승인, 코드 생성 진행 → code-generation: GENERATE 호출
-```
+- A) 변경 요청 → code-generation 재호출
+- B) 승인 → code-generation: GENERATE 호출
+- 확장 옵션: C) 오버라이드 (FAIL/CONDITIONAL 시, review-gate-pattern의 오버라이드 audit 형식 적용)
 
-**리뷰 FAIL / CONDITIONAL:**
-```
-[code-generation Plan 결과 표시]
-[리뷰 결과 — Verdict: FAIL/CONDITIONAL + 이슈 목록 표시]
-A) 리뷰 이슈 수정 요청 → code-generation 재호출
-B) 수정 후 승인, 코드 생성 진행 → code-generation: GENERATE 호출
-C) 리뷰 이슈를 인지하고 현재 상태로 진행 (오버라이드) → code-generation: GENERATE 호출
-```
-
-C 선택 시:
-1. 사용자에게 오버라이드 사유 입력을 요청한다
-2. devflow-audit에 override 이벤트 기록:
-   ```
-   - timestamp: [ISO 8601]
-   - type: override
-   - gate: code-plan
-   - review-verdict: [FAIL|CONDITIONAL]
-   - reason: [사용자 입력 사유]
-   - issues-acknowledged: [리뷰 이슈 목록]
-   ```
-3. code-generation: GENERATE 호출로 진행
-
-리뷰 결과가 FAIL/CONDITIONAL로 반환될 때마다 C 옵션을 포함하여 게이트를 표시한다. 리뷰 루프 5회 소진 시에는 conventions escalation 메시지가 우선한다.
+리뷰 루프 5회 소진 시 conventions escalation 메시지 우선.
 
 #### 2c. code-generation Generate 호출
 
@@ -222,13 +196,11 @@ C 선택 시:
 <!-- @gate-option: A -> code-generation-generate {재호출} -->
 <!-- @gate-option: B -> next-unit -->
 <!-- @gate-option: S -> next-unit {skip-review} -->
-```
-[code-generation 완료 결과 표시]
-[리뷰 결과 표시 — Verdict: PASS/CONDITIONAL/FAIL (Standard 이상, 자동 실행)]
-A) 변경 요청 (예: 구현 방식, 테스트 범위, 에러 핸들링 등) → code-generation: GENERATE 재호출
-B) 승인, 다음 unit 진행
-S) 리뷰어 이슈를 무시하고 진행 (audit 기록됨, 다음 unit은 정상 리뷰)
-```
+`_shared/patterns/review-gate-pattern.md` 적용:
+
+- A) 변경 요청 → code-generation: GENERATE 재호출
+- B) 승인, 다음 unit 진행
+- 확장 옵션: S) 리뷰 스킵 (audit 기록됨, 다음 unit은 정상 리뷰)
 
 **리뷰 자동 실행 (인라인 모드, Standard 이상)**: `aidlc-requesting-code-review`를 R1(단일 리뷰) 모드로 자동 호출.
 Council/Teams 리뷰를 원하면 자유 발화로 요청 → Interrupt Handler가 처리.
