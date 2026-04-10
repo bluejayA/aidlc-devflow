@@ -222,6 +222,8 @@ requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of
 
 ### 3. build-and-test
 
+workspace.md에서 brownfield로 확인된 경우, 호출 시 인라인 전달: `"Brownfield: true"` — stub 잔존 검증 활성화. Greenfield인 경우 전달하지 않음.
+
 `aidlc-build-and-test` 호출
 
 #### 3a. Auto-fix 전처리 (Self-Healing Loop)
