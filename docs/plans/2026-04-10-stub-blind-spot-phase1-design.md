@@ -34,7 +34,7 @@ Phase 2 (CRITICAL 자동 승격 + Brownfield 체크리스트)와 Phase 3 (Mock/R
 ### 스캔 명령
 
 ```bash
-grep -rn "not yet implemented\|todo!()\|unimplemented!()\|NotImplementedError\|raise NotImplementedError" src/ --include="*.rs" --include="*.py" --include="*.ts" --include="*.java" --include="*.kt" --include="*.go"
+grep -rn "not yet implemented\|todo!()\|unimplemented!()\|NotImplementedError\|raise NotImplementedError\|UnsupportedOperationException\|TODO(\".*\")\|panic(\"not implemented\")\|panic(\"TODO\")" . --include="*.rs" --include="*.py" --include="*.ts" --include="*.java" --include="*.kt" --include="*.go" --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=.git --exclude-dir=target --exclude-dir=build --exclude-dir=__pycache__
 ```
 
 ### 결과 전달
@@ -71,7 +71,7 @@ stub 미발견 시 전달 안 함.
 ### 스캔 + 필터링
 
 1. 동일 stub 패턴으로 스캔
-2. `git diff --name-only`로 변경 파일 목록 추출
+2. `git diff --name-only main...HEAD`로 main 브랜치 대비 변경 파일 목록 추출 (워크트리 없이 main 직접 작업 시 `git diff --name-only HEAD~[커밋수]`)
 3. stub 스캔 결과와 변경 파일 교차 비교
 4. **변경 파일 내 stub만 보고** (무관한 기존 stub은 제외)
 
@@ -91,7 +91,7 @@ stub 미발견 시 전달 안 함.
 | src/adapters/http.rs | 42 | "not yet implemented" |
 
 A) stub 수정 후 build-and-test 재실행
-B) stub을 인지하고 진행 (session-summary에 [DEFERRED_STUB] 기록)
+B) stub을 인지하고 진행 → 사유 입력 요청 후 session-summary에 [DEFERRED_STUB] 기록
 ```
 
 ### A/B 선택 동작
@@ -113,13 +113,13 @@ B) stub을 인지하고 진행 (session-summary에 [DEFERRED_STUB] 기록)
 
 | 파일 | 변경 내용 |
 |------|----------|
-| `aidlc-construction-orchestrator/SKILL.md` | unit별 code-generation 호출 전 stub scan + 결과 전달 |
-| `aidlc-build-and-test/SKILL.md` | 성공 후 stub 잔존 검증 + 조건부 게이트 |
+| `aidlc-construction-orchestrator/SKILL.md` | Step 1 컨텍스트 로드에 `workspace.md` 추가 + unit별 code-generation 호출 전 stub scan + 결과 전달 |
+| `aidlc-build-and-test/SKILL.md` | brownfield 여부를 orchestrator에서 전달받아 성공 후 stub 잔존 검증 + 조건부 게이트 |
 
 ---
 
 ## Assumptions
 
 - `workspace.md`의 brownfield/greenfield 구분이 정확하다
-- stub 패턴 (`not yet implemented`, `todo!()`, `unimplemented!()`, `NotImplementedError`)이 대부분의 언어를 커버한다
+- stub 패턴이 주요 언어를 커버한다: Rust (`todo!()`, `unimplemented!()`), Python (`NotImplementedError`), Go (`panic("not implemented")`), Java/Kotlin (`UnsupportedOperationException`, `TODO()`), 공통 (`not yet implemented`)
 - 변경 파일 내 stub만 필터링하면 false positive가 낮다
