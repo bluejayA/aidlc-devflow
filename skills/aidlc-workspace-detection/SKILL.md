@@ -8,6 +8,8 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/inception/workspace.md
+  skill_nature: amplification
+  lifecycle: active
 ---
 
 # aidlc-workspace-detection

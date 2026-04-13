@@ -9,6 +9,8 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: amplification
+  lifecycle: active
 ---
 
 # Writing Plans

@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/inception/nfr-requirements.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 NFR을 기능 요구에 혼재시킴"
+  amplification_notes: "도메인 프리셋 기반 NFR 체계화"
 ---
 
 # aidlc-nfr-requirements

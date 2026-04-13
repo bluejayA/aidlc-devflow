@@ -11,6 +11,8 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-with-gate
+  skill_nature: amplification
+  lifecycle: active
 ---
 
 # aidlc-auto-mode

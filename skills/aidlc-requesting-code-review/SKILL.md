@@ -9,6 +9,10 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 자신의 코드를 비판적으로 재검토하지 않음"
+  amplification_notes: "3-stage/4-stage 리뷰 + 다중 reviewer 디스패치 구조"
 ---
 
 # aidlc-requesting-code-review

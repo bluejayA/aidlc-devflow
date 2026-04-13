@@ -9,6 +9,10 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 세션 경계를 넘어 맥락을 유지하지 못함"
+  amplification_notes: "체크포인트-재개 프로토콜로 긴 작업 추적"
 ---
 
 # Executing Plans

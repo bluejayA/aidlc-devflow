@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/construction/{unit}/functional-design.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 API 계약 없이 구현함"
+  amplification_notes: "비즈니스 규칙 + 계약 선행 정의"
 ---
 
 # aidlc-functional-design

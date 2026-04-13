@@ -7,6 +7,8 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
+  skill_nature: null
+  lifecycle: active
 ---
 
 # devflow-state

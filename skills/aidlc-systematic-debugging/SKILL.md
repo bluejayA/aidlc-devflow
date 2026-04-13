@@ -9,6 +9,9 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: compensation
+  lifecycle: active
+  model_dependency: "모델이 원인 미확정 상태로 수정을 시도함"
 ---
 
 # aidlc-systematic-debugging

@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/inception/units.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 의존성 순서를 무시함"
+  amplification_notes: "독립 개발/테스트 가능 단위 분해"
 ---
 
 # aidlc-units-generation
