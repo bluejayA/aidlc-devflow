@@ -21,7 +21,7 @@ metadata:
 
 ### 1. 세션 요약
 
-devflow-audit.md를 파싱하여:
+devflow-docs/audit.md를 파싱하여:
 - 호출된 스킬 목록
 - 각 단계의 상태 (완료/스킵/실패)
 - 게이트에서의 사용자 선택 패턴

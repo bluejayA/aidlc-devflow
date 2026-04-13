@@ -487,7 +487,7 @@ Expected: ~380줄
 **1단계 — 기록:** 다음 4개 파일을 순서대로 업데이트:
 1. `devflow-state.md` — Current Stage 갱신 (in-progress 제거)
 2. `session-summary.md` — Completed Work에 추가 (`_shared/patterns/session-continuity.md` 템플릿 준수)
-3. `devflow-audit.md` — `[timestamp] [stage] — auto-approved — [이유 1줄]`
+3. `devflow-docs/audit.md` — `[timestamp] [stage] — auto-approved — [이유 1줄]`
 4. `auto-decision-log-[phase].md` — 판단 상세 append
 
 **2단계 — 검증:** `devflow-state.md`를 Read로 열어 Current Stage 값 확인. 불일치 시 즉시 수정.
