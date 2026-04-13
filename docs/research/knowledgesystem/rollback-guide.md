@@ -18,13 +18,49 @@
 
 ---
 
-## Level 1: Hook만 비활성 (가장 빠름, 1분)
+## Level 0: Kill Switch (가장 빠름, 5초)
 
 ### 언제
+- **긴급 상황에서 즉시 비활성 필요**
+- git/파일 수정 할 시간 없음
+- 한 세션에서만 임시 중단
+
+### 절차
+
+환경변수로 즉시 무력화:
+```bash
+# 현재 세션에서만
+export DEVFLOW_HOOK_DISABLED=1
+
+# 한 번 실행만 영향
+DEVFLOW_HOOK_DISABLED=1 claude
+
+# 복구
+unset DEVFLOW_HOOK_DISABLED
+```
+
+### 영향
+- Hook이 0.1ms 안에 exit 0 → 완전히 무력화
+- 파일 변경 없음, revert 불필요
+- 다른 모든 변경 (taxonomy, skill 태깅, STORE ownership) 정상 동작
+
+### 복구
+`unset DEVFLOW_HOOK_DISABLED` 또는 새 세션 시작.
+
+### 주의
+- 이건 **임시 무력화**. 근본 문제 해결 시 Level 1/2/3로 진행.
+- env 설정이 shell session 바운드. Claude Code 재시작 시 소실 가능.
+
+---
+
+## Level 1: Hook만 비활성 (영구, 1분)
+
+### 언제
+- Level 0으로 임시 조치 후 **장기 비활성 결정**
 - audit.md 급성장 (100KB 초과 후 수시 경고)
 - state.md `## Last Updated` 외 구조 섹션 파손 (T9 Critical)
 - hook 실행 지연 (T8 > 500ms 평균)
-- 단일 세션에서 audit 오염 관측
+- 여러 세션/환경에서 일관되게 차단 필요
 
 ### 절차
 
@@ -203,6 +239,39 @@ Phase 2 재설계 필요."
 - Post-mortem 작성 (위 참조)
 - Phase 2 plan을 "재설계" 방향으로 작성
 - 레드팀 3차 리뷰 호출
+
+---
+
+## 보존 정책 (MUST)
+
+롤백 가능성 보장을 위한 자산 보존 규칙:
+
+### 브랜치
+
+- `feature/knowledge-system-phase1` 브랜치 **머지 후 최소 4주 보존**
+  - 근거: Sprint 2 (14일) + 완충 2주
+  - Level 3 revert 시 참조 히스토리 필요
+  - 4주 경과 + Sprint 2 안정 확인 후에만 삭제 검토
+  - 명령: `git branch -d feature/knowledge-system-phase1` (4주 전 실행 금지)
+
+### 태그
+
+- **v1.8.0, v1.9.0 태그 절대 삭제 금지**
+  - 이유: marketplace rollback 시 과거 버전 참조 필수
+  - `git tag -d v1.9.0 && git push origin :refs/tags/v1.9.0` 금지
+  - 만약 실수 삭제 시 즉시 복원: `git tag v1.9.0 e84ad8a && git push --tags`
+
+- **v1.10.0 태그는 Phase 2 plan 확정 (14일 후) 전까지 유지**
+  - 문제 발견 시 v1.10.1 (fix 또는 revert)로 대체 가능
+
+### Plugin 버전 전략
+
+- v1.10.0 문제 발견 시 **두 가지 복구 경로**:
+  1. **v1.10.1 fix 릴리스**: 특정 component만 수정 (예: hook disable 기본값)
+  2. **v1.11.0 revert 릴리스**: Level 3 revert 후 새 minor bump
+
+- marketplace repo에서 이전 버전 pin 가능하게 version 엔트리 정리
+- v1.9.0 캐시는 Claude Code 사용자 local에 일정 기간 남아 emergency rollback 경로 확보
 
 ---
 
