@@ -45,8 +45,25 @@ canon() {
 }
 
 CANON_PATH=$(canon "$MODIFIED_PATH")
-REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-REPO_ROOT=$(canon "$REPO_ROOT")
+
+# === Resolve project root: DEVFLOW_ROOT opt-in > git toplevel > fail-closed ===
+# DEVFLOW_ROOT: MSA/multi-repo 프로젝트가 서비스 여러 개에 공통 audit을 쓰고 싶을 때 opt-in.
+# 검증: absolute path, 존재 디렉토리, 루트(/) 거부. 실패 시 silent exit (fail-closed).
+if [ -n "${DEVFLOW_ROOT:-}" ]; then
+  case "$DEVFLOW_ROOT" in
+    /*) : ;;
+    *) exit 0 ;;
+  esac
+  [ -d "$DEVFLOW_ROOT" ] || exit 0
+  REPO_ROOT=$(canon "$DEVFLOW_ROOT")
+  # Re-validate AFTER canonicalization (trailing slash / .. / symlink-to-root 차단)
+  [ "$REPO_ROOT" = "/" ] && exit 0
+  [ -d "$REPO_ROOT" ] || exit 0
+else
+  REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+  REPO_ROOT=$(canon "$REPO_ROOT")
+  [ "$REPO_ROOT" = "/" ] && exit 0
+fi
 
 # === Convert to repo-relative using parameter expansion (no glob — REPO_ROOT may contain *?[) ===
 case "$CANON_PATH" in
@@ -81,6 +98,14 @@ esac
 case "$REL_PATH" in
   devflow-docs/*|docs/*|skills/*|CLAUDE.md|README.md) : ;;
   *) exit 0 ;;
+esac
+
+# === REL_PATH sanitization: 제어문자 포함 경로 거부 (audit injection 방지) ===
+# POSIX 파일명은 newline/tab/CR/ESC/BEL 허용 — 이런 경로가 audit.md에 그대로 append되면
+# 한 event가 여러 log 행으로 위조되거나 ANSI terminal injection 가능.
+# evidence 무결성 + terminal 안전 보호.
+case "$REL_PATH" in
+  *[$'\n\r\t\x1b\x07\x08\x0b\x0c']*) exit 0 ;;
 esac
 
 # === audit.md append (event prefix: taxonomy §2.5 준수) ===
