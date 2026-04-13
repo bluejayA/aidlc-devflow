@@ -1,0 +1,130 @@
+#!/bin/bash
+# post-tool-file-edit — L1 auto ingest on Edit/Write/MultiEdit/NotebookEdit tool calls
+# Writes to devflow-docs/audit.md, soft-saves devflow-docs/devflow-state.md
+#
+# Race condition 방지 제약:
+# - 이 hook은 '## Last Updated' heading 값만 수정한다.
+# - 구조 섹션 (## Current Phase, ## Current Stage, ## Worktree, ## WIP 등) 절대 건드리지 않음.
+# - 구조 변경은 skill(using-devflow, auto-mode 등)의 책임.
+# - 동일 세션 내 동시성은 Claude Code가 단일 스레드로 보장.
+#   다중 세션 동시 Last Updated 경합은 timestamp drift만 발생 (수용).
+
+set -eo pipefail
+
+# Tool input comes via stdin as JSON per Claude Code hook contract
+INPUT=$(cat)
+
+# === Parse file_path: jq 우선, 없으면 python3 fallback, 둘 다 없으면 loud fail ===
+parse_file_path() {
+  if command -v jq >/dev/null 2>&1; then
+    printf '%s' "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null
+    return
+  fi
+  if command -v python3 >/dev/null 2>&1; then
+    printf '%s' "$INPUT" | python3 -c 'import sys,json
+try:
+  d=json.load(sys.stdin); print(d.get("tool_input",{}).get("file_path",""),end="")
+except Exception: pass'
+    return
+  fi
+  printf '[devflow] ERROR: post-tool-file-edit needs jq or python3 — neither found. Audit ingest disabled.\n' >&2
+  return 1
+}
+
+MODIFIED_PATH=$(parse_file_path) || exit 0
+[ -z "$MODIFIED_PATH" ] && exit 0
+
+# === Canonicalize paths (resolve symlinks, normalize ..) ===
+canon() {
+  local p="$1"
+  if command -v python3 >/dev/null 2>&1; then
+    python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$p" 2>/dev/null || printf '%s' "$p"
+  else
+    printf '%s' "$p"
+  fi
+}
+
+CANON_PATH=$(canon "$MODIFIED_PATH")
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+REPO_ROOT=$(canon "$REPO_ROOT")
+
+# === Convert to repo-relative using parameter expansion (no glob — REPO_ROOT may contain *?[) ===
+case "$CANON_PATH" in
+  /*)
+    STRIPPED="${CANON_PATH#"$REPO_ROOT"/}"
+    if [ "$STRIPPED" = "$CANON_PATH" ]; then
+      # Path doesn't start with REPO_ROOT/ — outside repo
+      exit 0
+    fi
+    REL_PATH="$STRIPPED"
+    ;;
+  *)
+    # Relative path: reject escape attempts
+    case "$CANON_PATH" in
+      ../*|*/../*|*/..) exit 0 ;;
+    esac
+    REL_PATH="$CANON_PATH"
+    ;;
+esac
+
+# === Exclusion filter (self-amplification 방지 + noise 제거) ===
+case "$REL_PATH" in
+  tests/*|hooks/*|.claude-plugin/*|.git/*|.worktrees/*)
+    exit 0 ;;
+  devflow-docs/.archive/*|devflow-docs/archieve/*|devflow-docs/audit.md|devflow-docs/audit-log/*)
+    exit 0 ;;
+  devflow-docs/devflow-state.md|devflow-docs/session-summary.md)
+    exit 0 ;;
+esac
+
+# === Whitelist filter (의미있는 지식 surface만 로깅) ===
+case "$REL_PATH" in
+  devflow-docs/*|docs/*|skills/*|CLAUDE.md|README.md) : ;;
+  *) exit 0 ;;
+esac
+
+# === audit.md append (event prefix: taxonomy §2.5 준수) ===
+AUDIT="$REPO_ROOT/devflow-docs/audit.md"
+TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+mkdir -p "$(dirname "$AUDIT")"
+[ -f "$AUDIT" ] || printf '# DevFlow Audit Log\n' > "$AUDIT"
+printf '%s\n' "- $TS — file-edit — $REL_PATH" >> "$AUDIT"
+
+# === audit.md size warning (Sprint 1: warning only, rotation은 Sprint 2) ===
+SIZE=$(wc -c < "$AUDIT" 2>/dev/null || printf '0')
+if [ "$SIZE" -gt 102400 ]; then
+  printf '[devflow] WARNING: audit.md > 100KB (%s bytes). Rotation recommended.\n' "$SIZE" >&2
+fi
+
+# === devflow-state.md soft-save (## Last Updated only) ===
+# 구조 섹션 절대 수정 금지 — race condition 방지.
+# python3 사용 시 atomic os.replace + EOF/blank 라인 안전 처리.
+STATE="$REPO_ROOT/devflow-docs/devflow-state.md"
+if [ -f "$STATE" ] && grep -q '^## Last Updated' "$STATE"; then
+  if command -v python3 >/dev/null 2>&1; then
+    python3 - "$STATE" "$TS" <<'PY' 2>/dev/null || true
+import sys, os
+state_path, ts = sys.argv[1], sys.argv[2]
+with open(state_path) as f:
+  lines = f.readlines()
+out = []
+i = 0
+while i < len(lines):
+  out.append(lines[i])
+  if lines[i].rstrip('\n') == '## Last Updated':
+    # next line은 timestamp 값. 없거나 새 section 헤더면 ts insert + 원문 보존.
+    if i + 1 < len(lines) and not lines[i+1].lstrip().startswith('#'):
+      out.append(ts + '\n')
+      i += 2
+      continue
+    out.append(ts + '\n')
+  i += 1
+tmp = state_path + '.tmp'
+with open(tmp, 'w') as f:
+  f.writelines(out)
+os.replace(tmp, state_path)
+PY
+  fi
+fi
+
+exit 0
