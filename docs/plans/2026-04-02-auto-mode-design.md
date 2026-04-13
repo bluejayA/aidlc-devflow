@@ -303,7 +303,7 @@ auto-mode 간 연속 실행에서 이전 세션의 산출물은 `.archive/`에 �
 devflow-docs/
 ├─ devflow-state.md                      ← 현행 포맷 동일 (호환)
 ├─ session-summary.md                    ← 현행 포맷 동일 (호환)
-├─ devflow-docs/audit.md                 ← 현행 포맷 동일 (호환)
+├─ audit.md                              ← 현행 포맷 동일 (호환)
 ├─ auto-decision-log-inception.md        ← auto 전용 (append-only, 감사 전용)
 ├─ auto-decision-log-construction.md     ← auto 전용 (append-only, 감사 전용)
 ├─ inception/                            ← stage 스킬이 생성
