@@ -1,6 +1,6 @@
 {
   "name": "aidlc",
-  "version": "1.9.0",
-  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (Orchestrator-Centric, 28개 skill + 3개 유틸리티, 17개 공유 패턴, 12개 리뷰어, 5개 에이전트, 4-stage 코드 리뷰 Distrust by Default, Agent Teams R3 모드, 기술 스택 프리셋 + 조건부 선택, 메타 태그 검증, Knowledge Compounding, NFR 도메인 프리셋, Auto Mode, Brownfield Stub Scan, Codex 세컨드 오피니언 가이드, 게이트 간소화, 278개 테스트)",
+  "version": "1.10.0",
+  "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인 (Orchestrator-Centric, Knowledge System Phase 1: 6-type taxonomy + Solution layer live + L1 ingest hook, skill_nature 분류 comp 4/amp 10/hybrid 11/null 6, Pattern 33 frontmatter, DEVFLOW_ROOT MSA opt-in, 28개 skill + 3개 유틸리티, 17개 공유 패턴, 12개 리뷰어, 5개 에이전트, 4-stage 코드 리뷰 Distrust by Default, 273개 테스트)",
   "skills": "./skills"
 }
