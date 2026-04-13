@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requesting-code-review, aidlc-inception-orchestrator]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Council Review Protocol
 
 agent-council 기반 다각도 리뷰의 공통 프로토콜.

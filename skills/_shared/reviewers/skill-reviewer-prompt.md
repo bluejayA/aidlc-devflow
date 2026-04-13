@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-writing-skills]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Skill Reviewer Prompt Template
 
 **Purpose:** 스킬 SKILL.md가 구조적으로 완전하고, 내용이 구체적이며, CSO가 올바른지 검증한다.

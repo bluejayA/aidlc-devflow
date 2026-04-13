@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-brainstorming]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Spec Document Reviewer Prompt Template
 
 **Purpose:** Spec 문서가 완전하고, 일관되며, 구현 계획 수립에 충분한지 검증한다.

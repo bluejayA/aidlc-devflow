@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-user-stories, aidlc-application-design, aidlc-nfr-requirements, aidlc-requirements-analysis, aidlc-units-generation, aidlc-workflow-planning, aidlc-functional-design, aidlc-inception-orchestrator]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Artifact Reviewer
 
 <!-- INCEPTION 산출물 공통 리뷰어. 리뷰 대상 스킬이 서브에이전트로 dispatch한다. -->

@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-writing-skills]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Skill Design Patterns — 구조 패턴 가이드
 
 <!-- 스킬 내부 구조를 어떻게 설계할지 결정하는 참조 문서. writing-skills Stage 2에서 Claude가 자동 판별에 사용한다. -->

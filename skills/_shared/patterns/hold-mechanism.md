@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: []
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Hold Mechanism
 
 진행 중 사용자가 일시 중단을 요청할 때의 처리 규약.

@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requesting-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Maintainability & Future Risk Reviewer Prompt
 
 > Comprehensive depth에서만 실행. Stage 2 (Code Quality) 통과 후 Stage 3 (Security)와 병렬 dispatch.

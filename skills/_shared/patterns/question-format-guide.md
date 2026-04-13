@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requirements-analysis]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Question Format Guide
 
 채팅 기반 질문의 품질 원칙. 게이트 구조(`gate-patterns.md`)는 선택지의 **틀**을 정의하고, 이 가이드는 선택지의 **내용 품질**을 정의한다.

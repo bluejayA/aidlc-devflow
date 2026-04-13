@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-writing-skills]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Skill Pattern Catalog
 
 <!-- 스킬 패턴 카탈로그: 새 스킬 작성 시 어떤 패턴을 따를지 결정하는 참조 문서 -->

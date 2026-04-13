@@ -1,6 +1,11 @@
 ---
 name: devflow-conventions
 description: Shared conventions for all AI-DLC stage skills. Defines invoke_mode and return_behavior metadata semantics.
+type: pattern
+applies_to: [aidlc-using-devflow, aidlc-test-driven-development, aidlc-dispatching-parallel-agents, aidlc-brainstorming, aidlc-writing-skills, aidlc-subagent-driven-development]
+status: active
+source: manual
+last_validated: 2026-04-13
 metadata:
   version: 0.5.0
   author: Jay

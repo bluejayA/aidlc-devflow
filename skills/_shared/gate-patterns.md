@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-inception-orchestrator, aidlc-construction-orchestrator]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Gate Patterns
 
 <!-- 게이트 작성 규약. Phase 오케스트레이터가 게이트 정의 시 이 패턴명을 참조한다. -->

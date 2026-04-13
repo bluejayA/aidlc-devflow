@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-inception-orchestrator, aidlc-requesting-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Council CLI Detection
 
 리뷰 시작 시 외부 AI CLI 설치 여부를 감지하고, 사용자에게 참여 AI를 확인받는다.

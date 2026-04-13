@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requirements-analysis, aidlc-auto-mode]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Tech Stack Defaults
 
 <!-- 기술 스택 질문의 인덱스 파일. question-format-guide.md와 함께 사용한다. -->

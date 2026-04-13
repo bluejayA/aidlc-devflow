@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-subagent-driven-development]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Implementer Subagent Prompt
 
 ## Task

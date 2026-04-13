@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-user-stories, aidlc-nfr-requirements]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Import-Review Protocol
 
 <!-- GENERATE/IMPORT 모드 + Hold/Skip 공유 프로토콜 -->

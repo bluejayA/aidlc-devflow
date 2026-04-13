@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requesting-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Code Quality Reviewer Prompt
 
 > Spec compliance review를 통과한 후에만 실행할 것.
