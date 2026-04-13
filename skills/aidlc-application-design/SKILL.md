@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/inception/application-design.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 컴포넌트 경계를 임의로 결정함"
+  amplification_notes: "도메인 entity + 서비스 구조 명시적 분해"
 ---
 
 # aidlc-application-design

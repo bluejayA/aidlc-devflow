@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-writing-skills]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Persuasion Principles
 
 <!-- 규율 강제 스킬의 언어 설계 원칙. writing-skills가 참조한다. -->

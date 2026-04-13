@@ -7,6 +7,8 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
+  skill_nature: amplification
+  lifecycle: active
 ---
 
 # aidlc-construction-orchestrator
@@ -296,46 +298,38 @@ A) systematic-debugging으로 조사
 build-and-test에서 테스트/빌드 실패 시 (auto-fix 소진 후) 사용자가 debugging을 선택하면:
 
 0. build-and-test 실패 시점의 에러 메시지(테스트명 + 에러 출력)를 컨텍스트에 보존한다
-   — 이 error_message는 K 게이트에서 devflow-solutions에 전달하는 데 사용
+   — 이 error_message는 systematic-debugging에 전달되어 내부 STORE 호출에 사용됨
 1. `aidlc-systematic-debugging` 호출
-2. debugging 완료 시 Return 수신:
+2. debugging 완료 시 Return 수신 (systematic-debugging 내부에서 이미 STORE 호출 완료):
    ```
    [systematic-debugging 완료]
    - 근본 원인: [요약]
    - 수정 내용: [요약]
    - 테스트: [회귀 테스트명] 추가됨
+   - solution_verdict: [SAVE | DUPLICATE | REJECT]
+   - solution_saved_path / solution_similar_to / solution_reject_reason
    ```
-3. K 게이트 표시 (재진입 방지: devflow-audit에 현재 unit + compound 로그 있으면 K 미표시):
-   ```
-   [systematic-debugging 완료]
-   - 근본 원인: [요약]
-   - 수정 내용: [요약]
+3. K 게이트 (verdict 소비) — `devflow-solutions` STORE 호출은 orchestrator가 직접 하지 않음 (systematic-debugging 내부에서 이미 완료). systematic-debugging Return의 `solution_verdict`를 그대로 audit에 기록하고 사용자에게 표시:
+   - `solution_verdict: "SAVE"` → "✅ 솔루션 저장 완료: {solution_saved_path}"
+   - `solution_verdict: "DUPLICATE"` → "⚠️ 유사한 솔루션 존재: {solution_similar_to}. 저장을 건너뜁니다."
+   - `solution_verdict: "REJECT"` → "❌ 솔루션 저장 실패: {solution_reject_reason}."
+4. verdict 표시 후 바로 `aidlc-build-and-test` 재실행.
 
-   K) 학습 기록 저장 → devflow-solutions 호출
-      → 이 해결 사례를 구조화하여 devflow-docs/solutions/에 저장합니다
-   →) 바로 build-and-test 재실행 (기본)
-   ```
-4. K 선택 시:
-   - `devflow-solutions` STORE 호출 (debugging Return 4필드 + 보존된 error_message)
-   - verdict별 안내:
-     - SAVE: "✅ 솔루션 저장 완료: {saved_path}" 표시
-     - DUPLICATE: "⚠️ 유사한 솔루션이 이미 존재합니다: {similar_to}\n   저장을 건너뜁니다." 표시
-     - REJECT: "❌ 솔루션 저장 실패: {reason}\n   Privacy 위반 또는 형식 오류로 저장하지 않았습니다." 표시
-   - verdict 표시 후 `aidlc-build-and-test` 재실행
-5. K 스킵(기본 →) 시: 바로 `aidlc-build-and-test` 재실행
+이 재정의의 근거 (옵션 α, Change 6):
+- writer ownership 단일화 (systematic-debugging)
+- user-invocable + orchestrator + debugging chain 경로 동일 처리
+- 이중 STORE 호출 제거 (중복 판정 낭비 제거)
+- STORE 실제 호출은 `skills/aidlc-systematic-debugging/SKILL.md`의 `## STORE 호출` 섹션 참조
 
-K 선택/스킵 모두 devflow-audit에 로깅:
+audit 기록 (event prefix: taxonomy §2.5 Evidence event type 규약 준수):
 ```
-- timestamp: [ISO 8601]
-- type: compound
-- unit: [unit-name]
-- action: [save | skip]
-- verdict: [SAVE | DUPLICATE | REJECT | null (skip 시)]
-- path: [saved_path | null]
+- solution_verdict: "SAVE" → audit prefix `solution-store`, `solution_saved_path` 포함
+- solution_verdict: "DUPLICATE" → audit prefix `solution-duplicate`, `solution_similar_to` 포함
+- solution_verdict: "REJECT" → audit prefix `solution-reject`, `solution_reject_reason` 포함
 ```
 
-**재진입 방지**: devflow-audit의 최근 로그에서 현재 unit + compound 타입 로그 존재 시 K 미표시.
-동일 build-and-test 실패 건 내에서만 적용. 새로운 실패에서는 다시 K 표시.
+**재진입 방지**: devflow-audit의 최근 로그에서 현재 unit + `solution-*` 타입 로그 존재 시 verdict 표시 skip (중복 안내 방지).
+동일 build-and-test 실패 건 내에서만 적용. 새로운 실패에서는 다시 표시.
 
 **Step 1.5 재검증 Debugging에는 K 게이트를 적용하지 않는다.** K 게이트는 본 Debugging 라우팅(build-and-test 실패 후)에서만 표시.
 

@@ -303,7 +303,7 @@ auto-mode 간 연속 실행에서 이전 세션의 산출물은 `.archive/`에 �
 devflow-docs/
 ├─ devflow-state.md                      ← 현행 포맷 동일 (호환)
 ├─ session-summary.md                    ← 현행 포맷 동일 (호환)
-├─ devflow-audit.md                      ← 현행 포맷 동일 (호환)
+├─ audit.md                              ← 현행 포맷 동일 (호환)
 ├─ auto-decision-log-inception.md        ← auto 전용 (append-only, 감사 전용)
 ├─ auto-decision-log-construction.md     ← auto 전용 (append-only, 감사 전용)
 ├─ inception/                            ← stage 스킬이 생성
@@ -320,7 +320,7 @@ devflow-docs/
   다음 4개 파일을 순서대로 업데이트:
   1. devflow-state.md — Current Stage 갱신
   2. session-summary.md — Completed Work에 추가
-  3. devflow-audit.md — 이벤트 1줄 추가
+  3. devflow-docs/audit.md — 이벤트 1줄 추가
   4. auto-decision-log-[phase].md — 판단 상세 append
 
 2단계: 검증
@@ -338,7 +338,7 @@ devflow-docs/
 |------|----------|------|
 | devflow-state.md | 매 checkpoint | Current Phase, Current Stage, Complexity, Selected Approach, Approved Stages, Completed Units, Active Unit |
 | session-summary.md | 매 checkpoint | Current State, Completed Work, Key Decisions, Commit |
-| devflow-audit.md | 매 checkpoint | timestamp + stage + event 1줄 |
+| devflow-docs/audit.md | 매 checkpoint | timestamp + stage + event 1줄 |
 | workflow-plan.md | approach 자동 선택 시 | Selected Approach 마킹 + Approved Stages 기록 |
 | auto-decision-log-[phase].md | 매 checkpoint | 판단 상세 (append-only) |
 

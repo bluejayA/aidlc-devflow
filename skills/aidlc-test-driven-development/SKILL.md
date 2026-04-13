@@ -9,6 +9,9 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: compensation
+  lifecycle: active
+  model_dependency: "모델이 자발적으로 실패 테스트를 먼저 작성하지 않음"
 ---
 
 # Test-Driven Development

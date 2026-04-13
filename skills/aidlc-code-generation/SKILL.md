@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/construction/{unit}/code-plan.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 TDD 순서 없이 구현하고 합리화함"
+  amplification_notes: "2단계 plan+generate 구조로 설계-구현 경계 유지"
 ---
 
 # aidlc-code-generation

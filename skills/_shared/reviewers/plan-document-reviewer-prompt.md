@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-writing-plans]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Plan Document Reviewer Prompt Template
 
 **Purpose:** 구현 계획 청크가 완전하고, spec과 일치하며, 태스크 분해가 적절한지 검증한다.

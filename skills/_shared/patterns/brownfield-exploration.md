@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-brainstorming]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Brownfield Exploration
 
 기존 코드베이스에서 작업할 때의 탐색 프로토콜.

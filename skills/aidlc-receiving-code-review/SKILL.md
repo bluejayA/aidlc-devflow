@@ -9,6 +9,10 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 피드백에 sycophancy로 맹목적 동의함"
+  amplification_notes: "Accept/Rebut 프로토콜 + 금지 응답 목록"
 ---
 
 # aidlc-receiving-code-review

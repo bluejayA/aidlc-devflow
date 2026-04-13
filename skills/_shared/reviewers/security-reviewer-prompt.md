@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requesting-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Security & Edge-case Reviewer Prompt
 
 > Standard 이상 depth에서 실행. Stage 2 (Code Quality) 통과 후 dispatch. Comprehensive에서는 Stage 4 (Maintainability)와 병렬 실행.

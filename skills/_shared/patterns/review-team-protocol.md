@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requesting-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Review Team Protocol — Agent Teams 협업 리뷰
 
 > requesting-code-review R3 모드에서 참조하는 프로토콜.

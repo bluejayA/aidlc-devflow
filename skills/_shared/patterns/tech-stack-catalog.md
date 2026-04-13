@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requirements-analysis, aidlc-auto-mode]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Tech Stack Catalog
 
 <!-- tech-stack-defaults.md에서 참조하는 기술 카탈로그. 필요할 때만 Read. -->

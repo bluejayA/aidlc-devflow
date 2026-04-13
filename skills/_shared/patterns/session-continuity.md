@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-auto-mode, aidlc-inception-orchestrator, aidlc-construction-orchestrator]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Session Continuity Pattern
 
 ## 1. 아티팩트 로딩 규칙

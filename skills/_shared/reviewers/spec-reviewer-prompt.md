@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-requesting-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Spec Compliance Reviewer Prompt
 
 ## Purpose

@@ -9,6 +9,10 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 서브에이전트 병렬화 + 리뷰 스킵 + 컨텍스트 누출로 효율 추구함"
+  amplification_notes: "Implementer status 4-state + 모델 복잡도 매핑 + 2단계 리뷰 시퀀스 구조"
 ---
 
 # Subagent-Driven Development

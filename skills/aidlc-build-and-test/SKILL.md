@@ -8,6 +8,9 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/construction/build-and-test/
+  skill_nature: compensation
+  lifecycle: active
+  model_dependency: "모델이 빌드/테스트를 실행 없이 '통과'로 선언함"
 ---
 
 # aidlc-build-and-test

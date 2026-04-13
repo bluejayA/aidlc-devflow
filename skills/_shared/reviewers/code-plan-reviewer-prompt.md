@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-code-generation]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Code Plan Reviewer
 
 <!-- 코드 계획(code-plan.md) 리뷰어. aidlc-code-generation이 Plan 완료 후 서브에이전트로 dispatch한다. -->

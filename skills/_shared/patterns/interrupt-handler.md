@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-construction-orchestrator]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Interrupt Handler Pattern
 
 <!-- 글로벌 인터럽트: 게이트 응답이 선택지 밖일 때 의도 분류 → 라우팅 → 복귀 -->

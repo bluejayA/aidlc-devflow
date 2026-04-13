@@ -9,6 +9,9 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: compensation
+  lifecycle: active
+  model_dependency: "모델이 완료 선언 전 검증 명령 실행을 생략함"
 ---
 
 # aidlc-verification-before-completion

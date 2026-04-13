@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/inception/user-stories.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 INVEST 기준 없이 작성함"
+  amplification_notes: "Acceptance Criteria 강제 + 추적성"
 ---
 
 # aidlc-user-stories

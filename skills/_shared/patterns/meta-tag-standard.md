@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: []
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Meta Tag Standard
 
 SKILL.md 파일에 삽입하는 기계 읽기 가능한 메타 태그의 규격을 정의한다.

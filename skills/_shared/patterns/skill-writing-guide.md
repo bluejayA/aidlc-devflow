@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-writing-skills]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Skill Writing Guide
 
 <!-- 스킬 SKILL.md 작성의 실전 원칙 + TDD 테스트 방법론 통합 문서. writing-skills가 참조한다. -->

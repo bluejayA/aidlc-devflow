@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-receiving-code-review]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Review Feedback Schema
 
 <!-- Single Source of Truth for reviewer output format. All 4 code reviewers reference this file. -->

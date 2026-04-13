@@ -9,6 +9,9 @@ metadata:
   category: ai-dlc-workflow
   invoke_mode: user-invocable
   return_behavior: stop-no-gate
+  skill_nature: compensation
+  lifecycle: active
+  model_dependency: "모델이 원인 미확정 상태로 수정을 시도함"
 ---
 
 # aidlc-systematic-debugging
@@ -261,3 +264,56 @@ conventions 표준 형식. 반환 필드:
 - 수정 내용: [1줄 요약]
 - 테스트: [회귀 테스트명] 추가됨
 - 전체 테스트: [N]개 통과, 0 실패
+
+---
+
+## STORE 호출 (완료 시 guaranteed)
+
+root_cause 확정 + 수정 검증 완료 상태에서 **무조건** `devflow-solutions` STORE 호출.
+
+### 호출 조건
+
+다음 **모두** 만족 시에만 STORE 호출:
+1. root_cause가 명확히 확정됨 (가설이 아닌 확증)
+2. fix가 적용되고 회귀 테스트가 PASS됨
+3. debugging이 inconclusive / aborted 상태 아님
+
+위 조건 미충족 시 STORE 호출하지 않음.
+
+### 호출 형식
+
+```
+devflow-solutions STORE(
+  root_cause="[확정된 근본 원인 한 줄]",
+  fix_summary="[적용된 수정 내용 한 줄]",
+  regression_test="[추가/수정된 회귀 테스트명 또는 경로]",
+  test_result="[수정 후 전체 테스트 결과, 예: '139 passed, 0 failed']",
+  error_message="[원본 에러 메시지 — build-and-test 경로 또는 caller가 전달]"
+)
+```
+
+### Return 필드 (caller 소비용)
+
+STORE Return값을 systematic-debugging 자체 Return에 포함:
+
+- `solution_verdict`: `"SAVE" | "DUPLICATE" | "REJECT"`
+- `solution_saved_path`: `string | null`
+- `solution_similar_to`: `string | null`
+- `solution_reject_reason`: `string | null`
+
+caller (construction-orchestrator, user-invocable, chain)는 이 값을 audit에 로그만 남김 (STORE 재호출 금지).
+
+### 호출 경로 (3가지 모두 동일)
+
+1. **Orchestrator 경로**: construction-orchestrator K-gate → systematic-debugging 호출 → 내부 STORE
+2. **User-invocable 경로**: `/aidlc:aidlc-systematic-debugging` 직접 호출 → 내부 STORE
+3. **Debugging chain 경로**: 다른 skill이 인라인 호출 → 내부 STORE
+
+세 경로 모두 guaranteed trigger. writer ownership = systematic-debugging 단독.
+
+### Noise 관리 (Sprint 1 정책)
+
+- Phase 1 목표: **Solution layer가 비어있지 않음**. 깨끗함은 Phase 2+.
+- 중복 판정은 `error_signature` 기반 duplicate check에 위임 (utility 책임).
+- 유사 문제 반복 저장 허용. promotion_filter는 Sprint 2+ 주제.
+- 첫 2주 noise 관측 후 실제 데이터로 필터 기준 수립.

@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-code-generation]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Code Reviewer
 
 <!-- 구현 코드 리뷰어 (Spec Compliance + Code Quality 2단계 통합). aidlc-code-generation이 Generate 완료 후 서브에이전트로 dispatch한다. -->

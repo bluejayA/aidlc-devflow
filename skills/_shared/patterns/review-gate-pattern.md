@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-inception-orchestrator, aidlc-construction-orchestrator]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Review Gate Pattern
 
 리뷰 결과(Verdict)에 따른 게이트 분기의 공통 패턴. 오케스트레이터에서 리뷰 결과를 받아 사용자에게 선택지를 제시할 때 이 패턴을 적용한다.

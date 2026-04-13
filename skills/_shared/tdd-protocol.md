@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-test-driven-development, aidlc-systematic-debugging, aidlc-executing-plans, aidlc-code-generation, aidlc-verification-before-completion, aidlc-subagent-driven-development, aidlc-workflow-planning]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # TDD Protocol
 
 <!-- TDD 규약의 Single Source of Truth. code-generation, verification-before-completion, systematic-debugging, code-reviewer가 참조한다. -->

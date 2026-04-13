@@ -8,6 +8,10 @@ metadata:
   invoke_mode: orchestrator-only
   return_behavior: stop-no-gate
   output_path: devflow-docs/inception/workflow-plan.md
+  skill_nature: hybrid
+  lifecycle: active
+  model_dependency: "모델이 단일 접근법만 제안하고 비교 안 함"
+  amplification_notes: "2-3 approach 비교 + 빠른/안전한 스펙트럼 강제 + Approved Stages 구조"
 ---
 
 # aidlc-workflow-planning

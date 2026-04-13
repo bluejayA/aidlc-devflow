@@ -1,3 +1,11 @@
+---
+type: pattern
+applies_to: [aidlc-functional-design]
+status: active
+source: manual
+last_validated: 2026-04-13
+---
+
 # Three-Mode Selection
 
 오케스트레이터 또는 사용자가 stage/스킬 실행 모드를 선택한다.
