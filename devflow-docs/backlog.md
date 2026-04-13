@@ -11,6 +11,7 @@
 
 - **BL-085**: Knowledge System Phase 1 — 6-type taxonomy 통합 + Solution layer 활성화 [P1] [#154](https://github.com/bluejayA/aidlc-devflow/issues/154)
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
+- **BL-087**: post-tool-file-edit hook 보안 가드 강화 — non-git cwd + relative path escape [P3] [#156](https://github.com/bluejayA/aidlc-devflow/issues/156)
 - **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
 
