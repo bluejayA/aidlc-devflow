@@ -95,5 +95,16 @@ assert_grew "DEVFLOW_ROOT valid override" "$B"
 # Clean test pollution
 rm -rf /tmp/devflow-docs 2>/dev/null || true
 
+# === Test E: DEVFLOW_HOOK_DISABLED kill switch ===
+B=$(wc -c < "$AUDIT" 2>/dev/null || echo 0)
+
+# E.1: kill switch set → hook 즉시 exit (normal path여도 write 없음)
+DEVFLOW_HOOK_DISABLED=1 run_hook "{\"tool_input\":{\"file_path\":\"$REPO/README.md\"}}"
+assert_unchanged "DEVFLOW_HOOK_DISABLED=1 → no-op" "$B"
+
+# E.2: kill switch unset → 정상 동작 (sanity check)
+DEVFLOW_HOOK_DISABLED= run_hook "{\"tool_input\":{\"file_path\":\"$REPO/README.md\"}}"
+assert_grew "DEVFLOW_HOOK_DISABLED empty → normal path" "$B"
+
 echo ""
 echo "=== ALL BEHAVIORAL TESTS PASSED ==="

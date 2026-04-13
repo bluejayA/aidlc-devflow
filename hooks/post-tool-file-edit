@@ -11,6 +11,12 @@
 
 set -eo pipefail
 
+# === Kill switch: 런타임 긴급 비활성화 (hooks.json 편집 없이) ===
+# 긴급 상황 (audit 급성장, state 파손, hook 지연 등) 시 env var로 즉시 무력화.
+# 사용: export DEVFLOW_HOOK_DISABLED=1  또는  DEVFLOW_HOOK_DISABLED=1 claude
+# 복구: unset DEVFLOW_HOOK_DISABLED
+[ -n "${DEVFLOW_HOOK_DISABLED:-}" ] && exit 0
+
 # Tool input comes via stdin as JSON per Claude Code hook contract
 INPUT=$(cat)
 
