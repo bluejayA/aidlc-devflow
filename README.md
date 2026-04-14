@@ -2,9 +2,9 @@
 
 [English](README.en.md) | 한국어
 
-![version](https://img.shields.io/badge/version-1.9.0-blue)
+![version](https://img.shields.io/badge/version-1.10.0-blue)
 ![skills](https://img.shields.io/badge/skills-28+3_utils-green)
-![tests](https://img.shields.io/badge/tests-278-brightgreen)
+![tests](https://img.shields.io/badge/tests-273-brightgreen)
 
 AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 Claude Code 개발 워크플로우 플러그인입니다.
 
@@ -20,6 +20,35 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 > **커스터마이즈** 👉 [운영자 가이드](docs/guide/operator-guide.md) — 기술 카탈로그, 질문 원칙, 워크플로우 기본값 조정
 
 > **아키텍처** 👉 [아키텍처 문서](docs/guide/architecture.md) — 3단 위임 체인, 리뷰 체계, 스킬 패턴 7종
+
+---
+
+## v1.10.0 — Knowledge System Phase 1
+
+본 릴리스는 **지식 시스템 레이어**를 도입합니다 (실험적, 2주 관측 중).
+
+| 변경 | 내용 |
+|------|------|
+| **6-type taxonomy** | Decision/Solution/Pattern/Skill/Evidence/SessionState — frontmatter overlay |
+| **Solution layer 활성화** | STORE 호출 owner를 `aidlc-systematic-debugging` 단독으로 이관 (옵션 α) |
+| **L1 ingest hook** | `hooks/post-tool-file-edit` — Edit/Write/MultiEdit/NotebookEdit 시 `devflow-docs/audit.md` 자동 append |
+| **Skill lifecycle 분류** | `skill_nature` 태깅: compensation 4 / amplification 10 / hybrid 11 / null 6 |
+| **Pattern frontmatter** | 33개 파일에 `type: pattern` + `applies_to` + `last_validated` 등 5 필드 |
+
+### 환경 변수 (선택)
+
+| 변수 | 용도 |
+|------|------|
+| `DEVFLOW_ROOT` | MSA/multi-repo 프로젝트에서 공통 audit root 지정 (opt-in). 절대경로 + 존재 디렉토리 + 루트(`/`) 거부 검증 |
+| `DEVFLOW_HOOK_DISABLED` | 긴급 무력화 kill switch. 설정 시 hook 0.1ms 안에 exit 0 |
+
+### 관련 문서
+
+- **Rollback 가이드**: [`docs/research/knowledgesystem/rollback-guide.md`](docs/research/knowledgesystem/rollback-guide.md) — 5-level 되돌림 (Kill switch → 전체 revert → Abandon)
+- **Phase 2 baseline**: [`docs/research/knowledgesystem/phase1-baseline.md`](docs/research/knowledgesystem/phase1-baseline.md) — 트리거 T1-T10 평가 기준점 (T0 = 2026-04-14)
+- **설계 의도 + debate**: [`docs/research/knowledgesystem/handoff-context.md`](docs/research/knowledgesystem/handoff-context.md)
+
+> **관측 기간**: v1.10.0 릴리스 후 14일간 운영 데이터 수집. 2026-04-28 시점에 Phase 2 방향 결정 예정.
 
 ---
 
