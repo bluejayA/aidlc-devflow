@@ -9,9 +9,22 @@ jobs:
   sync-marketplace:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract version from tag
-        id: version
-        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+      - name: Checkout source repo (plugin.json 읽기용)
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Extract version + description + revision
+        id: meta
+        run: |
+          cd source
+          VERSION="${GITHUB_REF_NAME#v}"
+          DESCRIPTION=$(jq -r '.description' .claude-plugin/plugin.json)
+          REVISION="${GITHUB_SHA}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          # plugin.json description은 1줄 규칙 유지 (workflow 단순화를 위해)
+          echo "description=${DESCRIPTION}" >> "$GITHUB_OUTPUT"
+          echo "revision=${REVISION}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout marketplace repo
         uses: actions/checkout@v4
@@ -20,12 +33,18 @@ jobs:
           token: ${{ secrets.DEVFLOW_MARKET }}
           path: marketplace
 
-      - name: Update marketplace.json
+      - name: Update marketplace.json (version + revision + description)
         run: |
           cd marketplace
-          # jq로 aidlc 플러그인 버전만 업데이트
-          jq --arg ver "${{ steps.version.outputs.version }}" \
-            '(.plugins[] | select(.name == "aidlc")).version = $ver' \
+          jq \
+            --arg ver  "${{ steps.meta.outputs.version }}" \
+            --arg sha  "${{ steps.meta.outputs.revision }}" \
+            --arg desc "${{ steps.meta.outputs.description }}" \
+            '(.plugins[] | select(.name == "aidlc")) |= (
+              .version = $ver
+              | .revision = $sha
+              | .description = $desc
+            )' \
             .claude-plugin/marketplace.json > tmp.json \
             && mv tmp.json .claude-plugin/marketplace.json
 
@@ -37,5 +56,5 @@ jobs:
           git add .claude-plugin/marketplace.json
           # 변경이 있을 때만 커밋
           git diff --staged --quiet || \
-            git commit -m "chore: sync aidlc version to ${{ steps.version.outputs.version }}" \
+            git commit -m "chore: sync aidlc to ${{ steps.meta.outputs.version }} (revision ${{ steps.meta.outputs.revision }})" \
             && git push
