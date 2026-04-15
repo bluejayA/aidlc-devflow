@@ -28,6 +28,13 @@
 - **Sprint 1 (단기)**: 2-3일 사용 후 1차 audit.md 성장률 + Solution layer 생성 유무 확인
 - **Sprint 2 (정식)**: 14일 운영 → Phase 2 plan 작성 시점 (트리거 우선순위 결정)
 
+## 관측 대상 (Consumer Repo)
+
+Phase 1 hook은 **consumer repo**(devflow를 돌리는 업무 프로젝트)의 `devflow-docs/`에 데이터를 축적한다. Plugin repo 자체는 관측 대상이 아니며, 본 baseline은 **구현 완료 시점 참조값**이다.
+
+- **Tier 1 관측 repo**: `/Users/jay.ahn/projects/infra/nexttui` (상세: `phase2-observation-plan.md`)
+- **평가 방식**: 단일 repo OR 조건 (다중 합산 아님)
+
 ## 관측 시작일 (T0)
 
 **2026-04-13** (본 baseline 작성일).
