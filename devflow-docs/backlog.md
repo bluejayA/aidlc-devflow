@@ -11,11 +11,16 @@
 
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
-- **BL-031**: deployment-prep 독립 스킬 — Dockerfile + k8s manifest 생성 (MVP) [P2] [#41](https://github.com/bluejayA/aidlc-devflow/issues/41)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
 
 > BL-085 (Knowledge System Phase 1)는 구현 완료 후 본 파일에서 제거 (git history로 추적).
 > Baseline + Phase 2 trigger 평가 기준: `docs/research/knowledgesystem/phase1-baseline.md` 참조.
+
+---
+
+## Graduated (별도 repo로 분리됨)
+
+- **BL-031**: deployment-prep 독립 스킬 → [bluejayA/devflow-k8s-deploy](https://github.com/bluejayA/devflow-k8s-deploy) repo로 분리 (2026-04-15). 이름 변경: `deployment-prep` → `devflow-k8s-deploy`. Tracking: [devflow-k8s-deploy#1](https://github.com/bluejayA/devflow-k8s-deploy/issues/1). 원본 이슈: [#41 closed](https://github.com/bluejayA/aidlc-devflow/issues/41)
 
 ---
 
