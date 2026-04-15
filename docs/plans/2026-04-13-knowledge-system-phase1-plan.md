@@ -12,10 +12,18 @@
 **Tech Stack:** Bash shell hooks (POSIX-compatible, jq optional), Markdown + YAML frontmatter, Claude Code plugin manifest (`.claude-plugin/plugin.json`, `hooks/hooks.json`)
 
 **Reference Docs:**
+
+설계 단계 자료:
 - Taxonomy: `docs/research/knowledgesystem/knowledge-taxonomy.md`
 - Integration plan: `docs/research/knowledgesystem/aidlc-knowledge-integration-plan.md`
 - Executable detail: `docs/research/knowledgesystem/executable-next-steps.md`
 - BL-081 source: `docs/research/2026-04-06-skill-lifecycle-strategy.md`
+
+구현 완료 후 자료 (Phase 2 진입 시 필수 참조):
+- Phase 1 사용자 영향 요약: `docs/research/knowledgesystem/phase1-overview.md`
+- Phase 1 baseline (plugin repo 기준 T0 = 2026-04-13): `docs/research/knowledgesystem/phase1-baseline.md`
+- Phase 2 관측 설계 (consumer repo nexttui T0 = 2026-04-14): `docs/research/knowledgesystem/phase2-observation-plan.md`
+- Rollback 가이드 (5-level): `docs/research/knowledgesystem/rollback-guide.md`
 
 **Critical constraints:**
 - 6 타입만, 하위 타입 금지
@@ -1054,7 +1062,7 @@ Manual verification per executable-next-steps.md `## Success Signals` section:
 
 - [ ] **Step 4: 문서 승격 고려**
 
-`docs/research/knowledgesystem/` 3개 문서는 설계 완료 상태. `docs/plans/` 컨벤션 반영해 본 plan 문서가 실제 구현 plan.
+`docs/research/knowledgesystem/` 설계 단계 3개 문서(taxonomy / integration-plan / executable-next-steps)는 설계 완료 상태. `docs/plans/` 컨벤션 반영해 본 plan 문서가 실제 구현 plan. 구현 완료 후 추가된 phase1-overview / phase1-baseline / phase2-observation-plan / rollback-guide 4건은 Reference Docs 섹션 참조.
 
 실행 완료 후 2주 관측 기간 시작:
 - audit.md 성장률 모니터
@@ -1119,8 +1127,11 @@ Phase 1 실행 완료 후 **최소 2-3일**, 권장 **14일** 운영.
 **호출 시 전달 자료**:
 1. 본 plan의 Re-evaluation Criteria 섹션 (기준)
 2. `docs/research/knowledgesystem/handoff-context.md` (설계 의도 + 과거 debate)
-3. 운영 데이터 스냅샷 (audit.md, solutions/ 목록, state 스냅샷)
-4. 트리거 발동 현황 (T1-T10 중 어느 것이 임계 넘었는가)
+3. `docs/research/knowledgesystem/phase1-baseline.md` (plugin repo 기준 T0)
+4. `docs/research/knowledgesystem/phase2-observation-plan.md` (consumer repo 측정 절차 + nexttui T0)
+5. `docs/research/knowledgesystem/rollback-guide.md` (트리거 발동 시 옵션 중 하나)
+6. 운영 데이터 스냅샷 (audit.md, solutions/ 목록, state 스냅샷)
+7. 트리거 발동 현황 (T1-T10 중 어느 것이 임계 넘었는가)
 
 ### Phase 2 실행 시 의사결정 체크리스트
 
@@ -1128,12 +1139,14 @@ Phase 1 실행 완료 후 **최소 2-3일**, 권장 **14일** 운영.
 
 1. [ ] `docs/plans/2026-04-13-knowledge-system-phase1-plan.md`의 본 섹션 읽기
 2. [ ] `docs/research/knowledgesystem/handoff-context.md` 읽기 (설계 의도 복원)
-3. [ ] 측정 대상 파일 실측 (위 표)
-4. [ ] 트리거 테이블로 활성화 항목 도출
-5. [ ] 우선순위 결정 규칙 적용
-6. [ ] 레드팀 호출 기준 체크
-7. [ ] 의사결정: 즉시 착수 항목 1-2개 선정 + 나머지 유보
-8. [ ] 신규 `docs/plans/YYYY-MM-DD-knowledge-system-phase2-*.md` plan 작성
+3. [ ] `docs/research/knowledgesystem/phase1-overview.md` 읽기 (구현 완료 시점 상태)
+4. [ ] `docs/research/knowledgesystem/phase2-observation-plan.md`의 재측정 명령을 nexttui에서 실행
+5. [ ] 새 측정값을 `phase1-baseline.md` T0 값과 비교 (plugin repo 대조군)
+6. [ ] 트리거 테이블로 활성화 항목 도출
+7. [ ] 우선순위 결정 규칙 적용
+8. [ ] 레드팀 호출 기준 체크 (필요 시 `rollback-guide.md`도 옵션 검토)
+9. [ ] 의사결정: 즉시 착수 항목 1-2개 선정 + 나머지 유보
+10. [ ] 신규 `docs/plans/YYYY-MM-DD-knowledge-system-phase2-*.md` plan 작성
 
 이 체크리스트는 **주관 없이 Phase 2 우선순위를 결정**하기 위한 장치. 체크리스트 항목별로 측정치를 plan에 기록.
 
@@ -1159,9 +1172,20 @@ Phase 1 실행 완료 후 **최소 2-3일**, 권장 **14일** 운영.
 
 ## References
 
+설계 단계:
 - Taxonomy: `docs/research/knowledgesystem/knowledge-taxonomy.md`
 - Integration plan: `docs/research/knowledgesystem/aidlc-knowledge-integration-plan.md`
 - Executable detail: `docs/research/knowledgesystem/executable-next-steps.md`
 - Red-team prompt: `docs/research/knowledgesystem/PROMPT-claude-code-knowledge-integration.md`
+- 설계 의도 + debate: `docs/research/knowledgesystem/handoff-context.md`
+
+구현 완료 후 (Phase 2 진입 시 필수):
+- Phase 1 사용자 영향 요약: `docs/research/knowledgesystem/phase1-overview.md`
+- Phase 1 baseline (plugin repo T0): `docs/research/knowledgesystem/phase1-baseline.md`
+- Phase 2 관측 설계 (consumer repo nexttui T0): `docs/research/knowledgesystem/phase2-observation-plan.md`
+- Rollback 가이드 (5-level): `docs/research/knowledgesystem/rollback-guide.md`
+
+기타:
 - BL-081 source: `docs/research/2026-04-06-skill-lifecycle-strategy.md`
 - BL-081 issue: https://github.com/bluejayA/aidlc-devflow/issues/145
+- Phase 1 구현 PR: https://github.com/bluejayA/aidlc-devflow/pull/157
