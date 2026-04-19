@@ -31,6 +31,9 @@
 - **BL-045**: dispatching-parallel-agents Agent Teams 강화 — 실행 중 충돌 감지/조율 [P2] [#71](https://github.com/bluejayA/aidlc-devflow/issues/71)
 - **BL-052**: Playwright E2E 자동 검증 + 평가기 비대칭 도구 설계 [P2] [#92](https://github.com/bluejayA/aidlc-devflow/issues/92)
 - **BL-084**: Mock vs Real adapter 테스트 갭 + Reachable stub 탐지 (선행: BL-082 ✅) [P2] [#152](https://github.com/bluejayA/aidlc-devflow/issues/152)
+- **BL-089**: aidlc-cost-review 스킬 — LLM/인프라 비용 효율성 리뷰 (performance는 quality-reviewer 확장으로 대체) [P2] [#174](https://github.com/bluejayA/aidlc-devflow/issues/174)
+- **BL-090**: 정합성 linter — consistency-check 스크립트 + git pre-commit hook MVP (감사 N=13 최대 friction 대응) [P2] [#175](https://github.com/bluejayA/aidlc-devflow/issues/175)
+- **BL-091**: Knowledge System — review-deferred evidence prefix + session-summary 공식화 (Codex adversarial 후 P1→P2 하향, T+14 Phase 2 plan 대기) [P2] [#176](https://github.com/bluejayA/aidlc-devflow/issues/176)
 
 
 ---
