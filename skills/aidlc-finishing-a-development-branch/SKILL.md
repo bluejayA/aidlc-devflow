@@ -132,6 +132,18 @@ git worktree prune
 ```
 사용자가 "정리"를 선택하면 파일을 열어 함께 정리한다. "건너뛰기"하면 그대로 진행한다.
 
+**Memory Sync Reconciliation** (프로젝트 auto-memory 갱신 필요 여부 확인):
+
+이번 사이클 결과가 auto-memory에 반영돼야 하는지 점검한다. 하나라도 해당되면 "동기화"를 권장한다:
+
+- 완료된 BL/PR 번호가 기존 `project_*.md`의 기록과 달라지는가?
+- 진행 우선순위가 바뀌었는가 (Next에서 완료/승격)?
+- 이번 세션에서 새로 배운 피드백/제약(사용자 판단 근거, 기각된 대안)이 있는가?
+
+→ "동기화" / "건너뛰기"
+
+"동기화" 선택 시: 해당 프로젝트의 auto-memory 디렉토리(`~/.claude/projects/.../memory/`)에서 관련 `project_*.md` 또는 `feedback_*.md`를 업데이트한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
+
 <!-- @state-update: 옵션 A 완료 → Current Phase를 finished로 -->
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
@@ -192,6 +204,18 @@ devflow는 PR 머지 후 종료 처리됩니다.
 → "정리" 또는 "건너뛰기"
 ```
 사용자가 "정리"를 선택하면 파일을 열어 함께 정리한다. "건너뛰기"하면 그대로 진행한다.
+
+**Memory Sync Reconciliation** (프로젝트 auto-memory 갱신 필요 여부 확인):
+
+이번 사이클 결과가 auto-memory에 반영돼야 하는지 점검한다. 하나라도 해당되면 "동기화"를 권장한다:
+
+- 완료된 BL/PR 번호가 기존 `project_*.md`의 기록과 달라지는가?
+- 진행 우선순위가 바뀌었는가 (Next에서 완료/승격)?
+- 이번 세션에서 새로 배운 피드백/제약(사용자 판단 근거, 기각된 대안)이 있는가?
+
+→ "동기화" / "건너뛰기"
+
+"동기화" 선택 시: 해당 프로젝트의 auto-memory 디렉토리(`~/.claude/projects/.../memory/`)에서 관련 `project_*.md` 또는 `feedback_*.md`를 업데이트한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
 
 <!-- @state-update: 옵션 B PR 생성 → Finishing Choice + PR URL 기록 -->
 **devflow state 유지**: 옵션 B에서는 devflow-state.md를 아카이브하지 않는다. PR 머지 후 다음 세션에서 using-devflow가 PR 머지 확인 → 종료 처리를 안내한다. devflow-state에 `## Finishing Choice`를 `B (PR pending)` + `## PR URL`을 `[github-pr-url]`로 기록한다.

@@ -119,6 +119,14 @@ metadata:
 
 1. `devflow-docs/devflow-state.md` 읽기
 2. `devflow-docs/session-summary.md` 읽기 (있으면)
+
+   **Memory Sync Staleness Check** *(optional, auto-memory 운영 시)*:
+   - (a) 머지 이력 비교 — `MEMORY.md`/`project_*.md` 최근 PR/BL 번호와 `git log --first-parent main -10` 대조
+   - (b) 로컬 미푸시 검사 — `git rev-list --count origin/main..HEAD` ≥ 1이면 unpushed 존재
+   - 임계: (a)에서 3 PR 이상 또는 3일 이상 불일치, 또는 (b)에서 미푸시 발견 시 아래 프롬프트
+   - 프롬프트: "⚠️ Memory staleness / push 보류 감지 — memory PR #N / git latest PR #M (+K) / local ahead J commits. A) 갱신 후 Resume / B) 그대로 Resume"
+   - auto-memory 부재 또는 (a)(b) 모두 0이면 no-op
+
 3. **백로그 확인 (Lazy Loading)**: `devflow-docs/backlog.md`가 존재하면:
    - `## Next`, `## Open` 섹션의 항목 수(`- **BL-` 패턴)만 카운트한다. 파일 내용은 로드하지 않는다.
    - 안내 표시:
