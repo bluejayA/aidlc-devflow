@@ -142,7 +142,7 @@ git worktree prune
 
 → "동기화" / "건너뛰기"
 
-"동기화" 선택 시: 해당 프로젝트의 auto-memory 디렉토리(`~/.claude/projects/.../memory/`)에서 관련 `project_*.md` 또는 `feedback_*.md`를 업데이트한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
+"동기화" 선택 시: **현재 repo(cwd)에 매핑되는 프로젝트 auto-memory 디렉토리**(Claude Code 규약상 `~/.claude/projects/<dashed-cwd>/memory/`)의 관련 `project_*.md` 또는 `feedback_*.md`만 업데이트한다. 다른 프로젝트 memory는 건드리지 않는다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
 
 > 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 프롬프트가 표시되면 Jay에게 "Memory Sync Reconciliation 프롬프트 출력됨"을 명시적으로 알리고, issue #177에 `observed (3-1)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
 
@@ -217,7 +217,7 @@ devflow는 PR 머지 후 종료 처리됩니다.
 
 → "동기화" / "건너뛰기"
 
-"동기화" 선택 시: 해당 프로젝트의 auto-memory 디렉토리(`~/.claude/projects/.../memory/`)에서 관련 `project_*.md` 또는 `feedback_*.md`를 업데이트한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
+"동기화" 선택 시: **현재 repo(cwd)에 매핑되는 프로젝트 auto-memory 디렉토리**(Claude Code 규약상 `~/.claude/projects/<dashed-cwd>/memory/`)의 관련 `project_*.md` 또는 `feedback_*.md`만 업데이트한다. 다른 프로젝트 memory는 건드리지 않는다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
 
 > 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 프롬프트가 표시되면 Jay에게 "Memory Sync Reconciliation 프롬프트 출력됨"을 명시적으로 알리고, issue #177에 `observed (3-1)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
 

@@ -121,11 +121,12 @@ metadata:
 2. `devflow-docs/session-summary.md` 읽기 (있으면)
 
    **Memory Sync Staleness Check** *(optional, auto-memory 운영 시)*:
-   - (a) 머지 이력 비교 — `MEMORY.md`/`project_*.md` 최근 PR/BL 번호와 `git log --first-parent main -10` 대조
-   - (b) 로컬 미푸시 검사 — `git rev-list --count origin/main..HEAD` ≥ 1이면 unpushed 존재
-   - 임계: (a)에서 3 PR 이상 또는 3일 이상 불일치, 또는 (b)에서 미푸시 발견 시 아래 프롬프트
-   - 프롬프트: "⚠️ Memory staleness / push 보류 감지 — memory PR #N / git latest PR #M (+K) / local ahead J commits. A) 갱신 후 Resume / B) 그대로 Resume"
-   - auto-memory 부재 또는 (a)(b) 모두 0이면 no-op
+   - 로컬 미푸시 검사 — `git rev-list --count @{upstream}..HEAD` (현재 브랜치의 upstream 대비 ahead)
+   - upstream이 미설정이면 이 신호는 스킵 (로컬 전용 브랜치로 간주)
+   - ahead ≥ 1이면 아래 프롬프트:
+     "⚠️ push 보류 감지 — local ahead J commits. A) 갱신 후 Resume / B) 그대로 Resume"
+   - B 선택 시 `devflow-docs/audit.md`에 `memory-sync-staleness-skipped` 이벤트를 한 줄 append (override 사유 추적용)
+   - upstream 미설정 또는 ahead 0이면 no-op
 
    > 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 Step 2.5 실행 시 Jay에게 "Memory Sync Staleness Check 실행됨"을 명시적으로 알리고, issue #177에 `observed (3-2)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
 
