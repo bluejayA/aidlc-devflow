@@ -142,7 +142,7 @@ git worktree prune
 
 → "동기화" / "건너뛰기"
 
-"동기화" 선택 시: **현재 repo(cwd)에 매핑되는 프로젝트 auto-memory 디렉토리**(Claude Code 규약상 `~/.claude/projects/<dashed-cwd>/memory/`)의 관련 `project_*.md` 또는 `feedback_*.md`만 업데이트한다. 다른 프로젝트 memory는 건드리지 않는다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
+"동기화" 선택 시: **현재 repo(cwd)에 매핑되는 프로젝트 auto-memory 디렉토리**(Claude Code 규약상 `~/.claude/projects/<dashed-cwd>/memory/` — `<dashed-cwd>`는 절대 cwd의 `/`를 `-`로 치환한 형태. 예: `/Users/jay/project` → `-Users-jay-project`)의 관련 `project_*.md` 또는 `feedback_*.md`만 업데이트한다. 다른 프로젝트 memory는 건드리지 않는다. 후보 디렉토리가 2개 이상 매치되면 업데이트를 중단하고 사용자 확인을 요청한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
 
 **실행 기록** (이 프롬프트가 표시되면 `devflow-docs/audit.md`에 한 줄 append):
 `[<ISO timestamp>] memory-sync-reconciliation-prompted | option=<A|B> | choice=<sync|skip>`
@@ -218,7 +218,7 @@ devflow는 PR 머지 후 종료 처리됩니다.
 
 → "동기화" / "건너뛰기"
 
-"동기화" 선택 시: **현재 repo(cwd)에 매핑되는 프로젝트 auto-memory 디렉토리**(Claude Code 규약상 `~/.claude/projects/<dashed-cwd>/memory/`)의 관련 `project_*.md` 또는 `feedback_*.md`만 업데이트한다. 다른 프로젝트 memory는 건드리지 않는다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
+"동기화" 선택 시: **현재 repo(cwd)에 매핑되는 프로젝트 auto-memory 디렉토리**(Claude Code 규약상 `~/.claude/projects/<dashed-cwd>/memory/` — `<dashed-cwd>`는 절대 cwd의 `/`를 `-`로 치환한 형태. 예: `/Users/jay/project` → `-Users-jay-project`)의 관련 `project_*.md` 또는 `feedback_*.md`만 업데이트한다. 다른 프로젝트 memory는 건드리지 않는다. 후보 디렉토리가 2개 이상 매치되면 업데이트를 중단하고 사용자 확인을 요청한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
 
 **실행 기록** (이 프롬프트가 표시되면 `devflow-docs/audit.md`에 한 줄 append):
 `[<ISO timestamp>] memory-sync-reconciliation-prompted | option=<A|B> | choice=<sync|skip>`

@@ -123,9 +123,11 @@ metadata:
    **Memory Sync Staleness Check** *(optional, auto-memory 운영 시)*:
    - **Preflight — upstream 확인**: `git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null`
      - 성공 → ahead check 진행
-     - 실패 → "upstream 미설정 — staleness check 비활성. 필요 시 `git push -u origin HEAD`로 upstream 설정" 안내 후 이 step 종료
+     - 실패 → "upstream 미설정 — staleness check 비활성. 필요 시 `git push -u origin HEAD`로 upstream 설정" 안내 + `devflow-docs/audit.md`에 한 줄 기록 후 이 step 종료:
+       `[<ISO timestamp>] memory-sync-staleness-skipped | branch=<name> | ahead=0 | reason=upstream-unset`
    - **Ahead check**: `git rev-list --count @{upstream}..HEAD`. 1 이상이면 아래 프롬프트:
      "⚠️ push 보류 감지 — local ahead J commits. A) 갱신 후 Resume / B) 그대로 Resume"
+   - **A 선택 시 권장 절차** (강제 아님, advisory): (1) `git push` 실행 → (2) 성공 시 `git rev-list --count @{upstream}..HEAD` 재확인하여 ahead==0이면 Resume 진행. sync 실패 시 에러 표시 + Resume 보류 권고(최종 판단은 사용자).
    - **실행 기록** (preflight 통과 시 항상) — `devflow-docs/audit.md`에 한 줄 append:
      `[<ISO timestamp>] memory-sync-staleness-check-run | branch=<name> | ahead=<N> | prompted=<true|false>`
    - **B 선택 시 추가 기록**:

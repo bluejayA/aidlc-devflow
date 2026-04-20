@@ -80,6 +80,20 @@ class TestFinishingMemorySyncReconciliation:
                 f"Memory Sync Reconciliation section not found before {marker}"
             )
 
+    def test_has_dashed_cwd_derivation_rule(self):
+        """Round 3 M2 확장: <dashed-cwd> 생성 규칙 명시 (/ → - 치환)."""
+        assert "`/`를 `-`로 치환" in self.content, (
+            "Missing dashed-cwd derivation rule"
+        )
+        assert "-Users-jay-project" in self.content, (
+            "Missing concrete transform example"
+        )
+
+    def test_has_multi_match_fail_safe(self):
+        """Round 3 M2: 경로 후보가 2개 이상 매치되면 업데이트 중단."""
+        assert "후보 디렉토리가 2개 이상 매치되면" in self.content
+        assert "사용자 확인을 요청" in self.content
+
 
 class TestUsingDevflowStalenessCheck:
     """aidlc-using-devflow SKILL.md Resume Flow에 Memory Sync
@@ -150,3 +164,17 @@ class TestUsingDevflowStalenessCheck:
         assert step_2 < staleness < step_3, (
             "Staleness Check must be positioned between Step 2 and Step 3"
         )
+
+    def test_has_upstream_unset_audit_reason(self):
+        """Round 3 M: preflight 실패도 audit 이벤트로 기록 (reason=upstream-unset)."""
+        assert "reason=upstream-unset" in self.content, (
+            "Missing upstream-unset audit reason for preflight failure"
+        )
+
+    def test_has_a_path_recommended_procedure(self):
+        """Round 3 H1 (부분): A 선택 시 권장 절차 명시. 강제 아님(advisory)."""
+        assert "A 선택 시 권장 절차" in self.content
+        assert "advisory" in self.content, "A-path must remain advisory, not hard block"
+        # 구체 명령 + 재검증
+        assert "git push" in self.content
+        assert "재확인" in self.content
