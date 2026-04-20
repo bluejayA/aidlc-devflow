@@ -121,14 +121,16 @@ metadata:
 2. `devflow-docs/session-summary.md` 읽기 (있으면)
 
    **Memory Sync Staleness Check** *(optional, auto-memory 운영 시)*:
-   - 로컬 미푸시 검사 — `git rev-list --count @{upstream}..HEAD` (현재 브랜치의 upstream 대비 ahead)
-   - upstream이 미설정이면 이 신호는 스킵 (로컬 전용 브랜치로 간주)
-   - ahead ≥ 1이면 아래 프롬프트:
+   - **Preflight — upstream 확인**: `git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null`
+     - 성공 → ahead check 진행
+     - 실패 → "upstream 미설정 — staleness check 비활성. 필요 시 `git push -u origin HEAD`로 upstream 설정" 안내 후 이 step 종료
+   - **Ahead check**: `git rev-list --count @{upstream}..HEAD`. 1 이상이면 아래 프롬프트:
      "⚠️ push 보류 감지 — local ahead J commits. A) 갱신 후 Resume / B) 그대로 Resume"
-   - B 선택 시 `devflow-docs/audit.md`에 `memory-sync-staleness-skipped` 이벤트를 한 줄 append (override 사유 추적용)
-   - upstream 미설정 또는 ahead 0이면 no-op
-
-   > 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 Step 2.5 실행 시 Jay에게 "Memory Sync Staleness Check 실행됨"을 명시적으로 알리고, issue #177에 `observed (3-2)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
+   - **실행 기록** (preflight 통과 시 항상) — `devflow-docs/audit.md`에 한 줄 append:
+     `[<ISO timestamp>] memory-sync-staleness-check-run | branch=<name> | ahead=<N> | prompted=<true|false>`
+   - **B 선택 시 추가 기록**:
+     `[<ISO timestamp>] memory-sync-staleness-skipped | branch=<name> | ahead=<N> | reason=<optional>`
+   - upstream 미설정 또는 ahead 0이면 프롬프트는 no-op
 
 3. **백로그 확인 (Lazy Loading)**: `devflow-docs/backlog.md`가 존재하면:
    - `## Next`, `## Open` 섹션의 항목 수(`- **BL-` 패턴)만 카운트한다. 파일 내용은 로드하지 않는다.
