@@ -13,8 +13,7 @@
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
 
-> BL-085 (Knowledge System Phase 1)는 구현 완료 후 본 파일에서 제거 (git history로 추적).
-> Baseline + Phase 2 trigger 평가 기준: `docs/research/knowledgesystem/phase1-baseline.md` 참조.
+> Phase 2 Knowledge System 관측 진행 중. Baseline + trigger 평가 기준: `docs/research/knowledgesystem/phase1-baseline.md` 참조.
 
 ---
 
