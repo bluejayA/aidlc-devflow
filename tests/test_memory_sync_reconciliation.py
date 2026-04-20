@@ -2,7 +2,10 @@
 
 finishing-a-development-branch 옵션 A/B와 using-devflow Resume Flow에
 Memory Sync 관련 섹션이 회귀 없이 유지되는지 정적 검증.
+
+추가로 L3 관측 hint의 만료일(2026-04-28) 경과 시 자동 fail하여 제거를 강제.
 """
+import datetime
 import pathlib
 
 SKILLS_DIR = pathlib.Path(__file__).resolve().parent.parent / "skills"
@@ -86,3 +89,52 @@ class TestUsingDevflowStalenessCheck:
         assert step_2 < staleness < step_3, (
             "Staleness Check must be positioned between Step 2 and Step 3"
         )
+
+
+class TestL3ObservationHintExpiry:
+    """BL-092 L3 관측 hint는 2026-04-28 T+14 만료.
+
+    만료일 이후 hint가 남아있으면 이 test가 fail하여 제거를 강제한다.
+    만료 전에는 hint 존재를 보장해 회귀를 방지한다.
+    """
+
+    EXPIRY_DATE = datetime.date(2026, 4, 28)
+    HINT_MARKER = "관측 요청 (BL-092 L3"
+
+    def setup_method(self):
+        self.finishing = (
+            SKILLS_DIR / "aidlc-finishing-a-development-branch" / "SKILL.md"
+        ).read_text()
+        self.using = (
+            SKILLS_DIR / "aidlc-using-devflow" / "SKILL.md"
+        ).read_text()
+
+    def test_hints_lifecycle(self):
+        today = datetime.date.today()
+        if today < self.EXPIRY_DATE:
+            # 만료 전: hint 존재 보장 (실수로 삭제되면 fail)
+            assert self.HINT_MARKER in self.finishing, (
+                f"L3 hint missing from finishing SKILL.md before expiry "
+                f"{self.EXPIRY_DATE} (today={today})"
+            )
+            assert self.HINT_MARKER in self.using, (
+                f"L3 hint missing from using-devflow SKILL.md before expiry "
+                f"{self.EXPIRY_DATE} (today={today})"
+            )
+            # 옵션 A와 B 두 곳에 모두 존재해야 함
+            assert self.finishing.count(self.HINT_MARKER) == 2, (
+                "Expected hint in both 옵션 A and 옵션 B of finishing SKILL.md"
+            )
+        else:
+            # 만료 후: hint 제거돼야 함
+            removal_guide = (
+                f"\n\n=== BL-092 L3 hint 만료 ({self.EXPIRY_DATE}) ===\n"
+                f"다음 파일에서 '{self.HINT_MARKER}' 블록 제거 필요:\n"
+                f"  - skills/aidlc-finishing-a-development-branch/SKILL.md "
+                f"(2곳: 옵션 A/B의 Memory Sync Reconciliation 섹션 말미)\n"
+                f"  - skills/aidlc-using-devflow/SKILL.md "
+                f"(Step 2.5 Memory Sync Staleness Check 말미)\n"
+                f"제거 후 이 test 클래스(TestL3ObservationHintExpiry)도 함께 삭제."
+            )
+            assert self.HINT_MARKER not in self.finishing, removal_guide
+            assert self.HINT_MARKER not in self.using, removal_guide

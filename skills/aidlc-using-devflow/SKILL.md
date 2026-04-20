@@ -127,6 +127,8 @@ metadata:
    - 프롬프트: "⚠️ Memory staleness / push 보류 감지 — memory PR #N / git latest PR #M (+K) / local ahead J commits. A) 갱신 후 Resume / B) 그대로 Resume"
    - auto-memory 부재 또는 (a)(b) 모두 0이면 no-op
 
+   > 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 Step 2.5 실행 시 Jay에게 "Memory Sync Staleness Check 실행됨"을 명시적으로 알리고, issue #177에 `observed (3-2)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
+
 3. **백로그 확인 (Lazy Loading)**: `devflow-docs/backlog.md`가 존재하면:
    - `## Next`, `## Open` 섹션의 항목 수(`- **BL-` 패턴)만 카운트한다. 파일 내용은 로드하지 않는다.
    - 안내 표시:

@@ -144,6 +144,8 @@ git worktree prune
 
 "동기화" 선택 시: 해당 프로젝트의 auto-memory 디렉토리(`~/.claude/projects/.../memory/`)에서 관련 `project_*.md` 또는 `feedback_*.md`를 업데이트한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
 
+> 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 프롬프트가 표시되면 Jay에게 "Memory Sync Reconciliation 프롬프트 출력됨"을 명시적으로 알리고, issue #177에 `observed (3-1)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
+
 <!-- @state-update: 옵션 A 완료 → Current Phase를 finished로 -->
 **devflow 종료 처리** (devflow-state.md가 존재하는 경우):
 1. `devflow-docs/devflow-state.md`의 `## Current Phase`를 `finished`로 업데이트
@@ -216,6 +218,8 @@ devflow는 PR 머지 후 종료 처리됩니다.
 → "동기화" / "건너뛰기"
 
 "동기화" 선택 시: 해당 프로젝트의 auto-memory 디렉토리(`~/.claude/projects/.../memory/`)에서 관련 `project_*.md` 또는 `feedback_*.md`를 업데이트한다. auto-memory 시스템이 구성돼 있지 않으면 이 체크는 no-op으로 넘긴다.
+
+> 📌 **관측 요청 (BL-092 L3, ~2026-04-28 T+14까지)**: 이 프롬프트가 표시되면 Jay에게 "Memory Sync Reconciliation 프롬프트 출력됨"을 명시적으로 알리고, issue #177에 `observed (3-1)` 코멘트를 제안. T+14 Phase 2 plan 작성 시 이 hint 제거 예정 (만료 test가 강제).
 
 <!-- @state-update: 옵션 B PR 생성 → Finishing Choice + PR URL 기록 -->
 **devflow state 유지**: 옵션 B에서는 devflow-state.md를 아카이브하지 않는다. PR 머지 후 다음 세션에서 using-devflow가 PR 머지 확인 → 종료 처리를 안내한다. devflow-state에 `## Finishing Choice`를 `B (PR pending)` + `## PR URL`을 `[github-pr-url]`로 기록한다.
