@@ -60,6 +60,7 @@ devflow-state의 `## Current Stage`를 업데이트하고 해당 스킬을 호�
 - `## Current State`의 Stage 필드 업데이트
 - `## Key Decisions`에 게이트 선택 기록 (결정 이유 포함)
 - `**Commit**` 필드에 현재 HEAD hash
+- **Traps 회수**: 사용자에게 "이번 stage에서 폐기한 접근이 있나요? (없으면 enter)" 질문. 응답이 있으면 `## Traps to Avoid` 섹션에 1줄씩 추가 (형식: `- [접근 요약]: [이유]로 폐기. 재시도 금지.`). 응답이 없으면 섹션을 `(없음)`으로 유지. 자세한 운영 규칙은 `_shared/patterns/session-continuity.md`의 "Traps to Avoid 운영 규칙" 참조.
 
 ### Step C: 게이트 제시
 

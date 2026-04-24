@@ -12,7 +12,6 @@
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
-- **BL-093**: Handoff Strategy: session-summary.md 작성 규칙 6항 명시 (작성 규칙 텍스트만, 강제는 094/095) [P2] [#181](https://github.com/bluejayA/aidlc-devflow/issues/181)
 - **BL-094**: Handoff Strategy: "Traps to Avoid" 섹션 + 운영 규칙 (orchestrator 회수, hook 강제는 BL-090 흡수) [P2] [#182](https://github.com/bluejayA/aidlc-devflow/issues/182)
 - **BL-095**: Handoff Strategy: "Handoff = hypothesis" 원칙 명문화 — Phase 1만 (Phase 2는 BL-095b) [P2] [#183](https://github.com/bluejayA/aidlc-devflow/issues/183)
 - **BL-095b**: Handoff Strategy: session-summary verification gate (Phase 2, evidence=산출물 디렉터리+git log) [P2] [#184](https://github.com/bluejayA/aidlc-devflow/issues/184)
