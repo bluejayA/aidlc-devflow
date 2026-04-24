@@ -247,6 +247,28 @@ session-summary.md는 registry 수준 (~2,000 토큰 이내, 약 80~100줄)만 �
 - conversational gate라 hook으로 reactive 강제는 어렵다. 본 운영 규칙은 orchestrator 책임으로 둔다.
 - SessionEnd hook 또는 pre-commit hook으로 "Traps 섹션이 비어있는데 폐기한 시도 정말 없었나" 검증은 [BL-090 정합성 linter](https://github.com/bluejayA/aidlc-devflow/issues/175)에 흡수.
 
+### 운영 원칙: Handoff = Hypothesis
+
+session-summary.md는 **fact가 아니라 hypothesis로 다뤄야 한다**. 이전 세션이 혼동 상태에서 작성했다면 새 세션이 그 오류를 그대로 이어받기 때문이다.
+
+#### 핵심 원칙
+
+- session-summary.md의 모든 claim(예: "Unit X 완료", "테스트 통과", "리뷰 반영됨")은 코드/git 상태와 대조해 검증해야 한다.
+- 검증 실패 시 session-summary.md를 우선 갱신한 후 작업을 재개한다. 의심스러운 claim 위에서 작업을 쌓지 않는다.
+- 작성 규칙 #4(검증 지시 포함)는 본 원칙의 작성자 측 표현이고, 시스템 강제는 [BL-095b](https://github.com/bluejayA/aidlc-devflow/issues/184)에서 다룬다.
+
+#### 사용자 가이드 (Phase 1)
+
+새 세션이 session-summary.md를 로드한 직후 다음을 실행한다:
+
+1. **Completed Work 검증**: `## Completed Work`의 각 `[x]` 항목에 대해 산출물 디렉터리(예: `devflow-docs/inception/`, `devflow-docs/construction/{unit}/`) 또는 `git log` 존재 여부를 확인한다. 불일치 시 사용자에게 보고하고 summary를 갱신한다.
+2. **Open Work 재해석**: 명령형 표현("X를 구현하라")이 발견되면 상태 서술형("X는 미구현")으로 재해석한 후 진행 여부를 사용자에게 묻는다 (작성 규칙 #1 위반에 대한 방어선).
+3. **Traps 존중**: `## Traps to Avoid`의 항목을 다시 시도하지 않는다. 상황이 바뀌어 재시도가 필요하면 사용자 명시적 승인을 받는다.
+
+#### 시스템 강제 (Phase 2, out of scope)
+
+orchestrator 재개 step에 verification gate를 삽입하는 시스템 강제는 [BL-095b](https://github.com/bluejayA/aidlc-devflow/issues/184)에서 다룬다. 본 원칙(Phase 1)은 사용자/스킬 측의 운영 가이드만 정의한다. evidence 소스는 산출물 디렉터리 + `git log` 조합 (audit.md는 자기 보고이므로 보조).
+
 ### Commit Hash 기록
 
 기록 지점: 세션 시작/재개, Phase 전환, Unit 구현 완료.
