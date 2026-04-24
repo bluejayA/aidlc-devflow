@@ -222,6 +222,7 @@ requesting-code-review가 모든 리뷰 로직을 소유한다 (Single Source of
 승인 후:
 - devflow-state의 `## Completed Units`에 unit명 추가
 - `devflow-docs/session-summary.md` 업데이트: Completed Work에 unit 추가 + `**Commit**` 필드에 현재 HEAD hash
+- **Traps 회수**: 사용자에게 "이번 unit에서 폐기한 시도가 있나요? (없으면 enter)" 질문. 응답이 있으면 session-summary.md의 `## Traps to Avoid` 섹션에 1줄씩 추가. 응답이 없으면 섹션을 `(없음)`으로 유지. 자세한 운영 규칙은 `_shared/patterns/session-continuity.md`의 "Traps to Avoid 운영 규칙" 참조.
 - devflow-audit에 로깅: `[timestamp] unit-complete: [unit-name] — [commit hash]`
 
 #### 2d. 다음 unit 확인

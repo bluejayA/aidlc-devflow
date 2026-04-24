@@ -151,6 +151,11 @@ INCEPTION 중간에 세션이 끊겨도 재개 시 이 파일로 맥락 복원 �
 - [다음 작업 설명]
 <!-- Key Decisions, Completed Work는 최근 20개까지만 유지. 초과 시 오래된 항목 삭제. -->
 
+## Traps to Avoid
+- [폐기한 접근 1]: [이유]로 폐기. 재시도 금지.
+- [폐기한 접근 2]: ...
+<!-- 비어 있으면 (없음) 한 줄만 둔다. 섹션 자체를 삭제하지 않는다. -->
+
 ## For Next Session
 - [인수인계 시 알아야 할 핵심 맥락]
 - [주의사항이나 미해결 이슈]
@@ -213,6 +218,34 @@ session-summary.md는 registry 수준 (~2,000 토큰 이내, 약 80~100줄)만 �
 | 설계 다이어그램, 산출물 | `devflow-docs/inception/`, `devflow-docs/construction/...` |
 
 상한 초과 시 시간이 갈수록 비대화되어 매 세션 로딩 비용이 누적된다. **Commit Hash 기록**(아래)도 최신 1개만 유지하는 이유와 같다.
+
+### Traps to Avoid 운영 규칙
+
+작성 규칙 #3의 운영 측면. 섹션만 추가하고 채우는 규칙이 없으면 빈 `(없음)`만 누적되어 가치가 0이 된다.
+
+#### 회수 시점 및 주체
+
+| 시점 | 주체 | 동작 |
+|------|------|------|
+| INCEPTION stage 게이트 승인 시 | aidlc-inception-orchestrator | "이번 stage에서 폐기한 접근이 있나요? (없으면 enter)" 질문, 응답을 1줄씩 추가 |
+| CONSTRUCTION unit 완료 시 | aidlc-construction-orchestrator | "이번 unit에서 폐기한 시도가 있나요? (없으면 enter)" 질문, 응답을 1줄씩 추가 |
+| 사용자가 명시적으로 "이 접근 폐기" 발화 시 | 응대 중인 스킬/orchestrator | 즉시 회수 (다음 stage-end까지 기다리지 않음) |
+
+#### 회수 형식
+
+회수 답변은 다음 형식으로 정규화한다:
+
+- 좋은 예: `- JWT를 cookie로 옮기는 접근: SameSite 호환성 문제로 폐기. 재시도 금지.`
+- 나쁜 예: `- 인증 잘 안 됨` (이유와 폐기 결론 누락)
+
+#### 빈 응답 처리
+
+사용자가 "없음"이라 답하면 섹션은 유지하고 `(없음)` 한 줄만 둔다. 섹션 자체를 삭제하지 않는다. 다음 stage에서 다시 회수 질문이 나갈 때 누적 가능하도록.
+
+#### 시스템 보완 (out of scope)
+
+- conversational gate라 hook으로 reactive 강제는 어렵다. 본 운영 규칙은 orchestrator 책임으로 둔다.
+- SessionEnd hook 또는 pre-commit hook으로 "Traps 섹션이 비어있는데 폐기한 시도 정말 없었나" 검증은 [BL-090 정합성 linter](https://github.com/bluejayA/aidlc-devflow/issues/175)에 흡수.
 
 ### Commit Hash 기록
 
