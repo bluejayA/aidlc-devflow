@@ -156,6 +156,64 @@ INCEPTION 중간에 세션이 끊겨도 재개 시 이 파일로 맥락 복원 �
 - [주의사항이나 미해결 이슈]
 ```
 
+### 작성 규칙
+
+session-summary.md는 다음 6개 규칙을 따른다. 위반하면 다음 세션이 맥락을 잘못 복원하거나, 검증 없이 명령을 맹목 실행해 부작용을 일으킨다.
+
+#### 1. Open Work는 상태 서술형, 명령형 금지
+
+- 좋은 예: `RefreshTokenService is not yet implemented; rotation 로직 누락`
+- 나쁜 예: `RefreshTokenService를 다음에 구현할 것`
+
+명령형은 새 세션이 맥락 검증 없이 그대로 실행하게 만든다. 상태 서술형은 현재 사실만 기술하므로 다음 세션이 검증 후 행동을 선택한다.
+
+#### 2. 파일 참조는 라인 번호까지
+
+- 좋은 예: `src/auth/TokenService.kt:L45-L72 — refresh 로직, race 의심`
+- 나쁜 예: `src/auth/TokenService.kt — refresh 로직 확인 필요`
+
+라인 범위가 없으면 다음 세션이 전체 파일을 읽어야 한다 (토큰 낭비 + 맥락 희석).
+
+#### 3. "Traps to Avoid" 섹션 명시
+
+폐기한 접근을 1줄씩 회수해 다음 세션이 같은 함정을 다시 밟지 않도록 한다.
+
+```markdown
+## Traps to Avoid
+- [폐기한 접근 1]: [이유]로 폐기. 재시도 금지.
+- [폐기한 접근 2]: ...
+```
+
+비어 있으면 `(없음)` 명시. **운영 규칙**(어느 시점에 누가 회수하는가, orchestrator stage-end 절차) **및 표준 템플릿 통합은 BL-094 참조**.
+
+#### 4. 검증 지시 포함
+
+session-summary.md를 읽는 다음 세션 prompt 마지막에 항상 다음 한 줄을 포함한다:
+
+> "이 문서의 주장을 코드/git 상태와 대조해 검증한 후 작업을 시작하라."
+
+handoff는 fact가 아니라 hypothesis다 (BL-095). 이전 세션이 혼동 상태에서 작성했다면 새 세션이 그 오류를 그대로 이어받는다. **시스템 강제**(orchestrator 재개 시 verification gate)는 **BL-095b 참조**.
+
+#### 5. CLAUDE.md 중복 회피
+
+handoff 텍스트 첫 줄 또는 prompt에 다음 지시를 포함한다:
+
+> "Read CLAUDE.md first. Do NOT restate its contents in this summary."
+
+CLAUDE.md에 이미 있는 컨벤션을 session-summary가 다시 적으면 매 세션 동일 컨텍스트를 다시 빌드해 토큰 낭비. session-summary는 **CLAUDE.md에 없는 세션 고유 정보**만 담는다.
+
+#### 6. 2K 토큰 상한
+
+session-summary.md는 registry 수준 (~2,000 토큰 이내, 약 80~100줄)만 유지. 상세는 별도 산출물로 분리한다:
+
+| 상세 종류 | 분리 위치 |
+|----------|----------|
+| 결정 이유, 토론 맥락 | `devflow-audit.md` 또는 ADR |
+| 코드 발췌 | 원본 파일 라인 참조 (규칙 #2) |
+| 설계 다이어그램, 산출물 | `devflow-docs/inception/`, `devflow-docs/construction/...` |
+
+상한 초과 시 시간이 갈수록 비대화되어 매 세션 로딩 비용이 누적된다. **Commit Hash 기록**(아래)도 최신 1개만 유지하는 이유와 같다.
+
 ### Commit Hash 기록
 
 기록 지점: 세션 시작/재개, Phase 전환, Unit 구현 완료.
