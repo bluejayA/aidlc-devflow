@@ -14,6 +14,7 @@
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
 - **BL-095**: Handoff Strategy: "Handoff = hypothesis" 원칙 명문화 — Phase 1만 (Phase 2는 BL-095b) [P2] [#183](https://github.com/bluejayA/aidlc-devflow/issues/183)
 - **BL-095b**: Handoff Strategy: session-summary verification gate (Phase 2, evidence=산출물 디렉터리+git log) [P2] [#184](https://github.com/bluejayA/aidlc-devflow/issues/184)
+- **BL-097**: `aidlc-pausing-a-session` 스킬 — mid-cycle stop checklist + 3-way sync (`devflow-state.md` / project auto-memory / git log) — `aidlc-finishing-a-development-branch`의 mid-cycle 형제. 5단계 체크리스트 (state 갱신 / memory 정밀 / 인덱스 / audit commit / 3-way verify) + drift 시 commit 거부. `aidlc-using-devflow` Resume Flow에 자동 drift detect 추가. seed=nexttui BL-P2-085 stale recovery (2026-04-28). 별도 BL 후보: `devflow-state.md` gitignore 정책 재검토 [P2] [#189](https://github.com/bluejayA/aidlc-devflow/issues/189)
 
 > Phase 2 Knowledge System 관측 진행 중. Baseline + trigger 평가 기준: `docs/research/knowledgesystem/phase1-baseline.md` 참조.
 
