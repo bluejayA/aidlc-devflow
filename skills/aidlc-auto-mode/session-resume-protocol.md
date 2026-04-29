@@ -2,6 +2,30 @@
 
 auto-mode `## Session Resume` 섹션의 보조 명세. baseline은 `_shared/patterns/session-continuity.md` (Handoff = Hypothesis Phase 1 사용자 가이드, BL-095). 본 문서는 auto-mode 특수 처리만 정의한다.
 
+## Drift 감지 (Step 3)
+
+devflow-state.md는 advisory cache이므로 stale 가능성 있음. 다음을 비교하여 drift를 감지한다:
+
+- **산출물 디렉토리**: `devflow-docs/inception/`, `devflow-docs/construction/`의 실제 파일 ↔ state.md `## Approved Stages` / `## Completed Units`
+- **git log**: `git log --oneline -20`의 commit message 키워드(예: `feat: requirements-analysis`, `feat(unit): X 완료`) ↔ state.md 상태
+
+### 게이트 (불일치 시)
+
+```
+⚠️ devflow-state.md drift 감지
+
+state.md 기록: [요약]
+산출물/git log: [요약]
+
+A) 산출물 우선 신뢰 (state.md 갱신 후 재개)
+B) state.md 우선 신뢰 (산출물은 검증용으로만 참조)
+C) 단계별 모드로 전환 (수동 정리)
+```
+
+### Audit Emit
+
+`auto-mode-invoked` audit emit 시 `mode=resume`, drift 발견 시 `auto-mode-resume-drift-detected | gap=<short>` 추가 emit (`decision-log-format.md` §audit emit 참조).
+
 ## Handoff Verification (Step 4)
 
 session-summary.md를 fact가 아닌 hypothesis로 다룬다. 새 세션이 로드 직후 다음 3단계를 실행한다.

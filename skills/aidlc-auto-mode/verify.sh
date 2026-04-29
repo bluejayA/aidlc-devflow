@@ -9,10 +9,12 @@ ERRORS=0
 
 echo "=== auto-mode Layer 1 Verification ==="
 
-# 1. 줄 수 확인 (skill-writing-guide L60: 500줄은 목표, 게이트 패턴/핵심 워크플로우는 분리 안 함)
+# 1. 줄 수 확인 (skill-writing-guide L60: 500줄은 목표).
+# BL-100~104 정합성 fix를 외부 분리 후(BL-105) 520 한도로 sustainable 자리.
+# 한도 무한 상향은 안티패턴 (BL-105 issue 참조). 추가 정합 fix는 외부 분리로 처리.
 LINES=$(wc -l < "$SKILL")
-if [ "$LINES" -gt 550 ]; then
-  echo "FAIL: SKILL.md is $LINES lines (max 550)"
+if [ "$LINES" -gt 520 ]; then
+  echo "FAIL: SKILL.md is $LINES lines (max 520 — BL-105 정책)"
   ERRORS=$((ERRORS + 1))
 else
   echo "PASS: SKILL.md is $LINES lines"

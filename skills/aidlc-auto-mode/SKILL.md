@@ -386,34 +386,13 @@ C → devflow-state `finished` → 세션 종료.
 
 ### session-summary 갱신 규칙
 
-baseline은 `_shared/patterns/session-continuity.md` (템플릿 + 6항 작성 규칙 + Traps to Avoid 운영 규칙). auto-mode 특수 규칙만 아래 인라인.
-
-**필수 필드 자동 기록**: `Last Updated` (ISO 8601), `Commit` (`git rev-parse --short HEAD`, Phase 전환·Unit 완료 시 갱신), `Completed Work` (`[x]` + 한 줄 결과), `Key Decisions` (최근 20개), `Next Steps`, `Traps to Avoid` (`(없음)` 기본값, BL-104 적용 전까지), `For Next Session` (에스컬레이션·완료 시점에만).
-
-**6항 규칙(BL-093) 적용 — auto-mode 컨텍스트:**
-
-| # | 규칙 | auto-mode 적용 |
-|---|---|---|
-| 1 | Open Work 상태 서술형 | "X 미구현" (명령형 "X 구현하라" 금지) |
-| 2 | 파일 참조는 라인 번호까지 | code-generation 산출물 인용 시 `path:L<N>-L<M>` |
-| 3 | Traps to Avoid 섹션 | `(없음)` 기본값. BL-104 적용 전까지 auto-fix 폐기는 decision-log에만 |
-| 4 | 검증 지시 포함 | summary 첫 줄에 "이 문서의 주장을 코드/git 상태와 대조해 검증한 후 작업 시작" |
-| 5 | CLAUDE.md 중복 회피 | 첫 줄에 "Read CLAUDE.md first. Do NOT restate" 포함 |
-| 6 | 2K 토큰 상한 (~80-100줄) | 상한 근접 시 Key Decisions / Completed Work 최근 20개 외 삭제 |
+baseline은 `_shared/patterns/session-continuity.md` §템플릿 + §작성 규칙 6항(BL-093) + §Traps to Avoid 운영 규칙. auto-mode 특수 규칙:
+- **필수 필드 자동 기록**: `Last Updated` (ISO 8601), `Commit` (`git rev-parse --short HEAD`, Phase 전환·Unit 완료 시), `Traps to Avoid` (`(없음)` 기본값, BL-104 적용 전까지), `For Next Session` (에스컬레이션·완료 시점에만)
+- **자동 진행 모드 정합**: 6항 #1(Open Work 상태 서술형) + #6(2K 상한 — Key Decisions/Completed Work 최근 20개 외 삭제) 자동 적용. #4(검증 지시) + #5(CLAUDE.md 중복 회피) 첫 줄 포함
 
 ### audit emit 형식
 
-plugin 공통 emit 표준(BL-098, memory-sync 패턴) 준수. 상세는 `decision-log-format.md` §audit emit 참조.
-
-| Prefix | 시점 | fields |
-|---|---|---|
-| `auto-mode-invoked` | skill 진입 직후 (Step 1 후) | `mode=new\|resume`, `intent` |
-| `auto-mode-stage-completed` | 매 스테이지 Checkpoint | `stage`, `complexity`, `auto-approved=true` |
-| `auto-mode-resume-drift-detected` | Session Resume Step 3 drift 감지 시 | `gap` |
-| `auto-mode-resume-handoff-verified` | Session Resume Step 4 완료 시 | `completed_work_match`, `traps_count`, `rephrased_count` |
-| `auto-mode-escalated` | 서킷 브레이커 도달/에스컬레이션 | `phase`, `reason`, `retries` |
-
-emit 절차: Read → Edit append (Write 전체 재작성 금지).
+5종 prefix(`auto-mode-invoked` / `-stage-completed` / `-resume-drift-detected` / `-resume-handoff-verified` / `-escalated`). 명세 + 형식 + emit 절차는 `decision-log-format.md` §audit emit 참조.
 
 ### devflow-state.md 화이트리스트
 
@@ -520,21 +499,7 @@ On Activation Step 1에서 재개 선택(A) 시 실행:
 
 1. `devflow-state.md` 읽기 — Current Phase, Current Stage 확인.
 2. `session-summary.md` 읽기 — 완료 작업 맥락 복원.
-3. **drift 감지 (state.md ↔ git log 교차검증)**: state.md는 advisory cache이므로 stale 가능성 있음. 다음을 비교:
-   - **산출물 디렉토리**: `devflow-docs/inception/`, `devflow-docs/construction/`의 실제 파일 ↔ state.md `## Approved Stages` / `## Completed Units`
-   - **git log**: `git log --oneline -20`의 commit message 키워드(예: `feat: requirements-analysis`, `feat(unit): X 완료`) ↔ state.md 상태
-   - 불일치 시 사용자 게이트 표시:
-     ```
-     ⚠️ devflow-state.md drift 감지
-
-     state.md 기록: [요약]
-     산출물/git log: [요약]
-
-     A) 산출물 우선 신뢰 (state.md 갱신 후 재개)
-     B) state.md 우선 신뢰 (산출물은 검증용으로만 참조)
-     C) 단계별 모드로 전환 (수동 정리)
-     ```
-   - `auto-mode-invoked` audit emit 시 `mode=resume`, drift 발견 시 `auto-mode-resume-drift-detected | gap=<short>` 추가 emit.
+3. **drift 감지 (state.md ↔ git log/산출물 교차검증)**: state.md는 advisory cache이므로 stale 가능성 있음. 비교 대상(산출물 디렉토리 + `git log --oneline -20`) / 게이트(3-way: 산출물 우선·state.md 우선·단계별 모드) / audit emit 상세는 `session-resume-protocol.md` §Drift 감지 참조.
 4. **Handoff Verification (Handoff = Hypothesis, BL-095 Phase 1)**: session-summary.md를 fact가 아닌 hypothesis로 다룬다. 4a Completed Work 검증 / 4b Open Work 재해석 / 4c Traps 존중 — 절차/게이트/audit emit 상세는 `session-resume-protocol.md` §Handoff Verification 참조.
 5. **in-progress 교차 검증**: Current Stage에 `(in-progress)` 포함 시:
    - 산출물 파일 존재 → 완료 처리 (Checkpoint 실행), 다음 스테이지로.
