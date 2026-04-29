@@ -32,3 +32,16 @@
   | Backend | FastAPI | 카탈로그 권장 + AI/ML 요구사항 |
 - source_priority: CLAUDE.md → 카탈로그 권장 → 업계 기본값
 ```
+
+## audit emit 형식 (devflow-docs/audit.md)
+
+decision-log는 판단 상세를 기록하고, audit.md는 이벤트 marker만 한 줄씩 append한다. plugin 공통 emit 표준 (BL-098, memory-sync 패턴) 준수:
+
+```
+[<ISO timestamp>] auto-mode-invoked | mode=<new|resume> | intent=<short>
+[<ISO timestamp>] auto-mode-stage-completed | stage=<name> | complexity=<level> | auto-approved=true
+[<ISO timestamp>] auto-mode-resume-drift-detected | gap=<short>
+[<ISO timestamp>] auto-mode-escalated | phase=<INCEPTION|CONSTRUCTION> | reason=<short> | retries=<N>
+```
+
+상세 SKILL.md `## State Management` → `### audit emit 형식` 참조.
