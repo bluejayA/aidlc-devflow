@@ -16,6 +16,7 @@
 - **BL-104**: auto-mode auto-fix loop 폐기 시도 → Traps to Avoid 자동 회수 (선택, BL-100~103 머지 후 효과 측정 후 진행) [P2] [#198](https://github.com/bluejayA/aidlc-devflow/issues/198)
 - **BL-105**: auto-mode SKILL.md 길이 관리 — 자기 완결형 원칙 재검토 + 외부 분리. yak shaving 회피 (한도 무한 상향 안티패턴 차단) [P2] [#201](https://github.com/bluejayA/aidlc-devflow/issues/201)
 - **BL-106**: auto-mode skill-reviewer + Codex adversarial 통합 HIGH 5건 fix — skill-reviewer 2건(6항 #2/#3 + Resume 게이트 모순) + Codex 3건(자기완결성 주석 / verify.sh 외부분리 검증 / 참조 깊이 1단계) [P2] [#204](https://github.com/bluejayA/aidlc-devflow/issues/204)
+- **BL-107**: auto-mode 한도 정책 재검토 — BL-106에서 한도 520 sustainable 자리 약함 입증 (여유 0). 추가 외부 분리 vs 한도 미세 상향 vs orchestrator-only 전환 검토 [P2] [#206](https://github.com/bluejayA/aidlc-devflow/issues/206)
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
