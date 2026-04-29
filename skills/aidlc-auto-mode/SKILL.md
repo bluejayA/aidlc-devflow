@@ -409,7 +409,8 @@ plugin 공통 emit 표준(BL-098, memory-sync 패턴) 준수. 상세는 `decisio
 |---|---|---|
 | `auto-mode-invoked` | skill 진입 직후 (Step 1 후) | `mode=new\|resume`, `intent` |
 | `auto-mode-stage-completed` | 매 스테이지 Checkpoint | `stage`, `complexity`, `auto-approved=true` |
-| `auto-mode-resume-drift-detected` | Session Resume drift 감지 시 | `gap` |
+| `auto-mode-resume-drift-detected` | Session Resume Step 3 drift 감지 시 | `gap` |
+| `auto-mode-resume-handoff-verified` | Session Resume Step 4 완료 시 | `completed_work_match`, `traps_count`, `rephrased_count` |
 | `auto-mode-escalated` | 서킷 브레이커 도달/에스컬레이션 | `phase`, `reason`, `retries` |
 
 emit 절차: Read → Edit append (Write 전체 재작성 금지).
@@ -534,10 +535,11 @@ On Activation Step 1에서 재개 선택(A) 시 실행:
      C) 단계별 모드로 전환 (수동 정리)
      ```
    - `auto-mode-invoked` audit emit 시 `mode=resume`, drift 발견 시 `auto-mode-resume-drift-detected | gap=<short>` 추가 emit.
-4. **in-progress 교차 검증**: Current Stage에 `(in-progress)` 포함 시:
+4. **Handoff Verification (Handoff = Hypothesis, BL-095 Phase 1)**: session-summary.md를 fact가 아닌 hypothesis로 다룬다. 4a Completed Work 검증 / 4b Open Work 재해석 / 4c Traps 존중 — 절차/게이트/audit emit 상세는 `session-resume-protocol.md` §Handoff Verification 참조.
+5. **in-progress 교차 검증**: Current Stage에 `(in-progress)` 포함 시:
    - 산출물 파일 존재 → 완료 처리 (Checkpoint 실행), 다음 스테이지로.
    - 산출물 미존재 → 해당 스테이지 처음부터 재실행.
-5. Phase에 따라 해당 플로우 진입:
+6. Phase에 따라 해당 플로우 진입:
    - `INCEPTION` → Phase 1의 해당 스테이지부터 재개.
    - `CONSTRUCTION` → Phase 2의 해당 스테이지부터 재개.
-6. decision-log에 `"session-resumed at [stage]"` 기록.
+7. decision-log에 `"session-resumed at [stage]"` 기록.
