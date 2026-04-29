@@ -14,6 +14,7 @@
 - **BL-102**: auto-mode session-summary 6항(BL-093) + 신규 템플릿 필드(Traps to Avoid / Commit / Last Updated) 자동 기록 [P2] [#196](https://github.com/bluejayA/aidlc-devflow/issues/196)
 - **BL-103**: auto-mode Session Resume Handoff=Hypothesis 검증 절차(BL-095 Phase 1) 추가 [P2] [#197](https://github.com/bluejayA/aidlc-devflow/issues/197)
 - **BL-104**: auto-mode auto-fix loop 폐기 시도 → Traps to Avoid 자동 회수 (선택, BL-100~103 머지 후 효과 측정 후 진행) [P2] [#198](https://github.com/bluejayA/aidlc-devflow/issues/198)
+- **BL-105**: auto-mode SKILL.md 길이 관리 — 자기 완결형 원칙 재검토 + 외부 분리. yak shaving 회피 (한도 무한 상향 안티패턴 차단) [P2] [#201](https://github.com/bluejayA/aidlc-devflow/issues/201)
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
