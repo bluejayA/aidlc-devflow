@@ -376,13 +376,30 @@ C → devflow-state `finished` → 세션 종료.
 
 **1단계 — 기록:** 다음 4개 파일을 순서대로 업데이트:
 1. `devflow-state.md` — Current Stage 갱신 (in-progress 제거), `## Last Updated`를 ISO 8601 timestamp로 갱신
-2. `session-summary.md` — Completed Work에 추가 (`_shared/patterns/session-continuity.md` 템플릿 준수)
+2. `session-summary.md` — 아래 §session-summary 갱신 규칙 준수
 3. `devflow-docs/audit.md` — 아래 §audit emit 형식으로 한 줄 append
 4. `auto-decision-log-[phase].md` — 판단 상세 append
 
 **2단계 — 검증:** `devflow-state.md`를 Read로 열어 Current Stage 값 확인. 불일치 시 즉시 수정.
 
 **3단계 — 진행 메시지:** 사용자에게 다음 스테이지 진행 메시지 표시.
+
+### session-summary 갱신 규칙
+
+baseline은 `_shared/patterns/session-continuity.md` (템플릿 + 6항 작성 규칙 + Traps to Avoid 운영 규칙). auto-mode 특수 규칙만 아래 인라인.
+
+**필수 필드 자동 기록**: `Last Updated` (ISO 8601), `Commit` (`git rev-parse --short HEAD`, Phase 전환·Unit 완료 시 갱신), `Completed Work` (`[x]` + 한 줄 결과), `Key Decisions` (최근 20개), `Next Steps`, `Traps to Avoid` (`(없음)` 기본값, BL-104 적용 전까지), `For Next Session` (에스컬레이션·완료 시점에만).
+
+**6항 규칙(BL-093) 적용 — auto-mode 컨텍스트:**
+
+| # | 규칙 | auto-mode 적용 |
+|---|---|---|
+| 1 | Open Work 상태 서술형 | "X 미구현" (명령형 "X 구현하라" 금지) |
+| 2 | 파일 참조는 라인 번호까지 | code-generation 산출물 인용 시 `path:L<N>-L<M>` |
+| 3 | Traps to Avoid 섹션 | `(없음)` 기본값. BL-104 적용 전까지 auto-fix 폐기는 decision-log에만 |
+| 4 | 검증 지시 포함 | summary 첫 줄에 "이 문서의 주장을 코드/git 상태와 대조해 검증한 후 작업 시작" |
+| 5 | CLAUDE.md 중복 회피 | 첫 줄에 "Read CLAUDE.md first. Do NOT restate" 포함 |
+| 6 | 2K 토큰 상한 (~80-100줄) | 상한 근접 시 Key Decisions / Completed Work 최근 20개 외 삭제 |
 
 ### audit emit 형식
 
