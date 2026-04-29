@@ -9,13 +9,16 @@
 
 ## Next
 
-- **BL-098**: systematic-debugging audit emit 일관성 fix — 2종 prefix(`-invoked` / `-completed`)만. memory-sync 등 다른 skill과 일관 (사용 경험 fix, measurement 인프라 아님). 2026-04-29 scope 축소 [P2] [#191](https://github.com/bluejayA/aidlc-devflow/issues/191)
+- **BL-100**: auto-mode audit emit 포맷 표준화 — BL-098 일관성 적용. `auto-mode-stage-completed | key=value` prefix [P2] [#194](https://github.com/bluejayA/aidlc-devflow/issues/194)
+- **BL-101**: auto-mode state.md advisory 정합 — `## Last Updated` 필드 + Session Resume git log 교차검증 [P2] [#195](https://github.com/bluejayA/aidlc-devflow/issues/195)
+- **BL-102**: auto-mode session-summary 6항(BL-093) + 신규 템플릿 필드(Traps to Avoid / Commit / Last Updated) 자동 기록 [P2] [#196](https://github.com/bluejayA/aidlc-devflow/issues/196)
+- **BL-103**: auto-mode Session Resume Handoff=Hypothesis 검증 절차(BL-095 Phase 1) 추가 [P2] [#197](https://github.com/bluejayA/aidlc-devflow/issues/197)
+- **BL-104**: auto-mode auto-fix loop 폐기 시도 → Traps to Avoid 자동 회수 (선택, BL-100~103 머지 후 효과 측정 후 진행) [P2] [#198](https://github.com/bluejayA/aidlc-devflow/issues/198)
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)
 - **BL-095**: Handoff Strategy: "Handoff = hypothesis" 원칙 명문화 — Phase 1만 (Phase 2는 BL-095b) [P2] [#183](https://github.com/bluejayA/aidlc-devflow/issues/183)
 - **BL-095b**: Handoff Strategy: session-summary verification gate (Phase 2, evidence=산출물 디렉터리+git log) [P2] [#184](https://github.com/bluejayA/aidlc-devflow/issues/184)
-- **BL-097**: `aidlc-pausing-a-session` 스킬 — mid-cycle stop checklist + 3-way sync (`devflow-state.md` / project auto-memory / git log) — `aidlc-finishing-a-development-branch`의 mid-cycle 형제. 5단계 체크리스트 (state 갱신 / memory 정밀 / 인덱스 / audit commit / 3-way verify) + drift 시 commit 거부. `aidlc-using-devflow` Resume Flow에 자동 drift detect 추가. seed=nexttui BL-P2-085 stale recovery (2026-04-28). 별도 BL 후보: `devflow-state.md` gitignore 정책 재검토 [P2] [#189](https://github.com/bluejayA/aidlc-devflow/issues/189)
 
 > **2026-04-29 frame 전환 + BL-097 단순화**: Knowledge System Phase 2 측정 인프라 작업 stop. devflow 가치 검증을 시스템 측정 → 사용 경험 회고로 전환. BL-097(mid-cycle pause)은 정보 분해 분석으로 5단계 → 2단계 자동화 + state.md advisory cache 격하로 단순화 (코드 변경 0). 상세: `memory/user_devflow_focus_shift.md` / `feedback_simple_first_decomposition.md` / `docs/guide/operator-guide.md` §7. Closed: BL-097 (#189) / BL-099 (#192). T+28 routine disabled.
 
