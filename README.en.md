@@ -2,7 +2,7 @@
 
 English | [한국어](README.md)
 
-![version](https://img.shields.io/badge/version-1.9.0-blue)
+![version](https://img.shields.io/badge/version-1.12.0-blue)
 ![skills](https://img.shields.io/badge/skills-28+3_utils-green)
 ![tests](https://img.shields.io/badge/tests-278-brightgreen)
 
@@ -18,6 +18,20 @@ A single orchestrator (`aidlc-using-devflow`) owns and drives the entire lifecyc
 > **Customize** [Operator Guide](docs/guide/operator-guide.md) — Tech catalog, question principles, workflow defaults
 
 > **Architecture** [Architecture](docs/guide/architecture.md) — 3-tier delegation chain, review system, 7 skill patterns
+
+---
+
+## Recent Update
+
+### Mid-cycle Pause Simplification + state.md Advisory Cache (v1.12.0)
+
+Simplified mid-cycle pause operational model. Information decomposition analysis confirmed `devflow-state.md` is a cache derivable from `git log` + `code-plan.md` → **demoted to advisory cache** + **2-step automation** (auto-memory + audit/commit). User update burden removed, drift-tolerant model.
+
+New guide [`docs/guide/memory-templates.md`](docs/guide/memory-templates.md) — best-practice delegation model reference. Each project adopts patterns autonomously per their environment. Plugin provides building blocks only.
+
+`systematic-debugging` audit emit consistency fix (BL-098 #191) — same prefix format (`-invoked` / `-completed`) as other skills.
+
+> **Knowledge System Phase 2 measurement infrastructure work stopped**. Recognized "questions unanswerable within a single plugin's systemization" (time dimension / n=1 / causal separation limits). See [`docs/research/knowledgesystem/redteam-3rd-result.md`](docs/research/knowledgesystem/redteam-3rd-result.md) for decision background. Operator guide: [`docs/guide/operator-guide.md`](docs/guide/operator-guide.md) §7.
 
 ---
 

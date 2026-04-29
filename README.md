@@ -2,7 +2,7 @@
 
 [English](README.en.md) | 한국어
 
-![version](https://img.shields.io/badge/version-1.10.0-blue)
+![version](https://img.shields.io/badge/version-1.12.0-blue)
 ![skills](https://img.shields.io/badge/skills-28+3_utils-green)
 ![tests](https://img.shields.io/badge/tests-273-brightgreen)
 
@@ -25,11 +25,15 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 ## Recent Update
 
-### Knowledge System Phase 1 구현 (v1.10.0)
+### Mid-cycle Pause 단순화 + state.md Advisory Cache (v1.12.0)
 
-지식 시스템 레이어를 도입했습니다 (실험적, 14일 관측 중). audit 자동 누적, `systematic-debugging`의 STORE 자동 발동, 6-type taxonomy 분류 등이 추가되었으며, 사용자 즉각 효용은 제한적이고 진짜 가치는 Phase 2부터 나옵니다.
+mid-cycle pause 운영 모델을 단순화했습니다. 정보 분해 분석 결과 `devflow-state.md`는 `git log` + `code-plan.md`로 derive 가능한 cache임을 확인 → **advisory cache로 격하** + **2단계 자동화** (auto-memory + audit/commit). 사용자 갱신 부담 제거, drift 허용 모델.
 
-자세한 내용·구현 전후 비교·관련 GitHub 이슈는 [`docs/research/knowledgesystem/phase1-overview.md`](docs/research/knowledgesystem/phase1-overview.md)를 참조하세요.
+신규 가이드 [`docs/guide/memory-templates.md`](docs/guide/memory-templates.md) — best practice 위임 모델 reference. 각 프로젝트가 본인 환경에 맞게 패턴을 자율 채택. plugin은 building block만 제공.
+
+`systematic-debugging` audit emit 일관성 추가 (BL-098 #191) — 다른 skill과 동일한 prefix(`-invoked` / `-completed`) 형식.
+
+> **Knowledge System Phase 2 측정 인프라 작업은 stop**. "단일 플러그인에서 시스템화 불가능한 질문" 인식 (시간 차원 / n=1 / 인과 분리 한계). 자세한 결정 배경: [`docs/research/knowledgesystem/redteam-3rd-result.md`](docs/research/knowledgesystem/redteam-3rd-result.md). 운영 가이드: [`docs/guide/operator-guide.md`](docs/guide/operator-guide.md) §7.
 
 ---
 
