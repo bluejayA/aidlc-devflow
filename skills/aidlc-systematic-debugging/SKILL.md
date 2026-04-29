@@ -267,6 +267,54 @@ conventions 표준 형식. 반환 필드:
 
 ---
 
+## audit emit (호출 추적)
+
+skill 호출 시 `devflow-docs/audit.md`에 다음 prefix 두 개를 emit한다. memory-sync 패턴과 동일한 한 줄 형식.
+
+### Prefix 명세
+
+| Prefix | 시점 | required fields |
+|---|---|---|
+| `systematic-debugging-invoked` | skill 진입 (1단계 시작 직전) | `trigger`, `symptom` |
+| `systematic-debugging-completed` | 4단계 완료 (root_cause 확정 + fix 검증) | `root_cause`, `fix_test` |
+
+### 형식
+
+`devflow-docs/audit.md`에 한 줄 append (BL-092 memory-sync와 동일):
+
+```
+[<ISO timestamp>] systematic-debugging-invoked | trigger=<source> | symptom=<short>
+[<ISO timestamp>] systematic-debugging-completed | root_cause=<one-line> | fix_test=<test-name>
+```
+
+### emit 절차 (인라인)
+
+```bash
+TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+echo "[${TS}] systematic-debugging-invoked | trigger=<source> | symptom=<short>" >> devflow-docs/audit.md
+```
+
+또는 Edit tool 호출:
+- Read `devflow-docs/audit.md`
+- Edit append (마지막 줄 뒤에 신규 줄 추가)
+- 절대 Write tool로 전체 재작성 금지 (devflow-audit utility critical rule 준수)
+
+### 호출 경로별 emit
+
+세 경로 모두 동일 emit (skill 본인 책임, caller 별도 emit 안 함):
+
+1. **Orchestrator 경로**: construction-orchestrator K-gate → 진입 직전 `invoked` + 4단계 완료 후 `completed`
+2. **User-invocable 경로**: `/aidlc:aidlc-systematic-debugging` 직접 호출 → 동일
+3. **Debugging chain 경로**: 다른 skill이 인라인 호출 → 동일
+
+> 중단/abort 케이스: 4단계 미완료 시 `completed` emit 안 함. `invoked`만 audit에 남고 STORE도 호출 안 함 (조건 미충족 — 아래 §STORE 호출 참조).
+
+### Why
+
+T2 진단(2026-04-28)에서 systematic-debugging 호출 자체가 audit에 흔적 안 남는 사용 경험 결함 발견 (다른 skill — memory-sync, finishing 등 — 은 emit하는데 본 skill만 누락). BL-098 (#191)로 일관성 fix.
+
+---
+
 ## STORE 호출 (완료 시 guaranteed)
 
 root_cause 확정 + 수정 검증 완료 상태에서 **무조건** `devflow-solutions` STORE 호출.
