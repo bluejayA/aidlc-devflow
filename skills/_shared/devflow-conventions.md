@@ -342,13 +342,13 @@ council 리뷰의 상세 절차 (risk scoring, 프롬프트, 스키마, 충돌 �
 
 ### 현재 적용
 
-| 파일 | 독자 | 포맷 |
-|------|------|------|
-| requirements.md, application-design.md | 사람 + AI | Markdown |
-| session-summary.md | 사람 + AI | Markdown |
-| devflow-state.md | 사람 + AI | Markdown |
-| audit.md | 사람 (디버깅) + AI | Markdown |
-| stage-context.jsonl (예정) | AI 전용 | JSONL |
+| 파일 | 독자 | 포맷 | 역할 |
+|------|------|------|------|
+| requirements.md, application-design.md | 사람 + AI | Markdown | Inception 산출물 (truth source) |
+| session-summary.md | 사람 + AI | Markdown | 세션 요약 |
+| devflow-state.md | 사람 + AI | Markdown | **advisory cache** — `git log` + `code-plan.md`로 derive 가능. stale 허용. truth는 git log + code-plan.md. 사용자가 원할 때 자연 발화로 갱신. |
+| audit.md | 사람 (디버깅) + AI | Markdown | 이벤트 marker (append-only, git tracked) |
+| stage-context.jsonl (예정) | AI 전용 | JSONL | — |
 
 ### 새 산출물 추가 시
 
