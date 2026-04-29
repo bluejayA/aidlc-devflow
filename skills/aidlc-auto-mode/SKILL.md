@@ -108,7 +108,11 @@ A 또는 첫 실행 → Step 4로.
 
    ## Selected Approach
    (pending)
+
+   ## Last Updated
+   <ISO 8601 timestamp>
    ```
+   `## Last Updated`는 post-tool-file-edit hook이 후속 file-edit마다 soft-save하는 필드. 누락 시 hook이 no-op이 되므로 초기화 단계에서 반드시 포함한다.
 3. `auto-decision-log-inception.md` 생성:
    ```markdown
    # Auto Decision Log — INCEPTION
@@ -371,14 +375,27 @@ C → devflow-state `finished` → 세션 종료.
 ### Checkpoint 블록 (매 스테이지 완료 시 반드시 실행)
 
 **1단계 — 기록:** 다음 4개 파일을 순서대로 업데이트:
-1. `devflow-state.md` — Current Stage 갱신 (in-progress 제거)
+1. `devflow-state.md` — Current Stage 갱신 (in-progress 제거), `## Last Updated`를 ISO 8601 timestamp로 갱신
 2. `session-summary.md` — Completed Work에 추가 (`_shared/patterns/session-continuity.md` 템플릿 준수)
-3. `devflow-docs/audit.md` — `[timestamp] [stage] — auto-approved — [이유 1줄]`
+3. `devflow-docs/audit.md` — 아래 §audit emit 형식으로 한 줄 append
 4. `auto-decision-log-[phase].md` — 판단 상세 append
 
 **2단계 — 검증:** `devflow-state.md`를 Read로 열어 Current Stage 값 확인. 불일치 시 즉시 수정.
 
 **3단계 — 진행 메시지:** 사용자에게 다음 스테이지 진행 메시지 표시.
+
+### audit emit 형식
+
+plugin 공통 emit 표준(BL-098, memory-sync 패턴) 준수. 상세는 `decision-log-format.md` §audit emit 참조.
+
+| Prefix | 시점 | fields |
+|---|---|---|
+| `auto-mode-invoked` | skill 진입 직후 (Step 1 후) | `mode=new\|resume`, `intent` |
+| `auto-mode-stage-completed` | 매 스테이지 Checkpoint | `stage`, `complexity`, `auto-approved=true` |
+| `auto-mode-resume-drift-detected` | Session Resume drift 감지 시 | `gap` |
+| `auto-mode-escalated` | 서킷 브레이커 도달/에스컬레이션 | `phase`, `reason`, `retries` |
+
+emit 절차: Read → Edit append (Write 전체 재작성 금지).
 
 ### devflow-state.md 화이트리스트
 
@@ -391,8 +408,13 @@ auto 모드가 기록할 수 있는 필드 (이 목록 외 기록 금지):
 - `## Completed Units` → unit 목록
 - `## Active Unit` → 현재 unit
 - `## Worktree` → branch, path (auto-mode v0.1에서는 worktree 미사용. 향후 확장 시 추가)
+- `## Last Updated` → ISO 8601 timestamp (post-tool-file-edit hook이 자동 soft-save하는 필드. auto-mode도 매 Checkpoint에서 명시 갱신)
 
 auto 전용 메타데이터(auto-fix 횟수, 리뷰 라운드 등)는 auto-decision-log에만 기록.
+
+> **devflow-state.md는 advisory cache** (`_shared/devflow-conventions.md` §파일 포맷).
+> truth source는 git log + 산출물 디렉토리 + code-plan.md. stale 허용.
+> Session Resume 시 git log 교차검증으로 drift를 감지한다 (아래 §Session Resume 참조).
 
 ### decision-log 규칙
 
@@ -480,10 +502,25 @@ On Activation Step 1에서 재개 선택(A) 시 실행:
 
 1. `devflow-state.md` 읽기 — Current Phase, Current Stage 확인.
 2. `session-summary.md` 읽기 — 완료 작업 맥락 복원.
-3. **교차 검증**: Current Stage에 `(in-progress)` 포함 시:
+3. **drift 감지 (state.md ↔ git log 교차검증)**: state.md는 advisory cache이므로 stale 가능성 있음. 다음을 비교:
+   - **산출물 디렉토리**: `devflow-docs/inception/`, `devflow-docs/construction/`의 실제 파일 ↔ state.md `## Approved Stages` / `## Completed Units`
+   - **git log**: `git log --oneline -20`의 commit message 키워드(예: `feat: requirements-analysis`, `feat(unit): X 완료`) ↔ state.md 상태
+   - 불일치 시 사용자 게이트 표시:
+     ```
+     ⚠️ devflow-state.md drift 감지
+
+     state.md 기록: [요약]
+     산출물/git log: [요약]
+
+     A) 산출물 우선 신뢰 (state.md 갱신 후 재개)
+     B) state.md 우선 신뢰 (산출물은 검증용으로만 참조)
+     C) 단계별 모드로 전환 (수동 정리)
+     ```
+   - `auto-mode-invoked` audit emit 시 `mode=resume`, drift 발견 시 `auto-mode-resume-drift-detected | gap=<short>` 추가 emit.
+4. **in-progress 교차 검증**: Current Stage에 `(in-progress)` 포함 시:
    - 산출물 파일 존재 → 완료 처리 (Checkpoint 실행), 다음 스테이지로.
    - 산출물 미존재 → 해당 스테이지 처음부터 재실행.
-4. Phase에 따라 해당 플로우 진입:
+5. Phase에 따라 해당 플로우 진입:
    - `INCEPTION` → Phase 1의 해당 스테이지부터 재개.
    - `CONSTRUCTION` → Phase 2의 해당 스테이지부터 재개.
-5. decision-log에 `"session-resumed at [stage]"` 기록.
+6. decision-log에 `"session-resumed at [stage]"` 기록.

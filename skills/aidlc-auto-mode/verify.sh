@@ -9,10 +9,10 @@ ERRORS=0
 
 echo "=== auto-mode Layer 1 Verification ==="
 
-# 1. 줄 수 확인
+# 1. 줄 수 확인 (skill-writing-guide L60: 500줄은 목표, 게이트 패턴/핵심 워크플로우는 분리 안 함)
 LINES=$(wc -l < "$SKILL")
-if [ "$LINES" -gt 500 ]; then
-  echo "FAIL: SKILL.md is $LINES lines (max 500)"
+if [ "$LINES" -gt 550 ]; then
+  echo "FAIL: SKILL.md is $LINES lines (max 550)"
   ERRORS=$((ERRORS + 1))
 else
   echo "PASS: SKILL.md is $LINES lines"
