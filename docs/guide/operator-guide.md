@@ -308,6 +308,71 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 
 ---
 
+## 7. Mid-cycle pause 정리 (2단계)
+
+devflow 작업을 *finishing 없이 임시 중단*할 때 LLM이 자동 수행하는 2단계 정리. 사용자 부담은 *"잠시 중단" 한 마디 + 승인*뿐.
+
+> **배경**: 한 기능 개발이 여러 phase + 여러 commit + 여러 테스트로 진행되어 finishing 전 mid-cycle 정리 필요성이 base rate 높음. 단 정보 분해 결과 — `devflow-state.md`는 `git log` + `code-plan.md`로 derive 가능한 cache이고 사용자가 갱신을 잊는 게 BL-P2-085 stale의 원인이었으므로, **state.md를 advisory cache로 격하**하고 사용자 갱신 책임을 제거함.
+
+### Trigger
+
+사용자 발언: *"잠시 중단" / "오늘은 여기까지" / "내일 이어서"*. 또는 컨텍스트 임박 / 우선 작업 전환 시.
+
+### 2단계 (LLM 자동 수행 + 사용자 승인)
+
+#### ① auto-memory 갱신 (+ MEMORY.md index 동시)
+
+`~/.claude/projects/<encoded-cwd>/memory/` 의 관련 메모리에 진행 중 정보 갱신:
+- commit hash / test 결과 / resume point / 의사결정 인사이트 / architecture 요점
+- MEMORY.md index 라인의 description도 함께 갱신
+
+> **경계 주의**: `<encoded-cwd>` exact match 디렉토리만. 다중 후보 / 부재 시 skip + audit에 사유 기록.
+
+#### ② audit append + commit
+
+```bash
+TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+echo "[${TS}] session-paused | branch=$(git rev-parse --abbrev-ref HEAD) | head=$(git rev-parse --short HEAD) | resume=<phase>" >> devflow-docs/audit.md
+git add devflow-docs/audit.md
+git commit -m "chore(devflow): mid-cycle pause checkpoint"
+```
+
+### state.md는 건드리지 않음
+
+`devflow-state.md`는 advisory cache. 자동 갱신 안 함. 사용자가 *원할 때*만 자연 발화로 갱신:
+
+- *"state.md에 [내용] 추가해줘"*
+- *"state 정리해줘"* (LLM이 git log + code-plan.md에서 derive 후 작성)
+- *"state.md에 노트 남겨줘 — Phase 4 race condition 의심"*
+
+별도 명령 형식 없음. 형식 / 시점 / 정확성 모두 사용자 자유. 본인의 개인 메모장으로 활용.
+
+### Resume 시점
+
+다음 세션 진입 시 LLM이 truth source를 다음 순서로 확인:
+
+1. **`git log`** — 실제 commit 진행
+2. **`code-plan.md`** — phase / task 정의
+3. **auto-memory** — 의사결정 / 인사이트
+4. (참고) `devflow-state.md` — stale 가능 인정. 1-3과 충돌 시 무시.
+
+state.md drift 발견 시 사용자 게이트 / 자동 reconcile 없음. 그대로 진행.
+
+### 한계 / 주의
+
+- **단계 ②는 git commit 발생** — 사용자 승인 후 진행. unrelated staged 변경이 있으면 안 함.
+- **Inception 단계**: stage-level 자동 hook이 이미 있어서 본 2단계 영향 작음. step-level 정보는 산출물 파일 자체가 truth.
+- **drift 허용 모델**: state.md가 stale해도 git log + code-plan.md로 진실 복원. 의도된 trade-off.
+- 운영하면서 부족한 부분 발견 시 본 가이드 갱신 후보.
+
+### 더 엄격한 정책 / 다른 형식 채택
+
+본 §7은 plugin 기본(advisory cache + 2단계). 더 엄격한 mid-cycle 정책(예: 5단계 strict sync)이나 세션 종료 응답 형식(진행 요약 + 재개 명령 + 다음 작업)을 본인 프로젝트에 적용하고 싶다면:
+
+→ `docs/guide/memory-templates.md` 참조. 패턴별 frontmatter + 본문을 본인 auto-memory에 복사해서 사용. plugin은 강제하지 않음.
+
+---
+
 ## 도움이 필요할 때
 
 | 상황 | 참조 문서 |

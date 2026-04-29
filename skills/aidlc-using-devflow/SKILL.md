@@ -59,6 +59,18 @@ metadata:
      ```
    - `.archive/`도 없으면 안내 없이 Step 3으로 진행 (정상 새 시작)
 
+   **(선택) 운영 패턴 채택 안내** — 첫 진입(`.archive/`도 없는 정상 새 시작) 시 한 번 표시:
+   ```
+   💡 운영 패턴 템플릿 (선택)
+
+   plugin의 `docs/guide/memory-templates.md`에 mid-cycle stop / 세션 종료 응답 형식 등
+   채택 가능한 운영 패턴이 있습니다. 본인 프로젝트 환경에 맞으면 자연 발화로 채택:
+     "memory-templates.md에서 [패턴명]을 내 프로젝트 메모리에 복사해줘"
+
+   강제 안 함. 무시하고 진행해도 됩니다.
+   ```
+   본 안내는 신규 프로젝트 첫 진입 시 1회만 권장. 이미 auto-memory에 운영 패턴이 있거나 사용자가 원하지 않는 신호 시 생략.
+
    **산출물이 있는 경우** → `requirements.md`에서 `## User Intent` 내용과 `**Depth**` 값, `**Timestamp**` 값을 읽어 기존 산출물 처리 게이트를 제시한다. `requirements.md`가 없거나 해당 섹션이 비어 있으면 "(정보 없음)"으로 대체한다:
    ```
    ## 기존 INCEPTION 산출물 발견
