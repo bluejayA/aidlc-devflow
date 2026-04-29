@@ -1,10 +1,11 @@
 #!/bin/bash
 # auto-mode Layer 1 검증 스크립트
-# SKILL.md 수정 후 실행하여 구조적 정합성 확인
+# SKILL.md + 부속 파일 수정 후 실행하여 구조적 정합성 확인
 
 set -euo pipefail
 
 SKILL="skills/aidlc-auto-mode/SKILL.md"
+SKILL_DIR="skills/aidlc-auto-mode"
 ERRORS=0
 
 echo "=== auto-mode Layer 1 Verification ==="
@@ -74,6 +75,47 @@ for SECTION in "INCEPTION 리뷰" "CONSTRUCTION 리뷰" "requesting-code-review"
     echo "PASS: Review section '$SECTION' found"
   else
     echo "FAIL: Review section '$SECTION' missing"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+# 8. 외부 분리 무결성 (BL-105/106 — Codex C-2)
+# 8a. 필수 부속 파일 존재
+for FILE in "$SKILL_DIR/decision-log-format.md" "$SKILL_DIR/session-resume-protocol.md"; do
+  if [ -f "$FILE" ]; then
+    echo "PASS: Required file '$FILE' exists"
+  else
+    echo "FAIL: Required file '$FILE' missing"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+# 8b. 필수 section anchor 존재 (cross-reference 깨짐 검출)
+declare -a ANCHORS=(
+  "$SKILL_DIR/decision-log-format.md:## audit emit 형식"
+  "$SKILL_DIR/session-resume-protocol.md:## Drift 감지"
+  "$SKILL_DIR/session-resume-protocol.md:## Handoff Verification"
+)
+for SPEC in "${ANCHORS[@]}"; do
+  FILE="${SPEC%%:*}"
+  ANCHOR="${SPEC#*:}"
+  if [ -f "$FILE" ] && grep -qF "$ANCHOR" "$FILE"; then
+    echo "PASS: Anchor '$ANCHOR' in $(basename "$FILE")"
+  else
+    echo "FAIL: Anchor '$ANCHOR' missing in $FILE"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+# 8c. 참조 깊이 1단계 가드 (BL-106 Codex C-3)
+# 부속 파일이 다른 부속 파일을 참조하지 않아야 함 (skill-writing-guide L55)
+for FILE in "$SKILL_DIR/decision-log-format.md" "$SKILL_DIR/session-resume-protocol.md"; do
+  [ -f "$FILE" ] || continue
+  OTHER_DEPS=$(grep -oE "(decision-log-format\.md|session-resume-protocol\.md)" "$FILE" | grep -v "$(basename "$FILE")" | sort -u || true)
+  if [ -z "$OTHER_DEPS" ]; then
+    echo "PASS: $(basename "$FILE") respects 1-level reference depth"
+  else
+    echo "FAIL: $(basename "$FILE") references other supplementary files: $OTHER_DEPS"
     ERRORS=$((ERRORS + 1))
   fi
 done

@@ -17,9 +17,8 @@ metadata:
 
 # aidlc-auto-mode
 
-<!-- 출력 언어: 한국어 (Korean) -->
-<!-- 초보자용 완전 자동 devflow. greenfield 전용. 단일 파일 자기 완결형. -->
-<!-- 기존 devflow SKILL.md 무수정. stage 스킬 재활용. -->
+<!-- 출력 언어: 한국어. 초보자용 완전 자동 devflow, greenfield 전용. 기존 devflow SKILL.md 무수정, stage 스킬 재활용. -->
+<!-- BL-105 정책: happy path는 자기 완결, 비정상 경로(재개·audit·6항)는 baseline + 부속 파일 위임. 필수 참조는 §On Activation 표. -->
 
 ## Trigger
 
@@ -45,6 +44,19 @@ user: "자동 모드로 로그인이 있는 블로그 만들어줘"
 | "이거 아닌데요" — 결과가 기대와 다를 때 | 다음 요청에서 구체적으로 무엇이 다른지 설명하면 auto 모드로 재진행 |
 
 ## On Activation
+
+### 필수 참조 (BL-105 정책)
+
+happy path는 본 SKILL.md 자기 완결. 비정상 경로 부속 파일/baseline 필수:
+
+| 경로 | 필수 참조 |
+|---|---|
+| audit emit (5종 prefix) | `decision-log-format.md` §audit emit |
+| Session Resume Step 3-4 | `session-resume-protocol.md` |
+| session-summary 6항 / Traps / 템플릿 | `_shared/patterns/session-continuity.md` |
+| state.md advisory 정책 | `_shared/devflow-conventions.md` §파일 포맷 |
+
+미로드 시 fallback: emit/Resume 차단(미추정), 6항 #2/#3은 누락 안내 후 진행.
 
 ### Step 1: 세션 감지
 
@@ -250,7 +262,7 @@ B → 수정 반영 후 requirements-analysis UPDATE 재호출.
   수정 후 전체 5개 re-dispatch. 최대 3라운드.
 - 3라운드 초과 → 사용자 에스컬레이션 (Error Handling 참조).
 
-### 사용자 확인 게이트 (유일한 게이트)
+### 사용자 확인 게이트 (신규 진행 시 유일. Resume 시 추가 게이트는 `session-resume-protocol.md` Step 3 drift / 4a/4c)
 
 일상 언어로 요약 + Claude 자율 판단 하이라이트:
 
@@ -388,7 +400,7 @@ C → devflow-state `finished` → 세션 종료.
 
 baseline은 `_shared/patterns/session-continuity.md` §템플릿 + §작성 규칙 6항(BL-093) + §Traps to Avoid 운영 규칙. auto-mode 특수 규칙:
 - **필수 필드 자동 기록**: `Last Updated` (ISO 8601), `Commit` (`git rev-parse --short HEAD`, Phase 전환·Unit 완료 시), `Traps to Avoid` (`(없음)` 기본값, BL-104 적용 전까지), `For Next Session` (에스컬레이션·완료 시점에만)
-- **자동 진행 모드 정합**: 6항 #1(Open Work 상태 서술형) + #6(2K 상한 — Key Decisions/Completed Work 최근 20개 외 삭제) 자동 적용. #4(검증 지시) + #5(CLAUDE.md 중복 회피) 첫 줄 포함
+- **6항 적용 책임**: #1(Open Work 상태 서술형) + #6(2K 상한 — Key Decisions/Completed Work 최근 20개 외 삭제) 자동 적용. #4(검증 지시) + #5(CLAUDE.md 중복 회피) 첫 줄 포함. **#2(파일 참조 라인 번호 `path:L<N>-L<M>`) + #3(Traps 섹션 명시)는 baseline 그대로 따름** — auto-mode가 재서술하지 않으므로 매 Checkpoint 직전 baseline 참조 필수
 
 ### audit emit 형식
 
@@ -409,9 +421,7 @@ auto 모드가 기록할 수 있는 필드 (이 목록 외 기록 금지):
 
 auto 전용 메타데이터(auto-fix 횟수, 리뷰 라운드 등)는 auto-decision-log에만 기록.
 
-> **devflow-state.md는 advisory cache** (`_shared/devflow-conventions.md` §파일 포맷).
-> truth source는 git log + 산출물 디렉토리 + code-plan.md. stale 허용.
-> Session Resume 시 git log 교차검증으로 drift를 감지한다 (아래 §Session Resume 참조).
+> **devflow-state.md는 advisory cache** (truth = git log + 산출물 + code-plan.md, stale 허용. drift 감지 §Session Resume / `_shared/devflow-conventions.md` §파일 포맷).
 
 ### decision-log 규칙
 

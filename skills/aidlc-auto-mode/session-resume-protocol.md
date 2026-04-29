@@ -24,7 +24,7 @@ C) 단계별 모드로 전환 (수동 정리)
 
 ### Audit Emit
 
-`auto-mode-invoked` audit emit 시 `mode=resume`, drift 발견 시 `auto-mode-resume-drift-detected | gap=<short>` 추가 emit (`decision-log-format.md` §audit emit 참조).
+Resume 진입 시 `auto-mode-invoked | mode=resume | intent=<short>` emit. drift 발견 시 (게이트 결과 무관) `auto-mode-resume-drift-detected | gap=<short>` 즉시 추가 emit. emit은 Read → Edit append 절차 (Write 전체 재작성 금지).
 
 ## Handoff Verification (Step 4)
 
