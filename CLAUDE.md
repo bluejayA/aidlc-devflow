@@ -1,5 +1,22 @@
 # aidlc-devflow 프로젝트 규칙
 
+## 정체성 (2026-05-12 확정)
+
+**Jay's personal AI workflow plugin — 1인용 sharpening 노선.**
+
+- 팀용 진화 야망 폐기. 다른 사용자도 자유 사용 가능하나 design target은 Jay 본인의 사용 패턴
+- 다음 작업 frame: 30+ 스킬을 본인 사용 패턴에 맞춰 sharpen, cull은 측정 데이터 누적 후
+- 두 차례 adversarial audit(mattpocock 비교, AIDLC self-audit, agent-council Gemini) 결과로 도달한 자가 진단
+
+## Claude와 협업 시 over-engineering 회피 룰
+
+세션이 누적되며 Claude 추천이 점진적으로 "이상적 시스템" 방향으로 부풀어오르는 패턴이 관측됨 (Phase 2 측정 stop, BL backlog 누적의 진짜 원인 — 2026-05-12 self-diagnosis). 점진적 누적이라 자가 감지 어려움. 명시 룰로 가드:
+
+1. **새 스킬/패턴/BL 추가 욕구는 yak shaving 의심 신호** — 추가 전 "Jay 실제 페인포인트인가 / Claude가 짠 이상적 답인가" 분리 점검
+2. **"이상적 목표" 추천 거부** — Claude가 제시하는 시스템화/일반화/추상화 추천은 1인용 frame에서 대부분 불필요. 직전 세션 컨텍스트가 다음 세션 추천을 ride하는 패턴 인지
+3. **분기별 본인 audit 필수** — 누적 over-engineering은 점진적이라 정기 자가 검토 외 catch 불가
+4. **측정 인프라 작업 제안 금지** — 사용자가 명시 요청 안 하면 enrichment 안 함 (`user_devflow_focus_shift.md` 원칙 유지)
+
 ## GitHub Flow (필수)
 
 ### gh CLI 사용
