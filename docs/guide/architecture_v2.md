@@ -14,7 +14,6 @@ graph TB
     HOOK --> ROUTE{"트리거 분기"}
 
     ROUTE -->|"개발 요청"| ENTRY["aidlc-using-devflow<br/>Entry Orchestrator"]
-    ROUTE -->|"'auto/자동' 명시"| AUTO["aidlc-auto-mode<br/>(옵트인, 분리 가능)"]
     ROUTE -->|"독립 호출"| INDEP["aidlc-brainstorming<br/>aidlc-systematic-debugging<br/>aidlc-test-driven-development<br/>etc."]
 
     ENTRY --> PHASE["Phase Orchestrators<br/>INCEPTION / CONSTRUCTION"]
@@ -26,7 +25,6 @@ graph TB
     POST -.->|"## Last Updated만 soft-save"| STATE["devflow-state.md<br/>(advisory cache)"]
 
     style ENTRY fill:#4a90d9,color:#fff
-    style AUTO fill:#9b59b6,color:#fff
     style PHASE fill:#7ab648,color:#fff
     style STAGE fill:#f5a623,color:#fff
     style REVIEW fill:#9b59b6,color:#fff
@@ -324,7 +322,7 @@ session-summary의 모든 주장은 **검증 대상 가설**로 전달된다. �
 - 구조 섹션(`## Current Phase` 등)은 스킬 전용 쓰기 권한.
 - 자연 발화 시에만 갱신 (mid-cycle pause 2단계 자동화).
 
-상세: `_shared/patterns/session-continuity.md`, `skills/aidlc-auto-mode/session-resume-protocol.md`
+상세: `_shared/patterns/session-continuity.md`
 
 ---
 
@@ -373,10 +371,9 @@ graph TD
 |------|------|----------|
 | **R1** | Claude 단일 리뷰어 순차 dispatch | Minimal/Standard 기본 |
 | **R2** | Council (Claude + Codex) | 사용자 명시 시 |
-| **R3** | Agent Teams (다수 협업 리뷰) | Comprehensive + 고복잡 |
 | **Ra** | 자동 — Distrust by Default 기본 동작 | Standard 이상 |
 
-**핵심**: 4-stage(관점)와 R-mode(모델 다양성)는 직교 차원. R2/R3에서도 4-stage 관점은 유지.
+**핵심**: 4-stage(관점)와 R-mode(모델 다양성)는 직교 차원. R2에서도 4-stage 관점은 유지.
 
 ### 7.3 12 리뷰어 프롬프트
 
@@ -391,7 +388,7 @@ graph TD
 | `maintainability-reviewer-prompt.md` | 유지보수성 | requesting-code-review Stage 4 |
 | `code-reviewer-prompt.md` | Spec + Quality 통합 | construction-orchestrator |
 | `code-plan-reviewer-prompt.md` | 코드 계획 | code-generation PART 1 |
-| `council-review-protocol.md` | Council/Teams 프로토콜 | requesting-code-review R2/R3 |
+| `council-review-protocol.md` | Council 프로토콜 | requesting-code-review R2 |
 | `implementer-prompt.md` | 서브에이전트 구현자 | subagent-driven-development |
 
 > `skill-reviewer-prompt.md`는 v1.14.0에서 `skill-forge` 플러그인으로 분리되었습니다.
@@ -401,7 +398,6 @@ graph TD
 | 설정 | 기본값 | 비고 |
 |------|--------|------|
 | 개별 리뷰어 타임아웃 | 300초 | "타임아웃 600초로" 자유 발화로 세션별 조정 |
-| R3 팀 전체 타임아웃 | 600초 | |
 | 리뷰 루프 max retry | 5회 | 초과 시 사용자 escalate |
 
 상세: `_shared/devflow-conventions.md` §리뷰 규약, `_shared/reviewers/council-review-protocol.md`
@@ -476,7 +472,7 @@ graph LR
 - 정합성 fix는 외부 분리로 처리 ("한도 무한 상향" 안티패턴 차단).
 - **참조 깊이 1단계**: 부속 파일끼리 다시 cross-reference 금지 → `verify.sh` 8c가 정적 가드.
 
-상세: `skills/aidlc-auto-mode/SKILL.md`, [`docs/guide/auto-mode-guide.md`](auto-mode-guide.md)
+상세: `_archive/skills/aidlc-auto-mode/SKILL.md`, `_archive/docs/guide/auto-mode-guide.md` (auto-mode는 별도 plugin 분리 예정으로 archive됨, 외부 분리 패턴 자체는 유효).
 
 ---
 
@@ -591,7 +587,6 @@ graph TD
 | `aidlc-construction-orchestrator` | 24 (3 steps, 5 gates, 1 interrupt, 3 state-updates) |
 | `aidlc-using-devflow` | 6 (resume-rules + 3 state-updates) |
 | `aidlc-finishing-a-development-branch` | 3 state-updates (옵션 A/B/D) |
-| `aidlc-auto-mode` | audit-emit 5 prefixes + Drift 가드 |
 | `aidlc-systematic-debugging` | audit-emit 일관 prefix (BL-098) |
 
 ### 10.3 273 테스트 구성
@@ -606,7 +601,6 @@ graph TD
 | Verification | `test_verification_contract.py` | Verification Contract + Self-Healing |
 | 정량 루브릭 | `test_quantitative_rubric.py` | 루브릭 점수 계산 |
 | Solutions | `test_devflow_solutions.py` | Knowledge Compounding |
-| Agent Teams | `test_agent_teams_review.py` | R3 협업 리뷰 |
 | Memory Sync | `test_memory_sync_reconciliation.py` | auto-memory ↔ devflow-docs sync |
 | Self-Review | `test_self_review_checklist.py` | INCEPTION 셀프리뷰 |
 | Hook | `test_session_start_hook.py`, `verify-hook-behavioral.sh` | SessionStart + PostToolUse |
@@ -667,9 +661,7 @@ devflow-docs/
 ├── backlog.md                   # 백로그 (Next/Open/Someday)
 ├── session-summary.md           # 세션 요약 (6항 작성 규칙 + Traps)
 ├── devflow-state.md             # 현재 상태 (advisory cache, @resume-rules 참조)
-├── audit.md                     # append-only 로그 (ISO8601)
-├── auto-decision-log-inception.md      # auto-mode 자율 판단 (INCEPTION)
-└── auto-decision-log-construction.md   # auto-mode 자율 판단 (CONSTRUCTION)
+└── audit.md                     # append-only 로그 (ISO8601)
 ```
 
 ### 12.1 파일 책임 분담
@@ -678,10 +670,9 @@ devflow-docs/
 |------|--------|--------|------|
 | `inception/*.md`, `construction/*.md` | 각 stage skill | orchestrator + 다음 stage | 강제 생성 |
 | `audit.md` | post-tool-file-edit hook + skill emit | 사람 / 사후 분석 | append-only |
-| `devflow-state.md` (구조) | skill (using-devflow, auto-mode 등) | orchestrator @resume-rules | advisory cache |
+| `devflow-state.md` (구조) | skill (using-devflow 등) | orchestrator @resume-rules | advisory cache |
 | `devflow-state.md` (`## Last Updated`) | hook (soft-save) | (timestamp drift 수용) | race-free |
 | `session-summary.md` | stage skill (조기 업데이트 + 게이트 승인 후) | 다음 세션 (검증 대상) | Handoff = Hypothesis |
-| `auto-decision-log-*.md` | aidlc-auto-mode | aidlc-auto-mode (재개) | 5종 prefix |
 
 ---
 
@@ -692,11 +683,6 @@ skills/
 ├── aidlc-using-devflow/             ← Entry Orchestrator
 ├── aidlc-inception-orchestrator/    ← Phase Orchestrator
 ├── aidlc-construction-orchestrator/
-├── aidlc-auto-mode/                 ← 옵트인 (외부 분리: 3 files)
-│   ├── SKILL.md (520줄)
-│   ├── decision-log-format.md
-│   ├── session-resume-protocol.md
-│   └── verify.sh                    ← 8 검증 카테고리 (8a/8b/8c 외부 분리 무결성)
 ├── aidlc-*/                         ← 25 stage/quality skills
 ├── _shared/
 │   ├── devflow-conventions.md       ← 전체 규약
@@ -731,7 +717,6 @@ tests/
 ├── conftest.py                      ← pytest fixtures
 ├── graph/                           ← 파서 출력 JSON
 ├── scenarios/                       ← L2 YAML 시나리오 (인터럽트 포함)
-├── eval-scenarios/                  ← Layer 2 행동 eval (auto-mode 3건)
 ├── test_*.py                        ← L1/L2/L3 + 기능별 검증 14개
 ├── verify-change-{1..6}.sh          ← Knowledge System Phase 1 검증
 └── verify-hook-behavioral.sh        ← Hook 동작 검증
@@ -741,7 +726,6 @@ docs/
 │   ├── how-it-works.md              ← 비기술 청중용
 │   ├── user-guide.md                ← 사용법
 │   ├── operator-guide.md            ← 커스터마이즈
-│   ├── auto-mode-guide.md           ← Auto Mode 사용법
 │   ├── memory-templates.md          ← best practice 위임 reference
 │   ├── architecture.md → v2.md      ← 본 문서
 │   ├── architecture_v1.md           ← 이전 버전
@@ -833,15 +817,15 @@ graph LR
 
 | 영역 | v1 | v2 |
 |------|----|----|
-| 스킬 수 | 27 | 28 + 3 utils (auto-mode 추가) |
+| 스킬 수 | 27 | 27 + 3 utils (auto-mode archive로 분리 예정) |
 | Hook | SessionStart 1개 | SessionStart + PostToolUse 2개 |
 | 테스트 | 95 (Phase 2) | 273 |
 | 게이트 | 6 패턴 | 6 패턴 + **3등급 분류** (자동/경량/정식) |
-| 리뷰 | 4-stage 단일축 | 4-stage × R-mode (R1/R2/R3/Ra) **직교** |
+| 리뷰 | 4-stage 단일축 | 4-stage × R-mode (R1/R2/Ra) **직교** |
 | 외부 AI | Codex + Gemini | Codex 단일 (Gemini 운영 중단) |
 | Brownfield | 분석 강화 | + **Stub Scan/잔존 검증** |
 | Knowledge System | (미정) | **6-type taxonomy + L1 ingest hook** |
-| Auto Mode | (없음) | **단일 SKILL.md + 외부 분리 패턴** |
+| Auto Mode | (없음) | **단일 SKILL.md + 외부 분리 패턴** (별도 plugin 분리 예정, `_archive/` 보관) |
 | Handoff | session-summary 존재 | **6항 작성 규칙 + Handoff=Hypothesis + Traps** |
 | state.md | 권위적 SSoT | **advisory cache** (derive from git log) |
 | Mid-cycle pause | 5단계 | **2단계 자동화** (정보 분해 압축) |
@@ -858,7 +842,6 @@ graph LR
 | [`docs/guide/how-it-works.md`](how-it-works.md) | 비기술 청중용 흐름 설명 |
 | [`docs/guide/user-guide.md`](user-guide.md) | 사용법 |
 | [`docs/guide/operator-guide.md`](operator-guide.md) | 커스터마이즈 |
-| [`docs/guide/auto-mode-guide.md`](auto-mode-guide.md) | Auto Mode 사용법 |
 | [`docs/guide/memory-templates.md`](memory-templates.md) | mid-cycle pause / 세션 종료 패턴 |
 | [`docs/guide/architecture_v1.md`](architecture_v1.md) | 이전 아키텍처 (v1.7 이전) |
 | [`docs/research/2026-05-06-aidlc-evolution-workshop.md`](../research/2026-05-06-aidlc-evolution-workshop.md) | 7주 진화 타임라인 14 phase |

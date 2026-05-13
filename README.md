@@ -13,8 +13,6 @@ AI-DLC 방법론을 **오케스트레이터 중심 아키텍처**로 구현한 C
 
 > **처음이신가요?** 👉 [AIDLC와 함께 개발하기](docs/guide/how-it-works.md) — 기술 용어 없이 전체 흐름을 쉽게 설명합니다.
 
-> **초보자라면?** 👉 [Auto Mode 가이드](docs/guide/auto-mode-guide.md) — 요구사항만 입력하면 설계부터 코드까지 자동 완성
-
 > **사용법** 👉 [사용자 가이드](docs/guide/user-guide.md) — 시작, 질문 방식, 게이트, 독립 스킬 사용법
 
 > **커스터마이즈** 👉 [운영자 가이드](docs/guide/operator-guide.md) — 기술 카탈로그, 질문 원칙, 워크플로우 기본값 조정
@@ -44,10 +42,6 @@ mid-cycle pause 운영 모델을 단순화했습니다. 정보 분해 분석 결
 
 오케스트레이터가 Stage Routing Table에 따라 전체 라이프사이클을 순차적으로 구동합니다.
 각 stage 완료 후 오케스트레이터가 직접 승인 게이트를 제시합니다. Stage skill은 실행 결과만 반환하고 즉시 종료합니다.
-
-### Auto Mode (초보자용)
-
-"auto 모드로 만들어줘"라고 요청하면 `aidlc-auto-mode`가 활성화됩니다. 설계부터 코드 생성, 빌드/테스트까지 Claude가 자율적으로 진행하며, 각 flow 종료 시 멀티에이전트 리뷰를 필수로 거칩니다. INCEPTION 완료 후 한 번만 사용자 확인을 받고, 이후는 최종 결과물까지 자동 진행합니다. 자세한 내용은 [Auto Mode 가이드](docs/guide/auto-mode-guide.md)를 참조하세요.
 
 ---
 
@@ -104,12 +98,6 @@ mid-cycle pause 운영 모델을 단순화했습니다. 정보 분해 분석 결
 | `aidlc-subagent-driven-development` | 태스크별 서브에이전트 실행 + 2단계 리뷰 (spec → quality) |
 | `aidlc-superpowers-tracking` | 세션 스킬 사용 추적 + 워크플로우 개선 인사이트 |
 
-### Auto Mode
-
-| Skill | 역할 |
-|-------|------|
-| `aidlc-auto-mode` | 초보자용 완전 자동 devflow. greenfield 전용. INCEPTION→CONSTRUCTION→BUILD를 자동 진행하며 멀티에이전트 리뷰 필수 |
-
 ### 개발 품질 도구
 
 | Skill | 역할 |
@@ -117,7 +105,7 @@ mid-cycle pause 운영 모델을 단순화했습니다. 정보 분해 분석 결
 | `aidlc-systematic-debugging` | 버그/실패 발생 시 근본 원인 조사 강제 + 실패 이력 분석 |
 | `aidlc-verification-before-completion` | 완료 선언 전 실제 검증 명령 실행 강제 + 회귀 테스트 RED-GREEN 검증 |
 | `aidlc-finishing-a-development-branch` | 개발 완료 후 병합/PR/유지/폐기 처리 |
-| `aidlc-requesting-code-review` | 4-stage 코드 리뷰 요청 (R1 단일/R2 Council/R3 Agent Teams/Ra 자동). Distrust by Default. 리뷰 로직의 Single Source of Truth |
+| `aidlc-requesting-code-review` | 4-stage 코드 리뷰 요청 (R1 단일/R2 Council/Ra 자동). Distrust by Default. 리뷰 로직의 Single Source of Truth |
 | `aidlc-receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
 | `aidlc-dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
 
@@ -187,9 +175,7 @@ devflow-docs/
 ├── backlog.md              # 백로그 (Next/Open/Someday 3단계)
 ├── session-summary.md      # 세션 요약 (재개 시 맥락 복원)
 ├── devflow-state.md        # 현재 단계 상태 (세션 재개용, @resume-rules 참조)
-├── audit.md                # 전체 상호작용 로그 (append-only)
-├── auto-decision-log-inception.md     # (auto-mode) INCEPTION 자율 판단 로그
-└── auto-decision-log-construction.md  # (auto-mode) CONSTRUCTION 자율 판단 로그
+└── audit.md                # 전체 상호작용 로그 (append-only)
 ```
 
 ---
