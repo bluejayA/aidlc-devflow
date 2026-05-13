@@ -1,6 +1,6 @@
 ---
 type: pattern
-applies_to: [aidlc-auto-mode, aidlc-inception-orchestrator, aidlc-construction-orchestrator]
+applies_to: [aidlc-inception-orchestrator, aidlc-construction-orchestrator]
 status: active
 source: manual
 last_validated: 2026-04-13

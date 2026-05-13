@@ -1,6 +1,6 @@
 ---
 type: pattern
-applies_to: [aidlc-requirements-analysis, aidlc-auto-mode]
+applies_to: [aidlc-requirements-analysis]
 status: active
 source: manual
 last_validated: 2026-04-13

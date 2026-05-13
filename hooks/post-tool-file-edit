@@ -5,7 +5,7 @@
 # Race condition 방지 제약:
 # - 이 hook은 '## Last Updated' heading 값만 수정한다.
 # - 구조 섹션 (## Current Phase, ## Current Stage, ## Worktree, ## WIP 등) 절대 건드리지 않음.
-# - 구조 변경은 skill(using-devflow, auto-mode 등)의 책임.
+# - 구조 변경은 skill(using-devflow 등)의 책임.
 # - 동일 세션 내 동시성은 Claude Code가 단일 스레드로 보장.
 #   다중 세션 동시 Last Updated 경합은 timestamp drift만 발생 (수용).
 

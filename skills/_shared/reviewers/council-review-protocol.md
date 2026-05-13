@@ -132,14 +132,12 @@ council-full과 동일하되, 사용자가 선택한 외부 AI 1개만 참여:
 
 > **4-stage와 Council의 관계**: 4-stage는 "무엇을 볼 것인가"(관점 커버리지), Council은 "누가 볼 것인가"(다모델 편향 보완). 두 차원은 직교한다. Council 모드에서도 4-stage 관점은 그대로 적용되며, Council이 바꾸는 것은 각 Stage의 실행 주체이다.
 >
-> | Stage | single (R1) | council (R2) | teams (R3) |
-> |-------|-------------|--------------|------------|
-> | Stage 1 (Spec) | Claude 서브에이전트 | Claude 서브에이전트 (변경 없음) | Claude 서브에이전트 (변경 없음) |
-> | Stage 2 (Quality) | Claude 서브에이전트 | Claude 의장 + 외부 AI | Agent Teams 병렬 리뷰 |
-> | Stage 3 (Security) | Claude 서브에이전트 | Claude 의장 + 외부 AI | Agent Teams 병렬 리뷰 |
-> | Stage 4 (Maintainability) | Claude 서브에이전트 | Claude 의장 + 외부 AI | Agent Teams 병렬 리뷰 |
->
-> R3(Agent Teams)의 상세 절차는 `_shared/patterns/review-team-protocol.md` 참조.
+> | Stage | single (R1) | council (R2) |
+> |-------|-------------|--------------|
+> | Stage 1 (Spec) | Claude 서브에이전트 | Claude 서브에이전트 (변경 없음) |
+> | Stage 2 (Quality) | Claude 서브에이전트 | Claude 의장 + 외부 AI |
+> | Stage 3 (Security) | Claude 서브에이전트 | Claude 의장 + 외부 AI |
+> | Stage 4 (Maintainability) | Claude 서브에이전트 | Claude 의장 + 외부 AI |
 >
 > Stage 1은 요구사항 대조(사실 확인)라 외부 AI 없이도 충분. Stage 2-4는 판단적 리뷰라 다모델 관점이 가치가 있다.
 

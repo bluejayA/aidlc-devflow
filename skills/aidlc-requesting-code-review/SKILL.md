@@ -60,15 +60,12 @@ depth에 따라 3-stage (Standard) 또는 4-stage (Comprehensive) code review를
 리뷰 모드:
 R1) 단일 리뷰 (3-stage Standard / 4-stage Comprehensive) ← 기본
 R2) Council 리뷰
-R3) Agent Teams 협업 리뷰 (리뷰어 간 소통 기반)
 Ra) 자동 선택 (risk score 기반)
 ```
 
 **R1 선택**: Stage 1 → Stage 2 → Stage 3 → Stage 4 (기존 동작 그대로)
 
 **R2/Ra 선택**: Council 리뷰로 진행
-
-**R3 선택**: Agent Teams 리뷰로 진행
 
 ---
 
@@ -181,43 +178,6 @@ R2 또는 Ra 선택 시, 4-stage 관점을 외부 AI와 함께 실행한다.
 
 ---
 
-### R3 흐름: Agent Teams 리뷰
-
-R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 협업 리뷰를 수행한다.
-
-> **R1과 R3의 차이**: R1은 각 리뷰어가 독립 실행 후 결과만 수집. R3은 리뷰어 간 발견 사항을 공유하여 중복 제거, 크로스 커팅 이슈 발견이 가능하다.
-
-1. `_shared/patterns/review-team-protocol.md` 읽기
-2. **Stage 1 (Spec Compliance)**: spec/plan 제공 시 서브에이전트로 실행 (R1과 동일)
-   - 요구사항 대조는 사실 확인이므로 팀 협업 불필요
-3. **Stage 2-4를 Agent Teams로 실행**:
-   - TeamCreate → 리뷰 팀 생성
-   - depth에 따라 리뷰어 spawn (Explore 타입):
-     - Standard: quality-reviewer + security-reviewer (+ spec-reviewer if spec 제공)
-     - Comprehensive: + maintainability-reviewer
-   - 리뷰어들이 병렬로 리뷰 수행 + SendMessage로 발견 사항 공유
-   - 팀 리드가 모든 결과 수신 후 종합 (결과 반환 형식으로 변환)
-   - TeamDelete로 팀 정리
-   - **이슈 수정 루프**: FAIL 또는 CONDITIONAL 판정 시 수정 후 팀 재생성하여 re-review (최대 5회, 초과 시 사용자 escalate — R1과 동일 제한)
-4. **종합 결과를 사용자에게 표시 + 승인 대기**:
-   ```
-   [Agent Teams Code Review 결과]
-   Verdict: [PASS | CONDITIONAL | FAIL]
-   Cross-cutting Issues: [리뷰어 간 소통에서 도출된 교차 이슈]
-   Issues: [분류별 목록]
-
-   A) 리뷰 반영하여 수정
-   B) 현재 상태로 승인
-   ```
-5. 결과를 결과 반환 형식으로 반환 (teams 모드 표시 추가)
-
-**에러 핸들링**:
-- TeamCreate 실패 → "Agent Teams를 사용할 수 없습니다. R1으로 전환합니다." 안내 후 R1 흐름으로 자동 전환
-- Agent spawn 실패 (일부 리뷰어) → 성공한 리뷰어 결과만 종합 + 실패한 관점은 "⏭ 스킵 (spawn 실패)" 표시
-- 전체 Agent spawn 실패 → R1 fallback
-
----
-
 ### 결과 반환
 
 각 Stage의 리뷰어는 `_shared/patterns/review-feedback-schema.md`의 출력 포맷을 따른다. Synthesis는 개별 Verdict를 worst-of 로직으로 집계한다.
@@ -241,7 +201,7 @@ R3 선택 시, 리뷰어들이 Agent Teams로 팀을 구성하여 소통 기반 
 
 | 모드 | 트리거 | spec/plan | depth | 리뷰 모드 |
 |------|--------|-----------|-------|----------|
-| **Standalone** | 사용자 직접 호출 | 사용자 지정 (없으면 Stage 1 스킵) | 사용자 지정 또는 Standard | 사용자 선택 (R1/R2/R3/Ra) |
+| **Standalone** | 사용자 직접 호출 | 사용자 지정 (없으면 Stage 1 스킵) | 사용자 지정 또는 Standard | 사용자 선택 (R1/R2/Ra) |
 | **SDD** | 태스크 완료 후 자동 | 태스크의 spec/plan 경로 | plan Complexity 연동 | R1 (기본값 고정) |
 
 SDD에서 호출 시, SDD가 리뷰 대상(변경 파일)과 spec/plan 경로를 전달한다. 리뷰 모드는 항상 R1 — 팀/Council 모드는 사용자 명시 선택 시에만.
@@ -313,25 +273,6 @@ SDD: 태스크 3 완료, requesting-code-review 호출
   → maintainability-reviewer → PASS
 → 수정 후 Stage 3 재리뷰 → PASS
 → Verdict: PASS / Recommendations 1건
-```
-
-### Example 4: Agent Teams 협업 리뷰 (Standard)
-
-```
-사용자: "팀 리뷰로 해줘" (R3 선택)
-
-[depth: Standard, spec 미제공]
-→ TeamCreate: "code-review-auth"
-→ Agent spawn (Explore):
-  - quality-reviewer: 코드 품질 분석 시작
-  - security-reviewer: 보안 분석 시작
-→ quality-reviewer → security-reviewer DM: "입력 검증 누락 발견 (auth.py:42)"
-→ security-reviewer: DM 반영하여 injection 경로 추가 분석
-→ 결과 종합:
-  - Cross-cutting: 입력 검증 누락이 품질+보안 모두에 영향
-  - Issues: Important 2건 (중복 제거됨, 원래 3건)
-→ TeamDelete
-→ Verdict: CONDITIONAL / Important 2건
 ```
 
 ---
