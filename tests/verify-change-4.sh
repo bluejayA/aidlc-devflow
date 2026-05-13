@@ -17,11 +17,11 @@ if [ -n "$MISSING_LIFECYCLE" ]; then
   exit 1
 fi
 
-# 2. compensation + hybrid 15개에 model_dependency 필수
+# 2. compensation + hybrid 14개에 model_dependency 필수
 COMP_HYBRID=(
   aidlc-verification-before-completion aidlc-test-driven-development
   aidlc-systematic-debugging aidlc-build-and-test
-  aidlc-code-generation aidlc-executing-plans
+  aidlc-code-generation
   aidlc-application-design aidlc-functional-design
   aidlc-units-generation aidlc-user-stories aidlc-nfr-requirements
   aidlc-receiving-code-review aidlc-requesting-code-review
@@ -35,9 +35,9 @@ for skill in "${COMP_HYBRID[@]}"; do
   fi
 done
 
-# 3. hybrid 11개에 amplification_notes 필수
+# 3. hybrid 10개에 amplification_notes 필수
 HYBRID=(
-  aidlc-code-generation aidlc-executing-plans
+  aidlc-code-generation
   aidlc-application-design aidlc-functional-design
   aidlc-units-generation aidlc-user-stories aidlc-nfr-requirements
   aidlc-receiving-code-review aidlc-requesting-code-review

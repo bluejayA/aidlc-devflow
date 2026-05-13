@@ -39,12 +39,6 @@ last_validated: 2026-04-13
 현재 unit 컨텍스트:
 - construction/{unit-name}/code-plan.md (있으면)
 
-### executing-plans 재개
-
-- 계획 파일 로드 (기존과 동일)
-- devflow-audit 교차 확인 (기존과 동일)
-- session-summary.md 로드 (신규)
-
 ### 로딩 후 컨텍스트 요약
 
 로드 완료 후 사용자에게 간략 요약 표시:
@@ -213,7 +207,7 @@ session-summary.md는 registry 수준 (~2,000 토큰 이내, 약 80~100줄)만 �
 
 | 상세 종류 | 분리 위치 |
 |----------|----------|
-| 결정 이유, 토론 맥락 | `devflow-audit.md` 또는 ADR |
+| 결정 이유, 토론 맥락 | `audit.md` 또는 ADR |
 | 코드 발췌 | 원본 파일 라인 참조 (규칙 #2) |
 | 설계 다이어그램, 산출물 | `devflow-docs/inception/`, `devflow-docs/construction/...` |
 
@@ -297,14 +291,12 @@ CONSTRUCTION 세션 재개 시 construction-orchestrator가 실행.
 ### 재검증 실행 주체 규칙
 
 - **construction-orchestrator 경유**: Step 1.5에서 재검증 실행
-- **executing-plans 독립 실행**: construction-orchestrator 외부 호출 시에만 자체 재검증
 - **중복 방지**: construction-orchestrator 내부 호출 시 재검증 스킵
 
 ### 재검증 후 복귀 경로
 
 재검증 실패 → debugging 완료 시:
 - construction-orchestrator: debugging Return 수신 → 재검증 재실행 (최대 2회, 초과 시 에스컬레이션)
-- executing-plans: debugging 완료 → 재검증 재실행 → 통과 시 정상 재개
 
 ### 프로세스
 
