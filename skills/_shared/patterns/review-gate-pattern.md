@@ -30,8 +30,8 @@ last_validated: 2026-04-13
 
 ## 리뷰 루프 제한
 
-- 최대 5회 re-dispatch (conventions 리뷰 루프 규약 참조)
-- 5회 초과 시 conventions escalation 메시지 표시
+- 최대 3회 re-dispatch (conventions 리뷰 루프 규약 참조)
+- 3회 초과 시 conventions escalation 메시지 표시
 
 ## 오버라이드 audit 형식
 

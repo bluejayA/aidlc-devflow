@@ -42,6 +42,15 @@ Agent tool (general-purpose):
     - Sections noticeably less detailed than others
     - Units that lack clear boundaries or interfaces
 
+    ## Calibration
+
+    승인 차단 기준을 정확히 잡는다. **실제 구현에 문제를 일으킬 이슈만 ❌로 분류한다.**
+
+    - ❌ Issues Found (block): 누락된 핵심 요구사항, 모순, 모호한 인터페이스, TODO/placeholder, scope 누락
+    - Recommendations (advisory): minor wording, stylistic preferences, formatting quibbles, 표현 개선 제안
+
+    의심스러우면 Recommendations로 분류. 승인 차단은 비싼 결정 — 실제 잘못 만들어질 위험이 있을 때만.
+
     ## Output Format
 
     ## Spec Review

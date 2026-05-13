@@ -18,8 +18,6 @@
 - **BL-106**: auto-mode skill-reviewer + Codex adversarial 통합 HIGH 5건 fix — skill-reviewer 2건(6항 #2/#3 + Resume 게이트 모순) + Codex 3건(자기완결성 주석 / verify.sh 외부분리 검증 / 참조 깊이 1단계) [P2] [#204](https://github.com/bluejayA/aidlc-devflow/issues/204)
 - **BL-107**: auto-mode 한도 정책 재검토 — BL-106에서 한도 520 sustainable 자리 약함 입증 (여유 0). 추가 외부 분리 vs 한도 미세 상향 vs orchestrator-only 전환 검토 [P2] [#206](https://github.com/bluejayA/aidlc-devflow/issues/206)
 - **BL-108**: superpowers v5.0.6 — Inline Self-Review 시범 도입 (실험). spec/plan reviewer 1건 self-review 대체 + 비교 [P2] [#207](https://github.com/bluejayA/aidlc-devflow/issues/207)
-- **BL-110**: superpowers v5.1.0 — aidlc named reviewer agent 단일 출처 통합 조사 (drift 차단) [P2] [#209](https://github.com/bluejayA/aidlc-devflow/issues/209)
-- **BL-111**: superpowers v5.0.4 — reviewer 프롬프트 Calibration 섹션 + max iter 3 가드 (skill-forge) [P2] [#210](https://github.com/bluejayA/aidlc-devflow/issues/210)
 - **BL-086**: aidlc-writing-plans에 mapping/매핑 검증 단계 추가 — Task 4 사고 재발 방지 [P2] [#155](https://github.com/bluejayA/aidlc-devflow/issues/155)
 - **BL-088**: MSA 통합 audit 지원 — marker file / config-based scope discovery [P3] [#158](https://github.com/bluejayA/aidlc-devflow/issues/158) (Phase 2 후보; DEVFLOW_ROOT opt-in으로 MVP 대체)
 - **BL-081**: 스킬 라이프사이클 관리 — skill_nature 태깅 + 경량화 체계 도입 [P2] [#145](https://github.com/bluejayA/aidlc-devflow/issues/145) (Phase 1 MVP 1,2번은 BL-085에 흡수, 3,4번 잔존)

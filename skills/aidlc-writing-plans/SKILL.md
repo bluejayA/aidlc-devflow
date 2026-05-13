@@ -109,9 +109,9 @@ Expected: PASS
 1. **Minimal / Standard / Comprehensive depth**:
    - 청크 작성 완료
    - `_shared/reviewers/plan-document-reviewer-prompt.md`를 서브에이전트로 dispatch
-   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
+   - ❌ Issues Found → 수정 후 re-dispatch (최대 3회)
    - Recommendations만 → 루프 종료 (수정 권장)
-   - 5회 초과 → 사용자 escalate
+   - 3회 초과 → 사용자 escalate
 2. 승인 → 다음 청크 또는 Execution Handoff
 
 ## Execution Handoff
