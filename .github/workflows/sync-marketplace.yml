@@ -14,6 +14,16 @@ jobs:
         with:
           path: source
 
+      - name: Verify plugin.json version matches tag
+        run: |
+          cd source
+          PJ_VER=$(jq -r '.version' .claude-plugin/plugin.json)
+          TAG_VER="${GITHUB_REF_NAME#v}"
+          if [ "$PJ_VER" != "$TAG_VER" ]; then
+            echo "::error::plugin.json version ($PJ_VER) ≠ tag ($TAG_VER). bump plugin.json before tagging."
+            exit 1
+          fi
+
       - name: Extract version + description + revision
         id: meta
         run: |
