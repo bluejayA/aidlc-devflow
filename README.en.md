@@ -107,7 +107,6 @@ After each stage completes, the orchestrator presents an approval gate. Stage sk
 | `aidlc-requesting-code-review` | 2-stage code review request (spec compliance → code quality). Single Source of Truth for review logic |
 | `aidlc-receiving-code-review` | Systematic handling of code review feedback |
 | `aidlc-dispatching-parallel-agents` | Dispatches independent tasks to parallel subagents |
-| `aidlc-writing-skills` | TDD-based skill development + CSO principles |
 
 ### Utilities
 
@@ -276,21 +275,16 @@ To start: "devflow 시작해줘" (or describe what you want to build)
 
 ---
 
-## Differentiators
+## Related Plugins
 
-### Built-in Full-Cycle Skill Development Toolchain
+### Skill authoring/validation split into `skill-forge` (v1.14.0)
 
-aidlc-devflow is not just a plugin that runs skills — it includes a **complete toolchain for creating and validating skills**.
+aidlc focuses on **running** skills (software development workflow). The meta task of **creating and validating** skills lives in a separate plugin, [`skill-forge`](https://github.com/bluejayA/skill-forge). Both plugins are independently installable from the same marketplace.
 
-| Phase | Tools | Description |
-|-------|-------|-------------|
-| **Design** | `skill-pattern-catalog` (7 behavioral) + `skill-design-patterns` (5 structural) | Decision tree auto-recommends the right pattern |
-| **Author** | `aidlc-writing-skills` + `skill-writing-guide` + `persuasion-principles` | TDD-based skill development. CSO principles + progressive disclosure |
-| **Review** | `skill-reviewer` subagent | Metadata consistency, pattern fitness, gate declaration verification |
-| **Test** | 3-Layer static verification (0 tokens) | L1 graph validation → L2 routing simulator → L3 step order checker |
-| **Operate** | Consistency checklist + impact analysis conventions | Cross-reference and dependency impact checks on skill modifications |
-
-When adding new skills or modifying existing ones, this toolchain ensures consistent quality from design through verification.
+| Domain | Plugin |
+|---|---|
+| Software development workflow (INCEPTION/CONSTRUCTION, 4-stage code review) | `aidlc` (this plugin) |
+| SKILL.md authoring, structural patterns, skill-reviewer auto-validation | `skill-forge` |
 
 ---
 

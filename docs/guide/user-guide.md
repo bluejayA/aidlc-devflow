@@ -104,11 +104,12 @@ B) 현재 게이트에서 계속 진행
 | TDD | `/aidlc:aidlc-test-driven-development` | RED-GREEN-REFACTOR 사이클 |
 | 디버깅 | `/aidlc:aidlc-systematic-debugging` | 버그 원인 조사 + 수정 |
 | 코드 리뷰 | `/aidlc:aidlc-requesting-code-review` | 2-stage 코드 리뷰 |
-| 스킬 작성 | `/aidlc:aidlc-writing-skills` | 새 스킬 SKILL.md 작성 |
 | 계획 실행 | `/aidlc:aidlc-executing-plans` | 구현 계획 배치 실행 |
 | 브랜치 완료 | `/aidlc:aidlc-finishing-a-development-branch` | 머지/PR/보관 결정 |
 
 또는 자연어로 요청하면 AI가 적절한 스킬을 자동으로 선택합니다.
+
+> 새 SKILL.md를 작성하거나 기존 스킬을 편집·검증하려면 별도 플러그인 [`skill-forge`](https://github.com/bluejayA/skill-forge)의 `writing-skills` 스킬을 사용하세요. aidlc v1.14.0부터 이 자원은 분리되었습니다.
 
 ---
 

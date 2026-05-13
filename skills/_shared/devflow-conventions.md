@@ -2,7 +2,7 @@
 name: devflow-conventions
 description: Shared conventions for all AI-DLC stage skills. Defines invoke_mode and return_behavior metadata semantics.
 type: pattern
-applies_to: [aidlc-using-devflow, aidlc-test-driven-development, aidlc-dispatching-parallel-agents, aidlc-brainstorming, aidlc-writing-skills, aidlc-subagent-driven-development]
+applies_to: [aidlc-using-devflow, aidlc-test-driven-development, aidlc-dispatching-parallel-agents, aidlc-brainstorming, aidlc-subagent-driven-development]
 status: active
 source: manual
 last_validated: 2026-04-13
@@ -201,8 +201,7 @@ STOP.
 3. **Phase Orchestrator에 등록**: 해당 Phase 오케스트레이터의 스테이지 순회 + 게이트 매핑에 추가
 4. **plugin.json**: skills 디렉토리에 자동 인식 (별도 등록 불필요)
 5. **사용자 질문 설계**: `_shared/patterns/question-format-guide.md` — 선택지 설계, 수준 적응, 모순 감지
-6. **스킬 작성 원칙 참조**: `_shared/patterns/skill-writing-guide.md` — 자유도 설계, 점진적 공개, CSO 심화, 스킬 TDD 방법론
-7. **패턴 선택**: `_shared/patterns/skill-pattern-catalog.md` — 7개 패턴 중 적합한 것 선택
+6. **스킬 작성 자체에 대한 가이드**: `skill-forge` 플러그인(별도) 참조 — writing-guide / design-patterns / pattern-catalog / persuasion-principles + skill-reviewer
 
 ## Brainstorming HARD-GATE
 
@@ -216,8 +215,8 @@ STOP.
 
 ## 합리화 방지 원칙
 
-규율 강제 스킬(TDD, 디버깅 등)의 합리화 방지 테이블 작성법과 설득 원칙:
-`_shared/patterns/persuasion-principles.md` 참조.
+규율 강제 스킬(TDD, 디버깅 등)의 합리화 방지 테이블 작성법과 설득 원칙은
+`skill-forge` 플러그인(별도)의 `_shared/patterns/persuasion-principles.md` 참조.
 
 ## Subagent Dispatch Rules
 

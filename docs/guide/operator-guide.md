@@ -249,25 +249,23 @@ conventions.md를 직접 수정합니다. 변경 시 주의사항:
 
 ## 5. 스킬 추가/수정
 
-### 새 스킬 추가 시 참조 문서 맵
+### 새 스킬 추가/수정은 `skill-forge` 플러그인 사용 (v1.14.0~)
+
+스킬 작성·검증 자원은 별도 플러그인 [`skill-forge`](https://github.com/bluejayA/skill-forge)로 분리되었습니다. 새 스킬을 만들거나 기존 스킬을 편집할 때는 skill-forge의 `writing-skills` 스킬을 호출하세요:
 
 ```
-1. skill-writing-guide.md        ← 구조 설계 원칙 + TDD 방법론 (자유도, 점진적 공개, 500줄, 압박 시나리오)
-   ↓
-2. skill-design-patterns.md      ← 구조 패턴 5종 (Tool Wrapper, Generator, Reviewer, Inversion, Pipeline)
-   ↓
-3. skill-pattern-catalog.md      ← 행동 패턴 7종 (Iron Law, Gate, Review Loop 등)
-   ↓
-4. persuasion-principles.md      ← 규율 강제 스킬 언어 설계 (Authority, Commitment, Social Proof)
-   ↓
-5. writing-skills SKILL.md       ← TDD 프로세스 (RED → GREEN → REFACTOR)
-   ↓
-6. skill-reviewer-prompt.md      ← 배포 전 자동 검증
-   ↓
-7. [선택] skill-creator 최적화   ← description 정량적 최적화 (writing-skills REFACTOR 게이트에서 선택)
+skill-forge:
+  skills/writing-skills/SKILL.md        ← TDD 프로세스 (RED → GREEN → REFACTOR)
+  skills/_shared/patterns/
+    skill-writing-guide.md              ← 구조 설계 원칙 + TDD 방법론
+    skill-design-patterns.md            ← 구조 패턴 5종
+    skill-pattern-catalog.md            ← 행동 패턴 7종
+    persuasion-principles.md            ← 규율 강제 스킬 언어 설계
+  skills/_shared/reviewers/
+    skill-reviewer-prompt.md            ← 배포 전 자동 검증
 ```
 
-외부 공개 가이드: `docs/guide/skill-design-patterns/` — aidlc 내부 참조 없이 독립적으로 읽을 수 있는 버전
+`[선택] skill-creator` 정량적 최적화는 writing-skills REFACTOR 게이트에서 선택할 수 있습니다.
 
 ### 기존 스킬 수정 시 영향 범위 확인
 
@@ -378,8 +376,8 @@ state.md drift 발견 시 사용자 게이트 / 자동 reconcile 없음. 그대�
 | 상황 | 참조 문서 |
 |------|----------|
 | 전체 아키텍처 이해 | `_shared/devflow-conventions.md` |
-| 스킬 작성법 | `aidlc-writing-skills/SKILL.md` |
-| 패턴 종류 | `_shared/patterns/skill-pattern-catalog.md` |
+| 스킬 작성법 | `skill-forge` 플러그인의 `writing-skills/SKILL.md` |
+| 스킬 패턴 카탈로그 | `skill-forge` 플러그인의 `_shared/patterns/skill-pattern-catalog.md` |
 | 게이트 구조 | `_shared/gate-patterns.md` |
 | 질문 설계 | `_shared/patterns/question-format-guide.md` |
 | 기술 카탈로그 | `_shared/patterns/tech-stack-defaults.md` |

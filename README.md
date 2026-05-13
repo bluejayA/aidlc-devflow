@@ -121,7 +121,6 @@ mid-cycle pause 운영 모델을 단순화했습니다. 정보 분해 분석 결
 | `aidlc-requesting-code-review` | 4-stage 코드 리뷰 요청 (R1 단일/R2 Council/R3 Agent Teams/Ra 자동). Distrust by Default. 리뷰 로직의 Single Source of Truth |
 | `aidlc-receiving-code-review` | 코드 리뷰 피드백 수신 시 체계적 처리 |
 | `aidlc-dispatching-parallel-agents` | 독립적 태스크를 병렬 서브에이전트로 디스패치 |
-| `aidlc-writing-skills` | 새 스킬 개발 시 TDD 방식 + CSO 원칙 적용 |
 
 ### 유틸리티
 
@@ -293,22 +292,16 @@ devflow는 feature 브랜치에서 작업 후 PR을 통해 머지하는 것을 �
 
 ---
 
-## 차별적 특징
+## 관련 플러그인
 
-### 스킬 개발 풀사이클 도구 내장
+### 스킬 작성·검증은 `skill-forge`로 분리 (v1.14.0)
 
-aidlc-devflow는 스킬을 실행하는 플러그인일 뿐 아니라, **스킬을 만들고 검증하는 도구 체계**를 내장하고 있습니다.
+스킬을 **실행**하는 것이 aidlc의 책임이고, 스킬을 **만들고 검증**하는 메타 작업은 별도 플러그인 [`skill-forge`](https://github.com/bluejayA/skill-forge)가 담당합니다. 두 플러그인은 같은 marketplace에서 독립적으로 설치할 수 있습니다.
 
-| 단계 | 도구 | 설명 |
-|------|------|------|
-| **설계** | `skill-pattern-catalog` (행동 7종) + `skill-design-patterns` (구조 5종) | 결정 트리로 적합한 패턴을 자동 추천 |
-| **작성** | `aidlc-writing-skills` + `skill-writing-guide` + `persuasion-principles` | TDD 방식 스킬 개발. CSO 원칙 + 점진적 공개 |
-| **리뷰** | `skill-reviewer` 서브에이전트 | 메타데이터 정합성, 패턴 적합성, 게이트 선언 검증 |
-| **최적화** | `skill-creator` 통합 게이트 (선택) | description 정량적 최적화 — eval + train/test 분할 벤치마크 |
-| **테스트** | 3-Layer 정적 검증 (0토큰) | L1 그래프 검증 → L2 라우팅 시뮬레이터 → L3 스텝 순서 체커 |
-| **운영** | 정합성 체크리스트 + 영향도 분석 규약 | 스킬 수정 시 참조·호출·연동 파급 확인 |
-
-새 스킬을 추가하거나 기존 스킬을 수정할 때, 설계부터 검증까지 일관된 품질을 유지할 수 있습니다.
+| 영역 | 플러그인 |
+|---|---|
+| 소프트웨어 개발 워크플로우 (INCEPTION/CONSTRUCTION, 4-stage 코드 리뷰) | `aidlc` (이 플러그인) |
+| SKILL.md 작성·구조 패턴·skill-reviewer 자동 검증 | `skill-forge` |
 
 ---
 

@@ -393,7 +393,8 @@ graph TD
 | `code-plan-reviewer-prompt.md` | 코드 계획 | code-generation PART 1 |
 | `council-review-protocol.md` | Council/Teams 프로토콜 | requesting-code-review R2/R3 |
 | `implementer-prompt.md` | 서브에이전트 구현자 | subagent-driven-development |
-| `skill-reviewer-prompt.md` | 스킬 검증 | writing-skills REFACTOR |
+
+> `skill-reviewer-prompt.md`는 v1.14.0에서 `skill-forge` 플러그인으로 분리되었습니다.
 
 ### 7.4 타임아웃 정책
 
@@ -815,35 +816,16 @@ graph LR
 
 ---
 
-## 17. 스킬 개발 풀사이클
+## 17. 스킬 개발 풀사이클 → `skill-forge` 플러그인으로 분리 (v1.14.0)
 
-writing-skills의 REFACTOR 단계 완료 후:
+스킬 설계/작성/리뷰 자원은 v1.14.0에서 별도 플러그인 [`skill-forge`](https://github.com/bluejayA/skill-forge)로 이전되었습니다. aidlc는 소프트웨어 개발 워크플로우 실행에 집중합니다.
 
-```mermaid
-graph LR
-    DESIGN["설계<br/>skill-design-patterns<br/>+ skill-pattern-catalog"] --> WRITE["작성<br/>aidlc-writing-skills<br/>+ skill-writing-guide"]
-    WRITE --> REVIEW["리뷰<br/>skill-reviewer<br/>(서브에이전트)"]
-    REVIEW --> APPROVED{"Approved?"}
-    APPROVED -->|"Yes"| OPT{"최적화 게이트<br/>A) 완성<br/>B) skill-creator<br/>(설치 시만)"}
-    APPROVED -->|"No"| WRITE
-    OPT -->|"A"| TEST["L1/L2/L3 테스트<br/>(0 LLM 토큰)"]
-    OPT -->|"B"| BENCH["skill-creator eval<br/>train/test 분할 벤치마크"]
-    BENCH --> TEST
-    TEST --> SHIP["배포 + audit"]
-
-    style DESIGN fill:#4a90d9,color:#fff
-    style REVIEW fill:#9b59b6,color:#fff
-    style TEST fill:#7ab648,color:#fff
-```
-
-| 단계 | 도구 |
+| 단계 | 도구 (skill-forge) |
 |------|------|
 | 설계 | `skill-pattern-catalog` (행동 7종) + `skill-design-patterns` (구조 5종) |
-| 작성 | `aidlc-writing-skills` + `skill-writing-guide` + `persuasion-principles` |
-| 리뷰 | `skill-reviewer` 서브에이전트 |
+| 작성 | `writing-skills` + `skill-writing-guide` + `persuasion-principles` |
+| 리뷰 | `skill-reviewer-prompt.md` 기반 서브에이전트 |
 | 최적화 | `skill-creator` 통합 게이트 (선택) |
-| 테스트 | 3-Layer 정적 검증 (273 tests) |
-| 운영 | `consistency-checklist` + 영향도 분석 규약 |
 
 ---
 

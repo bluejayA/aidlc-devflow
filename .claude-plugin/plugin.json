@@ -1,6 +1,6 @@
 {
   "name": "aidlc",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "AI-DLC 방법론 기반 개발 워크플로우 플러그인. INCEPTION/CONSTRUCTION 2-phase orchestrator + 4-stage 코드 리뷰",
   "skills": "./skills"
 }
