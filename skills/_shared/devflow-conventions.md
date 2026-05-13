@@ -113,9 +113,9 @@ Codex CLI 설치 시(`command -v codex`) Claude 리뷰 결과에 Codex 실행 �
 1. `_shared/reviewers/[type]-prompt.md` 읽기
 2. 서브에이전트 dispatch (산출물 경로 전달)
 3. ✅ Approved → Return to Orchestrator
-4. ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
+4. ❌ Issues Found → 수정 후 re-dispatch (최대 3회)
 5. Recommendations만 있음 (Issues 없음) → 루프 종료 (수정은 권장)
-6. 5회 초과 시 사용자 escalate
+6. 3회 초과 시 사용자 escalate
 
 ### 리뷰어 프롬프트
 - `_shared/reviewers/spec-document-reviewer-prompt.md` — 설계 문서 (brainstorming)
@@ -130,7 +130,7 @@ Codex CLI 설치 시(`command -v codex`) Claude 리뷰 결과에 Codex 실행 �
 
 ### Escalation 메시지 형식
 ```
-⚠️ 리뷰 루프 5회 초과 — 사용자 판단 필요
+⚠️ 리뷰 루프 3회 초과 — 사용자 판단 필요
 
 리뷰 이력:
 - 1회: [이슈 요약]

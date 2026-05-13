@@ -92,9 +92,9 @@ metadata:
 
 1. **Minimal / Standard / Comprehensive depth**:
    - `_shared/reviewers/spec-document-reviewer-prompt.md`를 서브에이전트로 dispatch
-   - ❌ Issues Found → 수정 후 re-dispatch (최대 5회)
+   - ❌ Issues Found → 수정 후 re-dispatch (최대 3회)
    - Recommendations만 → 루프 종료 (수정 권장)
-   - 5회 초과 → 사용자 escalate
+   - 3회 초과 → 사용자 escalate
 
 **사용자 리뷰 게이트** (리뷰 통과 후):
 

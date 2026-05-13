@@ -44,6 +44,15 @@ Agent tool (general-purpose type):
     - Missing verification steps or expected outputs
     - Files planned to hold multiple responsibilities or likely to grow unwieldy
 
+    ## Calibration
+
+    승인 차단 기준을 정확히 잡는다. **실제 구현에 문제를 일으킬 이슈만 ❌로 분류한다.**
+
+    - ❌ Issues Found (block): TODO/placeholder, "similar to X" 식 미완 정의, 누락된 검증 단계, spec 미충족, scope creep, 파일 책임 모호
+    - Recommendations (advisory): minor wording, 체크박스 syntax 누락, chunk size 약간 초과, 표현 개선 제안
+
+    의심스러우면 Recommendations로 분류. 승인 차단은 비싼 결정 — 실제 잘못 구현될 위험이 있을 때만.
+
     ## Output Format
 
     ## Plan Review - Chunk N

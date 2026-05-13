@@ -91,7 +91,7 @@ spec/plan 경로가 제공된 경우에만 실행. 미제공 시 Stage 2로 바�
 2. 서브에이전트 dispatch — `{project-root}` + 리뷰 대상 + spec/plan 경로 전달
 3. 결과 확인 (Verdict 기준):
    - PASS → Stage 2로
-   - FAIL → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 5회, 초과 시 사용자 escalate)
+   - FAIL → 수정 후 re-dispatch (conventions 리뷰 루프 규약: 최대 3회, 초과 시 사용자 escalate)
    - CONDITIONAL → Stage 2로 (수정 권장)
 
 #### Codex 세컨드 오피니언 (결과 반환 시 안내)
@@ -138,7 +138,7 @@ Stage 1 완료 후, depth에 따라 병렬 dispatch한다.
 3. `_shared/reviewers/maintainability-reviewer-prompt.md` — Stage 4 서브에이전트 dispatch (background, Comprehensive만)
 4. 모든 결과 수신 후 종합:
    - 모두 PASS → 결과 반환
-   - 일부 FAIL → FAIL stage만 수정 루프 (PASS stage 결과 유지, 최대 5회)
+   - 일부 FAIL → FAIL stage만 수정 루프 (PASS stage 결과 유지, 최대 3회)
    - 모두 FAIL → 모든 stage 수정 루프
 
 ---
@@ -281,7 +281,7 @@ SDD: 태스크 3 완료, requesting-code-review 호출
 
 ### Stage 1에서 반복 실패
 
-**증상**: spec compliance 리뷰가 5회 넘게 실패
+**증상**: spec compliance 리뷰가 3회 넘게 실패
 **원인**: spec 자체가 모호하거나 현재 구현과 맞지 않음
 **해결**: 사용자 escalate 후 spec 수정 또는 Stage 1 스킵 결정
 
