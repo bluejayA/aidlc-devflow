@@ -207,7 +207,7 @@ session-summary.md는 registry 수준 (~2,000 토큰 이내, 약 80~100줄)만 �
 
 | 상세 종류 | 분리 위치 |
 |----------|----------|
-| 결정 이유, 토론 맥락 | `devflow-audit.md` 또는 ADR |
+| 결정 이유, 토론 맥락 | `audit.md` 또는 ADR |
 | 코드 발췌 | 원본 파일 라인 참조 (규칙 #2) |
 | 설계 다이어그램, 산출물 | `devflow-docs/inception/`, `devflow-docs/construction/...` |
 
