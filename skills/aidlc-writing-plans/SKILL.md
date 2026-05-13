@@ -49,7 +49,7 @@ metadata:
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For agentic workers:** REQUIRED: Use `aidlc-subagent-driven-development` or `aidlc-executing-plans` to implement.
+> **For agentic workers:** REQUIRED: Use `aidlc-subagent-driven-development` to implement.
 
 **Goal:** [한 줄]
 **Complexity:** [Minimal | Standard | Comprehensive]
@@ -129,8 +129,7 @@ Expected: PASS
 
 Codex 미감지 시 가이드 생략. 핸드오프 메시지만 표시:
 
-- A) 서브에이전트 기반 → `aidlc-subagent-driven-development` (권장 — 태스크가 대부분 독립적일 때)
-- B) 별도 세션 → `aidlc-executing-plans` (체크포인트 리뷰 + 세션 재개가 필요할 때)
+- 구현 → `aidlc-subagent-driven-development` (현재 세션 또는 새 Claude 세션에서 동일하게 호출)
 
 ## 핵심 규칙
 

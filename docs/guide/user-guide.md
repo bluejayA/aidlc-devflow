@@ -104,7 +104,6 @@ B) 현재 게이트에서 계속 진행
 | TDD | `/aidlc:aidlc-test-driven-development` | RED-GREEN-REFACTOR 사이클 |
 | 디버깅 | `/aidlc:aidlc-systematic-debugging` | 버그 원인 조사 + 수정 |
 | 코드 리뷰 | `/aidlc:aidlc-requesting-code-review` | 2-stage 코드 리뷰 |
-| 계획 실행 | `/aidlc:aidlc-executing-plans` | 구현 계획 배치 실행 |
 | 브랜치 완료 | `/aidlc:aidlc-finishing-a-development-branch` | 머지/PR/보관 결정 |
 
 또는 자연어로 요청하면 AI가 적절한 스킬을 자동으로 선택합니다.

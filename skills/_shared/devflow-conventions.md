@@ -248,7 +248,6 @@ STOP.
 - `aidlc-subagent-driven-development` — per-task implementer dispatch
 - `aidlc-dispatching-parallel-agents` — 병렬 에이전트 dispatch
 - `aidlc-requesting-code-review` — 리뷰어 서브에이전트 dispatch
-- `aidlc-executing-plans` — 별도 세션 실행 (세션 자체가 격리)
 
 ## Council Review Mode
 

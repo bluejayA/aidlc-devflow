@@ -108,5 +108,5 @@ metadata:
 
 ## Integration
 
-- **사용하는 스킬**: `aidlc-code-generation`, `aidlc-subagent-driven-development`, `aidlc-executing-plans`
+- **사용하는 스킬**: `aidlc-code-generation`, `aidlc-subagent-driven-development`
 - **참조 문서**: `_shared/tdd-protocol.md`, `_shared/devflow-conventions.md`

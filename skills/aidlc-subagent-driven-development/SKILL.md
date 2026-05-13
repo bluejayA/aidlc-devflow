@@ -27,7 +27,7 @@ metadata:
 
 ## When to Use
 
-- 현재 세션에서 계획 실행 시 (별도 세션: `aidlc-executing-plans`)
+- 계획 실행 시 (현재 세션 또는 새 Claude 세션에서 동일하게 사용)
 - 태스크가 대부분 독립적일 때
 - 서브에이전트 지원 환경 (Claude Code 등)
 

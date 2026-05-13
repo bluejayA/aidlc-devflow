@@ -1,6 +1,6 @@
 ---
 type: pattern
-applies_to: [aidlc-test-driven-development, aidlc-systematic-debugging, aidlc-executing-plans, aidlc-code-generation, aidlc-verification-before-completion, aidlc-subagent-driven-development, aidlc-workflow-planning]
+applies_to: [aidlc-test-driven-development, aidlc-systematic-debugging, aidlc-code-generation, aidlc-verification-before-completion, aidlc-subagent-driven-development, aidlc-workflow-planning]
 status: active
 source: manual
 last_validated: 2026-04-13

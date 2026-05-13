@@ -94,7 +94,6 @@ After each stage completes, the orchestrator presents an approval gate. Stage sk
 | `aidlc-writing-plans` | Converts design documents into task-level implementation plans |
 | `aidlc-test-driven-development` | Enforces TDD Iron Law (Rigid). RED-GREEN-REFACTOR |
 | `aidlc-subagent-driven-development` | Per-task subagent execution + 2-stage review (spec → quality) |
-| `aidlc-executing-plans` | Batch execution of implementation plans + session resume support |
 | `aidlc-superpowers-tracking` | Session skill usage tracking + workflow improvement insights |
 
 ### Development Quality Tools

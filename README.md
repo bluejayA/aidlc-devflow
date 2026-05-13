@@ -102,7 +102,6 @@ mid-cycle pause 운영 모델을 단순화했습니다. 정보 분해 분석 결
 | `aidlc-writing-plans` | 설계 문서를 태스크별 상세 구현 계획으로 변환 |
 | `aidlc-test-driven-development` | TDD Iron Law 강제 (Rigid). RED-GREEN-REFACTOR |
 | `aidlc-subagent-driven-development` | 태스크별 서브에이전트 실행 + 2단계 리뷰 (spec → quality) |
-| `aidlc-executing-plans` | 구현 계획 배치 실행 + 세션 재개 지원 |
 | `aidlc-superpowers-tracking` | 세션 스킬 사용 추적 + 워크플로우 개선 인사이트 |
 
 ### Auto Mode
