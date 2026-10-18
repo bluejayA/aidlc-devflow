@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# aidlc v2: Codex 교차 리뷰 1회. 같은 리뷰 프롬프트(Part 1~4)를 다른 모델에 넘긴다.
+# Usage: codex-review DIFF_PACKAGE PLAN_FILE|-   → 리뷰 결과를 stdout으로
+# codex CLI가 없으면 그 사실을 적고 0으로 끝난다 (review 스킬이 "Codex 미실행"으로 기록).
+set -uo pipefail
+[ $# -eq 2 ] || { echo "usage: codex-review DIFF_PACKAGE PLAN_FILE|-" >&2; exit 2; }
+pkg=$1; plan=$2
+[ -f "$pkg" ] || { echo "no such diff package: $pkg" >&2; exit 2; }
+root=$(cd "$(dirname "$0")/.." && pwd)
+prompt_file="$root/_shared/prompts/review-prompt.md"
+
+if ! command -v codex >/dev/null 2>&1; then
+  printf '# Codex review\n\n**status:** not run — `codex` CLI not found in PATH.\n'
+  exit 0
+fi
+
+spec="(no plan; review the diff on its own terms — spec compliance = does it do what the commits claim)"
+[ "$plan" != "-" ] && [ -f "$plan" ] && spec=$(cat "$plan")
+
+prompt=$(cat <<PROMPT
+You are an independent reviewer from a different model family. Follow the reviewer instructions below (Part 1-4, all of them), in Korean. Treat [BRIEF_FILE]/[GLOBAL_CONSTRAINTS]/[REVIEW_FOCUS] as the PLAN section, and [DIFF_FILE] as the DIFF section. Do not run tests. Every finding needs file:line. Start with the Spec Compliance verdict.
+
+===== REVIEWER INSTRUCTIONS =====
+$(sed -n '/^```/,/^```/p' "$prompt_file" | sed '1d;$d')
+
+===== PLAN =====
+$spec
+
+===== DIFF =====
+$(cat "$pkg")
+PROMPT
+)
+
+# 비대화형, 샌드박스 읽기 전용, 프로젝트 파일은 건드리지 않는다
+model_flag=()
+[ -n "${DEVFLOW_CODEX_MODEL:-}" ] && model_flag=(--model "$DEVFLOW_CODEX_MODEL")
+printf '# Codex review\n\n**status:** ran at %s\n\n' "$(date -u +%FT%TZ)"
+codex exec --sandbox read-only "${model_flag[@]}" "$prompt" 2>/dev/null || {
+  printf '\n**status:** codex exec failed (exit %s). Treat as not run.\n' "$?"
+}
+exit 0

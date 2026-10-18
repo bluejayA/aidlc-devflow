@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# aidlc v2 PostToolUse: 테스트 실행 흔적 마커 + devflow-docs/audit.md append-only 기록
+set -u
+. "$(dirname "$0")/_lib.sh"
+tool=$(field tool_name)
+ts=$(date -u +%FT%TZ)
+if [ "$tool" = "Bash" ]; then
+  cmd=$(field tool_input.command)
+  if printf '%s' "$cmd" | grep -qE '(pytest|npm\s+(run\s+)?test|pnpm\s+test|yarn\s+test|go\s+test|cargo\s+test|bun\s+test|mvn\s+(test|verify)|gradle\s+test|dotnet\s+test|make\s+test|uv\s+run\s+pytest|jest|vitest|rspec)'; then
+    touch "$TEST_MARKER"
+  fi
+  # 커밋이 실제로 일어났으면 마커 초기화 (다음 커밋은 새 테스트 흔적 필요)
+  if printf '%s' "$cmd" | grep -qE '(^|[;&|]\s*)git\s+commit\b'; then
+    rm -f "$TEST_MARKER"
+  fi
+  entry="bash: $(printf '%s' "$cmd" | head -c 120 | tr '\n' ' ')"
+else
+  entry="$tool: $(field tool_input.file_path)"
+fi
+if [ -d "$CWD/devflow-docs" ]; then
+  printf '[%s] %s\n' "$ts" "$entry" >> "$CWD/devflow-docs/audit.md"
+fi
+exit 0

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# aidlc v2 PreToolUse(Bash): 세 가지 게이트. 우회: 환경변수 DEVFLOW_GATE=off
+set -u
+. "$(dirname "$0")/_lib.sh"
+[ "${DEVFLOW_GATE:-on}" = "off" ] && exit 0
+cmd=$(field tool_input.command)
+[ -n "$cmd" ] || exit 0
+
+# 1. main/master 직접 push 차단 — 어디서든
+if printf '%s' "$cmd" | grep -qE 'git\s+push\b.*\b(main|master)\b'; then
+  deny "BLOCK: main/master 브랜치에 직접 push 금지. feature 브랜치에서 PR로. (DEVFLOW_GATE=off로 우회 가능)"
+fi
+
+is_devflow_project || exit 0
+
+# 2. 커밋 전 테스트 실행 흔적 — docs:/chore:/style: 커밋은 예외
+if printf '%s' "$cmd" | grep -qE '(^|[;&|]\s*)git\s+commit\b'; then
+  if ! printf '%s' "$cmd" | grep -qE -- '-m\s+["'"'"']?(docs|chore|style|ci)(\(|:)'; then
+    if [ ! -f "$TEST_MARKER" ]; then
+      deny "GATE: 이 세션에서 마지막 커밋 이후 테스트를 돌린 흔적이 없다. 전체 테스트(pytest/npm test/go test/cargo test/uv run pytest 등)를 먼저 돌리고 출력을 읽은 뒤 커밋하라. docs:/chore: 커밋은 예외. (DEVFLOW_GATE=off로 우회 가능)"
+    fi
+  fi
+fi
+
+# 3. push / PR 전 review 완료 — 계획을 돌린 흔적(.devflow/sdd)이 있을 때만
+if printf '%s' "$cmd" | grep -qE '(git\s+push\b|gh\s+pr\s+create\b)'; then
+  if [ -d "$CWD/.devflow/sdd" ]; then
+    done_file="$CWD/.devflow/review-done"
+    head=$(git -C "$CWD" rev-parse --short HEAD 2>/dev/null || echo none)
+    if [ ! -f "$done_file" ] || ! grep -q "^$head " "$done_file"; then
+      deny "GATE: 이 브랜치의 현재 HEAD($head)에 대한 review가 없다. review 스킬(브랜치 리뷰 + Codex)을 먼저 돌려라. 리뷰가 .devflow/review-done에 HEAD를 기록하면 열린다. (DEVFLOW_GATE=off로 우회 가능)"
+    fi
+  fi
+fi
+exit 0

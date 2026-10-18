@@ -1,74 +1,49 @@
 # aidlc-devflow 프로젝트 규칙
 
-## 정체성 (2026-05-12 확정)
+## 정체성 (2026-10-18 v2 재기반)
 
-**Jay's personal AI workflow plugin — 1인용 sharpening 노선.**
+**Jay's personal AI workflow plugin — 1인용. 스킬 8개 + 훅 게이트 3개.**
 
-- 팀용 진화 야망 폐기. 다른 사용자도 자유 사용 가능하나 design target은 Jay 본인의 사용 패턴
-- 다음 작업 frame: 30+ 스킬을 본인 사용 패턴에 맞춰 sharpen, cull은 측정 데이터 누적 후
-- 두 차례 adversarial audit(mattpocock 비교, AIDLC self-audit, agent-council Gemini) 결과로 도달한 자가 진단
+- v1(28 스킬, 2026-03~05)은 `_archive/v1/`에 보존. 유지보수하지 않는다. 태그 `v1.15.0`.
+- v2는 방법론 자산(INCEPTION 구조, Handoff=Hypothesis, brownfield 3축, 통합 리뷰 관점, Codex 교차 리뷰)만 남기고 구현 레이어는 Claude Code 네이티브(worktree, auto memory, 서브에이전트 중첩, `/code-review`)와 훅에 맡겼다.
+- superpowers v7.0.0(MIT)에서 패턴 6개 차용: Size the Work, builder check, ledger + 파일 기반 디스패치, Rulings-not-stalls, Review Focus, 역할별 모델 선택. 출처는 `THIRD-PARTY-NOTICES`.
+- 설계 문서: "aidlc-devflow v2 재기반 설계안" (Claude Docs, 2026-10-18).
 
-## Claude와 협업 시 over-engineering 회피 룰
+## 구조
 
-세션이 누적되며 Claude 추천이 점진적으로 "이상적 시스템" 방향으로 부풀어오르는 패턴이 관측됨 (Phase 2 측정 stop, BL backlog 누적의 진짜 원인 — 2026-05-12 self-diagnosis). 점진적 누적이라 자가 감지 어려움. 명시 룰로 가드:
+```
+.claude-plugin/plugin.json   # name: aidlc
+skills/<8개>/SKILL.md        # devflow, requirements, design, plan-build, review, handoff, brownfield, discipline
+hooks/                       # hooks.json + session-start, pretool-git, posttool-audit, _lib.sh
+scripts/codex-review         # 외부 리뷰 1경로
+_shared/                     # conventions, handoff, brownfield, prompts/, scripts/, reference/
+_archive/v1/                 # v1 전체 (읽기 전용)
+```
 
-1. **새 스킬/패턴/BL 추가 욕구는 yak shaving 의심 신호** — 추가 전 "Jay 실제 페인포인트인가 / Claude가 짠 이상적 답인가" 분리 점검
-2. **"이상적 목표" 추천 거부** — Claude가 제시하는 시스템화/일반화/추상화 추천은 1인용 frame에서 대부분 불필요. 직전 세션 컨텍스트가 다음 세션 추천을 ride하는 패턴 인지
-3. **분기별 본인 audit 필수** — 누적 over-engineering은 점진적이라 정기 자가 검토 외 catch 불가
-4. **측정 인프라 작업 제안 금지** — 사용자가 명시 요청 안 하면 enrichment 안 함 (`user_devflow_focus_shift.md` 원칙 유지)
+- 스킬 본문은 "무엇을 할지"만. 설득·리캡·합리화 방지 문구는 쓰지 않는다 — 강제는 훅이 한다.
+- 새 스킬·패턴 추가 전에 묻는다: Jay의 실제 페인포인트인가, Claude가 짠 이상적 답인가. 후자면 추가하지 않는다.
+- 측정 인프라를 만들지 않는다. 유지·종료 판단은 분기 자가 audit(사용 여부)로만.
+
+## Claude와 협업 시 과잉설계 회피 룰 (v1에서 유지)
+
+1. 새 스킬/패턴 추가 욕구는 yak shaving 의심 신호
+2. "이상적 목표" 시스템화·일반화·추상화 추천 거부
+3. 분기별 본인 audit 필수
+4. 측정 인프라 작업 제안 금지
 
 ## GitHub Flow (필수)
 
-### gh CLI 사용
-GitHub 작업은 모두 `gh` CLI로 수행한다. MCP GitHub 도구는 사용하지 않는다.
+- GitHub 작업은 모두 `gh` CLI(REST API)로.
+- 커밋: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`). 이슈 연결 `refs #N` / `closes #N`. 멀티라인은 HEREDOC.
+- PR: body 첫 줄에 `Closes #N`, Summary + Test plan. 승인 없이 push/merge 금지.
+- 릴리스: `.claude-plugin/plugin.json` version을 올리고 같은 값으로 `v*` 태그. 태그 push가 marketplace(`bluejayA/devflow-marketplace`)를 동기화한다 (`.github/workflows/sync-marketplace.yml`).
 
-### 커밋 메시지
-- Conventional Commits 형식: `feat:`, `fix:`, `chore:`, `docs:`
-- 이슈 연결: 진행 중 `refs #N`, 완료 시 `closes #N`
-- HEREDOC으로 멀티라인 메시지 작성
+## 수정 전 영향도 확인
 
-### PR 생성 규칙
-- **body 첫 줄에 `Closes #N`** — 타이틀에만 넣으면 GitHub에서 이슈 연결이 안 됨
-- Summary + Test plan 포함
-- 테스트 통과 확인 후 PR 생성
-- 승인 없이 push/merge 금지
+1. 바꾸려는 경로·키워드를 `_shared/`, `skills/`, `hooks/`에서 Grep으로 교차 확인 (스킬이 `${CLAUDE_PLUGIN_ROOT}/_shared/...`를 직접 참조한다)
+2. 훅 스크립트를 바꾸면 stdin 시뮬레이션으로 allow/deny 케이스를 다시 돌린다 (PR #214 Test plan 참조)
+3. `claude plugin validate .` 통과 후 커밋
 
-### 수정 전 영향도 확인
-코드를 변경하기 전에 다음을 확인한다:
-1. 변경하려는 텍스트/키워드를 다른 파일에서 참조하는지 Grep으로 확인
-2. 핵심 특성 키워드(TDD, Review 등)를 삭제하는 경우, 의도적인지 재확인
-3. 출력 경로(output_path 등) 변경 시, 하류에서 해당 경로를 참조하지 않는지 확인
+## 백로그
 
----
-
-## 백로그 관리
-
-### 백로그 파일
-- 위치: `devflow-docs/backlog.md`
-- 구조: Next (3-5건) / Open / Someday
-- Done 항목은 파일에서 제거 (git history로 추적)
-
-### GitHub 이슈 연동
-<!-- github-issues: enabled -->
-> 아래 규칙은 `github-issues: enabled`일 때만 적용한다.
-> disabled일 때는 `devflow-docs/backlog.md` 파일 기반으로만 운영한다.
-
-**백로그 등록 시:**
-- `devflow-docs/backlog.md`에 항목 추가
-- GitHub 이슈를 `enhancement` 라벨로 동시 생성 (`bluejayA/aidlc-devflow`)
-- 백로그에 이슈 번호와 링크 기록
-
-**백로그 구현 시:**
-백로그 항목을 구현하여 커밋할 때, 연결된 GitHub 이슈와 반드시 연동한다.
-
-1. **커밋 메시지에 이슈 번호 포함**
-   - 진행 중: `refs #N`
-   - 완료 시: `closes #N` (머지 시 이슈 자동 클로즈)
-   - 예: `feat: workspace-detection에 사용자 질문 분기 추가 (closes #1)`
-
-2. **GitHub 이슈에 진행 코멘트 남기기**
-   - 구현 시작 시: 간략한 접근 방식 코멘트
-   - 커밋 완료 시: 변경 내용 요약 + 커밋 해시 코멘트
-
-3. **백로그 파일 정리**
-   - 구현 완료 시 `devflow-docs/backlog.md`에서 해당 항목 제거
+GitHub 이슈로만 관리한다. v1 시절 BL-xxx 이슈는 v2 범위에서 재평가 후 닫거나 다시 연다. `_archive/v1/backlog.md`는 참고용.

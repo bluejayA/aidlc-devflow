@@ -1,0 +1,25 @@
+#!/bin/bash
+# AIDLC SessionStart hook — 세션 시작 시 안내 메시지 출력
+# Claude Code가 이 stdout을 컨텍스트로 수신
+
+PLUGIN_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+
+# 서브에이전트 모드: 온보딩 스킵
+if [ -n "${CLAUDE_AGENT_ID:-}" ]; then
+  exit 0
+fi
+
+cat << 'MSG'
+🔧 AIDLC devflow 플러그인이 설치되어 있습니다.
+
+시작하려면:
+- 새 프로젝트: "devflow 시작해줘" 또는 "/aidlc:aidlc-using-devflow"
+- 기존 프로젝트 이어하기: "devflow 재개해줘"
+
+사용 가능한 독립 스킬:
+- /aidlc:aidlc-brainstorming — 아이디어를 설계로
+- /aidlc:aidlc-systematic-debugging — 버그 원인 조사
+- /aidlc:aidlc-test-driven-development — TDD 사이클
+- /aidlc:aidlc-requesting-code-review — 코드 리뷰 요청
+- /aidlc:aidlc-writing-skills — 새 스킬 작성
+MSG
