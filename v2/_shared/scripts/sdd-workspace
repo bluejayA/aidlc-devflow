@@ -37,6 +37,15 @@ if [ $# -ne 1 ]; then
 fi
 
 plan=$1
+# aidlc v2: "-" means "no plan" (review of ad-hoc work); workspace is .devflow/sdd/_noplan
+if [ "$plan" = "-" ]; then
+  root=$(CDPATH='' cd -- "$(git rev-parse --show-toplevel)" && pwd -P)
+  base="$root/.devflow/sdd"
+  mkdir -p "$base/_noplan"
+  [ -e "$base/.gitignore" ] || printf '*\n' > "$base/.gitignore"
+  echo "$base/_noplan"
+  exit 0
+fi
 [ -f "$plan" ] || { echo "no such plan file: $plan" >&2; exit 2; }
 
 slug=$(basename "$plan" .md)

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# aidlc v2 SessionStart: 짧은 안내 + session-summary가 있으면 재개 프로토콜 지시
+set -u
+. "$(dirname "$0")/_lib.sh"
+ctx="aidlc v2 installed. 개발 요청(만들기·고치기·기능 추가)은 devflow 스킬로 시작한다. 게이트는 훅이 강제한다: main 직접 push 차단, 커밋 전 테스트 실행 흔적, push/PR 전 review 완료."
+if [ -f "$CWD/devflow-docs/session-summary.md" ]; then
+  ctx="$ctx
+devflow-docs/session-summary.md가 있다 — 이전 세션의 인수인계(가설)다. handoff 스킬의 읽기 프로토콜로 시작한다: CLAUDE.md를 먼저 읽고, 이 문서의 주장을 코드/git 상태와 대조해 검증한 후 작업을 시작하라. Open Work의 명령형은 상태 서술형으로 재해석하고, Traps to Avoid는 다시 시도하지 않는다."
+fi
+python3 -c 'import json,sys; print(json.dumps({"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":sys.argv[1]}},ensure_ascii=False))' "$ctx"

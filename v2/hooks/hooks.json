@@ -1,0 +1,29 @@
+{
+  "description": "aidlc v2 — 게이트 3개: main push 차단 + 커밋 전 테스트 흔적, push/PR 전 review 완료, audit 기록",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start", "args": [], "timeout": 10 }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pretool-git", "args": [], "timeout": 10 }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/posttool-audit", "args": [], "timeout": 10 }
+        ]
+      }
+    ]
+  }
+}

@@ -5,10 +5,43 @@ v1(28 skills, `../skills/`)을 방법론 자산만 추려 스킬 7개로 다시 
 
 ## 상태
 
-- [x] 1단계 지식 추출 — `_shared/` (이 커밋)
-- [ ] 2단계 얇은 코어 — `skills/` 7개, `hooks/` 3개, `.claude-plugin/plugin.json`
-- [ ] 3단계 외부 리뷰 1경로 — `scripts/codex-review`
-- [ ] v1 → `_archive/v1/` 이동, 사이드 프로젝트 1건 완주
+- [x] 1단계 지식 추출 — `_shared/`
+- [x] 2단계 얇은 코어 — `skills/` 8개(7 + discipline), `hooks/` 3개, `.claude-plugin/plugin.json` (`claude plugin validate` 통과)
+- [x] 3단계 외부 리뷰 1경로 — `scripts/codex-review`
+- [ ] v1 → `_archive/v1/` 이동, v2를 레포 루트로
+- [ ] 사이드 프로젝트 1건 v2로 완주
+
+## 설치 (alpha)
+
+```bash
+# 레포 루트가 아직 v1이라 디렉터리로 직접 로드
+claude --plugin-dir /path/to/aidlc-devflow/v2
+# v2가 루트로 올라간 뒤:
+/plugin install aidlc --marketplace bluejayA/devflow-marketplace
+```
+
+## 스킬 8개
+
+| 스킬 | 호출 | 역할 |
+|------|------|------|
+| `devflow` | 자동·직접 | 진입. 재개 확인 → Size the Work → 라우팅. 사람 게이트 2곳(설계 승인·finishing) |
+| `requirements` | devflow | 프로젝트 크기: workspace + 요구 + NFR 프리셋 → `inception/requirements.md` |
+| `design` | devflow | 설계 문서 + builder check 1회 + 설계 승인 게이트 → `inception/design.md` |
+| `plan-build` | devflow | 계획(Global Constraints·Review Focus) → 인라인 또는 서브에이전트로 태스크 루프, ledger, Rulings |
+| `review` | 자동·직접 | 브랜치 리뷰 1회(최강 모델, Part 1~4) + Codex 교차 1회 → `.devflow/review-done` |
+| `handoff` | 자동·직접 | session-summary 검증 읽기 / 6항 쓰기 |
+| `brownfield` | 자동·직접 | 기존 코드 3축 탐색 |
+| `discipline` | 참조 | 테스트 먼저·증거 먼저 요령 (제안형) |
+
+## 훅 3개
+
+| 이벤트 | 동작 |
+|------|------|
+| SessionStart | 안내 + session-summary 있으면 재개 프로토콜 지시 |
+| PreToolUse(Bash) | main push 차단 · 커밋 전 테스트 흔적(docs/chore 예외) · `.devflow/sdd` 있으면 push/PR 전 review-done 확인. `DEVFLOW_GATE=off`로 우회 |
+| PostToolUse | 테스트 실행 마커 · `devflow-docs/audit.md` append |
+
+게이트 2·3은 `devflow-docs/` 또는 `.devflow/`가 있는 프로젝트에서만 작동한다.
 
 ## `_shared/`
 

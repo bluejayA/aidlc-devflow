@@ -15,10 +15,10 @@ v1 `devflow-conventions.md`(352줄) + `gate-patterns.md`(112줄)에서 규약만
 
 | 스킬 | 역할 | 호출 |
 |------|------|------|
-| `aidlc` | 진입. Size the Work + 라우팅 | 자동 (개발 요청 감지) |
-| `requirements` | workspace 판정 + 요구·NFR (프로젝트 크기만) | aidlc |
-| `design` | 설계 문서 + builder check 1회 | aidlc, 프로젝트 크기만 |
-| `plan-build` | 계획(Review Focus 포함) → 태스크별 구현·리뷰 → ledger | aidlc |
+| `devflow` | 진입. Size the Work + 라우팅 | 자동 (개발 요청 감지) |
+| `requirements` | workspace 판정 + 요구·NFR (프로젝트 크기만) | devflow |
+| `design` | 설계 문서 + builder check 1회 | devflow, 프로젝트 크기만 |
+| `plan-build` | 계획(Review Focus 포함) → 태스크별 구현·리뷰 → ledger | devflow |
 | `review` | 브랜치 리뷰 1회(최강 모델) + Codex 교차 리뷰 1회 | plan-build 끝 |
 | `handoff` | ledger + session-summary 읽기/쓰기 | 세션 시작·종료, 스킬 경계 |
 | `brownfield` | 기존 코드베이스 3축 탐색 | requirements, 기존 코드 있을 때 |
@@ -78,7 +78,7 @@ devflow-docs/
 | 필드 | 값 |
 |------|----|
 | `name`, `description` | Claude Code 표준. description은 트리거 조건을 한국어·영어 키워드로 |
-| `user-invocable` | `aidlc`, `brownfield`, `review`, `handoff`는 true. 나머지는 false (aidlc가 부른다) |
+| `user-invocable` | `devflow`, `brownfield`, `review`, `handoff`는 true. 나머지는 false (devflow가 부른다) |
 | `model` | `review`만 최강 모델 지정. 나머지는 세션 모델 |
 
 ## 새 스킬 추가
