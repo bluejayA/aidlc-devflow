@@ -114,12 +114,12 @@ Subagent (general-purpose):
 | 자리 | 값 |
 |------|----|
 | `[MODEL]` | 필수. 태스크 리뷰: diff 크기·위험에 맞춘 중저가. 브랜치 리뷰: 가장 강한 모델 |
-| `[BRIEF_FILE]` | `bash v2/_shared/scripts/task-brief PLAN N`이 출력한 경로 (구현자와 같은 파일) |
+| `[BRIEF_FILE]` | `bash ${CLAUDE_PLUGIN_ROOT}/_shared/scripts/task-brief PLAN N`이 출력한 경로 (구현자와 같은 파일) |
 | `[GLOBAL_CONSTRAINTS]` | 계획의 Global Constraints 섹션 또는 spec에서 그대로 복사한 값 |
 | `[REVIEW_FOCUS]` | 계획의 Review Focus 섹션 그대로 |
 | `[REPORT_FILE]` | 구현자가 보고서를 쓴 파일 |
 | `[BASE_SHA]`, `[HEAD_SHA]` | 태스크 전·후 커밋 |
-| `[DIFF_FILE]` | `bash v2/_shared/scripts/review-package PLAN BASE HEAD`가 출력한 경로. 패키지는 컨트롤러 컨텍스트에 들어가지 않는다 |
+| `[DIFF_FILE]` | `bash ${CLAUDE_PLUGIN_ROOT}/_shared/scripts/review-package PLAN BASE HEAD`가 출력한 경로. 패키지는 컨트롤러 컨텍스트에 들어가지 않는다 |
 
 ## 리뷰 결과 처리 (컨트롤러)
 
